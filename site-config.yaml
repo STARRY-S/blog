@@ -1,6 +1,6 @@
 title: STARRY-S' Blog
 subtitle: Morning.
-description: 如果接受一切，就不会受伤
+description: 夜的共鸣颤动不停，孤独将声音冻结
 author: STARRY-S
 email: hxstarrys@gmail.com
 language: zh-Hans
@@ -22,9 +22,7 @@ tagDir: tags
 
 # Those paths are under `srcDir`.
 skipRender:
-  - README.md
   - CNAME
-  - BingSiteAuth.xml
 
 perPage:
   index: 10
