@@ -7,7 +7,7 @@
   
   <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/" />
   
-  <updated>2021-07-15T06:27:07.000Z</updated>
+  <updated>2021-08-14T16:23:55.000Z</updated>
   
   <id>https://blog.starry-s.moe/</id>
   
@@ -19,6 +19,160 @@
   <generator uri="https://github.com/AlynxZhou/hikaru-generator-feed/" version="v2.3.4">Hikaru Generator Feed</generator>
   
   
+  
+  
+  
+  <entry>
+    <title>NieR:Automata 游戏记录</title>
+    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/nier_automata/" />
+    <id>https://blog.starry-s.moe/posts/nier_automata/</id>
+    
+    <author>
+      <name>STARRY-S</name>
+      <email>hxstarrys@gmail.com</email>
+    </author>
+    
+    
+    <published>2021-08-14T16:23:55.000Z</published>
+    
+    
+    <updated>2021-08-15T05:22:56.000Z</updated>
+    
+    
+    <summary type="html">
+      &lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210115172747.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。&lt;/p&gt;
+&lt;p&gt;尽管游戏玩了3遍，但是不敢保证说我把尼尔前前后后的每个细节都弄清楚，不过还是打算把我遇到的一些有意思的地方记录到博客中。&lt;/p&gt;
+&lt;div class=&quot;alert-red&quot;&gt;
+&lt;strong&gt;剧透警告&lt;/strong&gt;：本篇中的部分内容存在剧透
+&lt;/div&gt;
+
+
+    </summary>
+    
+    
+    <content type="html">
+      &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210115172747.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。&lt;/p&gt;
+&lt;p&gt;尽管游戏玩了3遍，但是不敢保证说我把尼尔前前后后的每个细节都弄清楚，不过还是打算把我遇到的一些有意思的地方记录到博客中。&lt;/p&gt;
+&lt;div class=&quot;alert-red&quot;&gt;
+&lt;strong&gt;剧透警告&lt;/strong&gt;：本篇中的部分内容存在剧透
+&lt;/div&gt;
+
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+&lt;hr&gt;
+ &lt;!--APlayer--&gt;
+&lt;div id=&quot;aplayer0&quot; style=&quot;background: var(--color-main-background)&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+const ap0 = new APlayer ({
+    container: document.getElementById(&quot;aplayer0&quot;),
+    theme: &quot;#33363b&quot;,
+    fixed: false,
+    listFolded: false,
+    listMaxHeight: false,
+    lrcType: false,
+    mini: false,
+    volume: 0.7,
+    order: &quot;list&quot;,
+    loop: &quot;all&quot;,
+    autoplay: false,
+    audio: [{
+        name: &quot;sand dream&quot;,
+        artist: &quot;Revo / 梶浦由記&quot;,
+        url: &quot;https://music.starry-s.moe/music/41d7_92fe_3e2f_49b31565f5b2dc00df4d8fb14b1bc59f.mp3&quot;,
+        cover: &quot;https://music.starry-s.moe/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg&quot;,
+        lrc: &quot;&quot;,
+        theme: &quot;#6e5c00&quot;
+    }]
+});
+&lt;/script&gt; 
+&lt;blockquote&gt;
+&lt;p&gt;听日推时遇到了这首非常好听的歌，很想把它插入到博客当中，于是我决定开始写这篇计划了很久但一直没有动笔的博客&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;第一次玩尼尔：机械纪元时除了一些必要的支线任务外，其他支线任务几乎都没有做完就主线通关删档了。&lt;/p&gt;
+&lt;p&gt;因为PC端没有官方汉化，觉得第三方汉化过于生硬就没有安装汉化包，于是我第一次玩这游戏时几乎全程英文生肉啃下来的，所以尽管游戏结局很令我感动，但是机械纪元究竟讲了怎样一个故事，期间为什么会发生这些事情，以及银莲、A2的过去究竟发生了什么，艾米尔是谁，为什么人们都说他很惨，塑料姐妹花的经历，为什么她们背负着很多罪孽我其实都不知道，所以第一遍玩完这个游戏后我很迫不及待的找了一个时间开始玩第二遍。&lt;/p&gt;
+&lt;p&gt;第一次打这游戏时全程简单模式+自动芯片，因为没打支线练等级所以三周目时因为等级太低，半天杀不死一个怪物。&lt;/p&gt;
+&lt;p&gt;然后因为没有手柄，只用鼠标操作，所以9s进行骇入后用鼠标很难控制方向，所以9s打怪时我几乎全程用手打，几乎没怎么进行骇入。&lt;/p&gt;
+&lt;p&gt;二刷时买了联想拯救者的xbox的有线手柄，就为了打尼尔。因为渣笔记本性能弱，游戏优化很差，GTX1050Ti只能开低画质降低分辨率至1366x768，才勉强30帧“流畅”运行，不过第二次玩尼尔时也是由于时间原因没有做很多支线，E结局到现在也没打完，一方面是因为懒，另一方面是因为后来买了PS4。&lt;/p&gt;
+&lt;p&gt;入手PS4后才终于才体验到比较流畅高清的画质，加上官方原配的繁体中文字幕(尽管是对照日语字幕翻译的，开英文语音时觉得字幕和语音有些对不上)，能更好的理解一些剧情。然后准确来说去年疫情 &lt;s&gt;超长假期&lt;/s&gt; 的时候还买了繁体中文的尼尔短话和长话小说，所以对一些幕后的剧情有了简单的了解，所以我把绝大多数支线都做完了(除了三周目末尾的一个向4s汇报情报的支线以及速度之星这个废手的支线外，别的应该是都做完了)，还攒了全武器，打通了全结局(26结局+dlc结局)，最后在寝室打了E结局然后心满意足的删档。尽管游戏里还有一些特性我没有尝试触发（比如B站上随处可见的卡墙bug，左脚踩右脚上天，如何流畅帅气的打怪之类的），DLC斗兽场的最难级别没有打过（对我这手残党来说真的太难了），所以没有亲自打死SQUARE ENIX社长（大雾）有些可惜。不过我觉得还是可以先把我在这个游戏里的一些回忆记录下来，不然时间久了就又忘了。&lt;/p&gt;
+&lt;p&gt;想了一下我不太会以叙事的方式讲述游戏的剧情，讲出来的话也就是通篇流水帐，所以我只打算把一些自认为不错的游戏截图贴上来，至于文字描述我暂时先不打算写，以后有时间再补上。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;其实我今年4月份就把游戏就打完了，但是我硬是拖了这么久才把游玩记录写到博客上。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210115175404.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210115180846.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210116183544.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210116183651.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210116183741.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210116184004.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210116184223.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210117155407.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210117163441.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210119163908.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210119165209.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210124120504.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210124143553.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210124182334.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;!-- ![](images/NieR_Automata_20210129002557.jpg) --&gt;
+
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210129010129.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;!-- ![](images/NieR_Automata_20210204010638.jpg) --&gt;
+
+&lt;!-- ![](images/NieR_Automata_20210204012723.jpg) --&gt;
+
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210204015704.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210206020307.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210214211911.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210214212838.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210219203841.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210219204035.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210219210754.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210219210830.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210220234528.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210222233545.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210223000109.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;!-- ![](images/NieR_Automata_20210309155216.jpg) --&gt;
+
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210309155202.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210309204622.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210309211227.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210309220354.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210310140442.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210310141143.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210314205859.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210314211653.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210320213830.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210320225429.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210321090429.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210321095116.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210321104439.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210321115643.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210321131750.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/nier_automata/images/NieR_Automata_20210220231427.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;未完待续&lt;/p&gt;
+&lt;/blockquote&gt;
+
+    </content>
+    
+    
+    <category term="游戏" label="游戏" scheme="https://blog.starry-s.moe/categories/%E6%B8%B8%E6%88%8F/" />
+    
+    <category term="尼尔" label="尼尔" scheme="https://blog.starry-s.moe/categories/%E6%B8%B8%E6%88%8F/%E5%B0%BC%E5%B0%94/" />
+    
+    
+    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/" />
+    
+    <category term="尼尔：机械纪元" label="尼尔：机械纪元" scheme="https://blog.starry-s.moe/tags/%E5%B0%BC%E5%B0%94%EF%BC%9A%E6%9C%BA%E6%A2%B0%E7%BA%AA%E5%85%83/" />
+    
+    <category term="NieR: Automata" label="NieR: Automata" scheme="https://blog.starry-s.moe/tags/NieR:%20Automata/" />
+    
+  </entry>
   
   
   
@@ -3269,6 +3423,104 @@ options=overclocking
   
   
   <entry>
+    <title>【日常】更新一下近期日常： 2019.6-2019.8</title>
+    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/shanghai-2/" />
+    <id>https://blog.starry-s.moe/posts/shanghai-2/</id>
+    
+    <author>
+      <name>STARRY-S</name>
+      <email>hxstarrys@gmail.com</email>
+    </author>
+    
+    
+    <published>2019-08-02T15:49:39.000Z</published>
+    
+    
+    <updated>2019-08-02T15:49:39.000Z</updated>
+    
+    
+    <summary type="html">
+      &lt;p&gt;好久没有更新博客了，大一下半年一直在忙各种考试，除此之外还有一堆乱七八糟的事情要忙，更新博客的事就只好一点点往后拖了，于是拖更到了8月，后决定不继续拖更但实在没什么拿得出手的技术类文章可写，正好最近还遇到许多有趣的事情，就整理成日常写在这里吧。&lt;/p&gt;
+
+    </summary>
+    
+    
+    <content type="html">
+      &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
+&lt;p&gt;好久没有更新博客了，大一下半年一直在忙各种考试，除此之外还有一堆乱七八糟的事情要忙，更新博客的事就只好一点点往后拖了，于是拖更到了8月，后决定不继续拖更但实在没什么拿得出手的技术类文章可写，正好最近还遇到许多有趣的事情，就整理成日常写在这里吧。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/shanghai-2/images/dianche-1.jpg&quot; alt=&quot;有轨电车——沈阳南站站&quot;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;现在是00:00， 很适合吹空调听音乐写博客，毕竟白天睡了一天了。&lt;/p&gt;
+&lt;/blockquote&gt;
+ &lt;!--APlayer--&gt;
+&lt;div id=&quot;aplayer0&quot; style=&quot;background: var(--color-main-background)&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+const ap0 = new APlayer ({
+    container: document.getElementById(&quot;aplayer0&quot;),
+    theme: &quot;#33363b&quot;,
+    fixed: false,
+    listFolded: false,
+    listMaxHeight: false,
+    lrcType: false,
+    mini: false,
+    volume: 0.7,
+    order: &quot;list&quot;,
+    loop: &quot;all&quot;,
+    autoplay: false,
+    audio: [{
+        name: &quot;夏恋&quot;,
+        artist: &quot;Otokaze&quot;,
+        url: &quot;https://music.starry-s.xyz/music/Otokaze - 夏恋.m4a&quot;,
+        cover: &quot;https://music.starry-s.xyz/music/cover/4450823069239492.jpg&quot;,
+        lrc: &quot;&quot;,
+        theme: &quot;#F6890E&quot;
+    }]
+});
+&lt;/script&gt; 
+
+&lt;p&gt;首先是6月末去了沈阳META·TRON（梅塔·特隆）电音节，听说这是东北第一次举办的电音节，从AlanWalker入坑的电音，但Meta没请Alan，不过得知有百大DJ前十的DonDiablo（大！菠！萝！）遂非常激动觉得机会难得于是毫不犹豫的就把票买了。&lt;/p&gt;
+&lt;p&gt;本来临近期末了除了高数和英语和程序这几科没结课就没有别的课了，但实际上因为要准备高数省统考某组织多加了几节高数课搞得每天都要上两三大节的高数，在得知考试提前到6月29号后某部门下通知要求周末不许离校必须参加全天的自习和新增的高数课和高数模拟考试（草——汉语），于是我差点成为了一个花700多块钱打水漂的带傻子。&lt;/p&gt;
+&lt;p&gt;于是6月23号下午考完高数模拟考试就直奔地铁站，临时买了一张沈阳北站到沈阳南站的高铁票，逃掉了晚自习，踏上了&lt;strong&gt;追&lt;/strong&gt;(露)&lt;strong&gt;逐&lt;/strong&gt;(宿)&lt;strong&gt;梦&lt;/strong&gt;(街)&lt;strong&gt;想&lt;/strong&gt;(头)的&lt;strong&gt;追&lt;/strong&gt;(流)&lt;strong&gt;梦&lt;/strong&gt;(浪)之旅。&lt;/p&gt;
+&lt;p&gt;买高铁票时只剩一张商务座，于是用29元超低价格体验了一次12分钟的商务舱之旅，还享有了商务舱专属候车区的服务，实在没敢问有没有免费咖啡因为怕被骂不要脸（逃&lt;/p&gt;
+&lt;p&gt;检票时乘务员阿姨像提醒小朋友一样严肃的提醒我下一站就下车，没有返程，要是不下车就坐到大连了哈哈哈哈哈哈（噗&lt;/p&gt;
+&lt;p&gt;没通地铁于是坐高铁去苏家屯...然后从沈阳南站一路狂奔到有鬼电车一号线的站台，等了将近20分钟才等到车（班次真少），14:00就开始的电音节我20:10才迟到赶到苏家屯的会展中心......&lt;/p&gt;
+&lt;p&gt;结果完美错过了回沈北的大巴车，于是真要露宿街头了。&lt;/p&gt;
+&lt;p&gt;实际是打车到了沈阳站太原街附近找个旅店住了一晚上第二天早起坐地铁然后换乘共享单车（迷）才赶上了第一节的高数课。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/shanghai-2/images/westlake.jpg&quot; alt=&quot;WestLake&quot;&gt;&lt;/p&gt;
+&lt;p&gt;暑假二刷上海，二刷了迪士冶和地铁二号线、地铁四号线、10号线、11号线、16号线和磁悬浮等景点。看了梦寐以求的BiliBili Macro Link，说实话BML的现场和看直播/回放的效果真的不一样，反正·&lt;strong&gt;爱死这破站&lt;/strong&gt; 就完了。&lt;/p&gt;
+&lt;p&gt;总之就是以后绝对不会这么热的天去迪士冶了，要出人命的。&lt;/p&gt;
+&lt;p&gt;不过说回来还是喜欢一个人玩，人多了就是特别累，尤其是夏天这个要命的季节。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;最后附上几张在杭州小虫草堂拍的照片，当时为了去那个地方愣是顶着大太阳坐了两个多小时公交车。&lt;/p&gt;
+&lt;p&gt;当时比较匆忙外加上好久没有用相机了一直都在用手机拍照所以拍的不是很好，光圈太大了对焦有些不准，凑和着看一下吧。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/shanghai-2/images/IMG_4604.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/shanghai-2/images/IMG_4605.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/shanghai-2/images/IMG_4641.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/shanghai-2/images/IMG_4658.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+
+    </content>
+    
+    
+    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/" />
+    
+    
+    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/" />
+    
+    <category term="Trip" label="Trip" scheme="https://blog.starry-s.moe/tags/Trip/" />
+    
+    <category term="琐事" label="琐事" scheme="https://blog.starry-s.moe/tags/%E7%90%90%E4%BA%8B/" />
+    
+    <category term="摄影" label="摄影" scheme="https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/" />
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Spring - 3</title>
     <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/spring-3/" />
     <id>https://blog.starry-s.moe/posts/spring-3/</id>
@@ -4204,119 +4456,6 @@ $ ./java/jdk1.8.0/bin/java -Xms512M -Xmx1024M -jar./paperclip.jar
     <category term="Minecraft" label="Minecraft" scheme="https://blog.starry-s.moe/tags/Minecraft/" />
     
     <category term="树莓派" label="树莓派" scheme="https://blog.starry-s.moe/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" />
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Everything is based on “Hello World”.</title>
-    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/hello-world/" />
-    <id>https://blog.starry-s.moe/posts/hello-world/</id>
-    
-    <author>
-      <name>STARRY-S</name>
-      <email>hxstarrys@gmail.com</email>
-    </author>
-    
-    
-    <published>2016-08-22T06:22:54.000Z</published>
-    
-    
-    <updated>2016-08-22T06:22:54.000Z</updated>
-    
-    
-    <summary type="html">
-      &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
-&lt;p&gt;&lt;img src=&quot;/posts/hello-world/images/image.jpg&quot; alt=&quot;&amp;quot;Hello World&amp;quot;&quot; title=&quot;Hello World&quot;&gt;&lt;/p&gt;
- &lt;!--APlayer--&gt;
-&lt;div id=&quot;aplayer0&quot; style=&quot;background: var(--color-main-background)&quot;&gt;&lt;/div&gt;
-&lt;script&gt;
-const ap0 = new APlayer ({
-    container: document.getElementById(&quot;aplayer0&quot;),
-    theme: &quot;#33363b&quot;,
-    fixed: false,
-    listFolded: false,
-    listMaxHeight: false,
-    lrcType: false,
-    mini: false,
-    volume: 0.7,
-    order: &quot;list&quot;,
-    loop: &quot;all&quot;,
-    autoplay: false,
-    audio: [{
-        name: &quot;時雨&quot;,
-        artist: &quot;川嶋あい&quot;,
-        url: &quot;https://music.starry-s.moe/music/obj_w5rDlsOJwrLDjj7CmsOj_4642548938_80e9_cee0_eb38_c8adceebab40a36bfc2685fdad037b14.mov&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/109951165427223375.jpg&quot;,
-        lrc: &quot;&quot;,
-        theme: &quot;#aabbaa&quot;
-    }]
-});
-&lt;/script&gt; 
-
-&lt;p&gt;你好，世界！&lt;/p&gt;
-
-    </summary>
-    
-    
-    <content type="html">
-      &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
-&lt;p&gt;&lt;img src=&quot;/posts/hello-world/images/image.jpg&quot; alt=&quot;&amp;quot;Hello World&amp;quot;&quot; title=&quot;Hello World&quot;&gt;&lt;/p&gt;
- &lt;!--APlayer--&gt;
-&lt;div id=&quot;aplayer0&quot; style=&quot;background: var(--color-main-background)&quot;&gt;&lt;/div&gt;
-&lt;script&gt;
-const ap0 = new APlayer ({
-    container: document.getElementById(&quot;aplayer0&quot;),
-    theme: &quot;#33363b&quot;,
-    fixed: false,
-    listFolded: false,
-    listMaxHeight: false,
-    lrcType: false,
-    mini: false,
-    volume: 0.7,
-    order: &quot;list&quot;,
-    loop: &quot;all&quot;,
-    autoplay: false,
-    audio: [{
-        name: &quot;時雨&quot;,
-        artist: &quot;川嶋あい&quot;,
-        url: &quot;https://music.starry-s.moe/music/obj_w5rDlsOJwrLDjj7CmsOj_4642548938_80e9_cee0_eb38_c8adceebab40a36bfc2685fdad037b14.mov&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/109951165427223375.jpg&quot;,
-        lrc: &quot;&quot;,
-        theme: &quot;#aabbaa&quot;
-    }]
-});
-&lt;/script&gt; 
-
-&lt;p&gt;你好，世界！&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-
-&lt;hr&gt;
-&lt;figure data-raw=&quot;#include &lt;stdio.h&gt;
-int main(int argc, char *argv[])
-{
-    printf(&amp;quot;Hello World!\n&amp;quot;);
-    return 0;
-}
-&quot; data-info=&quot;language-C&quot; data-lang=&quot;C&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-C&quot;&gt;#include &amp;lt;stdio.h&amp;gt;
-int main(int argc, char *argv[])
-{
-    printf(&quot;Hello World!\n&quot;);
-    return 0;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;STARRY-S039;Blog&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hello-world/#STARRY-S039;Blog&quot; title=&quot;STARRY-S039;Blog&quot;&gt;&lt;/a&gt;STARRY-S&#039; Blog&lt;/h2&gt;
-
-    </content>
-    
-    
-    <category term="Hello World" label="Hello World" scheme="https://blog.starry-s.moe/categories/Hello%20World/" />
-    
-    
-    <category term="Hello World" label="Hello World" scheme="https://blog.starry-s.moe/tags/Hello%20World/" />
     
   </entry>
   
