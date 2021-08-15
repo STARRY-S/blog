@@ -47,6 +47,8 @@ tags: about
 
 本站由[Hikaru](https://hikaru.alynx.one/)生成, 主题为[ARIA](https://github.com/AlynxZhou/hikaru-theme-aria), 托管于GitHub Pages（见页面右下角）, 很喜欢这个生成器以及ARIA这款主题。
 
+本站并不打算以技术博客为主，尽管我很想写大量的技术类文章，但是我希望它在作为技术博客的同时更多的记录一些生活相关的事情，所以我不注重访客量、文章质量这些东西，而且我不打算向很多人推荐这个网站，因为我的日常对其他人来说可能并不十分有趣。
+
 ----
 
 <!--aplayer
