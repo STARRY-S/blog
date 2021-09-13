@@ -7,7 +7,7 @@
   
   <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/" />
   
-  <updated>2021-08-14T16:23:55.000Z</updated>
+  <updated>2021-09-13T15:20:29.000Z</updated>
   
   <id>https://blog.starry-s.moe/</id>
   
@@ -19,6 +19,114 @@
   <generator uri="https://github.com/AlynxZhou/hikaru-generator-feed/" version="v2.3.4">Hikaru Generator Feed</generator>
   
   
+  
+  
+  
+  <entry>
+    <title>我们来组装一台电脑吧</title>
+    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/build-desktop/" />
+    <id>https://blog.starry-s.moe/posts/build-desktop/</id>
+    
+    <author>
+      <name>STARRY-S</name>
+      <email>hxstarrys@gmail.com</email>
+    </author>
+    
+    
+    <published>2021-09-13T15:20:29.000Z</published>
+    
+    
+    <updated>2021-09-13T15:20:29.000Z</updated>
+    
+    
+    <summary type="html">
+      &lt;p&gt;很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。&lt;/p&gt;
+&lt;div class=&quot;alert-blue&quot;&gt;
+本篇包含大量插图，为了浏览体验我只对图片进行了适量压缩，&lt;br&gt;
+网络不好的用户可能需要多花一些时间加载。
+&lt;/div&gt;
+
+
+    </summary>
+    
+    
+    <content type="html">
+      &lt;p&gt;很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。&lt;/p&gt;
+&lt;div class=&quot;alert-blue&quot;&gt;
+本篇包含大量插图，为了浏览体验我只对图片进行了适量压缩，&lt;br&gt;
+网络不好的用户可能需要多花一些时间加载。
+&lt;/div&gt;
+
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+&lt;hr&gt;
+&lt;blockquote&gt;
+&lt;p&gt;本篇仍在编写中，不定期更新&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;配置清单&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95&quot; title=&quot;配置清单&quot;&gt;&lt;/a&gt;配置清单&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一边翻着某东的购物车一边写&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;CPU + 主板: AMD Ryzen 5 5600X、华硕TFU GAMING B550M-PLUS (WI-FI) 共2477元&lt;/li&gt;
+&lt;li&gt;显卡: 目前仍为空气（实际买了技嘉 GeForce GT 730D3 亮机卡 529元&lt;/li&gt;
+&lt;li&gt;内存: 英睿达 美光 DDR4 3200MHz 8Gx2 469元&lt;/li&gt;
+&lt;li&gt;固态硬盘: 西部数据 SN750 SE 1TB 929元 + 英睿达 美光 MX500 2TB 1299元&lt;/li&gt;
+&lt;li&gt;机箱: 先马 鲁班1 199元&lt;/li&gt;
+&lt;li&gt;电源: 长城 金牌电源 V7-700W 475元&lt;/li&gt;
+&lt;li&gt;CPU散热: 利民AK120 PLUS 179元&lt;/li&gt;
+&lt;li&gt;机箱散热: 利民 TL-R12 三个12CM风扇 139元&lt;/li&gt;
+&lt;li&gt;其他: 扎带5.5元 理线带 9.9元&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因为我之前用笔记本时已经有一个ikbc c87 红轴机械键盘和罗技G304无线鼠标以及之前弄拓展屏时买了戴尔U2419HS显示器，所以这些配件我就不再列入装机清单里面。&lt;/p&gt;
+&lt;p&gt;整体配置全下来大概花了6.6K左右，显卡打算以后等价格恢复正常后再买。所以现在买的是英伟达730D，尽管是亮机卡但是我还是决定多花一点预算去自营点买一张靠谱的全新卡，这样就算以后我换显卡了，这张旧的730还可以拿去给亲朋好友的上古时代老电脑“升级”一下。&lt;/p&gt;
+&lt;p&gt;主板觉得华硕重炮手B550M就已经蛮符合我自己的需求了，在B站上看了一下B550的评测发现华硕的重炮手要比微星和技嘉的迫击炮强一些（也贵了好几百元），所以决定多花些预算上一张性能强一点的主板，为后续的升级留一些空间（不过我觉得就这配置已经很够用了没啥好升级的了&lt;/p&gt;
+&lt;p&gt;因为AMD R7 5800X太贵了有点超预算，所以决定买的R5 5600X，除了核心数少了一些（跑编译少几个线程）之外，性能对于现在的日常使用来说已经很足够了。肯定比我笔记本上的R7 4800H强许多。&lt;/p&gt;
+&lt;p&gt;因为自己打算在电脑装Linux + Windows双系统，所以实际上我给电脑装了2条NVME固态（SN750 SE 1T + SN550 1T），然后还配了2T的英睿达MX500，以后可能根据需要还会买几个机械硬盘存数据用。&lt;/p&gt;
+&lt;p&gt;因为CPU散热不带灯光，尽管我不喜欢RGB那种太花里胡哨的效果，但是还是得买几个有光亮的机箱风扇，因为预算有限而且不装显卡暂时对散热要求不高，所以我只买了比较便宜的风扇，不然机箱黑咕隆咚的太不好看了，以后有需要的话再修改。&lt;/p&gt;
+&lt;p&gt;在B站找了几个电源测评介绍的视频看了一下，就买了长城的700W金牌电源，价格比较便宜不是一元一瓦，目前来讲我不装显卡就日常待机的话整体功率都不会超100W，主要是电费太贵了。&lt;/p&gt;
+&lt;p&gt;从网上挑了很久的机箱发现实在没有比较便宜又顺眼的，一开始想买白色机箱来着，后来发现白色机箱要么就是奇葩风道要么就是超预算，所以最终决定买先马鲁班1黑色机箱，尺寸够大对散热和主板显卡长度几乎没有限制，不用买配件时总计算空间大小了。&lt;/p&gt;
+&lt;p&gt;配置是周五定下来就从京东上买的，因为基本上都是自营，周六当天就全收到货了。所以周六+周日两天一顿折腾就把电脑装好。一开始还比较担心会不会安错，哪里出问题需要返工这类的情况，实际上装机十分顺利。除了理线花了一些时间以外其他都基本上是一次装齐直接点亮装系统，其实第一次装好机插电源后按开机键怎么也点不亮，当时吓够呛然后拔掉开机跳线检查是不是接线有问题。后来才发现是自己脑残电源开关开反了主板没通电肯定点不亮。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;防呆不防傻， 那么你能帮帮我吗？（逃&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;装机&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E8%A3%85%E6%9C%BA&quot; title=&quot;装机&quot;&gt;&lt;/a&gt;装机&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;FLAG: 今晚太晚了，先把图贴上，以后有时间再写文字描述&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6800.jpg&quot; alt=&quot;主板&quot; title=&quot;主板&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6802.jpg&quot; alt=&quot;安装好CPU&quot; title=&quot;安装好CPU&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6804.jpg&quot; alt=&quot;内存特写&quot; title=&quot;内存特写&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6809.jpg&quot; alt=&quot;散热模具&quot; title=&quot;散热模具&quot;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_68012.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6814.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6816.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6821.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6822.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6825.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;&quot;&gt;&lt;img src=&quot;/posts/build-desktop/images/photo_2021-09-14_00-34-22.jpg&quot; alt=&quot;&quot;&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;最终成果展示&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E6%9C%80%E7%BB%88%E6%88%90%E6%9E%9C%E5%B1%95%E7%A4%BA&quot; title=&quot;最终成果展示&quot;&gt;&lt;/a&gt;最终成果展示&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6831.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6839.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6841.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;by STARRY-S&lt;/strong&gt;&lt;/p&gt;
+
+    </content>
+    
+    
+    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/" />
+    
+    
+    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/" />
+    
+    <category term="装机" label="装机" scheme="https://blog.starry-s.moe/tags/%E8%A3%85%E6%9C%BA/" />
+    
+    <category term="台式机" label="台式机" scheme="https://blog.starry-s.moe/tags/%E5%8F%B0%E5%BC%8F%E6%9C%BA/" />
+    
+  </entry>
   
   
   
@@ -4137,10 +4245,11 @@ reboot
 &lt;p&gt;顺便说一下网易版并不支持MacOS哈哈哈哈。。。。&lt;/p&gt;
 &lt;h2 id=&quot;第一部分：&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A&quot; title=&quot;第一部分：&quot;&gt;&lt;/a&gt;第一部分：&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;如果你尚未在官网购买正版的Minecraft，你可以使用HMCL（&lt;a href=&quot;https://github.com/huanghongxun/HMCL&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Hello Minecraft Launcher&lt;/a&gt; )启动器下载并运行MC。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;1.
-你需要确保你的电脑已安装java8。下载java：&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&lt;/a&gt;&lt;/p&gt;
-&lt;ol start=&quot;2&quot;&gt;
-&lt;li&gt;接下来你需要下载HMCL启动器。&lt;/li&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;你需要确保你的电脑已安装java8。下载java：&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;接下来你需要下载HMCL启动器。&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;我建议去&lt;a href=&quot;https://ci.huangyuhui.net/job/HMCL/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;HMCL的官方服务器&lt;/a&gt; 下载所需的&lt;code&gt;exe&lt;/code&gt;文件，最好不要从贴吧/论坛下载来路不明/非最新版本的HMCL启动器。&lt;/p&gt;
 &lt;p&gt;选择最新版本的后缀为&lt;code&gt;.exe&lt;/code&gt;的文件下载即可。或者你可以下载后缀为&lt;code&gt;.jar&lt;/code&gt;的文件（用于Linux，MacOS）&lt;/p&gt;
@@ -4418,100 +4527,6 @@ $ chmod 744 ./start.sh
     <category term="日常" label="日常" scheme="https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/" />
     
     <category term="碎碎念" label="碎碎念" scheme="https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" />
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>树莓派之我的世界服务器</title>
-    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/raspberrypi-mc-server/" />
-    <id>https://blog.starry-s.moe/posts/raspberrypi-mc-server/</id>
-    
-    <author>
-      <name>STARRY-S</name>
-      <email>hxstarrys@gmail.com</email>
-    </author>
-    
-    
-    <published>2016-11-25T07:01:28.000Z</published>
-    
-    
-    <updated>2016-11-25T07:01:28.000Z</updated>
-    
-    
-    <summary type="html">
-      &lt;div class=&quot;alert-red&quot;&gt;本篇由于创作时间过于久远, 作者已无法保证其准确性, 内容仅供参考。&lt;/div&gt;
-
-&lt;p&gt;刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。&lt;/p&gt;
-
-    </summary>
-    
-    
-    <content type="html">
-      &lt;div class=&quot;alert-red&quot;&gt;本篇由于创作时间过于久远, 作者已无法保证其准确性, 内容仅供参考。&lt;/div&gt;
-
-&lt;p&gt;刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;终于可以继续更新博客了！原计划是11月之前更新博客的。不巧电脑出了问题，重装了一遍Arch Linux,后来又发生了一些事一直没能用电脑。由于开学到现在能放假供我写博客的时间少之又少，这篇原本在11月初就能发表的文章就这样被硬生生推迟到了11月末了。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;材料以及工具&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberrypi-mc-server/#%E6%9D%90%E6%96%99%E4%BB%A5%E5%8F%8A%E5%B7%A5%E5%85%B7&quot; title=&quot;材料以及工具&quot;&gt;&lt;/a&gt;材料以及工具&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;树莓派一只 （包括所需要的C10的内存卡以及刷好的固件以及5v，2.5A充电器）&lt;/li&gt;
-&lt;li&gt;一个支持DDNS的路由器（非必须）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;blockquote&gt;
-&lt;p&gt;如果不想用树莓派建服务器的话也可以按照本教程在电脑上搭建服务器。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;配置树莓派&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberrypi-mc-server/#%E9%85%8D%E7%BD%AE%E6%A0%91%E8%8E%93%E6%B4%BE&quot; title=&quot;配置树莓派&quot;&gt;&lt;/a&gt;配置树莓派&lt;/h2&gt;
-&lt;h3 id=&quot;调整GPU可使用的内存：&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberrypi-mc-server/#%E8%B0%83%E6%95%B4GPU%E5%8F%AF%E4%BD%BF%E7%94%A8%E7%9A%84%E5%86%85%E5%AD%98%EF%BC%9A&quot; title=&quot;调整GPU可使用的内存：&quot;&gt;&lt;/a&gt;调整GPU可使用的内存：&lt;/h3&gt;
-&lt;p&gt;毕竟用树莓派开服务器不需要占用GPU，直接调低。&lt;/p&gt;
-&lt;p&gt;Raspbian: &lt;code&gt;raspi-config&lt;/code&gt;中将GPU内存分为16M。&lt;/p&gt;
-&lt;p&gt;Arch Linux ARM: &lt;code&gt;/boot/config.txt&lt;/code&gt;中更改GPU显存为16&lt;/p&gt;
-&lt;h2 id=&quot;安装JAVA&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberrypi-mc-server/#%E5%AE%89%E8%A3%85JAVA&quot; title=&quot;安装JAVA&quot;&gt;&lt;/a&gt;安装JAVA&lt;/h2&gt;
-&lt;p&gt;Archlinux ARM:&lt;/p&gt;
-&lt;figure data-raw=&quot;$ sudo pacman -S jre8-openjdk
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ sudo pacman -S jre8-openjdk
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;通用方法：
-前往 &lt;strong&gt;&lt;a href=&quot;http://www.oracle.com/technetwork/cn/java/javase/downloads/jdk8-downloads-2133151-zhs.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;JAVA下载页&lt;/a&gt;&lt;/strong&gt; 下载树莓派（ARM架构，32位系统）所支持的JDK。&lt;/p&gt;
-&lt;figure data-raw=&quot;$ mkdir ./java
-$ tar -zxvf 你所下载的JDK.jar.gz -C ./java/
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ mkdir ./java
-$ tar -zxvf 你所下载的JDK.jar.gz -C ./java/
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;在终端输入&lt;code&gt;./java/jdk1.8.0/bin/java -version&lt;/code&gt;显示java的版本号。&lt;/p&gt;
-&lt;h2 id=&quot;部署服务器&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberrypi-mc-server/#%E9%83%A8%E7%BD%B2%E6%9C%8D%E5%8A%A1%E5%99%A8&quot; title=&quot;部署服务器&quot;&gt;&lt;/a&gt;部署服务器&lt;/h2&gt;
-&lt;p&gt;本篇使用&lt;a href=&quot;https://github.com/PaperMC/Paper&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Paper MC&lt;/a&gt;部署服务器。
-除了Paper之外还有Bukkit和Spigot以及原版可选。&lt;/p&gt;
-&lt;p&gt;使用以下命令启动服务器。&lt;/p&gt;
-&lt;figure data-raw=&quot;$ echo eula=True &gt; eula.txt
-$ ./java/jdk*/bin/java -Xms512M -Xmx1024M -jar ./spigot.jar
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ echo eula=True &amp;gt; eula.txt
-$ ./java/jdk*/bin/java -Xms512M -Xmx1024M -jar ./spigot.jar
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;第一次运行会下载一些文件需要一定的时间。&lt;/p&gt;
-&lt;p&gt;网上有很多服务器插件和Mod什么的。本章中不做过多介绍.&lt;/p&gt;
-&lt;h2 id=&quot;用screen保持服务器一直运行而不被关掉。&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberrypi-mc-server/#%E7%94%A8screen%E4%BF%9D%E6%8C%81%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%B8%80%E7%9B%B4%E8%BF%90%E8%A1%8C%E8%80%8C%E4%B8%8D%E8%A2%AB%E5%85%B3%E6%8E%89%E3%80%82&quot; title=&quot;用screen保持服务器一直运行而不被关掉。&quot;&gt;&lt;/a&gt;用screen 保持服务器一直运行而不被关掉。&lt;/h2&gt;
-&lt;p&gt;首先安装好screen。&lt;/p&gt;
-&lt;figure data-raw=&quot;$ screen
-$ ./java/jdk1.8.0/bin/java -Xms512M -Xmx1024M -jar./paperclip.jar
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ screen
-$ ./java/jdk1.8.0/bin/java -Xms512M -Xmx1024M -jar./paperclip.jar
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;在配置好你的服务器后就可以和小伙伴一起联机了。经过测试几个人简单的联机运行蛮正常的。&lt;/p&gt;
-
-    </content>
-    
-    
-    <category term="Minecraft" label="Minecraft" scheme="https://blog.starry-s.moe/categories/Minecraft/" />
-    
-    
-    <category term="Minecraft" label="Minecraft" scheme="https://blog.starry-s.moe/tags/Minecraft/" />
-    
-    <category term="树莓派" label="树莓派" scheme="https://blog.starry-s.moe/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" />
     
   </entry>
   
