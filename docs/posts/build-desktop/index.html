@@ -328,6 +328,10 @@
         </div>
         
         
+        <div class="post-date meta-block">
+          <i class="far fa-calendar-plus"></i><span><time class="post-full-date" title="post-date" itemprop="dateUpdated" datetime="2021-09-14T15:53:37.000Z">9/14/2021, 11:53:37 PM</time></span>
+        </div>
+        
         
         
         <div class="post-categories meta-block">
@@ -345,18 +349,43 @@
       </div>
     </header>
     <main class="post-main" id="scrollspy-container" itemprop="articleBody">
-      <p>很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。</p>
+      <link href="/css/APlayer.min.css" rel="stylesheet">
+<script src= "/js/APlayer.min.js"></script>
+<p>很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。</p>
 <div class="alert-blue">
 本篇包含大量插图，为了浏览体验我只对图片进行了适量压缩，<br>
-网络不好的用户可能需要多花一些时间加载。
+网络不好的用户可能需要多花一些时间加载。<br>
 </div>
 
 <a id="more"></a>
 
+ <!--APlayer-->
+<div id="aplayer0" style="background: var(--color-main-background)"></div>
+<script>
+const ap0 = new APlayer ({
+    container: document.getElementById("aplayer0"),
+    theme: "#33363b",
+    fixed: false,
+    listFolded: false,
+    listMaxHeight: false,
+    lrcType: false,
+    mini: false,
+    volume: 0.7,
+    order: "list",
+    loop: "all",
+    autoplay: false,
+    audio: [{
+        name: "砂塵の彼方へ",
+        artist: "Revo / 梶浦由記",
+        url: "https://music.starry-s.moe/music/ae9d_b321_c72a_e5c3e5bb99a9461050bcf04c68886dad.mp3",
+        cover: "https://music.starry-s.moe/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg",
+        lrc: "",
+        theme: "#6e5c00"
+    }]
+});
+</script> 
+
 <hr>
-<blockquote>
-<p>本篇仍在编写中，不定期更新</p>
-</blockquote>
 <h2 id="配置清单"><a class="header-link" href="/posts/build-desktop/#%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95" title="配置清单"></a>配置清单</h2>
 <blockquote>
 <p>一边翻着某东的购物车一边写</p>
@@ -368,12 +397,12 @@
 <li>固态硬盘: 西部数据 SN750 SE 1TB 929元 + 英睿达 美光 MX500 2TB 1299元</li>
 <li>机箱: 先马 鲁班1 199元</li>
 <li>电源: 长城 金牌电源 V7-700W 475元</li>
-<li>CPU散热: 利民AK120 PLUS 179元</li>
-<li>机箱散热: 利民 TL-R12 三个12CM风扇 139元</li>
+<li>CPU散热: 利民AK120 PLUS 169元</li>
+<li>机箱散热: 利民 TL-R12 三个12CM风扇 119元</li>
 <li>其他: 扎带5.5元 理线带 9.9元</li>
 </ul>
 <p>因为我之前用笔记本时已经有一个ikbc c87 红轴机械键盘和罗技G304无线鼠标以及之前弄拓展屏时买了戴尔U2419HS显示器，所以这些配件我就不再列入装机清单里面。</p>
-<p>整体配置全下来大概花了6.6K左右，显卡打算以后等价格恢复正常后再买。所以现在买的是英伟达730D，尽管是亮机卡但是我还是决定多花一点预算去自营点买一张靠谱的全新卡，这样就算以后我换显卡了，这张旧的730还可以拿去给亲朋好友的上古时代老电脑“升级”一下。</p>
+<p>整体配置全下来大概花了6.6K左右，有些配件是买完以后京东又降价了于是申请了价格保护退了一些回来。显卡打算以后等价格恢复正常后再买。所以现在买的是英伟达730D，尽管是亮机卡但是我还是决定多花一点预算去自营店买一张靠谱的全新卡，这样就算以后我换显卡了，这张旧的730还可以拿去给亲朋好友的上古时代老电脑“升级”一下。</p>
 <p>主板觉得华硕重炮手B550M就已经蛮符合我自己的需求了，在B站上看了一下B550的评测发现华硕的重炮手要比微星和技嘉的迫击炮强一些（也贵了好几百元），所以决定多花些预算上一张性能强一点的主板，为后续的升级留一些空间（不过我觉得就这配置已经很够用了没啥好升级的了</p>
 <p>因为AMD R7 5800X太贵了有点超预算，所以决定买的R5 5600X，除了核心数少了一些（跑编译少几个线程）之外，性能对于现在的日常使用来说已经很足够了。肯定比我笔记本上的R7 4800H强许多。</p>
 <p>因为自己打算在电脑装Linux + Windows双系统，所以实际上我给电脑装了2条NVME固态（SN750 SE 1T + SN550 1T），然后还配了2T的英睿达MX500，以后可能根据需要还会买几个机械硬盘存数据用。</p>
@@ -386,26 +415,43 @@
 </blockquote>
 <hr>
 <h2 id="装机"><a class="header-link" href="/posts/build-desktop/#%E8%A3%85%E6%9C%BA" title="装机"></a>装机</h2>
-<blockquote>
-<p>FLAG: 今晚太晚了，先把图贴上，以后有时间再写文字描述</p>
-</blockquote>
+<p>我装机时为了防止装错顺序返工，于是去B站搜了一个教程：【<a href="https://www.bilibili.com/video/BV1jE411e7hw" target="_blank" rel="external nofollow noreferrer noopener">BV1jE411e7hw</a>】，照着这个顺序安装基本不会出错，而且比较常见的问题视频上都有提到，比如萌新不是十分熟悉的内存插槽优先级以及比较难弄的前面板跳线。</p>
 <p><img src="/posts/build-desktop/images/IMG_6800.jpg" alt="主板" title="主板"></p>
-<p><img src="/posts/build-desktop/images/IMG_6802.jpg" alt="安装好CPU" title="安装好CPU"></p>
-<p><img src="/posts/build-desktop/images/IMG_6804.jpg" alt="内存特写" title="内存特写"></p>
+<p><img src="/posts/build-desktop/images/IMG_6802.jpg" alt="AMD R5 5600X" title="AMD R5 5600X"></p>
+<p><img src="/posts/build-desktop/images/IMG_6804.jpg" alt="内存" title="内存"></p>
 <p><img src="/posts/build-desktop/images/IMG_6809.jpg" alt="散热模具" title="散热模具"></p>
 <hr>
-<p><img src="/posts/build-desktop/images/IMG_68012.jpg" alt=""></p>
+<p><img src="/posts/build-desktop/images/IMG_6812.jpg" alt=""></p>
+<p>因为散热器赠的利民TF7硅脂比较干，所以我直接点9个点然后就扣散热器了。觉得没必要像网上有人那样戴手套把硅质抹匀抹平，也不用特别在意硅脂会不会留气泡，总觉得这些不会对散热有太大影响。</p>
+<p>毕竟用一年左右就得拆下来换新硅脂，到时候只要硅脂别太干粘住直接把CPU连根拔起就行。</p>
+<hr>
 <p><img src="/posts/build-desktop/images/IMG_6814.jpg" alt=""></p>
+<p>特地拍了一张照片以确认我把散热器底下的膜撕掉了。</p>
 <p><img src="/posts/build-desktop/images/IMG_6816.jpg" alt=""></p>
+<hr>
 <p><img src="/posts/build-desktop/images/IMG_6821.jpg" alt=""></p>
 <p><img src="/posts/build-desktop/images/IMG_6822.jpg" alt=""></p>
+<hr>
 <p><img src="/posts/build-desktop/images/IMG_6825.jpg" alt=""></p>
-<h2 id=""><img src="/posts/build-desktop/images/photo_2021-09-14_00-34-22.jpg" alt=""></h2>
+<p><img src="/posts/build-desktop/images/photo_2021-09-14_00-34-22.jpg" alt=""></p>
+<p>背面理线花了好几个小时把不同种类形状的线绑了起来，最顶上的风扇RGB灯光线实在没有空间收纳于是只好捆成一坨放在那。</p>
+<p>机械硬盘仓上边屯了为以后准备的显卡供电的排线。</p>
 <h2 id="最终成果展示"><a class="header-link" href="/posts/build-desktop/#%E6%9C%80%E7%BB%88%E6%88%90%E6%9E%9C%E5%B1%95%E7%A4%BA" title="最终成果展示"></a>最终成果展示</h2>
 <p><img src="/posts/build-desktop/images/IMG_6831.jpg" alt=""></p>
+<p>装好Windows，安装华硕主板的软件，把风扇的灯调成了橙色长亮的模式。一开始调成浅蓝色觉得色温太低了有点冷，所以改成了暖色调。</p>
 <p><img src="/posts/build-desktop/images/IMG_6839.jpg" alt=""></p>
-<p><img src="/posts/build-desktop/images/IMG_6841.jpg" alt=""></p>
+<p>给机箱内部放拍一张特写，现在正在考虑要不要买一个手办放进去。</p>
 <hr>
+<p><img src="/posts/build-desktop/images/IMG_6841.jpg" alt="Arch Linux" title="Arch Linux"></p>
+<p>装好Arch Linux后的最终效果。</p>
+<h2 id="游戏体验"><a class="header-link" href="/posts/build-desktop/#%E6%B8%B8%E6%88%8F%E4%BD%93%E9%AA%8C" title="游戏体验"></a>游戏体验</h2>
+<p>这一部分目前可以跳过不写，因为一个渣显示器 + 730D能发挥出啥游戏效果可想而知。玩Minecraft (Java Edition 1.16.4 Fabric + Optifine)有时候能跑到90FPS，平常基本上就60帧左右。</p>
+<p>守望先锋就压根没打算试，本安娜老玩家是绝对不会在守望200fps以下安心奶人的，所以我宁可暂时不玩 (先用那个RTX2060的笔记本将就一下~)。</p>
+<p>最终盯着显示器上这肉眼可见的逐行扫描，我放弃了目前用这个电脑玩游戏的打算，拿来看个视频写个代码还是绰绰有余的。</p>
+<h2 id="Others"><a class="header-link" href="/posts/build-desktop/#Others" title="Others"></a>Others</h2>
+<blockquote>
+<p>本篇仍在编写中，不定期更新</p>
+</blockquote>
 <p><strong>by STARRY-S</strong></p>
 
     </main>
@@ -598,6 +644,18 @@
           
         </li>
       
+        <li>
+          
+          <a class="list-group-item toc-link" href="#游戏体验">游戏体验</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#Others">Others</a>
+          
+        </li>
+      
       </ol>
       
     </div>
@@ -679,4 +737,4 @@
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.2 at 2021-09-13T16:51:02.545Z. -->
+<!-- Page built by Hikaru v1.8.2 at 2021-09-14T15:54:11.930Z. -->
