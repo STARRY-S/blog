@@ -157,7 +157,7 @@ comment:
   disqusShortName: blog-starry-s
 
 reward:
-  enable: false
+  enable: true
   message: Support Me!
   weChatPayQRCode: images/wechatpay.jpg
   aliPayQRCode: images/alipay.jpg
