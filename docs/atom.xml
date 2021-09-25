@@ -161,9 +161,9 @@ Address=192.168.xxx.xxx/24
 Gateway=192.168.xxx.1
 DNS=8.8.8.8
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;重启后&lt;code&gt;ip addr&lt;/code&gt;就能看到设备的全部IP地址了。&lt;/p&gt;
+&lt;p&gt;重启系统后，使用&lt;code&gt;ip addr&lt;/code&gt;检查设备的IP地址是否正确。&lt;/p&gt;
 &lt;h3 id=&quot;%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99&quot;&gt;&lt;/a&gt;配置防火墙&lt;/h3&gt;
-&lt;p&gt;首先安装&lt;code&gt;ubw&lt;/code&gt;。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫&lt;strong&gt;Uncomplicated Filewall&lt;/strong&gt;，所以咱先用ufw配置防火墙）&lt;/p&gt;
+&lt;p&gt;首先安装&lt;code&gt;ufw&lt;/code&gt;。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫&lt;strong&gt;Uncomplicated Filewall&lt;/strong&gt;，所以咱先用ufw配置防火墙）&lt;/p&gt;
 &lt;p&gt;食用方法请参见&lt;a href=&quot;https://wiki.archlinux.org/title/Uncomplicated_Firewall&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Wiki页面&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id=&quot;Samba&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#Samba&quot;&gt;&lt;/a&gt;Samba&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -182,6 +182,8 @@ DNS=8.8.8.8
     <category term="树莓派" label="树莓派" scheme="https://blog.starry-s.moe/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" />
     
     <category term="Arch Linux" label="Arch Linux" scheme="https://blog.starry-s.moe/tags/Arch%20Linux/" />
+    
+    <category term="Samba" label="Samba" scheme="https://blog.starry-s.moe/tags/Samba/" />
     
     <category term="NAS" label="NAS" scheme="https://blog.starry-s.moe/tags/NAS/" />
     
