@@ -6,6 +6,7 @@ layout: post
 tags:
 - 树莓派
 - Arch Linux
+- Samba
 - NAS
 categories:
 - 教程
@@ -112,11 +113,11 @@ Gateway=192.168.xxx.1
 DNS=8.8.8.8
 ```
 
-重启后`ip addr`就能看到设备的全部IP地址了。
+重启系统后，使用`ip addr`检查设备的IP地址是否正确。
 
 ### 配置防火墙
 
-首先安装`ubw`。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫**Uncomplicated Filewall**，所以咱先用ufw配置防火墙）
+首先安装`ufw`。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫**Uncomplicated Filewall**，所以咱先用ufw配置防火墙）
 
 食用方法请参见[Wiki页面](https://wiki.archlinux.org/title/Uncomplicated_Firewall)。
 
