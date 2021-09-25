@@ -16,7 +16,7 @@
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
-    <meta name="generator" content="Hikaru v1.8.2">
+    <meta name="generator" content="Hikaru v1.8.3">
     <link rel="canonical" href="https://blog.starry-s.moe/posts/xiaomi_r3g_openwrt/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
@@ -383,7 +383,7 @@ const ap0 = new APlayer ({
 });
 </script> 
 
-<h2 id="准备工作"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C" title="准备工作"></a>准备工作</h2>
+<h2 id="%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"></a>准备工作</h2>
 <p>你至少需要以下工具：</p>
 <ul>
 <li>路由器本体</li>
@@ -393,7 +393,7 @@ const ap0 = new APlayer ({
 <li>Windows用户需要一个SSH软件（例如：<a href="https://putty.org" target="_blank" rel="external nofollow noreferrer noopener">putty</a>）</li>
 <li><a href="http://www1.miwifi.com/miwifi_download.html" target="_blank" rel="external nofollow noreferrer noopener">小米路由器客户端</a>, 用来绑定你的小米账号</li>
 </ul>
-<h2 id="SSH到路由器"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8" title="SSH到路由器"></a>SSH到路由器</h2>
+<h2 id="SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8"></a>SSH到路由器</h2>
 <blockquote>
 <p>路由器重启后指示灯会变为蓝色, 若变为红色则为刷机失败。</p>
 </blockquote>
@@ -423,7 +423,7 @@ const ap0 = new APlayer ({
 </code></pre></figure>
 </li>
 </ul>
-<h2 id="刷入Bootloader（推荐可选）"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89" title="刷入Bootloader（推荐可选）"></a>刷入Bootloader（推荐/可选）</h2>
+<h2 id="%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89"></a>刷入Bootloader（推荐/可选）</h2>
 <blockquote>
 <p>该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考<a href="https://www.right.com.cn/forum/forum.php?mod=viewthread&amp;tid=267455" target="_blank" rel="external nofollow noreferrer noopener">这篇帖子</a>, 不过为了防止变砖, 还是推荐刷Breed。</p>
 </blockquote>
@@ -445,7 +445,7 @@ mount /dev/sda1 /tmp/sdcard
 mtd -r write /tmp/sdcard/breed.bin Bootloader
 </code></pre></figure>
 <p>路由器刷写完毕后会自动重启, <strong>在写入Breed的过程中不要动路由器</strong>。</p>
-<h2 id="刷机"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E6%9C%BA" title="刷机"></a>刷机</h2>
+<h2 id="%E5%88%B7%E6%9C%BA"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E6%9C%BA"></a>刷机</h2>
 <p>下载所需固件：</p>
 <ul>
 <li><p>tuna镜像站的OpenWrt下载地址：<a href="https://mirrors.tuna.tsinghua.edu.cn/lede/releases/" target="_blank" rel="external nofollow noreferrer noopener">https://mirrors.tuna.tsinghua.edu.cn/lede/releases/</a></p>
@@ -453,7 +453,7 @@ mtd -r write /tmp/sdcard/breed.bin Bootloader
 <li><p>官方下载地址: <a href="https://downloads.openwrt.org/releases/" target="_blank" rel="external nofollow noreferrer noopener">https://downloads.openwrt.org/releases/</a></p>
 </li>
 </ul>
-<h3 id="使用Breed的刷机方法"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95" title="使用Breed的刷机方法"></a>使用Breed的刷机方法</h3>
+<h3 id="%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95"></a>使用Breed的刷机方法</h3>
 <p>按照hackpascal的说法是：</p>
 <blockquote>
 <p>如果kernel0存在kernel1不存在, 那么启动kernel0
@@ -474,7 +474,7 @@ mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-rootfs0.bin rootfs0
 <li><p>在环境变量编辑里添加<code>xiaomi.r3g.bootfw</code>字段, 值为<code>2</code>,保存后重启即可进入Openwrt。</p>
 </li>
 </ol>
-<h3 id="没有刷入Breed的刷机方法"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95" title="没有刷入Breed的刷机方法"></a>没有刷入Breed的刷机方法</h3>
+<h3 id="%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95"></a>没有刷入Breed的刷机方法</h3>
 <blockquote>
 <p><a href="https://openwrt.org/toh/xiaomi/mir3g" target="_blank" rel="external nofollow noreferrer noopener">OpenWrt官网提供的教程</a>是在没有刷入Breed的情况下刷入OpenWrt固件的。</p>
 </blockquote>
@@ -493,7 +493,7 @@ nvram commit
 reboot
 </code></pre></figure>
 <hr>
-<h2 id="Others"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#Others" title="Others"></a>Others</h2>
+<h2 id="Others"><a class="header-link" href="/posts/xiaomi_r3g_openwrt/#Others"></a>Others</h2>
 <ol>
 <li><p>如果刷了Breed + Pandavan/PandoraBox后想换回OpenWrt的话, 首先在Breed中刷回小米路由器开发版的官方固件, 然后SSH到路由器按照上述的使用Breed的刷机方法再刷机。</p>
 </li>
@@ -676,21 +676,21 @@ reboot
       
       <div class="archives-count count-block">
         <div class="site-count-title">归档</div>
-        <div><a href="/archives/">22</a></div>
+        <div><a href="/archives/">23</a></div>
       </div>
       
       
       
       <div class="categories-count count-block">
         <div class="site-count-title">分类</div>
-        <div><a href="/categories/">13</a></div>
+        <div><a href="/categories/">14</a></div>
       </div>
       
       
       
       <div class="tags-count count-block">
         <div class="site-count-title">标签</div>
-        <div><a href="/tags/">29</a></div>
+        <div><a href="/tags/">30</a></div>
       </div>
       
       
@@ -715,38 +715,38 @@ reboot
       
         <li>
           
-          <a class="list-group-item toc-link" href="#准备工作">准备工作</a>
+          <a class="list-group-item toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">准备工作</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#SSH到路由器">SSH到路由器</a>
+          <a class="list-group-item toc-link" href="#SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8">SSH到路由器</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#刷入Bootloader（推荐可选）">刷入Bootloader（推荐/可选）</a>
+          <a class="list-group-item toc-link" href="#%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89">刷入Bootloader（推荐/可选）</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#刷机">刷机</a>
+          <a class="list-group-item toc-link" href="#%E5%88%B7%E6%9C%BA">刷机</a>
           
           
       <ol >
       
         <li>
           
-          <a class="list-group-item toc-link" href="#使用Breed的刷机方法">使用Breed的刷机方法</a>
+          <a class="list-group-item toc-link" href="#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95">使用Breed的刷机方法</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#没有刷入Breed的刷机方法">没有刷入Breed的刷机方法</a>
+          <a class="list-group-item toc-link" href="#%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95">没有刷入Breed的刷机方法</a>
           
         </li>
       
@@ -842,4 +842,4 @@ reboot
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.2 at 2021-09-21T01:17:35.423Z. -->
+<!-- Page built by Hikaru v1.8.3 at 2021-09-25T15:29:41.115Z. -->

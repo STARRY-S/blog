@@ -16,7 +16,7 @@
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
-    <meta name="generator" content="Hikaru v1.8.2">
+    <meta name="generator" content="Hikaru v1.8.3">
     <link rel="canonical" href="https://blog.starry-s.moe/posts/archlinux-pavilion-gaming-laptop/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
@@ -381,7 +381,7 @@ const ap0 = new APlayer ({
 });
 </script> 
 
-<h2 id="先描述一下踩坑经过"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#%E5%85%88%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%8B%E8%B8%A9%E5%9D%91%E7%BB%8F%E8%BF%87" title="先描述一下踩坑经过"></a>先描述一下踩坑经过</h2>
+<h2 id="%E5%85%88%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%8B%E8%B8%A9%E5%9D%91%E7%BB%8F%E8%BF%87"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#%E5%85%88%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%8B%E8%B8%A9%E5%9D%91%E7%BB%8F%E8%BF%87"></a>先描述一下踩坑经过</h2>
 <blockquote>
 <p>本段略微有些废话, 可以跳过</p>
 </blockquote>
@@ -395,7 +395,7 @@ const ap0 = new APlayer ({
 <blockquote>
 <p>查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。</p>
 </blockquote>
-<h2 id="安装过程"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B" title="安装过程"></a>安装过程</h2>
+<h2 id="%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B"></a>安装过程</h2>
 <p>照着<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus" target="_blank" rel="external nofollow noreferrer noopener">Wiki</a>和Optimus Manager的<a href="https://github.com/Askannz/optimus-manager#optimus-manager" target="_blank" rel="external nofollow noreferrer noopener">README</a>。首先安装好显卡驱动相关的软件, 如果有Bumblebee的话使用<code>systemctl disable bumblebeed</code>停用。</p>
 <p>首先清除（记得备份）<code>/etc/X11/xorg.conf.d/</code>下的配置文件, 并删掉（记得备份）<code>/etc/X11/xorg.conf</code>（如果有的话）, 因为Optimus Manager会自动生成配置文件存放到<code>/etc/X11/xorg.conf.d/</code>里面, 所以建议安装前把显示配置相关的文件都清除掉。</p>
 <p>使用Arch Linux CN源或者通过AUR Helper安装<code>optimus-manager</code>。</p>
@@ -410,7 +410,7 @@ $ yay -S optimus-manager
 </code></pre></figure>
 <p>因为我用的Gnome, 参照<a href="https://github.com/Askannz/optimus-manager#important--gnome-and-gdm-users" target="_blank" rel="external nofollow noreferrer noopener">README中说的</a>卸载掉<code>gdm</code>并安装<code>gdm-prime</code><sup>AUR</sup>。（国内下载源代码的速度极慢建议挂梯子, 或者挂梯子克隆<a href="https://gitlab.gnome.org/GNOME/gdm" target="_blank" rel="external nofollow noreferrer noopener">GDM的代码</a>到<code>~/.cache/yay/gdm-prime/gdm</code>下。）</p>
 <p>修改<code>/etc/gdm/custom.conf</code>, 移除<code>WaylandEnable=false</code>一行前面的<code>#</code>禁用Wayland而使用X。</p>
-<h3 id="修改配置文件"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6" title="修改配置文件"></a>修改配置文件</h3>
+<h3 id="%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"></a>修改配置文件</h3>
 <figure data-raw="$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
 " class="code-block"><pre class="code"><code>$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
 </code></pre></figure>
@@ -642,7 +642,7 @@ allow_external_gpus=no
 # - triple_buffer : enable triple buffering.
 options=overclocking
 </code></pre></figure>
-<h2 id="食用方法"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95" title="食用方法"></a>食用方法</h2>
+<h2 id="%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95"></a>食用方法</h2>
 <p><code>optimus-manager --switch nvidia</code>切换到独显（nvidia）</p>
 <p><code>optimus-manager --switch intel</code>切换到集显（intel）</p>
 <p>安装<code>mesa-demos</code>后, 使用<code>glxinfo | grep "OpenGL renderer"</code>查看当前正使用的显卡</p>
@@ -654,7 +654,7 @@ options=overclocking
 <li><p>你可以在配置文件中修改<code>auto_logout=false</code>禁止自动注销以手动注销切换显卡。</p>
 </li>
 </ul>
-<h2 id="Others"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#Others" title="Others"></a>Others</h2>
+<h2 id="Others"><a class="header-link" href="/posts/archlinux-pavilion-gaming-laptop/#Others"></a>Others</h2>
 <ul>
 <li><p>之所以不推荐使用<code>bbswitch</code>是因为容易遇到<strong>ACPI锁死</strong>的问题, <a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_(lspci_hangs)" target="_blank" rel="external nofollow noreferrer noopener">参考Wiki</a>, 需要添加<a href="https://wiki.archlinux.org/index.php/Kernel_parameters" target="_blank" rel="external nofollow noreferrer noopener">内核参数</a><code>acpi_osi=! acpi_osi="Windows 2009"</code>或<code>acpi_osi="!Windows 2015"</code>启动, 如果你遇到了锁死可以通过开机时在<a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader" target="_blank" rel="external nofollow noreferrer noopener">启动加载器界面</a>编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。</p>
 </li>
@@ -838,21 +838,21 @@ options=overclocking
       
       <div class="archives-count count-block">
         <div class="site-count-title">归档</div>
-        <div><a href="/archives/">22</a></div>
+        <div><a href="/archives/">23</a></div>
       </div>
       
       
       
       <div class="categories-count count-block">
         <div class="site-count-title">分类</div>
-        <div><a href="/categories/">13</a></div>
+        <div><a href="/categories/">14</a></div>
       </div>
       
       
       
       <div class="tags-count count-block">
         <div class="site-count-title">标签</div>
-        <div><a href="/tags/">29</a></div>
+        <div><a href="/tags/">30</a></div>
       </div>
       
       
@@ -877,20 +877,20 @@ options=overclocking
       
         <li>
           
-          <a class="list-group-item toc-link" href="#先描述一下踩坑经过">先描述一下踩坑经过</a>
+          <a class="list-group-item toc-link" href="#%E5%85%88%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%8B%E8%B8%A9%E5%9D%91%E7%BB%8F%E8%BF%87">先描述一下踩坑经过</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#安装过程">安装过程</a>
+          <a class="list-group-item toc-link" href="#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B">安装过程</a>
           
           
       <ol >
       
         <li>
           
-          <a class="list-group-item toc-link" href="#修改配置文件">修改配置文件</a>
+          <a class="list-group-item toc-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">修改配置文件</a>
           
         </li>
       
@@ -901,7 +901,7 @@ options=overclocking
       
         <li>
           
-          <a class="list-group-item toc-link" href="#食用方法">食用方法</a>
+          <a class="list-group-item toc-link" href="#%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95">食用方法</a>
           
         </li>
       
@@ -992,4 +992,4 @@ options=overclocking
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.2 at 2021-09-21T01:17:35.414Z. -->
+<!-- Page built by Hikaru v1.8.3 at 2021-09-25T15:29:41.113Z. -->

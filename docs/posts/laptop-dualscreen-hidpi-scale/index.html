@@ -16,7 +16,7 @@
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
-    <meta name="generator" content="Hikaru v1.8.2">
+    <meta name="generator" content="Hikaru v1.8.3">
     <link rel="canonical" href="https://blog.starry-s.moe/posts/laptop-dualscreen-hidpi-scale/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
@@ -351,7 +351,7 @@
     <main class="post-main" id="scrollspy-container" itemprop="articleBody">
       <link href="/css/APlayer.min.css" rel="stylesheet">
 <script src= "/js/APlayer.min.js"></script>
-<h2 id="起因"><a class="header-link" href="/posts/laptop-dualscreen-hidpi-scale/#%E8%B5%B7%E5%9B%A0" title="起因"></a>起因</h2>
+<h2 id="%E8%B5%B7%E5%9B%A0"><a class="header-link" href="/posts/laptop-dualscreen-hidpi-scale/#%E8%B5%B7%E5%9B%A0"></a>起因</h2>
 <p>前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经<a href="/posts/archlinux-pavilion-gaming-laptop/">配置好了optimus-manager</a>，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。</p>
 <p>然后一看4K屏上的字小得瞎眼。</p>
 <p>如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。</p>
@@ -383,7 +383,7 @@ const ap0 = new APlayer ({
 });
 </script> 
 
-<h2 id="解决方法"><a class="header-link" href="/posts/laptop-dualscreen-hidpi-scale/#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95" title="解决方法"></a>解决方法</h2>
+<h2 id="%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><a class="header-link" href="/posts/laptop-dualscreen-hidpi-scale/#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"></a>解决方法</h2>
 <p>首先按照<a href="https://wiki.archlinux.org/index.php/HiDPI" target="_blank" rel="external nofollow noreferrer noopener">Wiki</a>设置GNOME的HIDPI:</p>
 <figure data-raw="$ gsettings set org.gnome.settings-daemon.plugins.xsettings overrides &quot;[{'Gdk/WindowScalingFactor', <2>}]&quot;
 $ gsettings set org.gnome.desktop.interface scaling-factor 2
@@ -424,7 +424,7 @@ $ gsettings set org.gnome.desktop.interface scaling-factor 2
 网易云音乐缩放方法参考<a href="https://ntzyz.io/post/fix-cloud-music-linux-client-hidpi-issue" target="_blank" rel="external nofollow noreferrer noopener">这篇博客</a>。
 qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </blockquote>
-<h2 id="Others"><a class="header-link" href="/posts/laptop-dualscreen-hidpi-scale/#Others" title="Others"></a>Others</h2>
+<h2 id="Others"><a class="header-link" href="/posts/laptop-dualscreen-hidpi-scale/#Others"></a>Others</h2>
 <ul>
 <li><p>仅限GNOME，因为我只用GNOME所以不知道其他DE开HIDPI的效果是什么样。</p>
 </li>
@@ -604,21 +604,21 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
       
       <div class="archives-count count-block">
         <div class="site-count-title">归档</div>
-        <div><a href="/archives/">22</a></div>
+        <div><a href="/archives/">23</a></div>
       </div>
       
       
       
       <div class="categories-count count-block">
         <div class="site-count-title">分类</div>
-        <div><a href="/categories/">13</a></div>
+        <div><a href="/categories/">14</a></div>
       </div>
       
       
       
       <div class="tags-count count-block">
         <div class="site-count-title">标签</div>
-        <div><a href="/tags/">29</a></div>
+        <div><a href="/tags/">30</a></div>
       </div>
       
       
@@ -643,13 +643,13 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#起因">起因</a>
+          <a class="list-group-item toc-link" href="#%E8%B5%B7%E5%9B%A0">起因</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#解决方法">解决方法</a>
+          <a class="list-group-item toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95">解决方法</a>
           
         </li>
       
@@ -740,4 +740,4 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.2 at 2021-09-21T01:17:35.406Z. -->
+<!-- Page built by Hikaru v1.8.3 at 2021-09-25T15:29:41.111Z. -->

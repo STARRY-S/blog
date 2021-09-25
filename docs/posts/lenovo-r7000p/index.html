@@ -16,7 +16,7 @@
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
-    <meta name="generator" content="Hikaru v1.8.2">
+    <meta name="generator" content="Hikaru v1.8.3">
     <link rel="canonical" href="https://blog.starry-s.moe/posts/lenovo-r7000p/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
@@ -386,14 +386,14 @@ const ap0 = new APlayer ({
 </script> 
 
 <hr>
-<h2 id="安装ArchLinux"><a class="header-link" href="/posts/lenovo-r7000p/#%E5%AE%89%E8%A3%85ArchLinux" title="安装ArchLinux"></a>安装Arch Linux</h2>
+<h2 id="%E5%AE%89%E8%A3%85ArchLinux"><a class="header-link" href="/posts/lenovo-r7000p/#%E5%AE%89%E8%A3%85ArchLinux"></a>安装Arch Linux</h2>
 <p>到手后就把之前买的西数SN750 1T固态换到了新电脑上，顺便格式化重装了个系统。</p>
 <p>双M2插槽配上1T + 500G NVME，美汁汁。</p>
 <p>于是直接给Linux分了150G root，16G SWAP，500G HOME（有点奢侈）， 然后还分了100G用来存steam游戏，剩下的全扔给Windows。</p>
 <p>装Linux过程中只遇到了终端的警报声有些大这个问题（插耳机时声音依旧从扬声器输出），别的问题都没遇到。</p>
 <p>之前的电脑总是遇到奇葩问题，用旧版本Linux内核关机或者<code>lspci</code>时会卡死，显卡驱动装不好会导致开机死机，声卡驱动一直有问题听歌时音量大一点就爆音，HDMI接口直连的NVIDIA显卡所以显卡驱动没配置好独显不工作时没办法外接显示器(后来才知道type c接口有DP视频输出)。</p>
 <p>新电脑买来装完系统后就遇到了一点小问题网上搜一下就解决了。</p>
-<h3 id="屏幕亮度不能调节"><a class="header-link" href="/posts/lenovo-r7000p/#%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6%E4%B8%8D%E8%83%BD%E8%B0%83%E8%8A%82" title="屏幕亮度不能调节"></a>屏幕亮度不能调节</h3>
+<h3 id="%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6%E4%B8%8D%E8%83%BD%E8%B0%83%E8%8A%82"><a class="header-link" href="/posts/lenovo-r7000p/#%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6%E4%B8%8D%E8%83%BD%E8%B0%83%E8%8A%82"></a>屏幕亮度不能调节</h3>
 <p><del>开个浏览器能把眼睛晃瞎</del></p>
 <p>网上查了一下只有在bios设置为独显直连时解决亮度不能调节的方法，在混合显卡模式下，存在<a href="https://bugzilla.opensuse.org/show_bug.cgi?id=1180749" target="_blank" rel="external nofollow noreferrer noopener">AMD显卡亮度用16位值表示而不是8位值表示</a>的这个BUG (Feature?)所以没办法调节亮度。</p>
 <p>所以<code>cat /sys/class/backlight/amdgpu_bl0/actual_brightness</code>得到的是一个大于255的数。</p>
@@ -427,7 +427,7 @@ options acpi_backlight=vendor
 options amdgpu.backlight=0
 </code></pre></figure>
 <p>最后重启电脑就能调亮度了。</p>
-<h3 id="GDM不自启动"><a class="header-link" href="/posts/lenovo-r7000p/#GDM%E4%B8%8D%E8%87%AA%E5%90%AF%E5%8A%A8" title="GDM不自启动"></a>GDM不自启动</h3>
+<h3 id="GDM%E4%B8%8D%E8%87%AA%E5%90%AF%E5%8A%A8"><a class="header-link" href="/posts/lenovo-r7000p/#GDM%E4%B8%8D%E8%87%AA%E5%90%AF%E5%8A%A8"></a>GDM不自启动</h3>
 <p>开机时GDM不会自动显示出来而是得手动切TTY2再切回TTY1才能显示。</p>
 <p>查Wiki得知是因为GDM在显卡驱动被加载之前就启动了。</p>
 <p><a href="https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_(e)GPU_is_present" target="_blank" rel="external nofollow noreferrer noopener">参照Wiki</a>，设置<a href="https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start" target="_blank" rel="external nofollow noreferrer noopener">KMS早启动</a>。</p>
@@ -447,7 +447,7 @@ MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm amdgpu radeon)
 " class="code-block"><pre class="code"><code>DRIVER=="nvidia", RUN+="/usr/lib/gdm-disable-wayland"
 </code></pre></figure>
 <p>之后重启电脑再开机<code>echo $XDG_SESSION_TYPE</code>就可以检查现在使用的是<code>wayland</code>了。</p>
-<h3 id="OptimusManager"><a class="header-link" href="/posts/lenovo-r7000p/#OptimusManager" title="OptimusManager"></a>Optimus Manager</h3>
+<h3 id="OptimusManager"><a class="header-link" href="/posts/lenovo-r7000p/#OptimusManager"></a>Optimus Manager</h3>
 <p>因为独显功耗太高了，使用独显直连模式在浏览网页写文档这类的轻度工作时电池待机只能2小时，用混合模式的话能待机4.5小时，外加上我也不打那些对性能要求很高的游戏，
 所以日常使用时就在Bios里设置显卡为混合模式。</p>
 <p>然后在Linux系统里安装<code>optimus-manager</code>，修改配置为：使用电池开机时关掉NVIDIA显卡，只让AMD集显工作；有外接电源时则使用“hybrid”混合模式，如果需要玩游戏的话用<a href="https://wiki.archlinux.org/index.php/PRIME#PRIME_render_offload" target="_blank" rel="external nofollow noreferrer noopener">nvidia-prime</a>让独显运行游戏。</p>
@@ -484,13 +484,13 @@ driver=amdgpu
 </code></pre></figure>
 <p>安装好<code>nvidia-prime</code>后在混合显卡模式（hybrid）下，使用<code>prime-run</code>让独显运行游戏。</p>
 <p>如果想让Steam以独显运行游戏，修改启动参数为<code>prime-run %command%</code>。</p>
-<h2 id="Windows"><a class="header-link" href="/posts/lenovo-r7000p/#Windows" title="Windows"></a>Windows</h2>
+<h2 id="Windows"><a class="header-link" href="/posts/lenovo-r7000p/#Windows"></a>Windows</h2>
 <p>在Windows系统下显卡独连时字体渲染有些蹦，设置了ClearType之后还是没啥改善。</p>
 <p>主要是Visual Studio 2019的字体渲染真的瞎眼，最后装了Text Sharp插件换了Jet Brains字体才看起来正常了一些。</p>
 <p>最后在NVIDIA控制面板全局设置里把平滑处理全关了，字体的锯齿才消失。</p>
 <p>貌似是因为NVIDIA把文本编辑器当游戏渲染了。</p>
 <hr>
-<h2 id="Others"><a class="header-link" href="/posts/lenovo-r7000p/#Others" title="Others"></a>Others</h2>
+<h2 id="Others"><a class="header-link" href="/posts/lenovo-r7000p/#Others"></a>Others</h2>
 <ul>
 <li><p>在Linux系统里会遇到按Fn+Esc键时FnLock的灯没有亮这个问题，不过不影响FnLock的正常使用，所以就忽视了。</p>
 </li>
@@ -670,21 +670,21 @@ driver=amdgpu
       
       <div class="archives-count count-block">
         <div class="site-count-title">归档</div>
-        <div><a href="/archives/">22</a></div>
+        <div><a href="/archives/">23</a></div>
       </div>
       
       
       
       <div class="categories-count count-block">
         <div class="site-count-title">分类</div>
-        <div><a href="/categories/">13</a></div>
+        <div><a href="/categories/">14</a></div>
       </div>
       
       
       
       <div class="tags-count count-block">
         <div class="site-count-title">标签</div>
-        <div><a href="/tags/">29</a></div>
+        <div><a href="/tags/">30</a></div>
       </div>
       
       
@@ -709,20 +709,20 @@ driver=amdgpu
       
         <li>
           
-          <a class="list-group-item toc-link" href="#安装ArchLinux">安装Arch Linux</a>
+          <a class="list-group-item toc-link" href="#%E5%AE%89%E8%A3%85ArchLinux">安装Arch Linux</a>
           
           
       <ol >
       
         <li>
           
-          <a class="list-group-item toc-link" href="#屏幕亮度不能调节">屏幕亮度不能调节</a>
+          <a class="list-group-item toc-link" href="#%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6%E4%B8%8D%E8%83%BD%E8%B0%83%E8%8A%82">屏幕亮度不能调节</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#GDM不自启动">GDM不自启动</a>
+          <a class="list-group-item toc-link" href="#GDM%E4%B8%8D%E8%87%AA%E5%90%AF%E5%8A%A8">GDM不自启动</a>
           
         </li>
       
@@ -830,4 +830,4 @@ driver=amdgpu
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.2 at 2021-09-21T01:17:35.401Z. -->
+<!-- Page built by Hikaru v1.8.3 at 2021-09-25T15:29:41.110Z. -->

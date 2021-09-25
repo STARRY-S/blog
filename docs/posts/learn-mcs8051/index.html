@@ -16,7 +16,7 @@
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
-    <meta name="generator" content="Hikaru v1.8.2">
+    <meta name="generator" content="Hikaru v1.8.3">
     <link rel="canonical" href="https://blog.starry-s.moe/posts/learn-mcs8051/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
@@ -409,7 +409,7 @@ const ap0 = new APlayer ({
 });
 </script> 
 
-<h2 id="硬件结构amp;指令系统"><a class="header-link" href="/posts/learn-mcs8051/#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84amp;%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F" title="硬件结构amp;指令系统"></a>硬件结构&amp;指令系统</h2>
+<h2 id="%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F"><a class="header-link" href="/posts/learn-mcs8051/#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F"></a>硬件结构&amp;指令系统</h2>
 <ol>
 <li><p>8051复位后从地址<code>0000H</code>开始执行程序, SP的值为<code>07H</code>。</p>
 <p>PC: 两字节(16位)寄存器, 也称程序计数器。</p>
@@ -614,7 +614,7 @@ const ap0 = new APlayer ({
 <blockquote>
 <p>以下部分写于2020年11月25日</p>
 </blockquote>
-<h2 id="汇编语言程序"><a class="header-link" href="/posts/learn-mcs8051/#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F" title="汇编语言程序"></a>汇编语言程序</h2>
+<h2 id="%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F"><a class="header-link" href="/posts/learn-mcs8051/#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F"></a>汇编语言程序</h2>
 <ol>
 <li><p>编写一个子程序, 将内部RAM 40H~4FH的内容复制到50H~5FH。</p>
 <figure data-raw="COPY: MOV R0, #40H
@@ -821,7 +821,7 @@ DJNZ R4, LOOP2
 </li>
 </ol>
 <hr>
-<h2 id="中断系统"><a class="header-link" href="/posts/learn-mcs8051/#%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F" title="中断系统"></a>中断系统</h2>
+<h2 id="%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F"><a class="header-link" href="/posts/learn-mcs8051/#%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F"></a>中断系统</h2>
 <ol>
 <li><p>8051的外部中断有低电平触发和下降沿触发两种触发方式。外部中断1的中断向量地址是<code>0013H</code>。</p>
 <p>在响应中断时, 单片机自动生成一条长调用指令<code>LCALL addr16</code>, 其地址为中断入口地址。</p>
@@ -965,7 +965,7 @@ DJNZ R4, LOOP2
 </li>
 </ol>
 <hr>
-<h2 id="定时器和计数器"><a class="header-link" href="/posts/learn-mcs8051/#%E5%AE%9A%E6%97%B6%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8" title="定时器和计数器"></a>定时器和计数器</h2>
+<h2 id="%E5%AE%9A%E6%97%B6%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8"><a class="header-link" href="/posts/learn-mcs8051/#%E5%AE%9A%E6%97%B6%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8"></a>定时器和计数器</h2>
 <ol>
 <li><p>使T0工作方式1的溢出周期最长的初值是<code>0000H</code>。</p>
 <p>定时器/计数器工作在方式0为13位计数器, 由<code>TLX</code>的低5位和<code>THX</code>的高8位组成13位计数器, 最大值为$2^{13}-1 = 8191$, 晶振频率12MHz下计时周期最长为8.192ms。工作在方式1时由均为8位的<code>TLX</code>和<code>THX</code>组成16位计数器, 最大值为65535, 晶振频率为12M下最长为65.536ms。</p>
@@ -986,7 +986,7 @@ DJNZ R4, LOOP2
 <p>2020年12月3日：
 前两天感冒, 休息了几天(<del>打了两天的游戏</del>)后继续。</p>
 </blockquote>
-<h2 id="串行口"><a class="header-link" href="/posts/learn-mcs8051/#%E4%B8%B2%E8%A1%8C%E5%8F%A3" title="串行口"></a>串行口</h2>
+<h2 id="%E4%B8%B2%E8%A1%8C%E5%8F%A3"><a class="header-link" href="/posts/learn-mcs8051/#%E4%B8%B2%E8%A1%8C%E5%8F%A3"></a>串行口</h2>
 <ol>
 <li><p>串行口TXD为高电平, 表示这是数据位或停止位或空闲状态。</p>
 <p>串行口工作在方式1时, <code>TXD</code>用来发送数据、<code>RXD</code>用来接受数据。方式1的一帧数据为10位, 起始为为0, 停止位为1, 数据位和空闲状态均可能为0或1。</p>
@@ -1112,7 +1112,7 @@ END
 <blockquote>
 <p>2020年12月7日：</p>
 </blockquote>
-<h2 id="IO口amp;外部存储器拓展"><a class="header-link" href="/posts/learn-mcs8051/#IO%E5%8F%A3amp;%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%8B%93%E5%B1%95" title="IO口amp;外部存储器拓展"></a>I/O口 &amp; 外部存储器拓展</h2>
+<h2 id="IO%E5%8F%A3%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%8B%93%E5%B1%95"><a class="header-link" href="/posts/learn-mcs8051/#IO%E5%8F%A3%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%8B%93%E5%B1%95"></a>I/O口 &amp; 外部存储器拓展</h2>
 <ol>
 <li><p>8051使用指令<code>MOVX A, @R0</code>读外部数据存储器时，不起作用的信号是<code>WR</code>。</p>
 <p>8051在使用<code>MOVX @DPTR</code>类指令读外部数据存储器时，P0和P2先输出外部数据的地址，单片机发出的<code>ALE</code>信号的负跳沿将P0口输出的地址锁存在地址锁存器(74HC573)里，之后单片机发出<code>RD</code>信号，读取外部数据存储器（RAM）的数据到总线再传送到P0口上。最后单片机从P0口读取数据保存到A中。</p>
@@ -1345,7 +1345,7 @@ RET
 </li>
 </ol>
 <hr>
-<h2 id="SFR列表"><a class="header-link" href="/posts/learn-mcs8051/#SFR%E5%88%97%E8%A1%A8" title="SFR列表"></a>SFR列表</h2>
+<h2 id="SFR%E5%88%97%E8%A1%A8"><a class="header-link" href="/posts/learn-mcs8051/#SFR%E5%88%97%E8%A1%A8"></a>SFR列表</h2>
 <table>
 <thead>
 <tr>
@@ -1706,21 +1706,21 @@ RET
       
       <div class="archives-count count-block">
         <div class="site-count-title">归档</div>
-        <div><a href="/archives/">22</a></div>
+        <div><a href="/archives/">23</a></div>
       </div>
       
       
       
       <div class="categories-count count-block">
         <div class="site-count-title">分类</div>
-        <div><a href="/categories/">13</a></div>
+        <div><a href="/categories/">14</a></div>
       </div>
       
       
       
       <div class="tags-count count-block">
         <div class="site-count-title">标签</div>
-        <div><a href="/tags/">29</a></div>
+        <div><a href="/tags/">30</a></div>
       </div>
       
       
@@ -1745,43 +1745,43 @@ RET
       
         <li>
           
-          <a class="list-group-item toc-link" href="#硬件结构amp;指令系统">硬件结构&指令系统</a>
+          <a class="list-group-item toc-link" href="#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F">硬件结构&指令系统</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#汇编语言程序">汇编语言程序</a>
+          <a class="list-group-item toc-link" href="#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F">汇编语言程序</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#中断系统">中断系统</a>
+          <a class="list-group-item toc-link" href="#%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F">中断系统</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#定时器和计数器">定时器和计数器</a>
+          <a class="list-group-item toc-link" href="#%E5%AE%9A%E6%97%B6%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8">定时器和计数器</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#串行口">串行口</a>
+          <a class="list-group-item toc-link" href="#%E4%B8%B2%E8%A1%8C%E5%8F%A3">串行口</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#IO口amp;外部存储器拓展">I/O口 & 外部存储器拓展</a>
+          <a class="list-group-item toc-link" href="#IO%E5%8F%A3%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%8B%93%E5%B1%95">I/O口 & 外部存储器拓展</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#SFR列表">SFR列表</a>
+          <a class="list-group-item toc-link" href="#SFR%E5%88%97%E8%A1%A8">SFR列表</a>
           
         </li>
       
@@ -1866,4 +1866,4 @@ RET
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.2 at 2021-09-21T01:17:35.412Z. -->
+<!-- Page built by Hikaru v1.8.3 at 2021-09-25T15:29:41.112Z. -->

@@ -7,7 +7,7 @@
   
   <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/" />
   
-  <updated>2021-09-13T15:20:29.000Z</updated>
+  <updated>2021-09-25T14:20:03.000Z</updated>
   
   <id>https://blog.starry-s.moe/</id>
   
@@ -19,6 +19,173 @@
   <generator uri="https://github.com/AlynxZhou/hikaru-generator-feed/" version="v2.3.4">Hikaru Generator Feed</generator>
   
   
+  
+  
+  
+  <entry>
+    <title>使用树莓派搭建一个NAS</title>
+    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/raspberry_pi_nas/" />
+    <id>https://blog.starry-s.moe/posts/raspberry_pi_nas/</id>
+    
+    <author>
+      <name>STARRY-S</name>
+      <email>hxstarrys@gmail.com</email>
+    </author>
+    
+    
+    <published>2021-09-25T14:20:03.000Z</published>
+    
+    
+    <updated>2021-09-25T15:27:10.000Z</updated>
+    
+    
+    <summary type="html">
+      &lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;
+
+    </summary>
+    
+    
+    <content type="html">
+      &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
+&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+ &lt;!--APlayer--&gt;
+&lt;div id=&quot;aplayer0&quot; style=&quot;background: var(--color-main-background)&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+const ap0 = new APlayer ({
+    container: document.getElementById(&quot;aplayer0&quot;),
+    theme: &quot;#33363b&quot;,
+    fixed: false,
+    listFolded: false,
+    listMaxHeight: false,
+    lrcType: false,
+    mini: false,
+    volume: 0.7,
+    order: &quot;list&quot;,
+    loop: &quot;all&quot;,
+    autoplay: false,
+    audio: [{
+        name: &quot;紫雨UNITED まさかのアリス突撃編&quot;,
+        artist: &quot;岩杉夏 / イザベル / あゆ&quot;,
+        url: &quot;https://music.starry-s.moe/music/070b_0208_540c_0af9917fa85b6e8d26efcf2d4d0a6706.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe/music/cover/109951166006696770.jpg&quot;,
+        lrc: &quot;&quot;,
+        theme: &quot;#3d79d9&quot;
+    }]
+});
+&lt;/script&gt; 
+&lt;blockquote&gt;
+&lt;p&gt;这歌太魔性了哈哈哈哈&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot;&gt;&lt;/a&gt;准备工作&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;树莓派以及所需的电源（废话）&lt;/li&gt;
+&lt;li&gt;16G以上的高速内存卡用来写系统镜像&lt;/li&gt;
+&lt;li&gt;硬盘（可以选择买移动硬盘或者直接买硬盘盒和机械硬盘自己组装）&lt;/li&gt;
+&lt;li&gt;网络设备：路由器、网线&lt;/li&gt;
+&lt;li&gt;（非必须）键盘、显示器、连接线等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;树莓派我使用的是高一时买的树莓派3B（满满的回忆），硬盘是上半年为了存照片而买的西数2T移动硬盘，因为暂时闲置所以拿来一起组个云盘玩。&lt;/p&gt;
+&lt;p&gt;内存卡需要质量好的不容易坏而且读写比较快的卡。&lt;/p&gt;
+&lt;h2 id=&quot;%E8%A3%85%E7%B3%BB%E7%BB%9F&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E8%A3%85%E7%B3%BB%E7%BB%9F&quot;&gt;&lt;/a&gt;装系统&lt;/h2&gt;
+&lt;p&gt;系统咱安装的是&lt;a href=&quot;https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;ArchLinux ARM&lt;/a&gt;，安装教程直接看官方文档即可。&lt;/p&gt;
+&lt;p&gt;一开始咱为了发挥树莓派3B的64位CPU的性能，我下载了64位的系统镜像，但是在配置无线连接的时候（可能是）驱动问题卡死，因为急着睡觉所以重新格式化内存卡后被迫安装32位的系统。&lt;/p&gt;
+&lt;p&gt;安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。&lt;/p&gt;
+&lt;p&gt;在格式化&lt;code&gt;root&lt;/code&gt;分区时一开始想尝试一下树莓派上跑&lt;code&gt;btrfs&lt;/code&gt;，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了&lt;code&gt;ext4&lt;/code&gt;，&lt;del&gt;不然我一晚上不用睡觉了&lt;/del&gt;。&lt;/p&gt;
+&lt;p&gt;在分区时除了&lt;code&gt;boot&lt;/code&gt;和&lt;code&gt;root&lt;/code&gt;之外，我额外分了2G的&lt;code&gt;swap&lt;/code&gt;分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（&lt;del&gt;这话咋读着这么别扭呢&lt;/del&gt;）&lt;/p&gt;
+&lt;p&gt;最后改一下&lt;code&gt;/etc/fstab&lt;/code&gt;让设备在开机时自动挂载交换分区。&lt;/p&gt;
+&lt;figure data-raw=&quot;# &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+/dev/mmcblk0p1  /boot   vfat    defaults        0       0
+/dev/mmcblk0p3  none    swap    defaults        0       0
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;# &amp;lt;file system&amp;gt; &amp;lt;dir&amp;gt; &amp;lt;type&amp;gt; &amp;lt;options&amp;gt; &amp;lt;dump&amp;gt; &amp;lt;pass&amp;gt;
+/dev/mmcblk0p1  /boot   vfat    defaults        0       0
+/dev/mmcblk0p3  none    swap    defaults        0       0
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果你的swap分区不是&lt;code&gt;mmcblk0p3&lt;/code&gt;的话，记得手动更改&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C&quot;&gt;&lt;/a&gt;配置网络&lt;/h2&gt;
+&lt;div class=&quot;alert-blue&quot;&gt;
+配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。&lt;br&gt;
+除非你能保证你执行的每个命令都肥肠正确。
+&lt;/div&gt;
+
+&lt;h3 id=&quot;%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C&quot;&gt;&lt;/a&gt;无线网络&lt;/h3&gt;
+&lt;p&gt;因为我电脑离路由器肥肠远，所以为了方便我还要给树莓派配置无线网络。首先照着&lt;a href=&quot;https://wiki.archlinux.org/title/Netctl&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Wiki上的netctl页面&lt;/a&gt;安装了&lt;code&gt;wifi-menu&lt;/code&gt;所需要用的&lt;code&gt;dialog&lt;/code&gt;，然后就用&lt;code&gt;wifi-menu&lt;/code&gt;连接wifi了。不过为了方便以后连接，我需要给他设置静态IP：&lt;/p&gt;
+&lt;p&gt;首先使用你比较喜欢的文本编辑器打开&lt;code&gt;wifi-menu&lt;/code&gt;自动生成的配置文件，并修改成以下的样子&lt;/p&gt;
+&lt;figure data-raw=&quot;# /etc/netctl.d/wlan0-YourWifiName
+
+Description=&#039;Automatically generated profile by wifi-menu&#039;
+Interface=wlan0
+Connection=wireless
+Security=wpa
+ESSID=Your Wifi Name
+IP=static
+Address=(&#039;192.168.xxx.xxx/24&#039;)
+Gateway=&#039;192.168.xxx.1&#039;
+DNS=&#039;8.8.8.8&#039;
+Key=YOUR WIFI PASSWORD
+&quot; data-info=&quot;language-conf&quot; data-lang=&quot;conf&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-conf&quot;&gt;# /etc/netctl.d/wlan0-YourWifiName
+
+Description=&#039;Automatically generated profile by wifi-menu&#039;
+Interface=wlan0
+Connection=wireless
+Security=wpa
+ESSID=Your Wifi Name
+IP=static
+Address=(&#039;192.168.xxx.xxx/24&#039;)
+Gateway=&#039;192.168.xxx.1&#039;
+DNS=&#039;8.8.8.8&#039;
+Key=YOUR WIFI PASSWORD
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;其中修改&lt;code&gt;Address&lt;/code&gt;为你想设置的CIDR地址、&lt;code&gt;Gateway&lt;/code&gt;为默认网关、以及&lt;code&gt;DNS&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;最后修改&lt;code&gt;Key&lt;/code&gt;为Wifi密码（明文），如果需要加密的话可以去wiki上找相应方法。&lt;/p&gt;
+&lt;p&gt;之后&lt;code&gt;sudo netctl enable wlan0-YourWifiName&lt;/code&gt;设置好开机自动连接即可。&lt;/p&gt;
+&lt;p&gt;这时候聪明的小伙伴会想到：我想使用网线联网并配置静态IP，该怎么办呢？&lt;/p&gt;
+&lt;h3 id=&quot;%E9%85%8D%E7%BD%AE%E6%9C%89%E7%BA%BF%E7%BD%91%E7%BB%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E6%9C%89%E7%BA%BF%E7%BD%91%E7%BB%9C&quot;&gt;&lt;/a&gt;配置有线网络&lt;/h3&gt;
+&lt;p&gt;默认情况下，有线接口&lt;code&gt;eth0&lt;/code&gt;使用&lt;code&gt;systemd-network&lt;/code&gt;配置了&lt;code&gt;DHCP&lt;/code&gt;，所以我们不需要改&lt;code&gt;netctl&lt;/code&gt;的配置文件，只编辑&lt;code&gt;/etc/systemd/network/eth0.network&lt;/code&gt;这个配置文件改成静态IP地址就好了。&lt;/p&gt;
+&lt;figure data-raw=&quot;[Match]
+Name=eth0
+
+[Network]
+Address=192.168.xxx.xxx/24
+Gateway=192.168.xxx.1
+DNS=8.8.8.8
+&quot; data-info=&quot;language-conf&quot; data-lang=&quot;conf&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-conf&quot;&gt;[Match]
+Name=eth0
+
+[Network]
+Address=192.168.xxx.xxx/24
+Gateway=192.168.xxx.1
+DNS=8.8.8.8
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;重启后&lt;code&gt;ip addr&lt;/code&gt;就能看到设备的全部IP地址了。&lt;/p&gt;
+&lt;h3 id=&quot;%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99&quot;&gt;&lt;/a&gt;配置防火墙&lt;/h3&gt;
+&lt;p&gt;首先安装&lt;code&gt;ubw&lt;/code&gt;。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫&lt;strong&gt;Uncomplicated Filewall&lt;/strong&gt;，所以咱先用ufw配置防火墙）&lt;/p&gt;
+&lt;p&gt;食用方法请参见&lt;a href=&quot;https://wiki.archlinux.org/title/Uncomplicated_Firewall&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Wiki页面&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;Samba&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#Samba&quot;&gt;&lt;/a&gt;Samba&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;今天太晚了需要早早睡觉，有时间咱再继续写。&lt;/p&gt;
+&lt;p&gt;晚安~&lt;/p&gt;
+&lt;/blockquote&gt;
+
+    </content>
+    
+    
+    <category term="教程" label="教程" scheme="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/" />
+    
+    <category term="树莓派" label="树莓派" scheme="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/%E6%A0%91%E8%8E%93%E6%B4%BE/" />
+    
+    
+    <category term="树莓派" label="树莓派" scheme="https://blog.starry-s.moe/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" />
+    
+    <category term="Arch Linux" label="Arch Linux" scheme="https://blog.starry-s.moe/tags/Arch%20Linux/" />
+    
+    <category term="NAS" label="NAS" scheme="https://blog.starry-s.moe/tags/NAS/" />
+    
+  </entry>
   
   
   
@@ -90,7 +257,7 @@ const ap0 = new APlayer ({
 &lt;/script&gt; 
 
 &lt;hr&gt;
-&lt;h2 id=&quot;配置清单&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95&quot; title=&quot;配置清单&quot;&gt;&lt;/a&gt;配置清单&lt;/h2&gt;
+&lt;h2 id=&quot;%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95&quot;&gt;&lt;/a&gt;配置清单&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;一边翻着某东的购物车一边写&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -118,7 +285,7 @@ const ap0 = new APlayer ({
 &lt;p&gt;防呆不防傻， 那么你能帮帮我吗？（逃&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;装机&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E8%A3%85%E6%9C%BA&quot; title=&quot;装机&quot;&gt;&lt;/a&gt;装机&lt;/h2&gt;
+&lt;h2 id=&quot;%E8%A3%85%E6%9C%BA&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E8%A3%85%E6%9C%BA&quot;&gt;&lt;/a&gt;装机&lt;/h2&gt;
 &lt;p&gt;我装机时为了防止装错顺序返工，于是去B站搜了一个教程：【&lt;a href=&quot;https://www.bilibili.com/video/BV1jE411e7hw&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;BV1jE411e7hw&lt;/a&gt;】，照着这个顺序安装基本不会出错，而且比较常见的问题视频上都有提到，比如萌新不是十分熟悉的内存插槽优先级以及比较难弄的前面板跳线。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;以下图片除了背部理线的那张图是用手机(iPhone XS)在弱光环境拍摄的，其余都是用相机(佳能EOS 800D + 适马17-50)拍摄，设备不是很好，技术有限，使用RawTherapee进行适量的裁剪调色&lt;/p&gt;
@@ -143,7 +310,7 @@ const ap0 = new APlayer ({
 &lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/photo_2021-09-14_00-34-22.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;背面理线花了好几个小时把不同种类形状的线绑了起来，最顶上的风扇RGB灯光线实在没有空间收纳于是只好捆成一坨放在那。&lt;/p&gt;
 &lt;p&gt;机械硬盘仓上边屯了为以后准备的显卡供电的排线。&lt;/p&gt;
-&lt;h2 id=&quot;最终成果展示&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E6%9C%80%E7%BB%88%E6%88%90%E6%9E%9C%E5%B1%95%E7%A4%BA&quot; title=&quot;最终成果展示&quot;&gt;&lt;/a&gt;最终成果展示&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%9C%80%E7%BB%88%E6%88%90%E6%9E%9C%E5%B1%95%E7%A4%BA&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E6%9C%80%E7%BB%88%E6%88%90%E6%9E%9C%E5%B1%95%E7%A4%BA&quot;&gt;&lt;/a&gt;最终成果展示&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6831.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
 &lt;p&gt;装好Windows，安装华硕主板的软件，把风扇的灯调成了橙色长亮的模式。一开始调成浅蓝色觉得色温太低了有点冷，所以改成了暖色调。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/build-desktop/images/IMG_6839.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
@@ -154,16 +321,16 @@ const ap0 = new APlayer ({
 &lt;p&gt;最终我决定还是把机箱放在桌子上好一些，这样不但能透过玻璃“欣赏”内部构造，还不用担心底部电源的风扇“吸尘器”吸进去很多灰尘。&lt;/p&gt;
 &lt;p&gt;机箱内部风道我也是采用的网上最推荐的风道方式，底部和右边为进风口，顶部和左边为出风口。因为现在没有显卡发热量并不大所以我只安装了左边的一个风扇和顶部的两个风扇。&lt;/p&gt;
 &lt;p&gt;以后可能再买个手办和灯放到电源仓的上边，再搞点装饰。&lt;/p&gt;
-&lt;h2 id=&quot;游戏体验&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E6%B8%B8%E6%88%8F%E4%BD%93%E9%AA%8C&quot; title=&quot;游戏体验&quot;&gt;&lt;/a&gt;游戏体验&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%B8%B8%E6%88%8F%E4%BD%93%E9%AA%8C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E6%B8%B8%E6%88%8F%E4%BD%93%E9%AA%8C&quot;&gt;&lt;/a&gt;游戏体验&lt;/h2&gt;
 &lt;p&gt;这一部分目前可以跳过不写，因为一个渣显示器 + 730D能发挥出啥游戏效果可想而知。玩Minecraft (Java Edition 1.16.4 Fabric + Optifine)有时候能跑到90FPS，平常基本上就60帧左右。&lt;/p&gt;
 &lt;p&gt;守望先锋就压根没打算试，本安娜老玩家是绝对不会在守望200fps以下安心奶人的，所以我宁可暂时不玩 (先用那个RTX2060的笔记本将就一下~)。&lt;/p&gt;
 &lt;p&gt;最终盯着显示器上这肉眼可见的逐行扫描，我放弃了目前用这个电脑玩游戏的打算，拿来看个视频写个代码还是绰绰有余的。&lt;/p&gt;
-&lt;h2 id=&quot;ArchLinux&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#ArchLinux&quot; title=&quot;ArchLinux&quot;&gt;&lt;/a&gt;Arch Linux&lt;/h2&gt;
+&lt;h2 id=&quot;ArchLinux&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#ArchLinux&quot;&gt;&lt;/a&gt;Arch Linux&lt;/h2&gt;
 &lt;p&gt;整个安装Linux的过程十分顺利，不像笔记本那样经常遇到许多奇奇怪怪的问题。加上走的独显直连没有麻烦的双显卡混合交火，基本上是装好自己需要的软件后开机就直接用了。&lt;/p&gt;
 &lt;p&gt;之前联想R7000P那个笔记本还经常无法调节屏幕亮度，TTY下面的警报“滴”声大得吓人，以前还遇到过nvidia+amdgpu+gnome进wayland就黑屏的问题（现在nvidia升470已经修复了）。&lt;/p&gt;
 &lt;p&gt;曾经用的那个惠普更是因为英伟达显卡驱动和惠普奇葩的硬件在linux5.0内核之前经常出现黑屏死机这些问题，而且不开启独显的话就没办法连双显示器。&lt;/p&gt;
 &lt;p&gt;所以还是台式机最香，觉得硬盘不够用了我就可以买块新硬盘扯根线扩容，主板上有4个内存插槽够我插很多根内存。CPU也都是可拆卸的只要主板支持我还可以继续升级，而且我可以选择没有集成显卡的CPU，显示器直连独显不用被那些驱动问题弄得头疼。&lt;/p&gt;
-&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#Others&quot; title=&quot;Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
+&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
 &lt;p&gt;其实最初我是想把装机的过程录下来拍成VLOG的，但是租的房子空间有限加上不想露脸，我一说话还会紧张不会组织语言，而且我没带三脚架，所以为了节省体力我只是拍几张照片放到博客上。&lt;/p&gt;
 &lt;p&gt;尽管现在这个电脑显卡很差不能打大型游戏，但是他的强悍的CPU性能已经足够我干很多事情了。一开始想测试一下CPU性能于是下载了Linux内核，用默认生成的&lt;code&gt;config&lt;/code&gt;，&lt;code&gt;make -j12&lt;/code&gt;编译。然后找个工具(&lt;code&gt;lm_sensors&lt;/code&gt;)查看一下CPU温度。当我还没配好配置文件时突然发现内核他编译好了。&lt;/p&gt;
 &lt;p&gt;然而除了写代码之外我暂时还没想好什么其他的使用这个电脑的方法。因为有点舍不得电费加上没有外网IP所以我也不打算把它当服务器用。&lt;/p&gt;
@@ -370,7 +537,7 @@ const ap0 = new APlayer ({
 &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
 
 &lt;hr&gt;
-&lt;h2 id=&quot;起因&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/daily-2021-07-15/#%E8%B5%B7%E5%9B%A0&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;
+&lt;h2 id=&quot;%E8%B5%B7%E5%9B%A0&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/daily-2021-07-15/#%E8%B5%B7%E5%9B%A0&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;
 &lt;p&gt;在收到提醒我续费域名的邮件之后，我在7月3号登录 NameSilo 交了16.99美元给我的&lt;code&gt;.me&lt;/code&gt;域名续费。在缴费成功且收到付款的 invoice 邮件后，我就以为域名续费成功了然后就干别的事情去了。&lt;/p&gt;
 &lt;p&gt;因为月初到9号一直有工训（工程训练），每天都要穿大一时留下的军训服到学校的工训楼那边学一些机床、电钻、机械这类的东西&lt;/p&gt;
 &lt;p&gt;（容我短暂吐槽一下，真搞不懂计算机专业的为啥还要搞这个又累又耽误时间，而且有的机器岁数看着都比我还大，搞不好还会把人弄伤，尤其是运气贼好在工训的最后一天排到了普车的某老师，态度差就不说了，还让我们把苦累活全干完了）&lt;/p&gt;
@@ -381,7 +548,7 @@ const ap0 = new APlayer ({
 &lt;p&gt;然而几天前充的16.99美元因为超过了3天的退款时间，所以我联系了客服，确定了我的域名被续到了2022年之后，把我刚刚缴的16.99美元申请退款。&lt;/p&gt;
 &lt;p&gt;因为NameSilo有规定是在续费订单申请退款之后，域名也将被删除，所以一通操作之下我第一次缴费的16.99美元没退回来，域名也没了，还收了我第二次续费退款的几块钱手续费。&lt;/p&gt;
 &lt;p&gt;（怪我英语不好没读懂退款的注意事项......）&lt;/p&gt;
-&lt;h2 id=&quot;结果&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/daily-2021-07-15/#%E7%BB%93%E6%9E%9C&quot; title=&quot;结果&quot;&gt;&lt;/a&gt;结果&lt;/h2&gt;
+&lt;h2 id=&quot;%E7%BB%93%E6%9E%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/daily-2021-07-15/#%E7%BB%93%E6%9E%9C&quot;&gt;&lt;/a&gt;结果&lt;/h2&gt;
 &lt;p&gt;我知道上面的内容读起来很乱，但是这件事情还是有必要讲出来，还是解释清楚较好，不然会引起一些不必要的麻烦。&lt;/p&gt;
 &lt;p&gt;所以我又不得不买了个&lt;code&gt;.moe&lt;/code&gt;域名，把我的网站全迁到新域名上。新域名就多了一个字母‘o’，意思同日语的‘萌’。&lt;/p&gt;
 &lt;p&gt;因为在家那几天没有电脑，我总不能现借电脑给TF卡烧镜像然后拿树莓派更新我的博客吧，所以本站的主页在12号那天有几个小时无法访问。&lt;/p&gt;
@@ -462,7 +629,7 @@ const ap0 = new APlayer ({
 });
 &lt;/script&gt; 
 
-&lt;h2 id=&quot;俯瞰风景&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E4%BF%AF%E7%9E%B0%E9%A3%8E%E6%99%AF&quot; title=&quot;俯瞰风景&quot;&gt;&lt;/a&gt;俯瞰风景&lt;/h2&gt;
+&lt;h2 id=&quot;%E4%BF%AF%E7%9E%B0%E9%A3%8E%E6%99%AF&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E4%BF%AF%E7%9E%B0%E9%A3%8E%E6%99%AF&quot;&gt;&lt;/a&gt;俯瞰风景&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;飞行这个名词，与坠落这个名词是相连结的。但越是迷恋天空的人，越会欠缺这样的认知，结果死了之后也只能持续朝云端飞行，不会往地面坠落下来，等于是朝着天空坠落。&lt;/p&gt;
 &lt;/li&gt;
@@ -494,7 +661,7 @@ const ap0 = new APlayer ({
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;杀人考察（前）&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E6%9D%80%E4%BA%BA%E8%80%83%E5%AF%9F%EF%BC%88%E5%89%8D%EF%BC%89&quot; title=&quot;杀人考察（前）&quot;&gt;&lt;/a&gt;杀人考察（前）&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%9D%80%E4%BA%BA%E8%80%83%E5%AF%9F%EF%BC%88%E5%89%8D%EF%BC%89&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E6%9D%80%E4%BA%BA%E8%80%83%E5%AF%9F%EF%BC%88%E5%89%8D%EF%BC%89&quot;&gt;&lt;/a&gt;杀人考察（前）&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;人要无知一点比较好，黑桐。人在小时候只看得到自己，根本不会察觉别人的恶意。就算是污秽也好，当被爱的感觉转化成经验，人才能够以善意去对待他人——因为人只能展现本身已具有的情感。&lt;/p&gt;
 &lt;/li&gt;
@@ -502,7 +669,7 @@ const ap0 = new APlayer ({
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;痛觉残留&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E7%97%9B%E8%A7%89%E6%AE%8B%E7%95%99&quot; title=&quot;痛觉残留&quot;&gt;&lt;/a&gt;痛觉残留&lt;/h2&gt;
+&lt;h2 id=&quot;%E7%97%9B%E8%A7%89%E6%AE%8B%E7%95%99&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E7%97%9B%E8%A7%89%E6%AE%8B%E7%95%99&quot;&gt;&lt;/a&gt;痛觉残留&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;无法适应社会的人非常多，他们的存在本身却从一开始就无法适应这个社会。他们不应该存在，不，是无法存在。&lt;/p&gt;
 &lt;/li&gt;
@@ -522,7 +689,7 @@ const ap0 = new APlayer ({
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;伽蓝之洞&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E4%BC%BD%E8%93%9D%E4%B9%8B%E6%B4%9E&quot; title=&quot;伽蓝之洞&quot;&gt;&lt;/a&gt;伽蓝之洞&lt;/h2&gt;
+&lt;h2 id=&quot;%E4%BC%BD%E8%93%9D%E4%B9%8B%E6%B4%9E&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E4%BC%BD%E8%93%9D%E4%B9%8B%E6%B4%9E&quot;&gt;&lt;/a&gt;伽蓝之洞&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;如果眼睛看得见，我大概正看着他应付的笑容。&lt;/p&gt;
 &lt;/li&gt;
@@ -537,7 +704,7 @@ const ap0 = new APlayer ({
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;矛盾螺旋&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E7%9F%9B%E7%9B%BE%E8%9E%BA%E6%97%8B&quot; title=&quot;矛盾螺旋&quot;&gt;&lt;/a&gt;矛盾螺旋&lt;/h2&gt;
+&lt;h2 id=&quot;%E7%9F%9B%E7%9B%BE%E8%9E%BA%E6%97%8B&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E7%9F%9B%E7%9B%BE%E8%9E%BA%E6%97%8B&quot;&gt;&lt;/a&gt;矛盾螺旋&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;所谓的变成大人，就是明智地将幻想取代。&lt;/p&gt;
 &lt;p&gt;自以为早熟的愚昧，让我骄傲地接受了这个事实。&lt;/p&gt;
@@ -639,7 +806,7 @@ const ap0 = new APlayer ({
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;忘却录音&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E5%BF%98%E5%8D%B4%E5%BD%95%E9%9F%B3&quot; title=&quot;忘却录音&quot;&gt;&lt;/a&gt;忘却录音&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%BF%98%E5%8D%B4%E5%BD%95%E9%9F%B3&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E5%BF%98%E5%8D%B4%E5%BD%95%E9%9F%B3&quot;&gt;&lt;/a&gt;忘却录音&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;在确认自己的记忆时，不可以依靠他人的记忆。毕竟只有名为回忆的自我天平，才能决定过去......&lt;/p&gt;
 &lt;/li&gt;
@@ -661,7 +828,7 @@ const ap0 = new APlayer ({
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;杀人考察（后）&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E6%9D%80%E4%BA%BA%E8%80%83%E5%AF%9F%EF%BC%88%E5%90%8E%EF%BC%89&quot; title=&quot;杀人考察（后）&quot;&gt;&lt;/a&gt;杀人考察（后）&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%9D%80%E4%BA%BA%E8%80%83%E5%AF%9F%EF%BC%88%E5%90%8E%EF%BC%89&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E6%9D%80%E4%BA%BA%E8%80%83%E5%AF%9F%EF%BC%88%E5%90%8E%EF%BC%89&quot;&gt;&lt;/a&gt;杀人考察（后）&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;本能在表层意识具现化成人格时，将会驱逐所有理性，会凌驾我这个名为白纯里绪的人格。&lt;/p&gt;
 &lt;/li&gt;
@@ -682,7 +849,7 @@ const ap0 = new APlayer ({
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;未来福音&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E6%9C%AA%E6%9D%A5%E7%A6%8F%E9%9F%B3&quot; title=&quot;未来福音&quot;&gt;&lt;/a&gt;未来福音&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%9C%AA%E6%9D%A5%E7%A6%8F%E9%9F%B3&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/karanokyokai/#%E6%9C%AA%E6%9D%A5%E7%A6%8F%E9%9F%B3&quot;&gt;&lt;/a&gt;未来福音&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;她擅长的并非预测未来，而是教人如何避免遭遇到不幸。&lt;/p&gt;
 &lt;/li&gt;
@@ -797,12 +964,12 @@ const ap0 = new APlayer ({
 });
 &lt;/script&gt; 
 
-&lt;h2 id=&quot;前言&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%89%8D%E8%A8%80&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%89%8D%E8%A8%80&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%89%8D%E8%A8%80&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;
 &lt;p&gt;首先需要明白什么是核心模式，什么是立即渲染模式，立即渲染模式的代码中都包含&lt;code&gt;glBegin()&lt;/code&gt;和&lt;code&gt;glEnd()&lt;/code&gt;，绘图的部分都是在这两个函数之间，比如画一个点就是&lt;code&gt;glVertex2f(x, y)&lt;/code&gt;，这种方式画图确实很简单，用户只要提供坐标和颜色就好了，不用知道GPU干了什么，而缺点是性能低，有很多限制，所以新版本的OpenGL为了给开发者提供更多的可操作空间而逐渐废弃了立即渲染改用核心模式。&lt;/p&gt;
 &lt;p&gt;核心模式提供了很多强大的功能，可以管线编程，代码量增加了很多，所以对初学者不太友好。&lt;/p&gt;
 &lt;p&gt;LearnOpenGL CN上面的代码基于C++，而OpenGL是用C编写的，教程上的代码除了矩阵运算部分可以使用C++的运算符重载而使代码编写起来变得更简单一些外，其他部分基本没啥区别，而且教程为了便于教学使用的也是面向过程式编程，没有将各个功能封装到一个类里面，所以咱这篇教程用C编写。&lt;/p&gt;
 &lt;p&gt;要记住C就是C，C++就是C++，C不是C++的子集，只能说C++兼容部分C的代码，不要把C和C++混用，不要因为C++支持面向对象使得一些功能看起来简单很易于使用就轻易迈入C++的坑。&lt;/p&gt;
-&lt;h2 id=&quot;准备工作&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot; title=&quot;准备工作&quot;&gt;&lt;/a&gt;准备工作&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot;&gt;&lt;/a&gt;准备工作&lt;/h2&gt;
 &lt;p&gt;有关OpenGL的介绍以及安装GLFW、GLAD以及编译所需的CMake的部分可以直接看&lt;a href=&quot;https://learnopengl-cn.github.io/01%20Getting%20started/02%20Creating%20a%20window/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;教程&lt;/a&gt;，咱尽可能把教程上没有提到的或者是刚开始学OpenGL很难理解的部分记录下来。&lt;/p&gt;
 &lt;p&gt;大体上就是安装&lt;code&gt;glfw&lt;/code&gt;，Arch Linux使用包管理器&lt;code&gt;sudo pacman -S glfw-x11&lt;/code&gt; (如果你使用的是wayland，那么安装&lt;code&gt;glfw-wayland&lt;/code&gt;)，然后把下载的&lt;code&gt;glad/glad.h&lt;/code&gt;复制到&lt;code&gt;/usr/include&lt;/code&gt;下，把&lt;code&gt;glad.c&lt;/code&gt;复制到工程文件夹的代码目录下。&lt;/p&gt;
 &lt;p&gt;为使用CMake生成Makefile，编写&lt;code&gt;CMakeLists.txt&lt;/code&gt;:&lt;/p&gt;
@@ -859,7 +1026,7 @@ target_link_libraries(main ${OPENGL_gl_LIBRARY} glfw)
     ├── glad.c
     └── main.c
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;创建窗口&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3&quot; title=&quot;创建窗口&quot;&gt;&lt;/a&gt;创建窗口&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%88%9B%E5%BB%BA%E7%AA%97%E5%8F%A3&quot;&gt;&lt;/a&gt;创建窗口&lt;/h2&gt;
 &lt;p&gt;编辑&lt;code&gt;main.c&lt;/code&gt;，加入所需的头文件&lt;/p&gt;
 &lt;figure data-raw=&quot;// glad.h要加在glfw3.h之前
 
@@ -961,16 +1128,16 @@ cmake .. &amp;amp;&amp;amp; make -j8
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;如果一切正常的话，可以看到窗口一闪而过就消失了，因为到目前为止我们只创建了一个窗口，创建完成后就结束了程序，所以窗口会瞬间消失。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;准备绘图&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%87%86%E5%A4%87%E7%BB%98%E5%9B%BE&quot; title=&quot;准备绘图&quot;&gt;&lt;/a&gt;准备绘图&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%87%86%E5%A4%87%E7%BB%98%E5%9B%BE&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%87%86%E5%A4%87%E7%BB%98%E5%9B%BE&quot;&gt;&lt;/a&gt;准备绘图&lt;/h2&gt;
 &lt;p&gt;在绘制形状之前，我们需要一些准备工作比如设定视口、回调函数，创建顶点缓冲区等操作，然后在大循环中进行渲染绘制。&lt;/p&gt;
-&lt;h3 id=&quot;视口&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E8%A7%86%E5%8F%A3&quot; title=&quot;视口&quot;&gt;&lt;/a&gt;视口&lt;/h3&gt;
+&lt;h3 id=&quot;%E8%A7%86%E5%8F%A3&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E8%A7%86%E5%8F%A3&quot;&gt;&lt;/a&gt;视口&lt;/h3&gt;
 &lt;p&gt;首先要告诉OpenGL咱的窗口尺寸是多少，以便OpenGL根据窗口大小显示数据和坐标。&lt;/p&gt;
 &lt;p&gt;在&lt;code&gt;/* prepare render */&lt;/code&gt;处添加代码：&lt;/p&gt;
 &lt;figure data-raw=&quot;glViewport(0, 0, 800, 600);
 &quot; data-info=&quot;language-C&quot; data-lang=&quot;C&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-C&quot;&gt;glViewport(0, 0, 800, 600);
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;首先需要知道你传给OpenGL的坐标都是&lt;code&gt;-1.0&lt;/code&gt;到&lt;code&gt;1.0&lt;/code&gt;之间的数，OpenGL再将其转换成屏幕上的像素点坐标，这个过程由GPU运算所得，所以你得告诉OpenGL你的屏幕尺寸，&lt;code&gt;glViewport&lt;/code&gt;的前两个参数为&lt;code&gt;0, 0&lt;/code&gt;指的是窗口左下角的位置，这个值咱目前不需要修改。&lt;/p&gt;
-&lt;h3 id=&quot;回调函数&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0&quot; title=&quot;回调函数&quot;&gt;&lt;/a&gt;回调函数&lt;/h3&gt;
+&lt;h3 id=&quot;%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0&quot;&gt;&lt;/a&gt;回调函数&lt;/h3&gt;
 &lt;p&gt;我们需要一个窗口被更改的回调函数，这样当窗口尺寸发生变化时，程序可以调用这个函数调整视口。&lt;/p&gt;
 &lt;p&gt;我们还需要一个&lt;a href=&quot;https://www.glfw.org/docs/3.3/input_guide.html#input_key&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;按键回调函数&lt;/a&gt;，当用户按下键盘上的某个按键后会调用这个回调函数处理按键操作。&lt;/p&gt;
 &lt;p&gt;编写函数&lt;code&gt;framebuffer_size_callback&lt;/code&gt;用来处理窗口尺寸更改:&lt;/p&gt;
@@ -1013,7 +1180,7 @@ glfwSetKeyCallback(window, key_callback);
 &quot; data-info=&quot;language-C&quot; data-lang=&quot;C&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-C&quot;&gt;glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 glfwSetKeyCallback(window, key_callback);
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;h3 id=&quot;大循环&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%A4%A7%E5%BE%AA%E7%8E%AF&quot; title=&quot;大循环&quot;&gt;&lt;/a&gt;大循环&lt;/h3&gt;
+&lt;h3 id=&quot;%E5%A4%A7%E5%BE%AA%E7%8E%AF&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E5%A4%A7%E5%BE%AA%E7%8E%AF&quot;&gt;&lt;/a&gt;大循环&lt;/h3&gt;
 &lt;p&gt;在大循环中，每循环一次代表绘制一帧画面。这里利用了双缓冲将绘制的图形放到缓存中，然后将缓存中的图形刷新到显示器上。(因为OpenGL绘图操作是逐行绘制的，如果不先将图形存到缓存中而直接显示在显示器上的话，在画面快速变动时你很可能会遇到画面撕裂，垂直不同步)&lt;/p&gt;
 &lt;p&gt;大循环部分的代码长这个样子:&lt;/p&gt;
 &lt;figure data-raw=&quot;while(!glfwWindowShouldClose(window))
@@ -1058,12 +1225,12 @@ glfwSetKeyCallback(window, key_callback);
 
 &lt;p&gt;如果你遇到什么问题，可以&lt;a href=&quot;/posts/learn_opengl/learn-code-1/main.c&quot;&gt;对照一下代码&lt;/a&gt;是否有问题。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;三角形&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E4%B8%89%E8%A7%92%E5%BD%A2&quot; title=&quot;三角形&quot;&gt;&lt;/a&gt;三角形&lt;/h2&gt;
+&lt;h2 id=&quot;%E4%B8%89%E8%A7%92%E5%BD%A2&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E4%B8%89%E8%A7%92%E5%BD%A2&quot;&gt;&lt;/a&gt;三角形&lt;/h2&gt;
 &lt;p&gt;画三角形的过程很简单，首先要确定三角形的三个顶点坐标，然后告诉GPU这三个点坐标就可以了 :)&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;如果你看不懂顶点着色器、几何着色器、片段着色器、光栅化这些难懂的知识点，那么你不必急于弄懂这个过程，等把图形绘制出来后再回来看这部分的内容。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h3 id=&quot;标准化设备坐标&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E6%A0%87%E5%87%86%E5%8C%96%E8%AE%BE%E5%A4%87%E5%9D%90%E6%A0%87&quot; title=&quot;标准化设备坐标&quot;&gt;&lt;/a&gt;标准化设备坐标&lt;/h3&gt;
+&lt;h3 id=&quot;%E6%A0%87%E5%87%86%E5%8C%96%E8%AE%BE%E5%A4%87%E5%9D%90%E6%A0%87&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E6%A0%87%E5%87%86%E5%8C%96%E8%AE%BE%E5%A4%87%E5%9D%90%E6%A0%87&quot;&gt;&lt;/a&gt;标准化设备坐标&lt;/h3&gt;
 &lt;p&gt;因为OpenGL的坐标为都是-1.0f到1.0f之间的数（我们先不考虑视口变换这些复杂的情形）&lt;/p&gt;
 &lt;p&gt;x, y, z的坐标为-1.0f到1.0f的坐标称作标准化设备坐标，坐标原点在窗口的正中央且在窗口的表面上，往右为x正方向，往上为y正方向，往屏幕里面为z正方向（这里是左手系）。&lt;/p&gt;
 &lt;p&gt;有关标准化设备坐标的介绍请看&lt;a href=&quot;https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/#_2&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;这里&lt;/a&gt;。&lt;/p&gt;
@@ -1085,7 +1252,7 @@ glfwSetKeyCallback(window, key_callback);
      0.0f,  0.0f, 1.0f      // blue
 };
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;h3 id=&quot;顶点缓冲&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E9%A1%B6%E7%82%B9%E7%BC%93%E5%86%B2&quot; title=&quot;顶点缓冲&quot;&gt;&lt;/a&gt;顶点缓冲&lt;/h3&gt;
+&lt;h3 id=&quot;%E9%A1%B6%E7%82%B9%E7%BC%93%E5%86%B2&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E9%A1%B6%E7%82%B9%E7%BC%93%E5%86%B2&quot;&gt;&lt;/a&gt;顶点缓冲&lt;/h3&gt;
 &lt;p&gt;首先我们需要创建一个顶点缓冲对象，用来存我们的顶点信息，这个对象叫“Vertex Buffer Object”（VBO），之后创建一个顶点数组对象“Vertex Array Object”（VAO），用来存我们创建的VBO。&lt;/p&gt;
 &lt;p&gt;为便于理解，你可以把VBO当作为开辟了一块GPU上的显存(Buffer)，用来存顶点和颜色信息，然后VAO是一个包含多个VBO的数组(Array)。&lt;/p&gt;
 &lt;p&gt;绘图时可以把VBO中存的大量顶点信息发送给GPU，因为用CPU给显卡发顶点坐标的速度慢而且没办法一次发送大量的顶点坐标，所以我们把顶点坐标存到显存中，绘图时直接访问显存即可。&lt;/p&gt;
@@ -1157,12 +1324,12 @@ glEnableVertexAttribArray(1);
 &lt;figure data-raw=&quot;glBindVertexArray(0);
 &quot; data-info=&quot;language-C&quot; data-lang=&quot;C&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-C&quot;&gt;glBindVertexArray(0);
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;h3 id=&quot;着色器&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E7%9D%80%E8%89%B2%E5%99%A8&quot; title=&quot;着色器&quot;&gt;&lt;/a&gt;着色器&lt;/h3&gt;
+&lt;h3 id=&quot;%E7%9D%80%E8%89%B2%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E7%9D%80%E8%89%B2%E5%99%A8&quot;&gt;&lt;/a&gt;着色器&lt;/h3&gt;
 &lt;p&gt;我们需要写两个着色器程序，分别为顶点着色器和片段着色器。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;开头说的核心模式可编程管线就是指我们可以写着色器程序，手动指定管线都进行什么操作。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h4 id=&quot;顶点着色器&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E9%A1%B6%E7%82%B9%E7%9D%80%E8%89%B2%E5%99%A8&quot; title=&quot;顶点着色器&quot;&gt;&lt;/a&gt;顶点着色器&lt;/h4&gt;
+&lt;h4 id=&quot;%E9%A1%B6%E7%82%B9%E7%9D%80%E8%89%B2%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E9%A1%B6%E7%82%B9%E7%9D%80%E8%89%B2%E5%99%A8&quot;&gt;&lt;/a&gt;顶点着色器&lt;/h4&gt;
 &lt;p&gt;因为OpenGL使用的是标准化设备坐标而不是屏幕上的像素点为坐标，所以GPU需要把标准化设备坐标转换为屏幕上的像素点，这个过程由顶点着色器实现。&lt;/p&gt;
 &lt;p&gt;而顶点着色器不知道咱们三角形的每个顶点的坐标是多少，所以咱们得往着色器中传我们刚才创建的VBO里面存储的坐标。&lt;/p&gt;
 &lt;p&gt;着色器程序使用GLSL编写，其代码和C很像&lt;/p&gt;
@@ -1198,7 +1365,7 @@ void main()
 &lt;li&gt;&lt;p&gt;main函数中&lt;code&gt;gl_Position&lt;/code&gt;代表这个顶点的位置坐标，我们把CPU传给顶点着色器的&lt;code&gt;vec3&lt;/code&gt;转换为&lt;code&gt;vec4&lt;/code&gt;。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id=&quot;片段着色器&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E7%89%87%E6%AE%B5%E7%9D%80%E8%89%B2%E5%99%A8&quot; title=&quot;片段着色器&quot;&gt;&lt;/a&gt;片段着色器&lt;/h4&gt;
+&lt;h4 id=&quot;%E7%89%87%E6%AE%B5%E7%9D%80%E8%89%B2%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E7%89%87%E6%AE%B5%E7%9D%80%E8%89%B2%E5%99%A8&quot;&gt;&lt;/a&gt;片段着色器&lt;/h4&gt;
 &lt;p&gt;顶点着色器处理完顶点后，由片段着色器计算每个像素点的颜色，所以如果我们想给三角形上色的话，也是在这个环节进行。&lt;/p&gt;
 &lt;p&gt;在代码文件夹中新建一个&lt;code&gt;fragment.glsl&lt;/code&gt;&lt;/p&gt;
 &lt;figure data-raw=&quot;#version 330 core
@@ -1229,7 +1396,7 @@ void main()
 &lt;p&gt;最后一个值恒为1.0f，我们暂时不需要修改它。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&quot;编译着色器&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E7%BC%96%E8%AF%91%E7%9D%80%E8%89%B2%E5%99%A8&quot; title=&quot;编译着色器&quot;&gt;&lt;/a&gt;编译着色器&lt;/h3&gt;
+&lt;h3 id=&quot;%E7%BC%96%E8%AF%91%E7%9D%80%E8%89%B2%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E7%BC%96%E8%AF%91%E7%9D%80%E8%89%B2%E5%99%A8&quot;&gt;&lt;/a&gt;编译着色器&lt;/h3&gt;
 &lt;p&gt;因为我们只是写了着色器程序的代码，需要让GPU将其编译。&lt;/p&gt;
 &lt;p&gt;编译着色器的部分对应的LearnOpenGL CN教程&lt;a href=&quot;https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/#_4&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;在这里&lt;/a&gt;，本篇不打算重复讲编译着色器部分的代码。&lt;/p&gt;
 &lt;p&gt;我们可以把编译着色器的代码封装到几个函数里面，这样可以减少main函数中重复代码的数量。&lt;/p&gt;
@@ -1238,7 +1405,7 @@ void main()
 &lt;figure data-raw=&quot;GLuint shaderProgram = load_program(&amp;quot;vertex.glsl&amp;quot;, &amp;quot;fragment.glsl&amp;quot;);
 &quot; data-info=&quot;language-C&quot; data-lang=&quot;C&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-C&quot;&gt;GLuint shaderProgram = load_program(&quot;vertex.glsl&quot;, &quot;fragment.glsl&quot;);
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;h3 id=&quot;我们期待的三角形&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E6%88%91%E4%BB%AC%E6%9C%9F%E5%BE%85%E7%9A%84%E4%B8%89%E8%A7%92%E5%BD%A2&quot; title=&quot;我们期待的三角形&quot;&gt;&lt;/a&gt;我们期待的三角形&lt;/h3&gt;
+&lt;h3 id=&quot;%E6%88%91%E4%BB%AC%E6%9C%9F%E5%BE%85%E7%9A%84%E4%B8%89%E8%A7%92%E5%BD%A2&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn_opengl/#%E6%88%91%E4%BB%AC%E6%9C%9F%E5%BE%85%E7%9A%84%E4%B8%89%E8%A7%92%E5%BD%A2&quot;&gt;&lt;/a&gt;我们期待的三角形&lt;/h3&gt;
 &lt;p&gt;经过了前面的一番准备，我们创建了缓冲对象存顶点的坐标和颜色信息，之后编写了着色器程序处理顶点坐标和颜色。&lt;/p&gt;
 &lt;p&gt;现在我们终于可以在大循环中画三角形了。&lt;/p&gt;
 &lt;p&gt;在大循环的&lt;code&gt;/* draw something */&lt;/code&gt;下面添加如下代码：&lt;/p&gt;
@@ -1395,7 +1562,7 @@ const ap0 = new APlayer ({
 &lt;p&gt;&lt;img src=&quot;/posts/spring-4/images/IMG_6726.jpg&quot; alt=&quot;&quot; title=&quot;iso100, 50mm, 1/250s, f2.8&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring-4/images/IMG_6728.jpg&quot; alt=&quot;&quot; title=&quot;iso100, 50mm, 1/320s, f2.8&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring-4/images/IMG_6697.jpg&quot; alt=&quot;&quot; title=&quot;iso100, 50mm, 1/320s, f2.8&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;Spring-4&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring-4/#Spring-4&quot; title=&quot;Spring-4&quot;&gt;&lt;/a&gt;Spring - 4&lt;/h1&gt;
+&lt;h1 id=&quot;Spring-4&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring-4/#Spring-4&quot;&gt;&lt;/a&gt;Spring - 4&lt;/h1&gt;
 
     </content>
     
@@ -1481,14 +1648,14 @@ const ap0 = new APlayer ({
 &lt;/script&gt; 
 
 &lt;hr&gt;
-&lt;h2 id=&quot;安装ArchLinux&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#%E5%AE%89%E8%A3%85ArchLinux&quot; title=&quot;安装ArchLinux&quot;&gt;&lt;/a&gt;安装Arch Linux&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%AE%89%E8%A3%85ArchLinux&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#%E5%AE%89%E8%A3%85ArchLinux&quot;&gt;&lt;/a&gt;安装Arch Linux&lt;/h2&gt;
 &lt;p&gt;到手后就把之前买的西数SN750 1T固态换到了新电脑上，顺便格式化重装了个系统。&lt;/p&gt;
 &lt;p&gt;双M2插槽配上1T + 500G NVME，美汁汁。&lt;/p&gt;
 &lt;p&gt;于是直接给Linux分了150G root，16G SWAP，500G HOME（有点奢侈）， 然后还分了100G用来存steam游戏，剩下的全扔给Windows。&lt;/p&gt;
 &lt;p&gt;装Linux过程中只遇到了终端的警报声有些大这个问题（插耳机时声音依旧从扬声器输出），别的问题都没遇到。&lt;/p&gt;
 &lt;p&gt;之前的电脑总是遇到奇葩问题，用旧版本Linux内核关机或者&lt;code&gt;lspci&lt;/code&gt;时会卡死，显卡驱动装不好会导致开机死机，声卡驱动一直有问题听歌时音量大一点就爆音，HDMI接口直连的NVIDIA显卡所以显卡驱动没配置好独显不工作时没办法外接显示器(后来才知道type c接口有DP视频输出)。&lt;/p&gt;
 &lt;p&gt;新电脑买来装完系统后就遇到了一点小问题网上搜一下就解决了。&lt;/p&gt;
-&lt;h3 id=&quot;屏幕亮度不能调节&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6%E4%B8%8D%E8%83%BD%E8%B0%83%E8%8A%82&quot; title=&quot;屏幕亮度不能调节&quot;&gt;&lt;/a&gt;屏幕亮度不能调节&lt;/h3&gt;
+&lt;h3 id=&quot;%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6%E4%B8%8D%E8%83%BD%E8%B0%83%E8%8A%82&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#%E5%B1%8F%E5%B9%95%E4%BA%AE%E5%BA%A6%E4%B8%8D%E8%83%BD%E8%B0%83%E8%8A%82&quot;&gt;&lt;/a&gt;屏幕亮度不能调节&lt;/h3&gt;
 &lt;p&gt;&lt;del&gt;开个浏览器能把眼睛晃瞎&lt;/del&gt;&lt;/p&gt;
 &lt;p&gt;网上查了一下只有在bios设置为独显直连时解决亮度不能调节的方法，在混合显卡模式下，存在&lt;a href=&quot;https://bugzilla.opensuse.org/show_bug.cgi?id=1180749&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;AMD显卡亮度用16位值表示而不是8位值表示&lt;/a&gt;的这个BUG (Feature?)所以没办法调节亮度。&lt;/p&gt;
 &lt;p&gt;所以&lt;code&gt;cat /sys/class/backlight/amdgpu_bl0/actual_brightness&lt;/code&gt;得到的是一个大于255的数。&lt;/p&gt;
@@ -1522,7 +1689,7 @@ options acpi_backlight=vendor
 options amdgpu.backlight=0
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;最后重启电脑就能调亮度了。&lt;/p&gt;
-&lt;h3 id=&quot;GDM不自启动&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#GDM%E4%B8%8D%E8%87%AA%E5%90%AF%E5%8A%A8&quot; title=&quot;GDM不自启动&quot;&gt;&lt;/a&gt;GDM不自启动&lt;/h3&gt;
+&lt;h3 id=&quot;GDM%E4%B8%8D%E8%87%AA%E5%90%AF%E5%8A%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#GDM%E4%B8%8D%E8%87%AA%E5%90%AF%E5%8A%A8&quot;&gt;&lt;/a&gt;GDM不自启动&lt;/h3&gt;
 &lt;p&gt;开机时GDM不会自动显示出来而是得手动切TTY2再切回TTY1才能显示。&lt;/p&gt;
 &lt;p&gt;查Wiki得知是因为GDM在显卡驱动被加载之前就启动了。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_(e)GPU_is_present&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;参照Wiki&lt;/a&gt;，设置&lt;a href=&quot;https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;KMS早启动&lt;/a&gt;。&lt;/p&gt;
@@ -1542,7 +1709,7 @@ MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm amdgpu radeon)
 &quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;DRIVER==&quot;nvidia&quot;, RUN+=&quot;/usr/lib/gdm-disable-wayland&quot;
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;之后重启电脑再开机&lt;code&gt;echo $XDG_SESSION_TYPE&lt;/code&gt;就可以检查现在使用的是&lt;code&gt;wayland&lt;/code&gt;了。&lt;/p&gt;
-&lt;h3 id=&quot;OptimusManager&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#OptimusManager&quot; title=&quot;OptimusManager&quot;&gt;&lt;/a&gt;Optimus Manager&lt;/h3&gt;
+&lt;h3 id=&quot;OptimusManager&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#OptimusManager&quot;&gt;&lt;/a&gt;Optimus Manager&lt;/h3&gt;
 &lt;p&gt;因为独显功耗太高了，使用独显直连模式在浏览网页写文档这类的轻度工作时电池待机只能2小时，用混合模式的话能待机4.5小时，外加上我也不打那些对性能要求很高的游戏，
 所以日常使用时就在Bios里设置显卡为混合模式。&lt;/p&gt;
 &lt;p&gt;然后在Linux系统里安装&lt;code&gt;optimus-manager&lt;/code&gt;，修改配置为：使用电池开机时关掉NVIDIA显卡，只让AMD集显工作；有外接电源时则使用“hybrid”混合模式，如果需要玩游戏的话用&lt;a href=&quot;https://wiki.archlinux.org/index.php/PRIME#PRIME_render_offload&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;nvidia-prime&lt;/a&gt;让独显运行游戏。&lt;/p&gt;
@@ -1579,13 +1746,13 @@ driver=amdgpu
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;安装好&lt;code&gt;nvidia-prime&lt;/code&gt;后在混合显卡模式（hybrid）下，使用&lt;code&gt;prime-run&lt;/code&gt;让独显运行游戏。&lt;/p&gt;
 &lt;p&gt;如果想让Steam以独显运行游戏，修改启动参数为&lt;code&gt;prime-run %command%&lt;/code&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;Windows&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#Windows&quot; title=&quot;Windows&quot;&gt;&lt;/a&gt;Windows&lt;/h2&gt;
+&lt;h2 id=&quot;Windows&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#Windows&quot;&gt;&lt;/a&gt;Windows&lt;/h2&gt;
 &lt;p&gt;在Windows系统下显卡独连时字体渲染有些蹦，设置了ClearType之后还是没啥改善。&lt;/p&gt;
 &lt;p&gt;主要是Visual Studio 2019的字体渲染真的瞎眼，最后装了Text Sharp插件换了Jet Brains字体才看起来正常了一些。&lt;/p&gt;
 &lt;p&gt;最后在NVIDIA控制面板全局设置里把平滑处理全关了，字体的锯齿才消失。&lt;/p&gt;
 &lt;p&gt;貌似是因为NVIDIA把文本编辑器当游戏渲染了。&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#Others&quot; title=&quot;Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
+&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/lenovo-r7000p/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;在Linux系统里会遇到按Fn+Esc键时FnLock的灯没有亮这个问题，不过不影响FnLock的正常使用，所以就忽视了。&lt;/p&gt;
 &lt;/li&gt;
@@ -1633,7 +1800,7 @@ driver=amdgpu
     
     
     <summary type="html">
-      &lt;h2 id=&quot;砖了&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#%E7%A0%96%E4%BA%86&quot; title=&quot;砖了&quot;&gt;&lt;/a&gt;砖了&lt;/h2&gt;
+      &lt;h2 id=&quot;%E7%A0%96%E4%BA%86&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#%E7%A0%96%E4%BA%86&quot;&gt;&lt;/a&gt;砖了&lt;/h2&gt;
 &lt;p&gt;本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。&lt;/p&gt;
 &lt;p&gt;然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。&lt;/p&gt;
 &lt;p&gt;之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。&lt;/p&gt;
@@ -1645,7 +1812,7 @@ driver=amdgpu
     <content type="html">
       &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
 &lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
-&lt;h2 id=&quot;砖了&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#%E7%A0%96%E4%BA%86&quot; title=&quot;砖了&quot;&gt;&lt;/a&gt;砖了&lt;/h2&gt;
+&lt;h2 id=&quot;%E7%A0%96%E4%BA%86&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#%E7%A0%96%E4%BA%86&quot;&gt;&lt;/a&gt;砖了&lt;/h2&gt;
 &lt;p&gt;本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。&lt;/p&gt;
 &lt;p&gt;然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。&lt;/p&gt;
 &lt;p&gt;之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。&lt;/p&gt;
@@ -1679,7 +1846,7 @@ const ap0 = new APlayer ({
 &lt;/script&gt; 
 
 &lt;hr&gt;
-&lt;h2 id=&quot;拆机&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#%E6%8B%86%E6%9C%BA&quot; title=&quot;拆机&quot;&gt;&lt;/a&gt;拆机&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%8B%86%E6%9C%BA&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#%E6%8B%86%E6%9C%BA&quot;&gt;&lt;/a&gt;拆机&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/xiaomi-r3g-ttl-flash/images/1.jpg&quot; alt=&quot;&amp;quot;路由器主板&amp;quot;&quot; title=&quot;Are You OK?&quot;&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;北方冬季气候干燥，拆机时记得放静电，找根铁丝把自己连地线上 (找个金属外壳是接地的电器和自己连上也行)。&lt;/p&gt;
@@ -1690,7 +1857,7 @@ const ap0 = new APlayer ({
 &lt;p&gt;找出家里吃灰好几年差点被我扔掉的电烙铁，刮刀头刮了半天电烙铁才上锡，把新买的杜邦线母线焊到主板上，和ttl串口线相连。&lt;/p&gt;
 &lt;p&gt;(电烙铁太破了根本焊不上锡，焊得很丑，emmm)&lt;/p&gt;
 &lt;p&gt;实际上可以买个4PIN单排针焊上去，把串口接到排针上就可以，我直接把电线焊到上面以后用起来会很麻烦。&lt;/p&gt;
-&lt;h2 id=&quot;刷机&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#%E5%88%B7%E6%9C%BA&quot; title=&quot;刷机&quot;&gt;&lt;/a&gt;刷机&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%88%B7%E6%9C%BA&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#%E5%88%B7%E6%9C%BA&quot;&gt;&lt;/a&gt;刷机&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;以下部分基于Arch Linux，其他系统的操作方式可能不一样（例如Windows可能需要超级终端访问串口，再想办法开一个tftp服务器）
 刷机的原理: 通过ttl串口线连接路由器的主板，让路由器访问电脑上的tftp服务器，刷第三方Boot Loader。&lt;/p&gt;
@@ -1764,7 +1931,7 @@ Warning!! Erase Boot Loader in Flash then burn new one. Are you sure?(Y/N)y
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;  按回车后开始刷机，过几秒钟后路由器会自动重启，第三方Boot Loader刷写完成。&lt;/p&gt;
 &lt;p&gt;  路由器断电，长按reset键的同时通电开机，灯闪烁后打开浏览器输入网址&lt;code&gt;http://192.168.1.1&lt;/code&gt;便可访问breed后台。&lt;/p&gt;
-&lt;h2 id=&quot;Done&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#Done&quot; title=&quot;Done&quot;&gt;&lt;/a&gt;Done&lt;/h2&gt;
+&lt;h2 id=&quot;Done&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi-r3g-ttl-flash/#Done&quot;&gt;&lt;/a&gt;Done&lt;/h2&gt;
 &lt;p&gt;第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照&lt;a href=&quot;/posts/Xiaomi_Miwifi_3G/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;小米路由器3G折腾之刷OpenWrt记录&lt;/a&gt;这篇文章刷OpenWrt。&lt;/p&gt;
 &lt;figure data-raw=&quot;BusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash)
 Enter &#039;help&#039; for a list of built-in commands.
@@ -1838,7 +2005,7 @@ root@XiaoQiang:~#
     
     
     <summary type="html">
-      &lt;h2 id=&quot;起因&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/laptop-dualscreen-hidpi-scale/#%E8%B5%B7%E5%9B%A0&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;
+      &lt;h2 id=&quot;%E8%B5%B7%E5%9B%A0&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/laptop-dualscreen-hidpi-scale/#%E8%B5%B7%E5%9B%A0&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;
 &lt;p&gt;前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经&lt;a href=&quot;/posts/archlinux-pavilion-gaming-laptop/&quot;&gt;配置好了optimus-manager&lt;/a&gt;，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。&lt;/p&gt;
 &lt;p&gt;然后一看4K屏上的字小得瞎眼。&lt;/p&gt;
 &lt;p&gt;如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。&lt;/p&gt;
@@ -1849,7 +2016,7 @@ root@XiaoQiang:~#
     <content type="html">
       &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
 &lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
-&lt;h2 id=&quot;起因&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/laptop-dualscreen-hidpi-scale/#%E8%B5%B7%E5%9B%A0&quot; title=&quot;起因&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;
+&lt;h2 id=&quot;%E8%B5%B7%E5%9B%A0&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/laptop-dualscreen-hidpi-scale/#%E8%B5%B7%E5%9B%A0&quot;&gt;&lt;/a&gt;起因&lt;/h2&gt;
 &lt;p&gt;前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经&lt;a href=&quot;/posts/archlinux-pavilion-gaming-laptop/&quot;&gt;配置好了optimus-manager&lt;/a&gt;，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。&lt;/p&gt;
 &lt;p&gt;然后一看4K屏上的字小得瞎眼。&lt;/p&gt;
 &lt;p&gt;如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。&lt;/p&gt;
@@ -1881,7 +2048,7 @@ const ap0 = new APlayer ({
 });
 &lt;/script&gt; 
 
-&lt;h2 id=&quot;解决方法&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/laptop-dualscreen-hidpi-scale/#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95&quot; title=&quot;解决方法&quot;&gt;&lt;/a&gt;解决方法&lt;/h2&gt;
+&lt;h2 id=&quot;%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/laptop-dualscreen-hidpi-scale/#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95&quot;&gt;&lt;/a&gt;解决方法&lt;/h2&gt;
 &lt;p&gt;首先按照&lt;a href=&quot;https://wiki.archlinux.org/index.php/HiDPI&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Wiki&lt;/a&gt;设置GNOME的HIDPI:&lt;/p&gt;
 &lt;figure data-raw=&quot;$ gsettings set org.gnome.settings-daemon.plugins.xsettings overrides &amp;quot;[{&#039;Gdk/WindowScalingFactor&#039;, &lt;2&gt;}]&amp;quot;
 $ gsettings set org.gnome.desktop.interface scaling-factor 2
@@ -1922,7 +2089,7 @@ $ gsettings set org.gnome.desktop.interface scaling-factor 2
 网易云音乐缩放方法参考&lt;a href=&quot;https://ntzyz.io/post/fix-cloud-music-linux-client-hidpi-issue&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;这篇博客&lt;/a&gt;。
 qt5设置环境变量&lt;code&gt;QT_SCREEN_SCALE_FACTORS=2&lt;/code&gt;。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/laptop-dualscreen-hidpi-scale/#Others&quot; title=&quot;Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
+&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/laptop-dualscreen-hidpi-scale/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;仅限GNOME，因为我只用GNOME所以不知道其他DE开HIDPI的效果是什么样。&lt;/p&gt;
 &lt;/li&gt;
@@ -2135,7 +2302,7 @@ const ap0 = new APlayer ({
 });
 &lt;/script&gt; 
 
-&lt;h2 id=&quot;硬件结构amp;指令系统&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84amp;%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F&quot; title=&quot;硬件结构amp;指令系统&quot;&gt;&lt;/a&gt;硬件结构&amp;amp;指令系统&lt;/h2&gt;
+&lt;h2 id=&quot;%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E6%8C%87%E4%BB%A4%E7%B3%BB%E7%BB%9F&quot;&gt;&lt;/a&gt;硬件结构&amp;amp;指令系统&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;8051复位后从地址&lt;code&gt;0000H&lt;/code&gt;开始执行程序, SP的值为&lt;code&gt;07H&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;PC: 两字节(16位)寄存器, 也称程序计数器。&lt;/p&gt;
@@ -2340,7 +2507,7 @@ const ap0 = new APlayer ({
 &lt;blockquote&gt;
 &lt;p&gt;以下部分写于2020年11月25日&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;汇编语言程序&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F&quot; title=&quot;汇编语言程序&quot;&gt;&lt;/a&gt;汇编语言程序&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F&quot;&gt;&lt;/a&gt;汇编语言程序&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;编写一个子程序, 将内部RAM 40H~4FH的内容复制到50H~5FH。&lt;/p&gt;
 &lt;figure data-raw=&quot;COPY: MOV R0, #40H
@@ -2547,7 +2714,7 @@ DJNZ R4, LOOP2
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;中断系统&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F&quot; title=&quot;中断系统&quot;&gt;&lt;/a&gt;中断系统&lt;/h2&gt;
+&lt;h2 id=&quot;%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E4%B8%AD%E6%96%AD%E7%B3%BB%E7%BB%9F&quot;&gt;&lt;/a&gt;中断系统&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;8051的外部中断有低电平触发和下降沿触发两种触发方式。外部中断1的中断向量地址是&lt;code&gt;0013H&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;在响应中断时, 单片机自动生成一条长调用指令&lt;code&gt;LCALL addr16&lt;/code&gt;, 其地址为中断入口地址。&lt;/p&gt;
@@ -2691,7 +2858,7 @@ DJNZ R4, LOOP2
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;定时器和计数器&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E5%AE%9A%E6%97%B6%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8&quot; title=&quot;定时器和计数器&quot;&gt;&lt;/a&gt;定时器和计数器&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%AE%9A%E6%97%B6%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E5%AE%9A%E6%97%B6%E5%99%A8%E5%92%8C%E8%AE%A1%E6%95%B0%E5%99%A8&quot;&gt;&lt;/a&gt;定时器和计数器&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;使T0工作方式1的溢出周期最长的初值是&lt;code&gt;0000H&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;定时器/计数器工作在方式0为13位计数器, 由&lt;code&gt;TLX&lt;/code&gt;的低5位和&lt;code&gt;THX&lt;/code&gt;的高8位组成13位计数器, 最大值为$2^{13}-1 = 8191$, 晶振频率12MHz下计时周期最长为8.192ms。工作在方式1时由均为8位的&lt;code&gt;TLX&lt;/code&gt;和&lt;code&gt;THX&lt;/code&gt;组成16位计数器, 最大值为65535, 晶振频率为12M下最长为65.536ms。&lt;/p&gt;
@@ -2712,7 +2879,7 @@ DJNZ R4, LOOP2
 &lt;p&gt;2020年12月3日：
 前两天感冒, 休息了几天(&lt;del&gt;打了两天的游戏&lt;/del&gt;)后继续。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;串行口&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E4%B8%B2%E8%A1%8C%E5%8F%A3&quot; title=&quot;串行口&quot;&gt;&lt;/a&gt;串行口&lt;/h2&gt;
+&lt;h2 id=&quot;%E4%B8%B2%E8%A1%8C%E5%8F%A3&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#%E4%B8%B2%E8%A1%8C%E5%8F%A3&quot;&gt;&lt;/a&gt;串行口&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;串行口TXD为高电平, 表示这是数据位或停止位或空闲状态。&lt;/p&gt;
 &lt;p&gt;串行口工作在方式1时, &lt;code&gt;TXD&lt;/code&gt;用来发送数据、&lt;code&gt;RXD&lt;/code&gt;用来接受数据。方式1的一帧数据为10位, 起始为为0, 停止位为1, 数据位和空闲状态均可能为0或1。&lt;/p&gt;
@@ -2838,7 +3005,7 @@ END
 &lt;blockquote&gt;
 &lt;p&gt;2020年12月7日：&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;IO口amp;外部存储器拓展&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#IO%E5%8F%A3amp;%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%8B%93%E5%B1%95&quot; title=&quot;IO口amp;外部存储器拓展&quot;&gt;&lt;/a&gt;I/O口 &amp;amp; 外部存储器拓展&lt;/h2&gt;
+&lt;h2 id=&quot;IO%E5%8F%A3%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%8B%93%E5%B1%95&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#IO%E5%8F%A3%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%99%A8%E6%8B%93%E5%B1%95&quot;&gt;&lt;/a&gt;I/O口 &amp;amp; 外部存储器拓展&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;8051使用指令&lt;code&gt;MOVX A, @R0&lt;/code&gt;读外部数据存储器时，不起作用的信号是&lt;code&gt;WR&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;8051在使用&lt;code&gt;MOVX @DPTR&lt;/code&gt;类指令读外部数据存储器时，P0和P2先输出外部数据的地址，单片机发出的&lt;code&gt;ALE&lt;/code&gt;信号的负跳沿将P0口输出的地址锁存在地址锁存器(74HC573)里，之后单片机发出&lt;code&gt;RD&lt;/code&gt;信号，读取外部数据存储器（RAM）的数据到总线再传送到P0口上。最后单片机从P0口读取数据保存到A中。&lt;/p&gt;
@@ -3071,7 +3238,7 @@ RET
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;SFR列表&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#SFR%E5%88%97%E8%A1%A8&quot; title=&quot;SFR列表&quot;&gt;&lt;/a&gt;SFR列表&lt;/h2&gt;
+&lt;h2 id=&quot;SFR%E5%88%97%E8%A1%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/learn-mcs8051/#SFR%E5%88%97%E8%A1%A8&quot;&gt;&lt;/a&gt;SFR列表&lt;/h2&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -3340,7 +3507,7 @@ const ap0 = new APlayer ({
 });
 &lt;/script&gt; 
 
-&lt;h2 id=&quot;先描述一下踩坑经过&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#%E5%85%88%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%8B%E8%B8%A9%E5%9D%91%E7%BB%8F%E8%BF%87&quot; title=&quot;先描述一下踩坑经过&quot;&gt;&lt;/a&gt;先描述一下踩坑经过&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%85%88%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%8B%E8%B8%A9%E5%9D%91%E7%BB%8F%E8%BF%87&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#%E5%85%88%E6%8F%8F%E8%BF%B0%E4%B8%80%E4%B8%8B%E8%B8%A9%E5%9D%91%E7%BB%8F%E8%BF%87&quot;&gt;&lt;/a&gt;先描述一下踩坑经过&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;本段略微有些废话, 可以跳过&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -3354,7 +3521,7 @@ const ap0 = new APlayer ({
 &lt;blockquote&gt;
 &lt;p&gt;查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;安装过程&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B&quot; title=&quot;安装过程&quot;&gt;&lt;/a&gt;安装过程&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B&quot;&gt;&lt;/a&gt;安装过程&lt;/h2&gt;
 &lt;p&gt;照着&lt;a href=&quot;https://wiki.archlinux.org/index.php/NVIDIA_Optimus&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Wiki&lt;/a&gt;和Optimus Manager的&lt;a href=&quot;https://github.com/Askannz/optimus-manager#optimus-manager&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;README&lt;/a&gt;。首先安装好显卡驱动相关的软件, 如果有Bumblebee的话使用&lt;code&gt;systemctl disable bumblebeed&lt;/code&gt;停用。&lt;/p&gt;
 &lt;p&gt;首先清除（记得备份）&lt;code&gt;/etc/X11/xorg.conf.d/&lt;/code&gt;下的配置文件, 并删掉（记得备份）&lt;code&gt;/etc/X11/xorg.conf&lt;/code&gt;（如果有的话）, 因为Optimus Manager会自动生成配置文件存放到&lt;code&gt;/etc/X11/xorg.conf.d/&lt;/code&gt;里面, 所以建议安装前把显示配置相关的文件都清除掉。&lt;/p&gt;
 &lt;p&gt;使用Arch Linux CN源或者通过AUR Helper安装&lt;code&gt;optimus-manager&lt;/code&gt;。&lt;/p&gt;
@@ -3369,7 +3536,7 @@ $ yay -S optimus-manager
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;因为我用的Gnome, 参照&lt;a href=&quot;https://github.com/Askannz/optimus-manager#important--gnome-and-gdm-users&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;README中说的&lt;/a&gt;卸载掉&lt;code&gt;gdm&lt;/code&gt;并安装&lt;code&gt;gdm-prime&lt;/code&gt;&lt;sup&gt;AUR&lt;/sup&gt;。（国内下载源代码的速度极慢建议挂梯子, 或者挂梯子克隆&lt;a href=&quot;https://gitlab.gnome.org/GNOME/gdm&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;GDM的代码&lt;/a&gt;到&lt;code&gt;~/.cache/yay/gdm-prime/gdm&lt;/code&gt;下。）&lt;/p&gt;
 &lt;p&gt;修改&lt;code&gt;/etc/gdm/custom.conf&lt;/code&gt;, 移除&lt;code&gt;WaylandEnable=false&lt;/code&gt;一行前面的&lt;code&gt;#&lt;/code&gt;禁用Wayland而使用X。&lt;/p&gt;
-&lt;h3 id=&quot;修改配置文件&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6&quot; title=&quot;修改配置文件&quot;&gt;&lt;/a&gt;修改配置文件&lt;/h3&gt;
+&lt;h3 id=&quot;%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6&quot;&gt;&lt;/a&gt;修改配置文件&lt;/h3&gt;
 &lt;figure data-raw=&quot;$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
 &quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
@@ -3601,7 +3768,7 @@ allow_external_gpus=no
 # - triple_buffer : enable triple buffering.
 options=overclocking
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;h2 id=&quot;食用方法&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95&quot; title=&quot;食用方法&quot;&gt;&lt;/a&gt;食用方法&lt;/h2&gt;
+&lt;h2 id=&quot;%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95&quot;&gt;&lt;/a&gt;食用方法&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;optimus-manager --switch nvidia&lt;/code&gt;切换到独显（nvidia）&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;optimus-manager --switch intel&lt;/code&gt;切换到集显（intel）&lt;/p&gt;
 &lt;p&gt;安装&lt;code&gt;mesa-demos&lt;/code&gt;后, 使用&lt;code&gt;glxinfo | grep &quot;OpenGL renderer&quot;&lt;/code&gt;查看当前正使用的显卡&lt;/p&gt;
@@ -3613,7 +3780,7 @@ options=overclocking
 &lt;li&gt;&lt;p&gt;你可以在配置文件中修改&lt;code&gt;auto_logout=false&lt;/code&gt;禁止自动注销以手动注销切换显卡。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#Others&quot; title=&quot;Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
+&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/archlinux-pavilion-gaming-laptop/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;之所以不推荐使用&lt;code&gt;bbswitch&lt;/code&gt;是因为容易遇到&lt;strong&gt;ACPI锁死&lt;/strong&gt;的问题, &lt;a href=&quot;https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_(lspci_hangs)&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;参考Wiki&lt;/a&gt;, 需要添加&lt;a href=&quot;https://wiki.archlinux.org/index.php/Kernel_parameters&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;内核参数&lt;/a&gt;&lt;code&gt;acpi_osi=! acpi_osi=&quot;Windows 2009&quot;&lt;/code&gt;或&lt;code&gt;acpi_osi=&quot;!Windows 2015&quot;&lt;/code&gt;启动, 如果你遇到了锁死可以通过开机时在&lt;a href=&quot;https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;启动加载器界面&lt;/a&gt;编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。&lt;/p&gt;
 &lt;/li&gt;
@@ -4119,7 +4286,7 @@ const ap0 = new APlayer ({
 });
 &lt;/script&gt; 
 
-&lt;h2 id=&quot;准备工作&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot; title=&quot;准备工作&quot;&gt;&lt;/a&gt;准备工作&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot;&gt;&lt;/a&gt;准备工作&lt;/h2&gt;
 &lt;p&gt;你至少需要以下工具：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;路由器本体&lt;/li&gt;
@@ -4129,7 +4296,7 @@ const ap0 = new APlayer ({
 &lt;li&gt;Windows用户需要一个SSH软件（例如：&lt;a href=&quot;https://putty.org&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;putty&lt;/a&gt;）&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;http://www1.miwifi.com/miwifi_download.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;小米路由器客户端&lt;/a&gt;, 用来绑定你的小米账号&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&quot;SSH到路由器&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8&quot; title=&quot;SSH到路由器&quot;&gt;&lt;/a&gt;SSH到路由器&lt;/h2&gt;
+&lt;h2 id=&quot;SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8&quot;&gt;&lt;/a&gt;SSH到路由器&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;路由器重启后指示灯会变为蓝色, 若变为红色则为刷机失败。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -4159,7 +4326,7 @@ const ap0 = new APlayer ({
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id=&quot;刷入Bootloader（推荐可选）&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89&quot; title=&quot;刷入Bootloader（推荐可选）&quot;&gt;&lt;/a&gt;刷入Bootloader（推荐/可选）&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89&quot;&gt;&lt;/a&gt;刷入Bootloader（推荐/可选）&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考&lt;a href=&quot;https://www.right.com.cn/forum/forum.php?mod=viewthread&amp;amp;tid=267455&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;这篇帖子&lt;/a&gt;, 不过为了防止变砖, 还是推荐刷Breed。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -4181,7 +4348,7 @@ mount /dev/sda1 /tmp/sdcard
 mtd -r write /tmp/sdcard/breed.bin Bootloader
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;p&gt;路由器刷写完毕后会自动重启, &lt;strong&gt;在写入Breed的过程中不要动路由器&lt;/strong&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;刷机&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E6%9C%BA&quot; title=&quot;刷机&quot;&gt;&lt;/a&gt;刷机&lt;/h2&gt;
+&lt;h2 id=&quot;%E5%88%B7%E6%9C%BA&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E6%9C%BA&quot;&gt;&lt;/a&gt;刷机&lt;/h2&gt;
 &lt;p&gt;下载所需固件：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;p&gt;tuna镜像站的OpenWrt下载地址：&lt;a href=&quot;https://mirrors.tuna.tsinghua.edu.cn/lede/releases/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;https://mirrors.tuna.tsinghua.edu.cn/lede/releases/&lt;/a&gt;&lt;/p&gt;
@@ -4189,7 +4356,7 @@ mtd -r write /tmp/sdcard/breed.bin Bootloader
 &lt;li&gt;&lt;p&gt;官方下载地址: &lt;a href=&quot;https://downloads.openwrt.org/releases/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;https://downloads.openwrt.org/releases/&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id=&quot;使用Breed的刷机方法&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot; title=&quot;使用Breed的刷机方法&quot;&gt;&lt;/a&gt;使用Breed的刷机方法&lt;/h3&gt;
+&lt;h3 id=&quot;%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;&lt;/a&gt;使用Breed的刷机方法&lt;/h3&gt;
 &lt;p&gt;按照hackpascal的说法是：&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;如果kernel0存在kernel1不存在, 那么启动kernel0
@@ -4210,7 +4377,7 @@ mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-rootfs0.bin rootfs0
 &lt;li&gt;&lt;p&gt;在环境变量编辑里添加&lt;code&gt;xiaomi.r3g.bootfw&lt;/code&gt;字段, 值为&lt;code&gt;2&lt;/code&gt;,保存后重启即可进入Openwrt。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;h3 id=&quot;没有刷入Breed的刷机方法&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot; title=&quot;没有刷入Breed的刷机方法&quot;&gt;&lt;/a&gt;没有刷入Breed的刷机方法&lt;/h3&gt;
+&lt;h3 id=&quot;%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;&lt;/a&gt;没有刷入Breed的刷机方法&lt;/h3&gt;
 &lt;blockquote&gt;
 &lt;p&gt;&lt;a href=&quot;https://openwrt.org/toh/xiaomi/mir3g&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;OpenWrt官网提供的教程&lt;/a&gt;是在没有刷入Breed的情况下刷入OpenWrt固件的。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -4229,7 +4396,7 @@ nvram commit
 reboot
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#Others&quot; title=&quot;Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
+&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;如果刷了Breed + Pandavan/PandoraBox后想换回OpenWrt的话, 首先在Breed中刷回小米路由器开发版的官方固件, 然后SSH到路由器按照上述的使用Breed的刷机方法再刷机。&lt;/p&gt;
 &lt;/li&gt;
@@ -4304,7 +4471,7 @@ reboot
 &lt;/blockquote&gt;
 &lt;p&gt;本教程仅提供所述内容的下载连接，游戏的版权归Mojang所有。&lt;/p&gt;
 &lt;p&gt;顺便说一下网易版并不支持MacOS哈哈哈哈。。。。&lt;/p&gt;
-&lt;h2 id=&quot;第一部分：&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A&quot; title=&quot;第一部分：&quot;&gt;&lt;/a&gt;第一部分：&lt;/h2&gt;
+&lt;h2 id=&quot;%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A&quot;&gt;&lt;/a&gt;第一部分：&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;如果你尚未在官网购买正版的Minecraft，你可以使用HMCL（&lt;a href=&quot;https://github.com/huanghongxun/HMCL&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Hello Minecraft Launcher&lt;/a&gt; )启动器下载并运行MC。&lt;/strong&gt;&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;你需要确保你的电脑已安装java8。下载java：&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&lt;/a&gt;&lt;/p&gt;
@@ -4334,7 +4501,7 @@ $ chmod 744 ./start.sh
 &lt;p&gt;在HMCL里点击右下角的加号下载游戏文件,建议将游戏下载到你启动器所在的文件夹内。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;如果你已购买正版Minecraft，在确保java安装好后直接去官网下载启动器再到启动器中下载游戏即可，可能会因网络原因速度慢，这是正常现象。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;请支持正版，RMB165，可使用支付宝。&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&quot;第二部分：&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A&quot; title=&quot;第二部分：&quot;&gt;&lt;/a&gt;第二部分：&lt;/h2&gt;
+&lt;h2 id=&quot;%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A&quot;&gt;&lt;/a&gt;第二部分：&lt;/h2&gt;
 &lt;ol&gt;
 &lt;li&gt;笔记本双显卡用户请确保你正确的安装了显卡驱动（新买的笔记本不知道什么是显卡驱动就默认已经安装好了），NVIDA显卡用户在桌面右键选择NVIDIA控制面板（没有这个选项可能是你的显卡驱动没安装好），选择 &lt;strong&gt;3D设置-&amp;gt;管理3D设置&lt;/strong&gt; ，选择添加，找到你安装的JAVA目录下的java.exe，将其设置为高性能处理器。然后保存设置并退出。（ps现在市面上新出的笔记本用集成显卡玩这个游戏也已经很流畅了）&lt;/li&gt;
 &lt;/ol&gt;
@@ -4347,7 +4514,7 @@ $ chmod 744 ./start.sh
 &lt;li&gt;&lt;p&gt;Linux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 &lt;a href=&quot;https://sh.alynx.xyz/posts/2017/02/16/Steam-with-Bumblebee/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Linux下使Steam调用Bumblebee使用独显&lt;/a&gt;,当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id=&quot;相关内容：&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%9A&quot; title=&quot;相关内容：&quot;&gt;&lt;/a&gt;相关内容：&lt;/h2&gt;
+&lt;h2 id=&quot;%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%9A&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%9A&quot;&gt;&lt;/a&gt;相关内容：&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&amp;amp;variant=zh-cn&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;教程/成功地启动游戏-Minecraft Wiki&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&quot;https://minecraft.net/zh-hans/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;官方网站|Minecraft&lt;/a&gt;&lt;/li&gt;
@@ -4388,7 +4555,7 @@ $ chmod 744 ./start.sh
     
     <summary type="html">
       &lt;p&gt;&lt;img src=&quot;/posts/spring-2/images/05.jpeg&quot; alt=&quot;Spring&quot; title=&quot;Flowers&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;春天来了。&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring-2/#%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82&quot; title=&quot;春天来了。&quot;&gt;&lt;/a&gt;春天来了。&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring-2/#%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82&quot;&gt;&lt;/a&gt;春天来了。&lt;/h2&gt;
 &lt;div class=&quot;alert-blue&quot;&gt;
 多图预警
 &lt;/div&gt;
@@ -4399,7 +4566,7 @@ $ chmod 744 ./start.sh
     
     <content type="html">
       &lt;p&gt;&lt;img src=&quot;/posts/spring-2/images/05.jpeg&quot; alt=&quot;Spring&quot; title=&quot;Flowers&quot;&gt;&lt;/p&gt;
-&lt;h2 id=&quot;春天来了。&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring-2/#%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82&quot; title=&quot;春天来了。&quot;&gt;&lt;/a&gt;春天来了。&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring-2/#%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82&quot;&gt;&lt;/a&gt;春天来了。&lt;/h2&gt;
 &lt;div class=&quot;alert-blue&quot;&gt;
 多图预警
 &lt;/div&gt;
@@ -4414,7 +4581,7 @@ $ chmod 744 ./start.sh
 &lt;p&gt;&lt;img src=&quot;/posts/spring-2/images/07.jpeg&quot; alt=&quot;Spring 7&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring-2/images/08.jpeg&quot; alt=&quot;Spring 8&quot;&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;Spring-2&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring-2/#Spring-2&quot; title=&quot;Spring-2&quot;&gt;&lt;/a&gt;Spring - 2&lt;/h2&gt;
+&lt;h2 id=&quot;Spring-2&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring-2/#Spring-2&quot;&gt;&lt;/a&gt;Spring - 2&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;拍摄自2018-3-28&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -4473,13 +4640,13 @@ $ chmod 744 ./start.sh
 &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
 
 &lt;hr&gt;
-&lt;h2 id=&quot;拍摄自ipodtouch6&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring/#%E6%8B%8D%E6%91%84%E8%87%AAipodtouch6&quot; title=&quot;拍摄自ipodtouch6&quot;&gt;&lt;/a&gt;拍摄自ipod touch6&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%8B%8D%E6%91%84%E8%87%AAipodtouch6&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring/#%E6%8B%8D%E6%91%84%E8%87%AAipodtouch6&quot;&gt;&lt;/a&gt;拍摄自ipod touch6&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring/images/1491917117692.jpeg&quot; alt=&quot;Spring_1&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring/images/1491917129991.jpeg&quot; alt=&quot;Spring_3&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring/images/1491917137076.jpeg&quot; alt=&quot;Spring_4&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring/images/1491917142441.jpeg&quot; alt=&quot;Spring_5&quot;&gt;&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id=&quot;拍摄自佳能powershots100&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring/#%E6%8B%8D%E6%91%84%E8%87%AA%E4%BD%B3%E8%83%BDpowershots100&quot; title=&quot;拍摄自佳能powershots100&quot;&gt;&lt;/a&gt;拍摄自佳能powershot s100&lt;/h2&gt;
+&lt;h2 id=&quot;%E6%8B%8D%E6%91%84%E8%87%AA%E4%BD%B3%E8%83%BDpowershots100&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring/#%E6%8B%8D%E6%91%84%E8%87%AA%E4%BD%B3%E8%83%BDpowershots100&quot;&gt;&lt;/a&gt;拍摄自佳能powershot s100&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring/images/IMG_0009.jpg&quot; alt=&quot;Spring_6&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring/images/IMG_0011.jpg&quot; alt=&quot;Spring_7&quot;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;/posts/spring/images/IMG_0012.jpg&quot; alt=&quot;Spring_8&quot;&gt;&lt;/p&gt;
@@ -4499,95 +4666,6 @@ $ chmod 744 ./start.sh
     <category term="Spring" label="Spring" scheme="https://blog.starry-s.moe/tags/Spring/" />
     
     <category term="Flowers" label="Flowers" scheme="https://blog.starry-s.moe/tags/Flowers/" />
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>Sorry, Thank you.</title>
-    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/sorry-thankyou/" />
-    <id>https://blog.starry-s.moe/posts/sorry-thankyou/</id>
-    
-    <author>
-      <name>STARRY-S</name>
-      <email>hxstarrys@gmail.com</email>
-    </author>
-    
-    
-    <published>2016-11-26T07:00:24.000Z</published>
-    
-    
-    <updated>2016-11-26T07:00:24.000Z</updated>
-    
-    
-    <summary type="html">
-      &lt;div style=&quot;text-align:center&quot;&gt;
-  &lt;img src=&quot;/posts/sorry-thankyou/images/snow.jpg&quot; alt=&quot;Snow&quot; title=&quot;Snow&quot;&gt;
-&lt;/div&gt;
-
-&lt;p&gt;想了很久不知道以什么来作为本篇文章的开头，不确定自己真的想说些什么，但是我还是带着确切目的来写这篇文章的。&lt;/p&gt;
-&lt;p&gt;这一个月发生了一些不太愉快的事，可能不算很大吧但是对我来说这个影响真的很大。我不知道应该从何说起，先静下来带上耳机慢慢的想慢慢的写。&lt;/p&gt;
-
-    </summary>
-    
-    
-    <content type="html">
-      &lt;div style=&quot;text-align:center&quot;&gt;
-  &lt;img src=&quot;/posts/sorry-thankyou/images/snow.jpg&quot; alt=&quot;Snow&quot; title=&quot;Snow&quot;&gt;
-&lt;/div&gt;
-
-&lt;p&gt;想了很久不知道以什么来作为本篇文章的开头，不确定自己真的想说些什么，但是我还是带着确切目的来写这篇文章的。&lt;/p&gt;
-&lt;p&gt;这一个月发生了一些不太愉快的事，可能不算很大吧但是对我来说这个影响真的很大。我不知道应该从何说起，先静下来带上耳机慢慢的想慢慢的写。&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-
-&lt;hr&gt;
-&lt;p&gt;一直没想到有些事发生的这么快，短短4个月发生了这么多变化。&lt;/p&gt;
-&lt;p&gt;还记得4个月前还在忙小考试的那阵子，这只猫就这么来到了我的生活中。&lt;/p&gt;
-&lt;p&gt;4个月它变化很大，长大了许多，从一只几斤重的小猫一下子变成一只大猫了。&lt;/p&gt;
-&lt;p&gt;它是一只很通人性的猫，可以用很乖来形容。在家里不打翻任何东西，犯错误会很主动的认错等待受罚。虽然它没有和人沟通的能力但是能看出它一直都想和人说话，一直都在努力的想表达很多事情。甚至它一直都在学人的一举一动。&lt;/p&gt;
-&lt;p&gt;它喜欢外出。和别的猫不一样，它可以被绳子栓着溜。夏天的时候我和家人一起在河边陪它溜达。它也不像别的猫那样到处乱跑。路人很喜欢它刷白刷白的毛，在河边很显眼。&lt;/p&gt;
-&lt;p&gt;它爱吃猫罐头，经常晚上缠在脚边要罐头吃。有时我太懒了就懒得管他，就只给它一碗猫粮。&lt;/p&gt;
-&lt;p&gt;和它相处的这段日子很愉快很美好。&lt;/p&gt;
-&lt;p&gt;每天晚上放学回家都能看到它激动的朝你跑来，晚上睡觉它还会趴在你的床边。&lt;/p&gt;
-&lt;p&gt;养一只猫的生活很别样的丰富多彩。它改变了我许多。后来它也就成了我生命的一部分了。&lt;/p&gt;
-&lt;p&gt;猫的思维也挺特殊的，和人有很大的不同&lt;/p&gt;
-&lt;p&gt;我可以用很规矩来形容一个猫。它在我眼里每天生活得都很规矩，定时定点的干一些事，并且总把它的主人当亲人来对待吧。&lt;/p&gt;
-&lt;p&gt;每天上学后都能听到几声它独自在家中哭嚎一般的叫声，听着挺揪心的，但是也没办法。&lt;/p&gt;
-&lt;p&gt;没想到一切过去得这么快，甚至我现在还难以回忆过去。&lt;/p&gt;
-&lt;p&gt;一周前的早晨，它去世了。&lt;/p&gt;
-&lt;p&gt;一瞬间觉得这和我想的有些不一样。&lt;/p&gt;
-&lt;p&gt;原本普通的一天中午就这样变得不同了。一下午我都神混颠倒的听老师讲课。还是请了一节课的假回家和家人一起把它带到大凌河边埋起来了。&lt;/p&gt;
-&lt;p&gt;我选择了沉默起来，没有和任何人说这件事。尽可能的不被这悲伤困扰着。中午在家带上耳机想让自己静下来，但是眼泪就抑制不住的往外流。心里还是那么的舍不得，没有告别的就这么离去了。&lt;/p&gt;
-&lt;p&gt;我缓了好长好长的时间。在学校里不愿多说一句话，在家里不敢想太多的东西，稍微有些害怕，有一些孤独。之前每天回家都会习惯性的喊几声它的名字，但是现在又要想方设法的控制自己不要这么做。&lt;/p&gt;
-&lt;p&gt;考虑了很久决定写点什么来纪念一下这只陪伴了我几个月的猫咪。的确，我没想到这么快失去它。尽管过去半个月了但我仍能梦到和它一起玩耍时的场景，总觉得它还活着。&lt;/p&gt;
-&lt;p&gt;总觉得没有和它说再见，梦里梦见它还是活蹦乱跳的和我闹。一切就像梦一样，我告诉自己那只是一场梦。在梦里和它说再见吧，这一切只能在梦里完成了，梦是那么的真实，总给我一种错觉。而真正的现实却被我当作梦境去面对了。&lt;/p&gt;
-&lt;p&gt;还有几天又要考试了，而这次我真的觉得累了。看到班级同学都在使劲的在课上学着，而我想歇一歇。先找几本书看一下吧，总感觉2016年的下半年大脑一直处在混沌的状态，丝毫没有清醒过，做事情的动机也没有了，一点都不像年初时的自己了。随着自己最喜欢的那首歌听腻了，就在也没找到更好听的歌来唤醒大脑的深处。而年末又发生了这些事情。我不得不好好的想想，我到底遗忘了什么，身体为什么这么的累，忙活了一切究竟换回来的是什么，尽管没有后悔过但是真的好累好累。这不是我给自己规划的生活。
-带耳机把这些一点点的写出来，也许写出来心里就会好受了吧。&lt;/p&gt;
-&lt;p&gt;有些事没办法按照自己所想的那样去进行，自己所想的和实际发生的之间的差距总是那么大，也许这就是生活吧。&lt;/p&gt;
-&lt;p&gt;这就是缘份吧，我想。&lt;/p&gt;
-&lt;p&gt;感谢它陪伴我的这4个月。心里想着有些对不起它，但是又没办法挽回了。&lt;/p&gt;
-&lt;p&gt;静静的在心里想：谢谢，对不起。&lt;/p&gt;
-&lt;p&gt;一切过去的好快，每天还是要面对着新的一切，还要去上学，还要有理想。重新规划一下未来，把没必要的数据都清理掉，给大脑一周的假期。一切还在继续。&lt;/p&gt;
-&lt;p&gt;看到AlanWalker终于发布新曲了，非常激动的戴耳机去听。看到这样一个有理想，一直努力的人真好。&lt;/p&gt;
-&lt;p&gt;一眨眼2016也就这么过去了。站在2017回首过去一年感觉自己变了好多，经历了好多的事。认识了好多的人，我的生活也就这么一点点的被他们影响着。但是这也没什么不好，虽然累点但是一切还是值得去走的。高中生活过去一半了，真的很快啊，或许到了高三时间会过得更快吧。要学会珍惜，要多和现在还存在的人和事待一会儿。一旦自己发现我已经失去了什么改变不回来时，就都晚了。&lt;/p&gt;
-&lt;p&gt;说实话我觉得我性格很大大咧咧的马马虎虎的，但是在班里却很宅的样子都不是很愿意说话。我找不到别的形容自己的词了，感觉说自己二一点也没什么不妥的。可能是我有时候疏忽大意了吧，忽略掉了身边好多对我好的人，还犯下了好多改不了的错误。有时候感觉自己蛮聪明的然后自己固执到了犯了错误都不愿意找原因的地步，然后自己就陷在这里越来越深了。感觉自己一直都是在拆了东墙补西墙那样的生活着，维护起网站了就开始遗弃用了多年的QQ空间了，一遇到点新鲜事就把脑子里别的东西全忘掉了，然后自己就这么看似完美的一天天的走下去了。  &lt;/p&gt;
-&lt;p&gt;可能还需要经历很久我在能把自己的毛病改过来吧，或许很久以后我也意识不到自己的毛病。&lt;/p&gt;
-&lt;p&gt;两个月过去了，期末过去了，春节即将来临了。有时候我还会不由自主的问自己我养过那只猫吗？它死了吗？发生过了什么吗？······也许一个人真的被什么东西伤到了影响到了他的正常生活后，他的大脑就会控制他自己不顾一切的忘掉这些事情。所以现在我彻底的忘掉了他的样子，盯着窗户上的堵死的猫洞会发呆很久才能想起来这是干什么用的，回看他的照片时会感到很陌生一样问自己，这只猫好可爱啊，为什么我一点和他熟悉的感觉都没有了呢。&lt;/p&gt;
-&lt;p&gt;感谢在生命中遇见了它，一切来的快去的也快。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;img src=&quot;/posts/sorry-thankyou/images/thankyou.jpg&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;h1 id=&quot;SorryThankyou&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/sorry-thankyou/#SorryThankyou&quot; title=&quot;SorryThankyou&quot;&gt;&lt;/a&gt;Sorry, Thankyou.&lt;/h1&gt;
-
-    </content>
-    
-    
-    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/" />
-    
-    
-    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/" />
-    
-    <category term="碎碎念" label="碎碎念" scheme="https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/" />
     
   </entry>
   
