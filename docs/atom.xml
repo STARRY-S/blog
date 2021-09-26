@@ -95,17 +95,45 @@ const ap0 = new APlayer ({
 &lt;p&gt;安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。&lt;/p&gt;
 &lt;p&gt;在格式化&lt;code&gt;root&lt;/code&gt;分区时一开始想尝试一下树莓派上跑&lt;code&gt;btrfs&lt;/code&gt;，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了&lt;code&gt;ext4&lt;/code&gt;，&lt;del&gt;不然我一晚上不用睡觉了&lt;/del&gt;。&lt;/p&gt;
 &lt;p&gt;在分区时除了&lt;code&gt;boot&lt;/code&gt;和&lt;code&gt;root&lt;/code&gt;之外，我额外分了2G的&lt;code&gt;swap&lt;/code&gt;分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（&lt;del&gt;这话咋读着这么别扭呢&lt;/del&gt;）&lt;/p&gt;
-&lt;p&gt;最后改一下&lt;code&gt;/etc/fstab&lt;/code&gt;让设备在开机时自动挂载交换分区。&lt;/p&gt;
+&lt;p&gt;因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。&lt;/p&gt;
+&lt;p&gt;把移动硬盘接到树莓派后&lt;code&gt;lsblk&lt;/code&gt;查看以下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。&lt;/p&gt;
+&lt;p&gt;如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅&lt;a href=&quot;https://wiki.archlinux.org/title/fdisk&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Wiki (fdisk)&lt;/a&gt;，因为往博客上写的话太难理解了别人肯定看不懂。&lt;/p&gt;
+&lt;p&gt;最后咱把2T移动硬盘格式化成这个样子：&lt;/p&gt;
+&lt;figure data-raw=&quot;# fdisk -l /dev/sda
+
+Device          Start        End    Sectors  Size Type
+/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+&quot; data-info=&quot;language-text&quot; data-lang=&quot;text&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;# fdisk -l /dev/sda
+
+Device          Start        End    Sectors  Size Type
+/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;其中的1T打算格式化为&lt;code&gt;btrfs&lt;/code&gt;给Samba用，其余的800G打算格式化为&lt;code&gt;NTFS&lt;/code&gt;留着给Windows当个移动硬盘。&lt;/p&gt;
+&lt;p&gt;创建分区时别忘了更改分区类型，给Linux用的就是&lt;code&gt;Linux filesystem&lt;/code&gt;，给Windows用的就是&lt;code&gt;Microsoft basic data&lt;/code&gt;，
+不然机械硬盘连接到Windows系统中将不显示分区，或者就是一直提醒你：该分区不可用，然后让你格式化，到时候一不小心点错了可是会丢数据的。&lt;/p&gt;
+&lt;p&gt;安装&lt;code&gt;btrfs-progs&lt;/code&gt;和&lt;code&gt;ntfs-3g&lt;/code&gt;，之后格式化硬盘（NTFS还是建议到Windows系统中格式化）。&lt;/p&gt;
+&lt;p&gt;格式化btrfs的时候加个&lt;code&gt;-L&lt;/code&gt;参数设置分区的标签，这样方便在fstab中设置开机自动挂载。&lt;/p&gt;
+&lt;figure data-raw=&quot;$ lsblk                                # 一定要看清楚自己格式化的分区名字
+$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+&quot; data-info=&quot;language-text&quot; data-lang=&quot;text&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-text&quot;&gt;$ lsblk                                # 一定要看清楚自己格式化的分区名字
+$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;最后改一下&lt;code&gt;/etc/fstab&lt;/code&gt;让设备在开机时自动挂载交换分区和移动硬盘。&lt;/p&gt;
 &lt;figure data-raw=&quot;# &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
 /dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=samba     /samba  btrfs   defaults        0       0
 &quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;# &amp;lt;file system&amp;gt; &amp;lt;dir&amp;gt; &amp;lt;type&amp;gt; &amp;lt;options&amp;gt; &amp;lt;dump&amp;gt; &amp;lt;pass&amp;gt;
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
 /dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=samba     /samba  btrfs   defaults        0       0
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;blockquote&gt;
 &lt;p&gt;如果你的swap分区不是&lt;code&gt;mmcblk0p3&lt;/code&gt;的话，记得手动更改&lt;/p&gt;
 &lt;/blockquote&gt;
+&lt;p&gt;重启系统后如果正常的话，分区会被自动挂载。&lt;/p&gt;
 &lt;h2 id=&quot;%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C&quot;&gt;&lt;/a&gt;配置网络&lt;/h2&gt;
 &lt;div class=&quot;alert-blue&quot;&gt;
 配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。&lt;br&gt;
@@ -165,11 +193,97 @@ DNS=8.8.8.8
 &lt;h3 id=&quot;%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99&quot;&gt;&lt;/a&gt;配置防火墙&lt;/h3&gt;
 &lt;p&gt;首先安装&lt;code&gt;ufw&lt;/code&gt;。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫&lt;strong&gt;Uncomplicated Filewall&lt;/strong&gt;，所以咱先用ufw配置防火墙）&lt;/p&gt;
 &lt;p&gt;食用方法请参见&lt;a href=&quot;https://wiki.archlinux.org/title/Uncomplicated_Firewall&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Wiki页面&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：&lt;/p&gt;
+&lt;figure data-raw=&quot;# Create or Edit /etc/ufw/applications.d/samba, add following content:
+
+[Samba]
+title=LanManager-like file and printer server for Unix
+description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
+ports=137,138/udp|139,445/tcp  
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;# Create or Edit /etc/ufw/applications.d/samba, add following content:
+
+[Samba]
+title=LanManager-like file and printer server for Unix
+description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
+ports=137,138/udp|139,445/tcp  
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;之后root账户执行&lt;code&gt;ufw app update Samba&lt;/code&gt;加载配置文件，然后&lt;code&gt;ufw allow Samba&lt;/code&gt;允许Samba的端口。&lt;/p&gt;
+&lt;p&gt;如果你的树莓派上还装有其他服务（比如http，https等），别忘了&lt;code&gt;ufw allow PORT&lt;/code&gt;开放端口，尤其是别忘了开SSH端口。&lt;/p&gt;
+&lt;p&gt;最后&lt;code&gt;ufw status&lt;/code&gt;查看防火墙状态信息，&lt;code&gt;ufw enable&lt;/code&gt;开启防火墙。&lt;/p&gt;
 &lt;h2 id=&quot;Samba&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#Samba&quot;&gt;&lt;/a&gt;Samba&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;今天太晚了需要早早睡觉，有时间咱再继续写。&lt;/p&gt;
-&lt;p&gt;晚安~&lt;/p&gt;
-&lt;/blockquote&gt;
+&lt;p&gt;配合&lt;a href=&quot;https://wiki.archlinux.org/title/Samba&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Arch Wiki&lt;/a&gt;食用。&lt;/p&gt;
+&lt;p&gt;首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：&lt;/p&gt;
+&lt;figure data-raw=&quot;$ sudo groupadd -r sambausers          # 新建用户组
+$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ sudo groupadd -r sambausers          # 新建用户组
+$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;（咱写的很详细了吧&lt;/p&gt;
+&lt;h3 id=&quot;%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8&quot;&gt;&lt;/a&gt;配置服务器&lt;/h3&gt;
+&lt;p&gt;安装好&lt;code&gt;samba&lt;/code&gt;安装包后，需要手动去&lt;code&gt;/etc/samba/&lt;/code&gt;创建&lt;code&gt;smb.conf&lt;/code&gt;配置文件，可以到&lt;a href=&quot;https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Samba git repository&lt;/a&gt;中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。&lt;/p&gt;
+&lt;figure data-raw=&quot;# /etc/samba/smb.conf
+
+[global]
+# 修改工作组的名字
+workgroup = MYGROUP
+# 服务器描述
+server string = Raspberry pi Samba Server
+
+# 在文件末尾添加共享文件夹目录及相关配置
+[sambashare]
+comment = Sample share file.
+path = /path/to/your/samba/folder
+writable = yes
+browsable = yes
+create mask = 0755
+directory mask = 0755
+read only = no
+guest ok = no  # 允许访客随意登录
+&quot; data-info=&quot;language-conf&quot; data-lang=&quot;conf&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-conf&quot;&gt;# /etc/samba/smb.conf
+
+[global]
+# 修改工作组的名字
+workgroup = MYGROUP
+# 服务器描述
+server string = Raspberry pi Samba Server
+
+# 在文件末尾添加共享文件夹目录及相关配置
+[sambashare]
+comment = Sample share file.
+path = /path/to/your/samba/folder
+writable = yes
+browsable = yes
+create mask = 0755
+directory mask = 0755
+read only = no
+guest ok = no  # 允许访客随意登录
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;配置好文件后，启动&lt;code&gt;smb.service&lt;/code&gt;和&lt;code&gt;nmb.service&lt;/code&gt;&lt;/p&gt;
+&lt;figure data-raw=&quot;$ sudo systemctl enable --now smb.service
+$ sudo systemctl enable --now nmb.service
+&quot; data-info=&quot;language-bash&quot; data-lang=&quot;bash&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code class=&quot;language-bash&quot;&gt;$ sudo systemctl enable --now smb.service
+$ sudo systemctl enable --now nmb.service
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8&quot;&gt;&lt;/a&gt;访问服务器&lt;/h3&gt;
+&lt;p&gt;咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接&#039;smb://192.168.xxx.xxx&#039;，
+输入用户组、用户名和密码登录就可以访问共享文件夹。&lt;/p&gt;
+&lt;p&gt;Windows系统中，首先需要到 控制面板-&amp;gt;程序-&amp;gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
+打开文件资源管理器输入地址&lt;code&gt;\\192.168.xxx.xxx\&lt;/code&gt;，登录后就能访问共享文件夹了。&lt;/p&gt;
+&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
+&lt;p&gt;所以到此为止，咱的Samba服务器就搭建好了。&lt;/p&gt;
+&lt;p&gt;随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。&lt;/p&gt;
+&lt;p&gt;后续可能想办法搞个内网穿透，这样从外面也能访问到家里的服务器了。&lt;/p&gt;
+&lt;br&gt;
+
+&lt;p&gt;&lt;strong&gt;Written by STARRY-S&lt;/strong&gt;&lt;/p&gt;
 
     </content>
     

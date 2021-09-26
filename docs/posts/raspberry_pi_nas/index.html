@@ -398,17 +398,45 @@ const ap0 = new APlayer ({
 <p>安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。</p>
 <p>在格式化<code>root</code>分区时一开始想尝试一下树莓派上跑<code>btrfs</code>，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了<code>ext4</code>，<del>不然我一晚上不用睡觉了</del>。</p>
 <p>在分区时除了<code>boot</code>和<code>root</code>之外，我额外分了2G的<code>swap</code>分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（<del>这话咋读着这么别扭呢</del>）</p>
-<p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区。</p>
+<p>因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。</p>
+<p>把移动硬盘接到树莓派后<code>lsblk</code>查看以下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。</p>
+<p>如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅<a href="https://wiki.archlinux.org/title/fdisk" target="_blank" rel="external nofollow noreferrer noopener">Wiki (fdisk)</a>，因为往博客上写的话太难理解了别人肯定看不懂。</p>
+<p>最后咱把2T移动硬盘格式化成这个样子：</p>
+<figure data-raw="# fdisk -l /dev/sda
+
+Device          Start        End    Sectors  Size Type
+/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+" data-info="language-text" data-lang="text" class="code-block"><pre class="code"><code class="language-text"># fdisk -l /dev/sda
+
+Device          Start        End    Sectors  Size Type
+/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+</code></pre></figure>
+<p>其中的1T打算格式化为<code>btrfs</code>给Samba用，其余的800G打算格式化为<code>NTFS</code>留着给Windows当个移动硬盘。</p>
+<p>创建分区时别忘了更改分区类型，给Linux用的就是<code>Linux filesystem</code>，给Windows用的就是<code>Microsoft basic data</code>，
+不然机械硬盘连接到Windows系统中将不显示分区，或者就是一直提醒你：该分区不可用，然后让你格式化，到时候一不小心点错了可是会丢数据的。</p>
+<p>安装<code>btrfs-progs</code>和<code>ntfs-3g</code>，之后格式化硬盘（NTFS还是建议到Windows系统中格式化）。</p>
+<p>格式化btrfs的时候加个<code>-L</code>参数设置分区的标签，这样方便在fstab中设置开机自动挂载。</p>
+<figure data-raw="$ lsblk                                # 一定要看清楚自己格式化的分区名字
+$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+" data-info="language-text" data-lang="text" class="code-block"><pre class="code"><code class="language-text">$ lsblk                                # 一定要看清楚自己格式化的分区名字
+$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+</code></pre></figure>
+<p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区和移动硬盘。</p>
 <figure data-raw="# <file system> <dir> <type> <options> <dump> <pass>
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
 /dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=samba     /samba  btrfs   defaults        0       0
 " class="code-block"><pre class="code"><code># &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
 /dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=samba     /samba  btrfs   defaults        0       0
 </code></pre></figure>
 <blockquote>
 <p>如果你的swap分区不是<code>mmcblk0p3</code>的话，记得手动更改</p>
 </blockquote>
+<p>重启系统后如果正常的话，分区会被自动挂载。</p>
 <h2 id="%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"></a>配置网络</h2>
 <div class="alert-blue">
 配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。<br>
@@ -468,11 +496,97 @@ DNS=8.8.8.8
 <h3 id="%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99"></a>配置防火墙</h3>
 <p>首先安装<code>ufw</code>。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫<strong>Uncomplicated Filewall</strong>，所以咱先用ufw配置防火墙）</p>
 <p>食用方法请参见<a href="https://wiki.archlinux.org/title/Uncomplicated_Firewall" target="_blank" rel="external nofollow noreferrer noopener">Wiki页面</a>。</p>
+<p>因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：</p>
+<figure data-raw="# Create or Edit /etc/ufw/applications.d/samba, add following content:
+
+[Samba]
+title=LanManager-like file and printer server for Unix
+description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
+ports=137,138/udp|139,445/tcp  
+" class="code-block"><pre class="code"><code># Create or Edit /etc/ufw/applications.d/samba, add following content:
+
+[Samba]
+title=LanManager-like file and printer server for Unix
+description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
+ports=137,138/udp|139,445/tcp  
+</code></pre></figure>
+<p>之后root账户执行<code>ufw app update Samba</code>加载配置文件，然后<code>ufw allow Samba</code>允许Samba的端口。</p>
+<p>如果你的树莓派上还装有其他服务（比如http，https等），别忘了<code>ufw allow PORT</code>开放端口，尤其是别忘了开SSH端口。</p>
+<p>最后<code>ufw status</code>查看防火墙状态信息，<code>ufw enable</code>开启防火墙。</p>
 <h2 id="Samba"><a class="header-link" href="/posts/raspberry_pi_nas/#Samba"></a>Samba</h2>
-<blockquote>
-<p>今天太晚了需要早早睡觉，有时间咱再继续写。</p>
-<p>晚安~</p>
-</blockquote>
+<p>配合<a href="https://wiki.archlinux.org/title/Samba" target="_blank" rel="external nofollow noreferrer noopener">Arch Wiki</a>食用。</p>
+<p>首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：</p>
+<figure data-raw="$ sudo groupadd -r sambausers          # 新建用户组
+$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+" class="code-block"><pre class="code"><code>$ sudo groupadd -r sambausers          # 新建用户组
+$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+</code></pre></figure>
+<p>（咱写的很详细了吧</p>
+<h3 id="%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8"></a>配置服务器</h3>
+<p>安装好<code>samba</code>安装包后，需要手动去<code>/etc/samba/</code>创建<code>smb.conf</code>配置文件，可以到<a href="https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD" target="_blank" rel="external nofollow noreferrer noopener">Samba git repository</a>中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。</p>
+<figure data-raw="# /etc/samba/smb.conf
+
+[global]
+# 修改工作组的名字
+workgroup = MYGROUP
+# 服务器描述
+server string = Raspberry pi Samba Server
+
+# 在文件末尾添加共享文件夹目录及相关配置
+[sambashare]
+comment = Sample share file.
+path = /path/to/your/samba/folder
+writable = yes
+browsable = yes
+create mask = 0755
+directory mask = 0755
+read only = no
+guest ok = no  # 允许访客随意登录
+" data-info="language-conf" data-lang="conf" class="code-block"><pre class="code"><code class="language-conf"># /etc/samba/smb.conf
+
+[global]
+# 修改工作组的名字
+workgroup = MYGROUP
+# 服务器描述
+server string = Raspberry pi Samba Server
+
+# 在文件末尾添加共享文件夹目录及相关配置
+[sambashare]
+comment = Sample share file.
+path = /path/to/your/samba/folder
+writable = yes
+browsable = yes
+create mask = 0755
+directory mask = 0755
+read only = no
+guest ok = no  # 允许访客随意登录
+</code></pre></figure>
+<p>配置好文件后，启动<code>smb.service</code>和<code>nmb.service</code></p>
+<figure data-raw="$ sudo systemctl enable --now smb.service
+$ sudo systemctl enable --now nmb.service
+" data-info="language-bash" data-lang="bash" class="code-block"><pre class="code"><code class="language-bash">$ sudo systemctl enable --now smb.service
+$ sudo systemctl enable --now nmb.service
+</code></pre></figure>
+<h3 id="%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8"><a class="header-link" href="/posts/raspberry_pi_nas/#%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8"></a>访问服务器</h3>
+<p>咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接'smb://192.168.xxx.xxx'，
+输入用户组、用户名和密码登录就可以访问共享文件夹。</p>
+<p>Windows系统中，首先需要到 控制面板-&gt;程序-&gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
+打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
+<h2 id="Others"><a class="header-link" href="/posts/raspberry_pi_nas/#Others"></a>Others</h2>
+<p>所以到此为止，咱的Samba服务器就搭建好了。</p>
+<p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>
+<p>后续可能想办法搞个内网穿透，这样从外面也能访问到家里的服务器了。</p>
+<br>
+
+<p><strong>Written by STARRY-S</strong></p>
 
     </main>
     <footer class="post-footer">
@@ -719,6 +833,30 @@ DNS=8.8.8.8
           
           <a class="list-group-item toc-link" href="#Samba">Samba</a>
           
+          
+      <ol >
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8">配置服务器</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8">访问服务器</a>
+          
+        </li>
+      
+      </ol>
+      
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#Others">Others</a>
+          
         </li>
       
       </ol>
@@ -802,4 +940,4 @@ DNS=8.8.8.8
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.3 at 2021-09-25T15:37:55.854Z. -->
+<!-- Page built by Hikaru v1.8.3 at 2021-09-26T15:44:43.038Z. -->
