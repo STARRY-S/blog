@@ -1,7 +1,7 @@
 ---
 title: 使用树莓派搭建一个NAS
 created: 2021-09-25T22:20:03+08:00
-updated: 2021-09-25T23:27:10+08:00
+updated: 2021-09-29T01:07:48+08:00
 layout: post
 tags:
 - 树莓派
@@ -52,16 +52,47 @@ categories:
 
 在分区时除了`boot`和`root`之外，我额外分了2G的`swap`分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（~~这话咋读着这么别扭呢~~）
 
-最后改一下`/etc/fstab`让设备在开机时自动挂载交换分区。
+因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。
 
+把移动硬盘接到树莓派后`lsblk`查看以下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。
+
+如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅[Wiki (fdisk)](https://wiki.archlinux.org/title/fdisk)，因为往博客上写的话太难理解了别人肯定看不懂。
+
+最后咱把2T移动硬盘格式化成这个样子：
+
+```text
+# fdisk -l /dev/sda
+
+Device          Start        End    Sectors  Size Type
+/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+```
+
+其中的1T打算格式化为`btrfs`给Samba用，其余的800G打算格式化为`NTFS`留着给Windows当个移动硬盘。
+
+创建分区时别忘了更改分区类型，给Linux用的就是`Linux filesystem`，给Windows用的就是`Microsoft basic data`，
+不然机械硬盘连接到Windows系统中将不显示分区，或者就是一直提醒你：该分区不可用，然后让你格式化，到时候一不小心点错了可是会丢数据的。
+
+安装`btrfs-progs`和`ntfs-3g`，之后格式化硬盘（NTFS还是建议到Windows系统中格式化）。
+
+格式化btrfs的时候加个`-L`参数设置分区的标签，这样方便在fstab中设置开机自动挂载。
+
+``` text
+$ lsblk                                # 一定要看清楚自己格式化的分区名字
+$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+```
+
+最后改一下`/etc/fstab`让设备在开机时自动挂载交换分区和移动硬盘。
 
 ```
 # <file system> <dir> <type> <options> <dump> <pass>
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
 /dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=samba     /samba  btrfs   defaults        0       0
 ```
-
 > 如果你的swap分区不是`mmcblk0p3`的话，记得手动更改
+
+重启系统后如果正常的话，分区会被自动挂载。
 
 ## 配置网络
 
@@ -121,8 +152,88 @@ DNS=8.8.8.8
 
 食用方法请参见[Wiki页面](https://wiki.archlinux.org/title/Uncomplicated_Firewall)。
 
+因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：
+
+```
+# Create or Edit /etc/ufw/applications.d/samba, add following content:
+
+[Samba]
+title=LanManager-like file and printer server for Unix
+description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
+ports=137,138/udp|139,445/tcp  
+```
+
+之后root账户执行`ufw app update Samba`加载配置文件，然后`ufw allow Samba`允许Samba的端口。
+
+如果你的树莓派上还装有其他服务（比如http，https等），别忘了`ufw allow PORT`开放端口，尤其是别忘了开SSH端口。
+
+最后`ufw status`查看防火墙状态信息，`ufw enable`开启防火墙。
+
 ## Samba
 
-> 今天太晚了需要早早睡觉，有时间咱再继续写。
->
-> 晚安~
+配合[Arch Wiki](https://wiki.archlinux.org/title/Samba)食用。
+
+首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：
+
+```
+$ sudo groupadd -r sambausers          # 新建用户组
+$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+```
+
+（咱写的很详细了吧
+
+### 配置服务器
+
+安装好`samba`安装包后，需要手动去`/etc/samba/`创建`smb.conf`配置文件，可以到[Samba git repository](https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD)中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。
+
+``` conf
+# /etc/samba/smb.conf
+
+[global]
+# 修改工作组的名字
+workgroup = MYGROUP
+# 服务器描述
+server string = Raspberry pi Samba Server
+
+# 在文件末尾添加共享文件夹目录及相关配置
+[sambashare]
+comment = Sample share file.
+path = /path/to/your/samba/folder
+writable = yes
+browsable = yes
+create mask = 0755
+directory mask = 0755
+read only = no
+guest ok = no  # 允许访客随意登录
+```
+
+配置好文件后，启动`smb.service`和`nmb.service`
+
+``` bash
+$ sudo systemctl enable --now smb.service
+$ sudo systemctl enable --now nmb.service
+```
+
+### 访问服务器
+
+咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接`smb://192.168.xxx.xxx`，
+输入用户组、用户名和密码登录就可以访问共享文件夹。
+
+Windows系统中，首先需要到 控制面板->程序->启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
+打开文件资源管理器输入地址`\\192.168.xxx.xxx\`，登录后就能访问共享文件夹了。
+
+## Others
+
+所以到此为止，咱的Samba服务器就搭建好了。
+
+随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。
+
+后续可能想办法搞个内网穿透，这样从外面也能访问到家里的服务器了。
+
+<br>
+
+**by STARRY-S**
