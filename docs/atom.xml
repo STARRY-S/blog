@@ -36,7 +36,7 @@
     <published>2021-09-25T14:20:03.000Z</published>
     
     
-    <updated>2021-09-25T15:27:10.000Z</updated>
+    <updated>2021-09-28T17:07:48.000Z</updated>
     
     
     <summary type="html">
@@ -273,7 +273,7 @@ $ sudo systemctl enable --now nmb.service
 $ sudo systemctl enable --now nmb.service
 &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 &lt;h3 id=&quot;%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8&quot;&gt;&lt;/a&gt;访问服务器&lt;/h3&gt;
-&lt;p&gt;咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接&#039;smb://192.168.xxx.xxx&#039;，
+&lt;p&gt;咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接&lt;code&gt;smb://192.168.xxx.xxx&lt;/code&gt;，
 输入用户组、用户名和密码登录就可以访问共享文件夹。&lt;/p&gt;
 &lt;p&gt;Windows系统中，首先需要到 控制面板-&amp;gt;程序-&amp;gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
 打开文件资源管理器输入地址&lt;code&gt;\\192.168.xxx.xxx\&lt;/code&gt;，登录后就能访问共享文件夹了。&lt;/p&gt;
@@ -283,7 +283,7 @@ $ sudo systemctl enable --now nmb.service
 &lt;p&gt;后续可能想办法搞个内网穿透，这样从外面也能访问到家里的服务器了。&lt;/p&gt;
 &lt;br&gt;
 
-&lt;p&gt;&lt;strong&gt;Written by STARRY-S&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;by STARRY-S&lt;/strong&gt;&lt;/p&gt;
 
     </content>
     
