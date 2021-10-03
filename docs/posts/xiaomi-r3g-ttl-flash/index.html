@@ -16,7 +16,7 @@
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
-    <meta name="generator" content="Hikaru v1.8.3">
+    <meta name="generator" content="Hikaru v1.8.2">
     <link rel="canonical" href="https://blog.starry-s.moe/posts/xiaomi-r3g-ttl-flash/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
@@ -347,7 +347,7 @@
     <main class="post-main" id="scrollspy-container" itemprop="articleBody">
       <link href="/css/APlayer.min.css" rel="stylesheet">
 <script src= "/js/APlayer.min.js"></script>
-<h2 id="%E7%A0%96%E4%BA%86"><a class="header-link" href="/posts/xiaomi-r3g-ttl-flash/#%E7%A0%96%E4%BA%86"></a>砖了</h2>
+<h2 id="砖了"><a class="header-link" href="/posts/xiaomi-r3g-ttl-flash/#%E7%A0%96%E4%BA%86" title="砖了"></a>砖了</h2>
 <p>本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。</p>
 <p>然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。</p>
 <p>之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。</p>
@@ -381,7 +381,7 @@ const ap0 = new APlayer ({
 </script> 
 
 <hr>
-<h2 id="%E6%8B%86%E6%9C%BA"><a class="header-link" href="/posts/xiaomi-r3g-ttl-flash/#%E6%8B%86%E6%9C%BA"></a>拆机</h2>
+<h2 id="拆机"><a class="header-link" href="/posts/xiaomi-r3g-ttl-flash/#%E6%8B%86%E6%9C%BA" title="拆机"></a>拆机</h2>
 <p><img src="/posts/xiaomi-r3g-ttl-flash/images/1.jpg" alt="&quot;路由器主板&quot;" title="Are You OK?"></p>
 <blockquote>
 <p>北方冬季气候干燥，拆机时记得放静电，找根铁丝把自己连地线上 (找个金属外壳是接地的电器和自己连上也行)。</p>
@@ -392,7 +392,7 @@ const ap0 = new APlayer ({
 <p>找出家里吃灰好几年差点被我扔掉的电烙铁，刮刀头刮了半天电烙铁才上锡，把新买的杜邦线母线焊到主板上，和ttl串口线相连。</p>
 <p>(电烙铁太破了根本焊不上锡，焊得很丑，emmm)</p>
 <p>实际上可以买个4PIN单排针焊上去，把串口接到排针上就可以，我直接把电线焊到上面以后用起来会很麻烦。</p>
-<h2 id="%E5%88%B7%E6%9C%BA"><a class="header-link" href="/posts/xiaomi-r3g-ttl-flash/#%E5%88%B7%E6%9C%BA"></a>刷机</h2>
+<h2 id="刷机"><a class="header-link" href="/posts/xiaomi-r3g-ttl-flash/#%E5%88%B7%E6%9C%BA" title="刷机"></a>刷机</h2>
 <blockquote>
 <p>以下部分基于Arch Linux，其他系统的操作方式可能不一样（例如Windows可能需要超级终端访问串口，再想办法开一个tftp服务器）
 刷机的原理: 通过ttl串口线连接路由器的主板，让路由器访问电脑上的tftp服务器，刷第三方Boot Loader。</p>
@@ -466,7 +466,7 @@ Warning!! Erase Boot Loader in Flash then burn new one. Are you sure?(Y/N)y
 </code></pre></figure>
 <p>  按回车后开始刷机，过几秒钟后路由器会自动重启，第三方Boot Loader刷写完成。</p>
 <p>  路由器断电，长按reset键的同时通电开机，灯闪烁后打开浏览器输入网址<code>http://192.168.1.1</code>便可访问breed后台。</p>
-<h2 id="Done"><a class="header-link" href="/posts/xiaomi-r3g-ttl-flash/#Done"></a>Done</h2>
+<h2 id="Done"><a class="header-link" href="/posts/xiaomi-r3g-ttl-flash/#Done" title="Done"></a>Done</h2>
 <p>第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照<a href="/posts/Xiaomi_Miwifi_3G/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95">小米路由器3G折腾之刷OpenWrt记录</a>这篇文章刷OpenWrt。</p>
 <figure data-raw="BusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash)
 Enter 'help' for a list of built-in commands.
@@ -707,19 +707,19 @@ root@XiaoQiang:~#
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E7%A0%96%E4%BA%86">砖了</a>
+          <a class="list-group-item toc-link" href="#砖了">砖了</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E6%8B%86%E6%9C%BA">拆机</a>
+          <a class="list-group-item toc-link" href="#拆机">拆机</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E5%88%B7%E6%9C%BA">刷机</a>
+          <a class="list-group-item toc-link" href="#刷机">刷机</a>
           
         </li>
       
@@ -810,4 +810,4 @@ root@XiaoQiang:~#
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.3 at 2021-09-28T17:23:15.912Z. -->
+<!-- Page built by Hikaru v1.8.2 at 2021-10-03T16:02:56.701Z. -->

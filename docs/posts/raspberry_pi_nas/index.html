@@ -16,7 +16,7 @@
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
-    <meta name="generator" content="Hikaru v1.8.3">
+    <meta name="generator" content="Hikaru v1.8.2">
     <link rel="canonical" href="https://blog.starry-s.moe/posts/raspberry_pi_nas/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
@@ -382,7 +382,7 @@ const ap0 = new APlayer ({
 <blockquote>
 <p>这歌太魔性了哈哈哈哈</p>
 </blockquote>
-<h2 id="%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><a class="header-link" href="/posts/raspberry_pi_nas/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"></a>准备工作</h2>
+<h2 id="准备工作"><a class="header-link" href="/posts/raspberry_pi_nas/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C" title="准备工作"></a>准备工作</h2>
 <ul>
 <li>树莓派以及所需的电源（废话）</li>
 <li>16G以上的高速内存卡用来写系统镜像</li>
@@ -392,24 +392,39 @@ const ap0 = new APlayer ({
 </ul>
 <p>树莓派我使用的是高一时买的树莓派3B（满满的回忆），硬盘是上半年为了存照片而买的西数2T移动硬盘，因为暂时闲置所以拿来一起组个云盘玩。</p>
 <p>内存卡需要质量好的不容易坏而且读写比较快的卡。</p>
-<h2 id="%E8%A3%85%E7%B3%BB%E7%BB%9F"><a class="header-link" href="/posts/raspberry_pi_nas/#%E8%A3%85%E7%B3%BB%E7%BB%9F"></a>装系统</h2>
+<div class="alert-green">
+一定要使用功率足够大的电源适配器为树莓派供电，如果需要为树莓派连接多块移动硬盘，请一定要使用带供电的usb连接线，否则会出现很严重的问题：<br>
+（供电不足导致的数据传输中断，严重的会导致硬盘受损）
+</div>
+
+<h2 id="装系统"><a class="header-link" href="/posts/raspberry_pi_nas/#%E8%A3%85%E7%B3%BB%E7%BB%9F" title="装系统"></a>装系统</h2>
 <p>系统咱安装的是<a href="https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3" target="_blank" rel="external nofollow noreferrer noopener">ArchLinux ARM</a>，安装教程直接看官方文档即可。</p>
 <p>一开始咱为了发挥树莓派3B的64位CPU的性能，我下载了64位的系统镜像，但是在配置无线连接的时候（可能是）驱动问题卡死，因为急着睡觉所以重新格式化内存卡后被迫安装32位的系统。</p>
 <p>安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。</p>
 <p>在格式化<code>root</code>分区时一开始想尝试一下树莓派上跑<code>btrfs</code>，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了<code>ext4</code>，<del>不然我一晚上不用睡觉了</del>。</p>
-<p>在分区时除了<code>boot</code>和<code>root</code>之外，我额外分了2G的<code>swap</code>分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（<del>这话咋读着这么别扭呢</del>）</p>
+<p>在分区时除了<code>boot</code>和<code>root</code>之外，我额外分了1G的<code>swap</code>分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（<del>这话咋读着这么别扭呢</del>）</p>
+<p>需要注意的是，内存卡的第一个分区一定要为<code>boot</code>，第二个分区为<code>root</code>，最后一个分区是<code>swap</code>，顺序不要乱了不然是无法开机的。</p>
+<p>最后咱按照安装教程，把内存卡格式化成了酱紫：</p>
+<figure data-raw="Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sdc1           2048   411647   409600  200M  c W95 FAT32 (LBA)
+/dev/sdc2         411648 60235775 59824128 28.5G 83 Linux
+/dev/sdc3       60235776 62333951  2098176    1G 82 Linux swap / Solaris
+" data-info="language-text" data-lang="text" class="code-block"><pre class="code"><code class="language-text">Device     Boot    Start      End  Sectors  Size Id Type
+/dev/sdc1           2048   411647   409600  200M  c W95 FAT32 (LBA)
+/dev/sdc2         411648 60235775 59824128 28.5G 83 Linux
+/dev/sdc3       60235776 62333951  2098176    1G 82 Linux swap / Solaris
+</code></pre></figure>
+<blockquote>
+<p>卸载内存卡之前，记得随手敲几遍<code>sync</code></p>
+</blockquote>
 <p>因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。</p>
-<p>把移动硬盘接到树莓派后<code>lsblk</code>查看以下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。</p>
+<p>把移动硬盘接到树莓派后<code>lsblk</code>查看一下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。</p>
 <p>如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅<a href="https://wiki.archlinux.org/title/fdisk" target="_blank" rel="external nofollow noreferrer noopener">Wiki (fdisk)</a>，因为往博客上写的话太难理解了别人肯定看不懂。</p>
 <p>最后咱把2T移动硬盘格式化成这个样子：</p>
-<figure data-raw="# fdisk -l /dev/sda
-
-Device          Start        End    Sectors  Size Type
+<figure data-raw="Device          Start        End    Sectors  Size Type
 /dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
 /dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
-" data-info="language-text" data-lang="text" class="code-block"><pre class="code"><code class="language-text"># fdisk -l /dev/sda
-
-Device          Start        End    Sectors  Size Type
+" data-info="language-text" data-lang="text" class="code-block"><pre class="code"><code class="language-text">Device          Start        End    Sectors  Size Type
 /dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
 /dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
 </code></pre></figure>
@@ -426,24 +441,44 @@ $ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
 <p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区和移动硬盘。</p>
 <figure data-raw="# <file system> <dir> <type> <options> <dump> <pass>
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
-/dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=swap      none    swap    defaults        0       0
 LABEL=samba     /samba  btrfs   defaults        0       0
 " class="code-block"><pre class="code"><code># &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
-/dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=swap      none    swap    defaults        0       0
 LABEL=samba     /samba  btrfs   defaults        0       0
 </code></pre></figure>
 <blockquote>
 <p>如果你的swap分区不是<code>mmcblk0p3</code>的话，记得手动更改</p>
 </blockquote>
 <p>重启系统后如果正常的话，分区会被自动挂载。</p>
-<h2 id="%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"></a>配置网络</h2>
+<h2 id="更换软件源"><a class="header-link" href="/posts/raspberry_pi_nas/#%E6%9B%B4%E6%8D%A2%E8%BD%AF%E4%BB%B6%E6%BA%90" title="更换软件源"></a>更换软件源</h2>
+<p>可以参考北京外国语大学开源软件镜像源的<a href="https://mirrors.bfsu.edu.cn/help/archlinuxarm/" target="_blank" rel="external nofollow noreferrer noopener">帮助页面</a>。</p>
+<figure data-raw="# /etc/pacman.d/mirrorlist
+
+# 北京外国语大学
+Server = https://mirrors.bfsu.edu.cn/archlinuxarm/$arch/$repo
+# 清华大学
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxarm/$arch/$repo
+# 北京交通大学
+Server = https://mirror.bjtu.edu.cn/archlinuxarm/$arch/$repo
+" class="code-block"><pre class="code"><code># /etc/pacman.d/mirrorlist
+
+# 北京外国语大学
+Server = https://mirrors.bfsu.edu.cn/archlinuxarm/$arch/$repo
+# 清华大学
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxarm/$arch/$repo
+# 北京交通大学
+Server = https://mirror.bjtu.edu.cn/archlinuxarm/$arch/$repo
+</code></pre></figure>
+<p>之后执行<code>pacman -Syyu</code>更新系统。</p>
+<h2 id="配置网络"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C" title="配置网络"></a>配置网络</h2>
 <div class="alert-blue">
 配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。<br>
 除非你能保证你执行的每个命令都肥肠正确。
 </div>
 
-<h3 id="%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C"><a class="header-link" href="/posts/raspberry_pi_nas/#%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C"></a>无线网络</h3>
+<h3 id="无线网络"><a class="header-link" href="/posts/raspberry_pi_nas/#%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C" title="无线网络"></a>无线网络</h3>
 <p>因为我电脑离路由器肥肠远，所以为了方便我还要给树莓派配置无线网络。首先照着<a href="https://wiki.archlinux.org/title/Netctl" target="_blank" rel="external nofollow noreferrer noopener">Wiki上的netctl页面</a>安装了<code>wifi-menu</code>所需要用的<code>dialog</code>，然后就用<code>wifi-menu</code>连接wifi了。不过为了方便以后连接，我需要给他设置静态IP：</p>
 <p>首先使用你比较喜欢的文本编辑器打开<code>wifi-menu</code>自动生成的配置文件，并修改成以下的样子</p>
 <figure data-raw="# /etc/netctl.d/wlan0-YourWifiName
@@ -458,7 +493,7 @@ Address=('192.168.xxx.xxx/24')
 Gateway='192.168.xxx.1'
 DNS='8.8.8.8'
 Key=YOUR WIFI PASSWORD
-" data-info="language-conf" data-lang="conf" class="code-block"><pre class="code"><code class="language-conf"># /etc/netctl.d/wlan0-YourWifiName
+" class="code-block"><pre class="code"><code># /etc/netctl.d/wlan0-YourWifiName
 
 Description='Automatically generated profile by wifi-menu'
 Interface=wlan0
@@ -475,7 +510,7 @@ Key=YOUR WIFI PASSWORD
 <p>最后修改<code>Key</code>为Wifi密码（明文），如果需要加密的话可以去wiki上找相应方法。</p>
 <p>之后<code>sudo netctl enable wlan0-YourWifiName</code>设置好开机自动连接即可。</p>
 <p>这时候聪明的小伙伴会想到：我想使用网线联网并配置静态IP，该怎么办呢？</p>
-<h3 id="%E9%85%8D%E7%BD%AE%E6%9C%89%E7%BA%BF%E7%BD%91%E7%BB%9C"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E6%9C%89%E7%BA%BF%E7%BD%91%E7%BB%9C"></a>配置有线网络</h3>
+<h3 id="配置有线网络"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E6%9C%89%E7%BA%BF%E7%BD%91%E7%BB%9C" title="配置有线网络"></a>配置有线网络</h3>
 <p>默认情况下，有线接口<code>eth0</code>使用<code>systemd-network</code>配置了<code>DHCP</code>，所以我们不需要改<code>netctl</code>的配置文件，只编辑<code>/etc/systemd/network/eth0.network</code>这个配置文件改成静态IP地址就好了。</p>
 <figure data-raw="[Match]
 Name=eth0
@@ -484,7 +519,7 @@ Name=eth0
 Address=192.168.xxx.xxx/24
 Gateway=192.168.xxx.1
 DNS=8.8.8.8
-" data-info="language-conf" data-lang="conf" class="code-block"><pre class="code"><code class="language-conf">[Match]
+" class="code-block"><pre class="code"><code>[Match]
 Name=eth0
 
 [Network]
@@ -493,7 +528,7 @@ Gateway=192.168.xxx.1
 DNS=8.8.8.8
 </code></pre></figure>
 <p>重启系统后，使用<code>ip addr</code>检查设备的IP地址是否正确。</p>
-<h3 id="%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99"></a>配置防火墙</h3>
+<h3 id="配置防火墙"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99" title="配置防火墙"></a>配置防火墙</h3>
 <p>首先安装<code>ufw</code>。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫<strong>Uncomplicated Filewall</strong>，所以咱先用ufw配置防火墙）</p>
 <p>食用方法请参见<a href="https://wiki.archlinux.org/title/Uncomplicated_Firewall" target="_blank" rel="external nofollow noreferrer noopener">Wiki页面</a>。</p>
 <p>因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：</p>
@@ -502,87 +537,92 @@ DNS=8.8.8.8
 [Samba]
 title=LanManager-like file and printer server for Unix
 description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
-ports=137,138/udp|139,445/tcp  
+ports=137,138/udp|139,445/tcp
 " class="code-block"><pre class="code"><code># Create or Edit /etc/ufw/applications.d/samba, add following content:
 
 [Samba]
 title=LanManager-like file and printer server for Unix
 description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
-ports=137,138/udp|139,445/tcp  
+ports=137,138/udp|139,445/tcp
 </code></pre></figure>
 <p>之后root账户执行<code>ufw app update Samba</code>加载配置文件，然后<code>ufw allow Samba</code>允许Samba的端口。</p>
 <p>如果你的树莓派上还装有其他服务（比如http，https等），别忘了<code>ufw allow PORT</code>开放端口，尤其是别忘了开SSH端口。</p>
 <p>最后<code>ufw status</code>查看防火墙状态信息，<code>ufw enable</code>开启防火墙。</p>
-<h2 id="Samba"><a class="header-link" href="/posts/raspberry_pi_nas/#Samba"></a>Samba</h2>
+<h2 id="Samba"><a class="header-link" href="/posts/raspberry_pi_nas/#Samba" title="Samba"></a>Samba</h2>
 <p>配合<a href="https://wiki.archlinux.org/title/Samba" target="_blank" rel="external nofollow noreferrer noopener">Arch Wiki</a>食用。</p>
-<p>首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：</p>
-<figure data-raw="$ sudo groupadd -r sambausers          # 新建用户组
-$ sudo usermod -aG sambausers username # 添加当前用户至分组中
-$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
-$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
-$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
-$ sudo chmod 0770 /samba/sharefolder   # 修改权限
-" class="code-block"><pre class="code"><code>$ sudo groupadd -r sambausers          # 新建用户组
-$ sudo usermod -aG sambausers username # 添加当前用户至分组中
-$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
-$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
-$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
-$ sudo chmod 0770 /samba/sharefolder   # 修改权限
-</code></pre></figure>
-<p>（咱写的很详细了吧</p>
-<h3 id="%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8"></a>配置服务器</h3>
-<p>安装好<code>samba</code>安装包后，需要手动去<code>/etc/samba/</code>创建<code>smb.conf</code>配置文件，可以到<a href="https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD" target="_blank" rel="external nofollow noreferrer noopener">Samba git repository</a>中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。</p>
+<h3 id="配置服务器"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8" title="配置服务器"></a>配置服务器</h3>
+<p>安装好<code>samba</code>安装包后，需要手动去<code>/etc/samba/</code>创建<code>smb.conf</code>配置文件，可以复制这个样例文件：<a href="https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD" target="_blank" rel="external nofollow noreferrer noopener">smb.conf.default</a>，咱只需要把它粘贴再简单修改一下就好。</p>
 <figure data-raw="# /etc/samba/smb.conf
 
 [global]
 # 修改工作组的名字
-workgroup = MYGROUP
+workgroup = WORKGROUP
 # 服务器描述
-server string = Raspberry pi Samba Server
+server string = Raspberry Pi Samba Server
+# 修改日志的目录
+log file = /var/log/samba/%m.log
 
 # 在文件末尾添加共享文件夹目录及相关配置
 [sambashare]
 comment = Sample share file.
-path = /path/to/your/samba/folder
+path = /samba/sharefolder
 writable = yes
 browsable = yes
-create mask = 0755
+create mask = 0744
 directory mask = 0755
 read only = no
-guest ok = no  # 允许访客随意登录
-" data-info="language-conf" data-lang="conf" class="code-block"><pre class="code"><code class="language-conf"># /etc/samba/smb.conf
+guest ok = no
+" class="code-block"><pre class="code"><code># /etc/samba/smb.conf
 
 [global]
 # 修改工作组的名字
-workgroup = MYGROUP
+workgroup = WORKGROUP
 # 服务器描述
-server string = Raspberry pi Samba Server
+server string = Raspberry Pi Samba Server
+# 修改日志的目录
+log file = /var/log/samba/%m.log
 
 # 在文件末尾添加共享文件夹目录及相关配置
 [sambashare]
 comment = Sample share file.
-path = /path/to/your/samba/folder
+path = /samba/sharefolder
 writable = yes
 browsable = yes
-create mask = 0755
+create mask = 0744
 directory mask = 0755
 read only = no
-guest ok = no  # 允许访客随意登录
+guest ok = no
 </code></pre></figure>
 <p>配置好文件后，启动<code>smb.service</code>和<code>nmb.service</code></p>
 <figure data-raw="$ sudo systemctl enable --now smb.service
 $ sudo systemctl enable --now nmb.service
-" data-info="language-bash" data-lang="bash" class="code-block"><pre class="code"><code class="language-bash">$ sudo systemctl enable --now smb.service
+" class="code-block"><pre class="code"><code>$ sudo systemctl enable --now smb.service
 $ sudo systemctl enable --now nmb.service
 </code></pre></figure>
-<h3 id="%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8"><a class="header-link" href="/posts/raspberry_pi_nas/#%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8"></a>访问服务器</h3>
+<h3 id="设置用户"><a class="header-link" href="/posts/raspberry_pi_nas/#%E8%AE%BE%E7%BD%AE%E7%94%A8%E6%88%B7" title="设置用户"></a>设置用户</h3>
+<p>添加一个现有的Linux用户到Samba中：</p>
+<figure data-raw="# 如果你没有重启树莓派，记得先挂载硬盘
+$ sudo mkdir /samba
+$ sudo mount /dev/sdXn /samba
+
+$ sudo mkdir -p /samba/sharefolder
+$ sudo smbpasswd -a username                        # 添加用户并设置密码
+$ sudo chown username:username /samba/sharefolder   # 修改文件夹的所属用户和组
+" class="code-block"><pre class="code"><code># 如果你没有重启树莓派，记得先挂载硬盘
+$ sudo mkdir /samba
+$ sudo mount /dev/sdXn /samba
+
+$ sudo mkdir -p /samba/sharefolder
+$ sudo smbpasswd -a username                        # 添加用户并设置密码
+$ sudo chown username:username /samba/sharefolder   # 修改文件夹的所属用户和组
+</code></pre></figure>
+<h3 id="访问服务器"><a class="header-link" href="/posts/raspberry_pi_nas/#%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8" title="访问服务器"></a>访问服务器</h3>
 <p>咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接<code>smb://192.168.xxx.xxx</code>，
 输入用户组、用户名和密码登录就可以访问共享文件夹。</p>
 <p>Windows系统中，首先需要到 控制面板-&gt;程序-&gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
 打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
-<h2 id="Others"><a class="header-link" href="/posts/raspberry_pi_nas/#Others"></a>Others</h2>
+<h2 id="Others"><a class="header-link" href="/posts/raspberry_pi_nas/#Others" title="Others"></a>Others</h2>
 <p>所以到此为止，咱的Samba服务器就搭建好了。</p>
-<p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>
 <p>后续可能想办法搞个内网穿透，这样从外面也能访问到家里的服务器了。</p>
 <br>
 
@@ -789,38 +829,44 @@ $ sudo systemctl enable --now nmb.service
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">准备工作</a>
+          <a class="list-group-item toc-link" href="#准备工作">准备工作</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E8%A3%85%E7%B3%BB%E7%BB%9F">装系统</a>
+          <a class="list-group-item toc-link" href="#装系统">装系统</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C">配置网络</a>
+          <a class="list-group-item toc-link" href="#更换软件源">更换软件源</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#配置网络">配置网络</a>
           
           
       <ol >
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E6%97%A0%E7%BA%BF%E7%BD%91%E7%BB%9C">无线网络</a>
+          <a class="list-group-item toc-link" href="#无线网络">无线网络</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E9%85%8D%E7%BD%AE%E6%9C%89%E7%BA%BF%E7%BD%91%E7%BB%9C">配置有线网络</a>
+          <a class="list-group-item toc-link" href="#配置有线网络">配置有线网络</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E9%85%8D%E7%BD%AE%E9%98%B2%E7%81%AB%E5%A2%99">配置防火墙</a>
+          <a class="list-group-item toc-link" href="#配置防火墙">配置防火墙</a>
           
         </li>
       
@@ -838,13 +884,19 @@ $ sudo systemctl enable --now nmb.service
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8">配置服务器</a>
+          <a class="list-group-item toc-link" href="#配置服务器">配置服务器</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E8%AE%BF%E9%97%AE%E6%9C%8D%E5%8A%A1%E5%99%A8">访问服务器</a>
+          <a class="list-group-item toc-link" href="#设置用户">设置用户</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#访问服务器">访问服务器</a>
           
         </li>
       
@@ -940,4 +992,4 @@ $ sudo systemctl enable --now nmb.service
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.3 at 2021-09-28T17:23:15.872Z. -->
+<!-- Page built by Hikaru v1.8.2 at 2021-10-03T16:02:56.636Z. -->
