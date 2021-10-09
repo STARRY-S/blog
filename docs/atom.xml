@@ -274,7 +274,7 @@ $ sudo systemctl enable --now nmb.service
 输入用户组、用户名和密码登录就可以访问共享文件夹。&lt;/p&gt;
 &lt;p&gt;Windows系统中，首先需要到 控制面板-&amp;gt;程序-&amp;gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
 打开文件资源管理器输入地址&lt;code&gt;\\192.168.xxx.xxx\&lt;/code&gt;，登录后就能访问共享文件夹了。&lt;/p&gt;
-&lt;h3 id=&quot;Frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#Frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F&quot;&gt;&lt;/a&gt;Frp内网穿透&lt;/h3&gt;
+&lt;h2 id=&quot;Frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/raspberry_pi_nas/#Frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F&quot;&gt;&lt;/a&gt;Frp内网穿透&lt;/h2&gt;
 &lt;blockquote&gt;
 &lt;p&gt;配合&lt;a href=&quot;https://gofrp.org/docs/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;frp文档&lt;/a&gt;食用更佳&lt;/p&gt;
 &lt;/blockquote&gt;
