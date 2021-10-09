@@ -426,16 +426,13 @@ $ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
 <p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区和移动硬盘。</p>
 <figure data-raw="# <file system> <dir> <type> <options> <dump> <pass>
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
-/dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=swap      none    swap    defaults        0       0
 LABEL=samba     /samba  btrfs   defaults        0       0
 " class="code-block"><pre class="code"><code># &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
-/dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=swap      none    swap    defaults        0       0
 LABEL=samba     /samba  btrfs   defaults        0       0
 </code></pre></figure>
-<blockquote>
-<p>如果你的swap分区不是<code>mmcblk0p3</code>的话，记得手动更改</p>
-</blockquote>
 <p>重启系统后如果正常的话，分区会被自动挂载。</p>
 <h2 id="%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"><a class="header-link" href="/posts/raspberry_pi_nas/#%E9%85%8D%E7%BD%AE%E7%BD%91%E7%BB%9C"></a>配置网络</h2>
 <div class="alert-blue">
@@ -502,13 +499,13 @@ DNS=8.8.8.8
 [Samba]
 title=LanManager-like file and printer server for Unix
 description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
-ports=137,138/udp|139,445/tcp  
+ports=137,138/udp|139,445/tcp
 " class="code-block"><pre class="code"><code># Create or Edit /etc/ufw/applications.d/samba, add following content:
 
 [Samba]
 title=LanManager-like file and printer server for Unix
 description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
-ports=137,138/udp|139,445/tcp  
+ports=137,138/udp|139,445/tcp
 </code></pre></figure>
 <p>之后root账户执行<code>ufw app update Samba</code>加载配置文件，然后<code>ufw allow Samba</code>允许Samba的端口。</p>
 <p>如果你的树莓派上还装有其他服务（比如http，https等），别忘了<code>ufw allow PORT</code>开放端口，尤其是别忘了开SSH端口。</p>
@@ -580,10 +577,60 @@ $ sudo systemctl enable --now nmb.service
 输入用户组、用户名和密码登录就可以访问共享文件夹。</p>
 <p>Windows系统中，首先需要到 控制面板-&gt;程序-&gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
 打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
+<h3 id="Frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F"><a class="header-link" href="/posts/raspberry_pi_nas/#Frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F"></a>Frp内网穿透</h3>
+<blockquote>
+<p>配合<a href="https://gofrp.org/docs/" target="_blank" rel="external nofollow noreferrer noopener">frp文档</a>食用更佳</p>
+</blockquote>
+<p>首先在frp的<a href="https://github.com/fatedier/frp/releases" target="_blank" rel="external nofollow noreferrer noopener">GitHub Release</a>页面下载安装包。</p>
+<p>如果是树莓派用的话就下载<code>arm</code>版本的安装包即可。Arch Linux可以在ArchLinux CN源或AUR中安装<code>frpc</code>和<code>frps</code>作为客户端和服务端。</p>
+<figure data-raw="# 树莓派上下载编译好的文件
+$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_arm.tar.gz
+# 解压
+$ tar -zxvf ./frp_0.37.1_linux_arm.tar.gz
+$ cd frp_0.37.1_linux_arm/
+# 编辑配置文件
+$ vim ./frpc.ini
+$ ./frpc -c ./frpc.ini
+" data-info="language-sh" data-lang="sh" class="code-block"><pre class="code"><code class="language-sh"># 树莓派上下载编译好的文件
+$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_arm.tar.gz
+# 解压
+$ tar -zxvf ./frp_0.37.1_linux_arm.tar.gz
+$ cd frp_0.37.1_linux_arm/
+# 编辑配置文件
+$ vim ./frpc.ini
+$ ./frpc -c ./frpc.ini
+</code></pre></figure>
+<p>客户端配置文件的格式可参考如下：</p>
+<figure data-raw="[common]
+server_addr = server ip
+server_port = 6000
+
+[samba]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 445
+remote_port = 6003
+" class="code-block"><pre class="code"><code>[common]
+server_addr = server ip
+server_port = 6000
+
+[samba]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 445
+remote_port = 6003
+</code></pre></figure>
+<p>其中端口号和<code>token</code>按需要自行更改，Samba服务的<code>tcp</code>端口号为<code>445</code>。</p>
+<p>服务端配置文件格式如下：</p>
+<figure data-raw="[common]
+bind_port = 6000
+" class="code-block"><pre class="code"><code>[common]
+bind_port = 6000
+</code></pre></figure>
+<p>为了安全，别忘了配置<a href="https://gofrp.org/docs/reference/server-configures/#%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81" target="_blank" rel="external nofollow noreferrer noopener">权限验证</a>，同时别忘了修改服务器的防火墙设置。</p>
 <h2 id="Others"><a class="header-link" href="/posts/raspberry_pi_nas/#Others"></a>Others</h2>
 <p>所以到此为止，咱的Samba服务器就搭建好了。</p>
 <p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>
-<p>后续可能想办法搞个内网穿透，这样从外面也能访问到家里的服务器了。</p>
 <br>
 
 <p><strong>by STARRY-S</strong></p>
@@ -848,6 +895,12 @@ $ sudo systemctl enable --now nmb.service
           
         </li>
       
+        <li>
+          
+          <a class="list-group-item toc-link" href="#Frp%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F">Frp内网穿透</a>
+          
+        </li>
+      
       </ol>
       
           
@@ -940,4 +993,4 @@ $ sudo systemctl enable --now nmb.service
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.3 at 2021-09-28T17:23:15.872Z. -->
+<!-- Page built by Hikaru v1.8.3 at 2021-10-09T15:58:18.462Z. -->
