@@ -87,10 +87,9 @@ $ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
 ```
 # <file system> <dir> <type> <options> <dump> <pass>
 /dev/mmcblk0p1  /boot   vfat    defaults        0       0
-/dev/mmcblk0p3  none    swap    defaults        0       0
+LABEL=swap      none    swap    defaults        0       0
 LABEL=samba     /samba  btrfs   defaults        0       0
 ```
-> 如果你的swap分区不是`mmcblk0p3`的话，记得手动更改
 
 重启系统后如果正常的话，分区会被自动挂载。
 
@@ -160,7 +159,7 @@ DNS=8.8.8.8
 [Samba]
 title=LanManager-like file and printer server for Unix
 description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
-ports=137,138/udp|139,445/tcp  
+ports=137,138/udp|139,445/tcp
 ```
 
 之后root账户执行`ufw app update Samba`加载配置文件，然后`ufw allow Samba`允许Samba的端口。
@@ -226,13 +225,55 @@ $ sudo systemctl enable --now nmb.service
 Windows系统中，首先需要到 控制面板->程序->启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
 打开文件资源管理器输入地址`\\192.168.xxx.xxx\`，登录后就能访问共享文件夹了。
 
+### Frp内网穿透
+
+> 配合[frp文档](https://gofrp.org/docs/)食用更佳
+
+首先在frp的[GitHub Release](https://github.com/fatedier/frp/releases)页面下载安装包。
+
+如果是树莓派用的话就下载`arm`版本的安装包即可。Arch Linux可以在ArchLinux CN源或AUR中安装`frpc`和`frps`作为客户端和服务端。
+
+``` sh
+# 树莓派上下载编译好的文件
+$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_arm.tar.gz
+# 解压
+$ tar -zxvf ./frp_0.37.1_linux_arm.tar.gz
+$ cd frp_0.37.1_linux_arm/
+# 编辑配置文件
+$ vim ./frpc.ini
+$ ./frpc -c ./frpc.ini
+```
+
+客户端配置文件的格式可参考如下：
+
+```
+[common]
+server_addr = server ip
+server_port = 6000
+
+[samba]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 445
+remote_port = 6003
+```
+
+其中端口号和`token`按需要自行更改，Samba服务的`tcp`端口号为`445`。
+
+服务端配置文件格式如下：
+
+```
+[common]
+bind_port = 6000
+```
+
+为了安全，别忘了配置[权限验证](https://gofrp.org/docs/reference/server-configures/#%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81)，同时别忘了修改服务器的防火墙设置。
+
 ## Others
 
 所以到此为止，咱的Samba服务器就搭建好了。
 
 随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。
-
-后续可能想办法搞个内网穿透，这样从外面也能访问到家里的服务器了。
 
 <br>
 
