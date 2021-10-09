@@ -225,7 +225,7 @@ $ sudo systemctl enable --now nmb.service
 Windows系统中，首先需要到 控制面板->程序->启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
 打开文件资源管理器输入地址`\\192.168.xxx.xxx\`，登录后就能访问共享文件夹了。
 
-### Frp内网穿透
+## Frp内网穿透
 
 > 配合[frp文档](https://gofrp.org/docs/)食用更佳
 
