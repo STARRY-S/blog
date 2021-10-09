@@ -229,13 +229,6 @@
   
   
   <url>
-    <loc>https://blog.starry-s.moe/categories/</loc>
-    
-  </url>
-  
-  
-  
-  <url>
     <loc>https://blog.starry-s.moe/archives/</loc>
     
   </url>
@@ -243,16 +236,14 @@
   
   
   <url>
-    <loc>https://blog.starry-s.moe/</loc>
+    <loc>https://blog.starry-s.moe/categories/</loc>
     
   </url>
   
   
   
   <url>
-    <loc>https://blog.starry-s.moe/posts/raspberry_pi_nas/old/</loc>
-    
-    <lastmod>2021-09-28T17:07:48.000Z</lastmod>
+    <loc>https://blog.starry-s.moe/</loc>
     
   </url>
   
