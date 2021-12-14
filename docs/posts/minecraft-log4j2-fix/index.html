@@ -11,13 +11,13 @@
     
     <meta name="author" content="STARRY-S">
     
-    <meta name="description" content="夜的共鸣颤动不停，孤独将声音冻结">
+    <meta name="description" content="11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day级漏洞， 不过当时咱忙着考试复习，一看是Apache的漏洞就没太当回事。 直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。 还好咱的Minecraft服务器玩的人比较少，停服升级Fabric并下载了Minecraft官方提供的有关log4j的配置文件， 没有收到影响。 所以咱把配置方法整理一下写在这里帮助一下有需要的人。">
     
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
     <meta name="generator" content="Hikaru v1.8.3">
-    <link rel="canonical" href="https://blog.starry-s.moe/tags/%E5%8D%95%E7%89%87%E6%9C%BA/">
+    <link rel="canonical" href="https://blog.starry-s.moe/posts/minecraft-log4j2-fix/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
     
@@ -242,7 +242,7 @@
       });
     </script>
     
-    <title>标签 单片机 - STARRY-S' Blog</title>
+    <title>Java版Minecraft修复log4j漏洞 - STARRY-S' Blog</title>
   </head>
   <body itemscope itemtype="http://schema.org/WebPage">
     
@@ -273,7 +273,7 @@
         
         <li role="menuitem"><a href="/categories/"><i class="fas fa-th-list"></i><span class="menu-text">分类</span></a></li>
         
-        <li role="menuitem"><a href="/tags/" class="current"><i class="fas fa-tags"></i><span class="menu-text">标签</span></a></li>
+        <li role="menuitem"><a href="/tags/"><i class="fas fa-tags"></i><span class="menu-text">标签</span></a></li>
         
         <li role="menuitem"><a href="/about/"><i class="fas fa-user-edit"></i><span class="menu-text">关于</span></a></li>
         
@@ -291,44 +291,134 @@
         <div class="main-container">
           <div class="content">
             
-<div id="tag" class="tag page">
-  <div class="page-title">
-    <a class="page-title-link page-title-link-external" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/" itemprop="url">单片机</a>
-  </div>
-  
+<div id="page" class="page">
   <article class="article post card" itemscope itemtype="http://schema.org/Article">
-    <header id="post-header" class="post-header">
-      <div class="post-title-simple" itemprop="name headline">
-        <a class="post-title-link post-title-link-external" href="/posts/learn-mcs8051/" itemprop="url">51单片机习题整理</a>
+    <div class="post-block">
+      <link itemprop="mainEntityOfPage" href="https://blog.starry-s.moe/posts/minecraft-log4j2-fix/">
+      <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+        
+        <meta itemprop="name" content="STARRY-S">
+        <meta itemprop="description" content="夜的共鸣颤动不停，孤独将声音冻结">
+        <meta itemprop="image" content="/images/avatar.jpg">
+        
+      </span>
+      <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="STARRY-S' Blog">
+      </span>
+    </div>
+    <header class="post-header">
+      <div class="post-title" itemprop="name headline">
+        <a class="post-title-link post-title-link-external" href="/posts/minecraft-log4j2-fix/" itemprop="url">Java版Minecraft修复log4j漏洞</a>
+      </div>
+      <div class="post-meta">
+        
+        <div class="post-date meta-block">
+          <i class="far fa-calendar-check"></i><span><time class="post-full-date" title="post-date" itemprop="dateCreated datePublished" datetime="2021-12-14T09:58:19.000Z">12/14/2021, 5:58:19 PM</time></span>
+        </div>
+        
+        
+        
+        
+        <div class="post-categories meta-block">
+          
+          <i class="far fa-folder-open"></i><span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Minecraft/" itemprop="url" rel="index"><span itemprop="name">Minecraft</span></a></span>
+        </div>
+        
+        
+        
+        <div class="post-comment-count meta-block">
+          <i class="far fa-comments"></i><span><a href="/posts/minecraft-log4j2-fix/#comment-results" itemprop="discussionUrl"><span class="post-comment-count comment-count" data-comment-identifier="Java版Minecraft修复log4j漏洞" itemprop="commentCount">阅读评论</span></a></span>
+        </div>
+        
+        
+      </div>
+    </header>
+    <main class="post-main" id="scrollspy-container" itemprop="articleBody">
+      <p>11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day级漏洞，
+不过当时咱忙着考试复习，一看是Apache的漏洞就没太当回事。</p>
+<p>直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。</p>
+<p>还好咱的Minecraft服务器玩的人比较少，停服升级Fabric并下载了Minecraft官方提供的有关log4j的配置文件，
+没有收到影响。</p>
+<p>所以咱把配置方法整理一下写在这里帮助一下有需要的人。</p>
+<a id="more"></a>
+
+<hr>
+<h2 id="%E5%8D%87%E7%BA%A7%E7%AC%AC%E4%B8%89%E6%96%B9%E5%90%AF%E5%8A%A8%E5%99%A8HMCL"><a class="header-link" href="/posts/minecraft-log4j2-fix/#%E5%8D%87%E7%BA%A7%E7%AC%AC%E4%B8%89%E6%96%B9%E5%90%AF%E5%8A%A8%E5%99%A8HMCL"></a>升级第三方启动器(HMCL)</h2>
+<p>咱写这个文章时HMCL还没发布稳定版的更新，所以为了修复这个漏洞需要下载<a href="https://hmcl.huangyuhui.net/download" target="_blank" rel="external nofollow noreferrer noopener">最新的开发版</a>。</p>
+<p>确保你下载的HMCL版本号大于等于<code>3.4.211</code>即可。</p>
+<p>如果你使用的是其他第三方启动器(比如MultiMC)，记得升级到最新版本。</p>
+<h2 id="%E5%8D%87%E7%BA%A7Fabric"><a class="header-link" href="/posts/minecraft-log4j2-fix/#%E5%8D%87%E7%BA%A7Fabric"></a>升级Fabric</h2>
+<p>如果你使用了fabric loader，将fabric loader升级到最新版，官方的安装程序(installer)下载地址为<a href="https://fabricmc.net/use/installer/" target="_blank" rel="external nofollow noreferrer noopener">https://fabricmc.net/use/installer/</a></p>
+<p>确保你安装的fabric loader版本大于等于<code>0.12.11</code>即可。</p>
+<p>咱在升级最新的开发版HMCL之后使用官方的fabric installer安装后无法启动游戏，所以如果你使用HMCL启动器的话需要从启动器添加新游戏版本时选择上最新的fabric。</p>
+<blockquote>
+<p>升级fabric后只有启动带fabric的游戏才能保证不受漏洞攻击，如果启动不带fabric的游戏将仍有安全隐患</p>
+</blockquote>
+<h2 id="%E4%BF%AE%E6%94%B9Minecraft%E7%9A%84JVM%E5%8F%82%E6%95%B0"><a class="header-link" href="/posts/minecraft-log4j2-fix/#%E4%BF%AE%E6%94%B9Minecraft%E7%9A%84JVM%E5%8F%82%E6%95%B0"></a>修改Minecraft的JVM参数</h2>
+<ul>
+<li><p>游戏版本为1.7-1.16：</p>
+<p>在<a href="https://www.minecraft.net/en-us/article/important-message--security-vulnerability-java-edition" target="_blank" rel="external nofollow noreferrer noopener">Minecraft官网发布的公告</a>
+上下载对应你的游戏版本的配置文件<code>log4j2_XXXX.xml</code>，把它放到<code>.minecraft/versions/1.16.4/</code>目录下（1.16.4为你的游戏版本），之后打开启动器，
+设置JVM启动参数添加<code>-Dlog4j.configurationFile=log4j2_XXXX.xml</code>。</p>
+<p><img src="/posts/minecraft-log4j2-fix/images/1.png" alt=""></p>
+</li>
+<li><p>游戏版本1.17：</p>
+<p>在启动器中添加启动参数<code>-Dlog4j2.formatMsgNoLookups=true</code>。</p>
+</li>
+<li><p>游戏版本1.18:</p>
+<p>直接升级到1.18.1。</p>
+</li>
+</ul>
+<h2 id="Others"><a class="header-link" href="/posts/minecraft-log4j2-fix/#Others"></a>Others</h2>
+<p>以上的几种方法都可以修复漏洞，所以比较懒的人只要更新个启动器就好了。</p>
+<p>检验漏洞是否被修复的方法是，游戏的聊天中输入<code>${date:YYYY}</code>，然后看游戏的日志，如果变成了<code>2021</code>(再过几天就是2022了)，则代表漏洞没被修复。
+如果游戏日志中显示的也是<code>${date:YYYY}</code>，那就基本上没问题了。</p>
+
+    </main>
+    <footer class="post-footer">
+      
+      <div class="post-tags">
+        <a class="post-tag button" href="/tags/Minecraft/" rel="tag"><i class="fas fa-tag"></i>Minecraft</a><a class="post-tag button" href="/tags/HMCL/" rel="tag"><i class="fas fa-tag"></i>HMCL</a>
       </div>
       
-      <span class="post-date">
-        
-        
-        
-        
-        
-        
-        <time title="post-date" itemprop="dateCreated datePublished" datetime="2020-11-03T12:19:36.000Z">11-03</time>
-      </span>
-      
-    </header>
+    </footer>
   </article>
   
+  <nav class="page-nav">
+    <div class="page-nav-next page-nav-item">
+      
+    </div>
+    <div class="page-nav-prev page-nav-item">
+      
+      <a href="/posts/raspberry_pi_nas/" rel="prev" title="使用树莓派搭建一个NAS"><span class="nav-title">使用树莓派搭建一个NAS</span><i class="fas fa-angle-right"></i></a>
+      
+    </div>
+  </nav>
+  
+  
   
 
-<nav class="pagination">
-  
-  
-  <a class="page-number current" href="/tags/%E5%8D%95%E7%89%87%E6%9C%BA/">1</a>
-  
-  
-</nav>
-
-
-
-  
-  
+<div class="reward" id="reward">
+  <div class="reward-info" id="reward-info">
+    <span>Support Me!</span>
+  </div>
+  <button id="reward-button" class="button reward-button" disable="enable"><i class="fas fa-donate"></i>打赏</button>
+  <div id="qr" class="qr" style="display: none;" aria-hidden="true">
+    
+    <div id="wechatpay">
+      <img id="wechatpay-qr" src="/images/wechatpay.jpg" alt="微信支付"/>
+      <span>微信支付</span>
+    </div>
+    
+    
+    <div id="alipay">
+      <img id="alipay-qr" src="/images/alipay.jpg" alt="支付宝"/>
+      <span>支付宝</span>
+    </div>
+    
+    
+  </div>
+</div>
 
 
 
@@ -344,6 +434,70 @@
         "user": "STARRY-S",
         "repo": "Blog",
         "containerClass": "comment-count"
+      });
+    });
+  </script>
+  
+  <div class="comment-results" id="comment-results">
+    <div class="sk-wave" id="sk-wave">
+      <div class="sk-rect sk-rect1"></div>
+      <div class="sk-rect sk-rect2"></div>
+      <div class="sk-rect sk-rect3"></div>
+      <div class="sk-rect sk-rect4"></div>
+      <div class="sk-rect sk-rect5"></div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    documentReady(() => {
+      loadComment({
+        "user": "STARRY-S",
+        "repo": "Blog",
+        "perPage": "10",
+        "sendButtonText": "去评论",
+        "noCommentText": "这个页面还没有评论，现在就去评论吧！",
+        "failText": "你可能达到了 API 请求频率上限，请等待一段时间再刷新。",
+        "title": "Java版Minecraft修复log4j漏洞",
+        "queryString": window.location.search,
+        "basePath": "/posts/minecraft-log4j2-fix/",
+        "containerID": "comment-results"
+      }).then(() => {
+        // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
+        // A modern way to show date in user's format.
+        // But it shows date only by default, no time.
+        const formatter = new Intl.DateTimeFormat("zh-Hans", {
+          "year": "numeric",
+          "month": "2-digit",
+          "day": "2-digit",
+          "weekday": "short",
+          "hour": "2-digit",
+          "minute": "2-digit",
+          "second": "2-digit",
+          "timeZoneName": "short",
+          "hour12": false
+        });
+        elementsEach(
+          document.querySelectorAll("time.comment-full-date"),
+          (e, i) => {
+            const date = new Date(e.getAttribute("datetime"));
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/formatToParts
+            const parts = formatter.formatToParts(date);
+            const obj = {};
+            for (let {type, value} of parts) {
+              obj[type] = value
+            }
+            e.innerHTML = `${obj["year"]}-${obj["month"]}-${obj["day"]} ${obj["weekday"]} ${obj["hour"]}:${obj["minute"]}:${obj["second"]} ${obj["timeZoneName"]}`
+          }
+        );
+        elementsEach(
+          document.querySelectorAll("div.comment-content img"),
+          (e, i) => {
+            // If an image works as link,
+            // stop adding link styles to it.
+            if (e.parentNode.tagName.toLowerCase() === "a") {
+              e.parentNode.classList.add("img-link");
+            }
+          }
+        );
       });
     });
   </script>
@@ -410,6 +564,43 @@
     
   </div>
   <div class="sidebar-sticky">
+    
+    
+    <hr>
+    <div class="post-toc sidebar-item">
+      <div><i class="fas fa-list-ol"></i>文章目录</div>
+      
+      
+      <ol class="toc" id="scrollspy-target">
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E5%8D%87%E7%BA%A7%E7%AC%AC%E4%B8%89%E6%96%B9%E5%90%AF%E5%8A%A8%E5%99%A8HMCL">升级第三方启动器(HMCL)</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E5%8D%87%E7%BA%A7Fabric">升级Fabric</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E4%BF%AE%E6%94%B9Minecraft%E7%9A%84JVM%E5%8F%82%E6%95%B0">修改Minecraft的JVM参数</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#Others">Others</a>
+          
+        </li>
+      
+      </ol>
+      
+    </div>
+    
     
     
     <hr>
@@ -487,4 +678,4 @@
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.8.3 at 2021-12-14T10:40:01.673Z. -->
+<!-- Page built by Hikaru v1.8.3 at 2021-12-14T10:40:01.094Z. -->
