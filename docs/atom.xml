@@ -67,7 +67,7 @@
 &lt;p&gt;确保你安装的fabric loader版本大于等于&lt;code&gt;0.12.11&lt;/code&gt;即可。&lt;/p&gt;
 &lt;p&gt;咱在升级最新的开发版HMCL之后使用官方的fabric installer安装后无法启动游戏，所以如果你使用HMCL启动器的话需要从启动器添加新游戏版本时选择上最新的fabric。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;升级fabric后只有启动带fabric的游戏才能保证不受漏洞攻击，如果启动不带fabric的游戏将仍有安全隐患&lt;/p&gt;
+&lt;p&gt;升级fabric后如果启动不带fabric的游戏将仍有被攻击的风险，所以如果你只升级了fabric，务必顺带升级一下启动器&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;%E4%BF%AE%E6%94%B9Minecraft%E7%9A%84JVM%E5%8F%82%E6%95%B0&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/minecraft-log4j2-fix/#%E4%BF%AE%E6%94%B9Minecraft%E7%9A%84JVM%E5%8F%82%E6%95%B0&quot;&gt;&lt;/a&gt;修改Minecraft的JVM参数&lt;/h2&gt;
 &lt;ul&gt;
