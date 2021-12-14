@@ -40,22 +40,20 @@
     
     
     <summary type="html">
-      &lt;p&gt;11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day级漏洞，
-不过当时咱忙着考试复习，一看是Apache的漏洞就没太当回事。&lt;/p&gt;
-&lt;p&gt;直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。&lt;/p&gt;
+      &lt;p&gt;11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day漏洞，&lt;/p&gt;
+&lt;p&gt;不过直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。&lt;/p&gt;
 &lt;p&gt;还好咱的Minecraft服务器玩的人比较少，停服升级Fabric并下载了Minecraft官方提供的有关log4j的配置文件，
-没有收到影响。&lt;/p&gt;
+还好没有受到影响。&lt;/p&gt;
 &lt;p&gt;所以咱把配置方法整理一下写在这里帮助一下有需要的人。&lt;/p&gt;
 
     </summary>
     
     
     <content type="html">
-      &lt;p&gt;11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day级漏洞，
-不过当时咱忙着考试复习，一看是Apache的漏洞就没太当回事。&lt;/p&gt;
-&lt;p&gt;直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。&lt;/p&gt;
+      &lt;p&gt;11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day漏洞，&lt;/p&gt;
+&lt;p&gt;不过直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。&lt;/p&gt;
 &lt;p&gt;还好咱的Minecraft服务器玩的人比较少，停服升级Fabric并下载了Minecraft官方提供的有关log4j的配置文件，
-没有收到影响。&lt;/p&gt;
+还好没有受到影响。&lt;/p&gt;
 &lt;p&gt;所以咱把配置方法整理一下写在这里帮助一下有需要的人。&lt;/p&gt;
 &lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
 
