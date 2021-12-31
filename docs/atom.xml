@@ -7,7 +7,7 @@
   
   <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/" />
   
-  <updated>2021-12-14T09:58:19.000Z</updated>
+  <updated>2021-09-25T14:20:03.000Z</updated>
   
   <id>https://blog.starry-s.moe/</id>
   
@@ -19,87 +19,6 @@
   <generator uri="https://github.com/AlynxZhou/hikaru-generator-feed/" version="v2.3.4">Hikaru Generator Feed</generator>
   
   
-  
-  
-  
-  <entry>
-    <title>Java版Minecraft修复log4j漏洞</title>
-    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/minecraft-log4j2-fix/" />
-    <id>https://blog.starry-s.moe/posts/minecraft-log4j2-fix/</id>
-    
-    <author>
-      <name>STARRY-S</name>
-      <email>hxstarrys@gmail.com</email>
-    </author>
-    
-    
-    <published>2021-12-14T09:58:19.000Z</published>
-    
-    
-    <updated>2021-12-14T09:58:19.000Z</updated>
-    
-    
-    <summary type="html">
-      &lt;p&gt;11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day漏洞，&lt;/p&gt;
-&lt;p&gt;不过直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。&lt;/p&gt;
-&lt;p&gt;还好咱的Minecraft服务器玩的人比较少，停服升级Fabric并下载了Minecraft官方提供的有关log4j的配置文件，
-还好没有受到影响。&lt;/p&gt;
-&lt;p&gt;所以咱把配置方法整理一下写在这里帮助一下有需要的人。&lt;/p&gt;
-
-    </summary>
-    
-    
-    <content type="html">
-      &lt;p&gt;11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day漏洞，&lt;/p&gt;
-&lt;p&gt;不过直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。&lt;/p&gt;
-&lt;p&gt;还好咱的Minecraft服务器玩的人比较少，停服升级Fabric并下载了Minecraft官方提供的有关log4j的配置文件，
-还好没有受到影响。&lt;/p&gt;
-&lt;p&gt;所以咱把配置方法整理一下写在这里帮助一下有需要的人。&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-
-&lt;hr&gt;
-&lt;h2 id=&quot;%E5%8D%87%E7%BA%A7%E7%AC%AC%E4%B8%89%E6%96%B9%E5%90%AF%E5%8A%A8%E5%99%A8HMCL&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/minecraft-log4j2-fix/#%E5%8D%87%E7%BA%A7%E7%AC%AC%E4%B8%89%E6%96%B9%E5%90%AF%E5%8A%A8%E5%99%A8HMCL&quot;&gt;&lt;/a&gt;升级第三方启动器(HMCL)&lt;/h2&gt;
-&lt;p&gt;咱写这个文章时HMCL还没发布稳定版的更新，所以为了修复这个漏洞需要下载&lt;a href=&quot;https://hmcl.huangyuhui.net/download&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;最新的开发版&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;确保你下载的HMCL版本号大于等于&lt;code&gt;3.4.211&lt;/code&gt;即可。&lt;/p&gt;
-&lt;p&gt;如果你使用的是其他第三方启动器(比如MultiMC)，记得升级到最新版本。&lt;/p&gt;
-&lt;h2 id=&quot;%E5%8D%87%E7%BA%A7Fabric&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/minecraft-log4j2-fix/#%E5%8D%87%E7%BA%A7Fabric&quot;&gt;&lt;/a&gt;升级Fabric&lt;/h2&gt;
-&lt;p&gt;如果你使用了fabric loader，将fabric loader升级到最新版，官方的安装程序(installer)下载地址为&lt;a href=&quot;https://fabricmc.net/use/installer/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;https://fabricmc.net/use/installer/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;确保你安装的fabric loader版本大于等于&lt;code&gt;0.12.11&lt;/code&gt;即可。&lt;/p&gt;
-&lt;p&gt;咱在升级最新的开发版HMCL之后使用官方的fabric installer安装后无法启动游戏，所以如果你使用HMCL启动器的话需要从启动器添加新游戏版本时选择上最新的fabric。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;升级fabric后如果启动不带fabric的游戏将仍有被攻击的风险，所以如果你只升级了fabric，务必顺带升级一下启动器&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;%E4%BF%AE%E6%94%B9Minecraft%E7%9A%84JVM%E5%8F%82%E6%95%B0&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/minecraft-log4j2-fix/#%E4%BF%AE%E6%94%B9Minecraft%E7%9A%84JVM%E5%8F%82%E6%95%B0&quot;&gt;&lt;/a&gt;修改Minecraft的JVM参数&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;游戏版本为1.7-1.16：&lt;/p&gt;
-&lt;p&gt;在&lt;a href=&quot;https://www.minecraft.net/en-us/article/important-message--security-vulnerability-java-edition&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Minecraft官网发布的公告&lt;/a&gt;
-上下载对应你的游戏版本的配置文件&lt;code&gt;log4j2_XXXX.xml&lt;/code&gt;，把它放到&lt;code&gt;.minecraft/versions/1.16.4/&lt;/code&gt;目录下（1.16.4为你的游戏版本），之后打开启动器，
-设置JVM启动参数添加&lt;code&gt;-Dlog4j.configurationFile=log4j2_XXXX.xml&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/posts/minecraft-log4j2-fix/images/1.png&quot; alt=&quot;&quot;&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;游戏版本1.17：&lt;/p&gt;
-&lt;p&gt;在启动器中添加启动参数&lt;code&gt;-Dlog4j2.formatMsgNoLookups=true&lt;/code&gt;。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;游戏版本1.18:&lt;/p&gt;
-&lt;p&gt;直接升级到1.18.1。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/minecraft-log4j2-fix/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
-&lt;p&gt;以上的几种方法都可以修复漏洞，所以比较懒的人只要更新个启动器就好了。&lt;/p&gt;
-&lt;p&gt;检验漏洞是否被修复的方法是，游戏的聊天中输入&lt;code&gt;${date:YYYY}&lt;/code&gt;，然后看游戏的日志，如果变成了&lt;code&gt;2021&lt;/code&gt;(再过几天就是2022了)，则代表漏洞没被修复。
-如果游戏日志中显示的也是&lt;code&gt;${date:YYYY}&lt;/code&gt;，那就基本上没问题了。&lt;/p&gt;
-
-    </content>
-    
-    
-    <category term="Minecraft" label="Minecraft" scheme="https://blog.starry-s.moe/categories/Minecraft/" />
-    
-    
-    <category term="Minecraft" label="Minecraft" scheme="https://blog.starry-s.moe/tags/Minecraft/" />
-    
-    <category term="HMCL" label="HMCL" scheme="https://blog.starry-s.moe/tags/HMCL/" />
-    
-  </entry>
   
   
   
@@ -4842,6 +4761,73 @@ $ chmod 744 ./start.sh
 &lt;blockquote&gt;
 &lt;p&gt;拍摄自2018-3-28&lt;/p&gt;
 &lt;/blockquote&gt;
+
+    </content>
+    
+    
+    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/" />
+    
+    <category term="Spring" label="Spring" scheme="https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/Spring/" />
+    
+    
+    <category term="摄影" label="摄影" scheme="https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/" />
+    
+    <category term="Spring" label="Spring" scheme="https://blog.starry-s.moe/tags/Spring/" />
+    
+    <category term="Flowers" label="Flowers" scheme="https://blog.starry-s.moe/tags/Flowers/" />
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Spring</title>
+    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/spring/" />
+    <id>https://blog.starry-s.moe/posts/spring/</id>
+    
+    <author>
+      <name>STARRY-S</name>
+      <email>hxstarrys@gmail.com</email>
+    </author>
+    
+    
+    <published>2017-05-05T14:28:00.000Z</published>
+    
+    
+    <updated>2017-05-05T14:28:00.000Z</updated>
+    
+    
+    <summary type="html">
+      &lt;div class=&quot;alert-blue&quot;&gt;
+多图预警
+&lt;/div&gt;
+
+&lt;p&gt;前一阵子拍的一些花，简单地用手机和电脑调了颜色，感觉蛮好看的。感觉有的照片可以当作壁纸了。&lt;/p&gt;
+
+    </summary>
+    
+    
+    <content type="html">
+      &lt;div class=&quot;alert-blue&quot;&gt;
+多图预警
+&lt;/div&gt;
+
+&lt;p&gt;前一阵子拍的一些花，简单地用手机和电脑调了颜色，感觉蛮好看的。感觉有的照片可以当作壁纸了。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+&lt;hr&gt;
+&lt;h2 id=&quot;%E6%8B%8D%E6%91%84%E8%87%AAipodtouch6&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring/#%E6%8B%8D%E6%91%84%E8%87%AAipodtouch6&quot;&gt;&lt;/a&gt;拍摄自ipod touch6&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/1491917117692.jpeg&quot; alt=&quot;Spring_1&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/1491917129991.jpeg&quot; alt=&quot;Spring_3&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/1491917137076.jpeg&quot; alt=&quot;Spring_4&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/1491917142441.jpeg&quot; alt=&quot;Spring_5&quot;&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&quot;%E6%8B%8D%E6%91%84%E8%87%AA%E4%BD%B3%E8%83%BDpowershots100&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/spring/#%E6%8B%8D%E6%91%84%E8%87%AA%E4%BD%B3%E8%83%BDpowershots100&quot;&gt;&lt;/a&gt;拍摄自佳能powershot s100&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/IMG_0009.jpg&quot; alt=&quot;Spring_6&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/IMG_0011.jpg&quot; alt=&quot;Spring_7&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/IMG_0012.jpg&quot; alt=&quot;Spring_8&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/IMG_0018.jpg&quot; alt=&quot;Spring_9&quot;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/spring/images/IMG_0025.jpg&quot; alt=&quot;Spring_10&quot;&gt;&lt;/p&gt;
 
     </content>
     
