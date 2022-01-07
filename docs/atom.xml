@@ -69,8 +69,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;How to Love&quot;,
         artist: &quot;A-One&quot;,
-        url: &quot;https://music.starry-s.moe/music/070e_530e_020b_0dd79823b4ddc4a054895ae0101d5eae.m4a&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/7951668093293588.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/070e_530e_020b_0dd79823b4ddc4a054895ae0101d5eae.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/7951668093293588.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#f11c62&quot;
     }]
@@ -191,8 +191,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;紫雨UNITED まさかのアリス突撃編&quot;,
         artist: &quot;岩杉夏 / イザベル / あゆ&quot;,
-        url: &quot;https://music.starry-s.moe/music/070b_0208_540c_0af9917fa85b6e8d26efcf2d4d0a6706.m4a&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/109951166006696770.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/070b_0208_540c_0af9917fa85b6e8d26efcf2d4d0a6706.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/109951166006696770.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#3d79d9&quot;
     }]
@@ -533,8 +533,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;砂塵の彼方へ&quot;,
         artist: &quot;Revo / 梶浦由記&quot;,
-        url: &quot;https://music.starry-s.moe/music/ae9d_b321_c72a_e5c3e5bb99a9461050bcf04c68886dad.mp3&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/ae9d_b321_c72a_e5c3e5bb99a9461050bcf04c68886dad.mp3&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#6e5c00&quot;
     }]
@@ -716,8 +716,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;sand dream&quot;,
         artist: &quot;Revo / 梶浦由記&quot;,
-        url: &quot;https://music.starry-s.moe/music/41d7_92fe_3e2f_49b31565f5b2dc00df4d8fb14b1bc59f.mp3&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/41d7_92fe_3e2f_49b31565f5b2dc00df4d8fb14b1bc59f.mp3&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#6e5c00&quot;
     }]
@@ -919,8 +919,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;Oblivious&quot;,
         artist: &quot;Kalafina&quot;,
-        url: &quot;https://music.starry-s.moe/music/obj_w5rDlsOJwrLDjj7CmsOj_8776653719_722d_c783_516e_072d631639c3a9e51d99be99dfae261f.m4a&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/Kalafina All Time Best 2008-2018 small.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_8776653719_722d_c783_516e_072d631639c3a9e51d99be99dfae261f.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#7c7c7c&quot;
     }]
@@ -1254,8 +1254,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;One Light&quot;,
         artist: &quot;Kalafina&quot;,
-        url: &quot;https://music.starry-s.moe/music/obj_w5rDlsOJwrLDjj7CmsOj_8776656540_d358_942f_cb9c_b29cfa734f2c6c5f95938d794ce3d90e.mov&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/Kalafina All Time Best 2008-2018 small.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_8776656540_d358_942f_cb9c_b29cfa734f2c6c5f95938d794ce3d90e.mov&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#484444&quot;
     }]
@@ -1833,8 +1833,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;愚カシイ机械&quot;,
         artist: &quot;岡部啓一 / 石濱翔 / 帆足圭吾 / 高田龍一&quot;,
-        url: &quot;https://music.starry-s.moe/music/f47cbf8a517c72c16b5eff614cd78ace.m4a&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/2522279674184572.png&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/f47cbf8a517c72c16b5eff614cd78ace.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/2522279674184572.png&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#aa6666&quot;
     }]
@@ -1937,8 +1937,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;Underground&quot;,
         artist: &quot;Lindsey Stirling&quot;,
-        url: &quot;https://music.starry-s.moe/music/obj_wonDkMOGw6XDiTHCmMOi_2660462601_5de2_ff1b_7e9f_3314960c90b9d68875a3d640df5d283a.mp4&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/109951164174520818.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_2660462601_5de2_ff1b_7e9f_3314960c90b9d68875a3d640df5d283a.mp4&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/109951164174520818.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#CC8888&quot;
     }]
@@ -2135,8 +2135,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;crescent in the sky&quot;,
         artist: &quot;Stepan Voles&quot;,
-        url: &quot;https://music.starry-s.moe/music/396e_a80d_10de_076d0b69c03bd2673595bd17ce939f69.mp3&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/1379887099097990.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/396e_a80d_10de_076d0b69c03bd2673595bd17ce939f69.mp3&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/1379887099097990.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#2233ee&quot;
     }]
@@ -2338,8 +2338,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;エンドロール&quot;,
         artist: &quot;KEIKO&quot;,
-        url: &quot;https://music.starry-s.moe/music/obj_w5rDlsOJwrLDjj7CmsOj_5016145218_8a57_c3ad_6dee_bedcb53124a46de8152d464b7db24470.mov&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/109951165501153240.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_5016145218_8a57_c3ad_6dee_bedcb53124a46de8152d464b7db24470.mov&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/109951165501153240.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#886666&quot;
     }]
@@ -2466,8 +2466,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;Gloria&quot;,
         artist: &quot;Kalafina&quot;,
-        url: &quot;https://music.starry-s.moe/music/kalafina-gloria.aac&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/2505786999756176.png&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/kalafina-gloria.aac&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/2505786999756176.png&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#cc2222&quot;
     }]
@@ -2592,8 +2592,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;春はゆく&quot;,
         artist: &quot;Aimer&quot;,
-        url: &quot;https://music.starry-s.moe/music/obj_wonDkMOGw6XDiTHCmMOi_1630142819_fc9d_8785_4c2c_8abd7ec40b9695cbf53de173e782f195.m4a&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/109951164785068521.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_1630142819_fc9d_8785_4c2c_8abd7ec40b9695cbf53de173e782f195.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/109951164785068521.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#25AFF5&quot;
     }]
@@ -3797,8 +3797,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;Kaleidoscope&quot;,
         artist: &quot;Vicetone / Grace Grundy&quot;,
-        url: &quot;https://music.starry-s.moe/music/560e_0558_060b_adc45c798222ffa86a4d1a0cb6ddf18f.m4a&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/18671906464338403.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/560e_0558_060b_adc45c798222ffa86a4d1a0cb6ddf18f.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/18671906464338403.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#A26208&quot;
     }]
@@ -4163,8 +4163,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;夏恋&quot;,
         artist: &quot;Otokaze&quot;,
-        url: &quot;https://music.starry-s.moe/music/Otokaze - 夏恋.m4a&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/4450823069239492.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/Otokaze - 夏恋.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/4450823069239492.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#F6890E&quot;
     }]
@@ -4264,8 +4264,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;辉く空の静寂には&quot;,
         artist: &quot;Kalafina&quot;,
-        url: &quot;https://music.starry-s.moe/music/4d6b_af91_c8ab_7e676adf998cd77b5d6b8a8e095d4066.mp3&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/109951163710392062.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/4d6b_af91_c8ab_7e676adf998cd77b5d6b8a8e095d4066.mp3&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/109951163710392062.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#776666&quot;
     }]
@@ -4357,8 +4357,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;光の旋律&quot;,
         artist: &quot;Kalafina&quot;,
-        url: &quot;https://music.starry-s.moe/music/Hikari_No_Senritsu.mp3&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/Kalafina All Time Best 2008-2018 small.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/Hikari_No_Senritsu.mp3&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#444&quot;
     }]
@@ -4390,8 +4390,8 @@ const ap1 = new APlayer ({
     audio: [{
         name: &quot;aquarium&quot;,
         artist: &quot;Víctor Vergara&quot;,
-        url: &quot;https://music.starry-s.moe/music/4098_d136_0a0a_ea008ceca6a370b79cdc52db597556d0.mp3&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/1379887099097990.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/4098_d136_0a0a_ea008ceca6a370b79cdc52db597556d0.mp3&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/1379887099097990.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#3333aa&quot;
     }]
@@ -4432,8 +4432,8 @@ const ap2 = new APlayer ({
     audio: [{
         name: &quot;遊園施設&quot;,
         artist: &quot;帆足圭吾&quot;,
-        url: &quot;https://music.starry-s.moe/music/540b_075e_0453_cae9f8037d04c81f84993977b01792ec.m4a&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/18710389371705314.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/540b_075e_0453_cae9f8037d04c81f84993977b01792ec.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/18710389371705314.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#44aa44&quot;
     }]
@@ -4576,8 +4576,8 @@ const ap0 = new APlayer ({
     audio: [{
         name: &quot;Mallow Flower&quot;,
         artist: &quot;Otokaze&quot;,
-        url: &quot;https://music.starry-s.moe/music/969d_ef88_965d_f8693c4f0a65db94a9cc0ebb9be2bd06.mp3&quot;,
-        cover: &quot;https://music.starry-s.moe/music/cover/781752767371058.jpg&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/969d_ef88_965d_f8693c4f0a65db94a9cc0ebb9be2bd06.mp3&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/781752767371058.jpg&quot;,
         lrc: &quot;&quot;,
         theme: &quot;#EFCE82&quot;
     }]
