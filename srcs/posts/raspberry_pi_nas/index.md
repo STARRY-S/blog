@@ -22,8 +22,8 @@ categories:
     "name": "紫雨UNITED まさかのアリス突撃編",
     "artist": "岩杉夏 / イザベル / あゆ",
     "theme": "#3d79d9",
-    "url": "https://music.starry-s.moe/music/070b_0208_540c_0af9917fa85b6e8d26efcf2d4d0a6706.m4a",
-    "cover": "https://music.starry-s.moe/music/cover/109951166006696770.jpg"
+    "url": "https://music.starry-s.moe:2053/music/070b_0208_540c_0af9917fa85b6e8d26efcf2d4d0a6706.m4a",
+    "cover": "https://music.starry-s.moe:2053/music/cover/109951166006696770.jpg"
 }
 -->
 > 这歌太魔性了哈哈哈哈

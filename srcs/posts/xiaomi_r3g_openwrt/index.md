@@ -26,8 +26,8 @@ categories:
     "name": "Mallow Flower",
     "artist": "Otokaze",
     "theme": "#EFCE82",
-    "url": "https://music.starry-s.moe/music/969d_ef88_965d_f8693c4f0a65db94a9cc0ebb9be2bd06.mp3",
-    "cover": "https://music.starry-s.moe/music/cover/781752767371058.jpg"
+    "url": "https://music.starry-s.moe:2053/music/969d_ef88_965d_f8693c4f0a65db94a9cc0ebb9be2bd06.mp3",
+    "cover": "https://music.starry-s.moe:2053/music/cover/781752767371058.jpg"
 }
 -->
 

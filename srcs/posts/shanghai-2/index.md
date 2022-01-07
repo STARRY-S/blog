@@ -25,8 +25,8 @@ categories:
     "name": "夏恋",
     "artist": "Otokaze",
     "theme": "#F6890E",
-    "url": "https://music.starry-s.moe/music/Otokaze - 夏恋.m4a",
-    "cover": "https://music.starry-s.moe/music/cover/4450823069239492.jpg"
+    "url": "https://music.starry-s.moe:2053/music/Otokaze - 夏恋.m4a",
+    "cover": "https://music.starry-s.moe:2053/music/cover/4450823069239492.jpg"
 }
 -->
 

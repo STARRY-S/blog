@@ -29,8 +29,8 @@ categories:
     "name": "光の旋律",
     "artist": "Kalafina",
     "theme": "#444",
-    "url": "https://music.starry-s.moe/music/Hikari_No_Senritsu.mp3",
-    "cover": "https://music.starry-s.moe/music/cover/Kalafina All Time Best 2008-2018 small.jpg"
+    "url": "https://music.starry-s.moe:2053/music/Hikari_No_Senritsu.mp3",
+    "cover": "https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg"
 }
 -->
 
@@ -53,8 +53,8 @@ categories:
     "name": "aquarium",
     "artist": "Víctor Vergara",
     "theme": "#3333aa",
-    "url": "https://music.starry-s.moe/music/4098_d136_0a0a_ea008ceca6a370b79cdc52db597556d0.mp3",
-    "cover": "https://music.starry-s.moe/music/cover/1379887099097990.jpg"
+    "url": "https://music.starry-s.moe:2053/music/4098_d136_0a0a_ea008ceca6a370b79cdc52db597556d0.mp3",
+    "cover": "https://music.starry-s.moe:2053/music/cover/1379887099097990.jpg"
 }
 -->
 
@@ -91,8 +91,8 @@ categories:
     "name": "遊園施設",
     "artist": "帆足圭吾",
     "theme": "#44aa44",
-    "url": "https://music.starry-s.moe/music/540b_075e_0453_cae9f8037d04c81f84993977b01792ec.m4a",
-    "cover": "https://music.starry-s.moe/music/cover/18710389371705314.jpg"
+    "url": "https://music.starry-s.moe:2053/music/540b_075e_0453_cae9f8037d04c81f84993977b01792ec.m4a",
+    "cover": "https://music.starry-s.moe:2053/music/cover/18710389371705314.jpg"
 }
 -->
 

@@ -34,8 +34,8 @@ mathjax: true
     "name": "春はゆく",
     "artist": "Aimer",
     "theme": "#25AFF5",
-    "url": "https://music.starry-s.moe/music/obj_wonDkMOGw6XDiTHCmMOi_1630142819_fc9d_8785_4c2c_8abd7ec40b9695cbf53de173e782f195.m4a",
-    "cover": "https://music.starry-s.moe/music/cover/109951164785068521.jpg"
+    "url": "https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_1630142819_fc9d_8785_4c2c_8abd7ec40b9695cbf53de173e782f195.m4a",
+    "cover": "https://music.starry-s.moe:2053/music/cover/109951164785068521.jpg"
 }
 -->
 

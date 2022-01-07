@@ -30,8 +30,8 @@ categories:
     "name": "crescent in the sky",
     "artist": "Stepan Voles",
     "theme": "#2233ee",
-    "url": "https://music.starry-s.moe/music/396e_a80d_10de_076d0b69c03bd2673595bd17ce939f69.mp3",
-    "cover": "https://music.starry-s.moe/music/cover/1379887099097990.jpg"
+    "url": "https://music.starry-s.moe:2053/music/396e_a80d_10de_076d0b69c03bd2673595bd17ce939f69.mp3",
+    "cover": "https://music.starry-s.moe:2053/music/cover/1379887099097990.jpg"
 }
 -->
 
