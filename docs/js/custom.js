@@ -5,8 +5,8 @@ function addScript(url){
 	var script = document.createElement("script");
 	script.setAttribute("type","text/javascript");
 	script.setAttribute("src", "https://www.googletagmanager.com/gtag/js?id=G-70DHXLE02Z");
-    script.setAttribute("async");
-	document.getElementsByTagName("head")[0].appendChild(script);
+    // script.setAttribute("async");
+    document.head.appendChild(script);
 }
 
 addScript();
