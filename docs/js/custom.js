@@ -1,6 +1,7 @@
 "use strict";
 // Write your custom JavaScript code here.
 
+
 function addScript(url){
 	var script = document.createElement("script");
 	script.setAttribute("type","text/javascript");
