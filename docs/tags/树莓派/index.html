@@ -47,16 +47,19 @@
     
     
     <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/css/variables.css">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
-    
-    <link rel="stylesheet" type="text/css" href="/css/sidebar.css">
-    
     <link rel="stylesheet" type="text/css" href="/css/custom.css">
     <link rel="stylesheet" type="text/css" href="/css/atom-one-dark.css">
+    <style type="text/css">
+      :root {
+        --url-sidebar-background: url(/images/background.webp);
+        --url-dark-sidebar-background: url(/images/background-dark.webp);
+        
+      }
+      
+    </style>
     
-<link rel="stylesheet" type="text/css" href="/css/page.css">
-<link rel="stylesheet" type="text/css" href="/css/post.css">
-
     
     <script type="text/javascript" src="/js/index.js"></script>
     <script defer type="text/javascript" src="/js/scrollspy.js"></script>
@@ -293,13 +296,13 @@
             
 <div id="tag" class="tag page">
   <div class="page-title">
-    <a class="page-title-link page-title-link-external" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" itemprop="url">树莓派</a>
+    <a class="title-link" href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/" itemprop="url">树莓派</a>
   </div>
   
   <article class="article post card" itemscope itemtype="http://schema.org/Article">
     <header id="post-header" class="post-header">
       <div class="post-title-simple" itemprop="name headline">
-        <a class="post-title-link post-title-link-external" href="/posts/raspberry_pi_nas/" itemprop="url">使用树莓派搭建一个NAS</a>
+        <a class="title-link-simple" href="/posts/raspberry_pi_nas/" itemprop="url">使用树莓派搭建一个NAS</a>
       </div>
       
       <span class="post-date">
@@ -318,7 +321,7 @@
   <article class="article post card" itemscope itemtype="http://schema.org/Article">
     <header id="post-header" class="post-header">
       <div class="post-title-simple" itemprop="name headline">
-        <a class="post-title-link post-title-link-external" href="/posts/raspberrypi-mc-server/" itemprop="url">树莓派之我的世界服务器</a>
+        <a class="title-link-simple" href="/posts/raspberrypi-mc-server/" itemprop="url">树莓派之我的世界服务器</a>
       </div>
       
       <span class="post-date">
@@ -504,4 +507,4 @@
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.9.0 at 2022-01-30T17:38:45.142Z. -->
+<!-- Page built by Hikaru v1.9.0 at 2022-02-01T09:18:09.084Z. -->
