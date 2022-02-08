@@ -229,9 +229,7 @@
   
   
   <url>
-    <loc>https://blog.starry-s.moe/about/</loc>
-    
-    <lastmod>2021-05-06T09:48:30.000Z</lastmod>
+    <loc>https://blog.starry-s.moe/archives/</loc>
     
   </url>
   
@@ -245,7 +243,9 @@
   
   
   <url>
-    <loc>https://blog.starry-s.moe/archives/</loc>
+    <loc>https://blog.starry-s.moe/about/</loc>
+    
+    <lastmod>2021-05-06T09:48:30.000Z</lastmod>
     
   </url>
   
@@ -659,14 +659,14 @@
   
   
   <url>
-    <loc>https://blog.starry-s.moe/atom.xml</loc>
+    <loc>https://blog.starry-s.moe/sitemap.xml</loc>
     
   </url>
   
   
   
   <url>
-    <loc>https://blog.starry-s.moe/sitemap.xml</loc>
+    <loc>https://blog.starry-s.moe/atom.xml</loc>
     
   </url>
   
