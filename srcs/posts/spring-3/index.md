@@ -24,8 +24,8 @@ categories:
     "name": "辉く空の静寂には",
     "artist": "Kalafina",
     "theme": "#776666",
-    "url": "https://music.starry-s.moe/music/4d6b_af91_c8ab_7e676adf998cd77b5d6b8a8e095d4066.mp3",
-    "cover": "https://music.starry-s.moe/music/cover/109951163710392062.jpg"
+    "url": "https://music.starry-s.moe:2053/music/4d6b_af91_c8ab_7e676adf998cd77b5d6b8a8e095d4066.mp3",
+    "cover": "https://music.starry-s.moe:2053/music/cover/109951163710392062.jpg"
 }
 -->
 

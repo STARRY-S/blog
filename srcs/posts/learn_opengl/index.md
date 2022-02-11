@@ -24,8 +24,8 @@ categories:
     "name": "One Light",
     "artist": "Kalafina",
     "theme": "#484444",
-    "url": "https://music.starry-s.moe/music/obj_w5rDlsOJwrLDjj7CmsOj_8776656540_d358_942f_cb9c_b29cfa734f2c6c5f95938d794ce3d90e.mov",
-    "cover": "https://music.starry-s.moe/music/cover/Kalafina All Time Best 2008-2018 small.jpg"
+    "url": "https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_8776656540_d358_942f_cb9c_b29cfa734f2c6c5f95938d794ce3d90e.mov",
+    "cover": "https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg"
 }
 -->
 

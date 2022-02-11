@@ -27,8 +27,8 @@ categories:
     "name": "砂塵の彼方へ",
     "artist": "Revo / 梶浦由記",
     "theme": "#6e5c00",
-    "url": "https://music.starry-s.moe/music/ae9d_b321_c72a_e5c3e5bb99a9461050bcf04c68886dad.mp3",
-    "cover": "https://music.starry-s.moe/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg"
+    "url": "https://music.starry-s.moe:2053/music/ae9d_b321_c72a_e5c3e5bb99a9461050bcf04c68886dad.mp3",
+    "cover": "https://music.starry-s.moe:2053/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg"
 }
 -->
 

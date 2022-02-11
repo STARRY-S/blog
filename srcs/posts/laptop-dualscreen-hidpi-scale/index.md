@@ -27,8 +27,8 @@ categories:
     "name": "エンドロール",
     "artist": "KEIKO",
     "theme": "#886666",
-    "url": "https://music.starry-s.moe/music/obj_w5rDlsOJwrLDjj7CmsOj_5016145218_8a57_c3ad_6dee_bedcb53124a46de8152d464b7db24470.mov",
-    "cover": "https://music.starry-s.moe/music/cover/109951165501153240.jpg"
+    "url": "https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_5016145218_8a57_c3ad_6dee_bedcb53124a46de8152d464b7db24470.mov",
+    "cover": "https://music.starry-s.moe:2053/music/cover/109951165501153240.jpg"
 }
 -->
 
