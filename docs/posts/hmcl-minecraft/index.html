@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html data-theme="light" lang="zh-Hans">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=10">
+    
+    <meta name="theme-color" content="#33363b">
+    <meta name="msapplication-TileColor" content="#33363b">
+    
+    
+    <meta name="author" content="STARRY-S">
+    
+    <meta name="description" content="终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。">
+    
+    
+    <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
+    
+    <meta name="generator" content="Hikaru v1.10.2">
+    <link rel="canonical" href="https://blog.starry-s.moe/posts/hmcl-minecraft/">
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
+    
+    
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicons/android-chrome-192x192.png">
+    
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png">
+    
+    
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png">
+    
+    
+    <link rel="mask-icon" href="/favicons/safari-pinned-tab.svg" color="#33363b">
+    
+    
+    <link rel="manifest" href="/favicons/site.webmanifest">
+    
+    
+    <meta name="msapplication-config" content="/favicons/browserconfig.xml">
+    
+    
+    <link rel="shortcut icon" type="image/x-icon" href="/favicons/favicon.ico">
+    
+    
+    <link rel="alternate" href="/atom.xml" title="STARRY-S' Blog" type="application/atom+xml" />
+    
+    
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/css/variables.css">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/css/atom-one-dark.css">
+    <style type="text/css">
+      :root {
+        --url-sidebar-background: url(/images/background.webp);
+        --url-dark-sidebar-background: url(/images/background-dark.webp);
+        
+      }
+      
+    </style>
+    
+    
+    <script type="text/javascript" src="/js/index.js"></script>
+    <script defer type="text/javascript" src="/js/scrollspy.js"></script>
+    <script defer type="text/javascript" src="/js/custom.js"></script>
+    <script defer type="text/javascript" src="/js/clipboard.min.js"></script>
+    <script defer type="text/javascript" src="/js/fa-solid.min.js"></script>
+    <script defer type="text/javascript" src="/js/fa-brands.min.js"></script>
+    <script defer type="text/javascript" src="/js/fa-regular.min.js"></script>
+    <script defer type="text/javascript" src="/js/fontawesome.min.js"></script>
+    
+    <script defer type="text/javascript" src="/js/busuanzi.pure.mini.js"></script>
+    
+    
+    
+    
+    
+    
+    <script defer type="text/javascript" src="/js/highlight.min.js"></script>
+    <script type="text/javascript">
+      documentReady(() => {
+        elementsEach(
+          document.querySelectorAll("figure.code-block pre.code code"),
+          (e, i) => {
+            // We want to use hljs' background and color for the whole block.
+            e.parentNode.parentNode.classList.add("hljs");
+            hljs.highlightBlock(e);
+          }
+        );
+      });
+    </script>
+    
+    
+    <script type="text/javascript">
+      documentReady(() => {
+        elementsEach(
+          document.querySelectorAll("figure.code-block pre.code"),
+          (e, i) => {
+            const code = e.parentNode.getAttribute("data-raw");
+            const gutter = [];
+            gutter.push("<pre class=\"gutter\">");
+            // Highlight should not change lines.
+            // But may replace `\n` with `<br>`, so use original code here.
+            const codeLines = code.split(/\r?\n/g);
+            // It seems marked.js starts to keep the last `\n`,
+            // which will leave an empty line after splitting,
+            // and we should not add gutter for the last empty line.
+            // Don't do trim here! We only skip empty line.
+            if (codeLines[codeLines.length - 1].length === 0) {
+              codeLines.pop();
+            }
+            for (let i = 0; i < codeLines.length; ++i) {
+              gutter.push(`<span class="line-number">${i + 1}</span>`);
+              if (i !== codeLines.length - 1) {
+                gutter.push("\n");
+              }
+            }
+            gutter.push("</pre>");
+            elementBefore(e, createElementFromString(gutter.join("")));
+          }
+        );
+      });
+    </script>
+    
+    <script type="text/javascript">
+      // Set theme before page rendering.
+      // Check user's choice from localStorage.
+      let theme = window.localStorage.getItem("theme");
+      const preferenceQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      // theme might be null here.
+      if (theme !== "dark" && theme !== "light") {
+        // Init from user's system settings if no choice.
+        theme = preferenceQuery.matches ? "dark" : "light";
+      }
+      // Yes, it looks I can modify documentElement before ready!
+      // Don't use requestAnimationFrame here, it will cause flickering.
+      document.documentElement.setAttribute("data-theme", theme);
+      window.localStorage.setItem("theme", theme);
+      documentReady(() => {
+        const themeToggle = document.getElementById("theme-toggle");
+        const setThemeToggle = (themeToggle, theme) => {
+          themeToggle.innerHTML = theme === "dark"
+            ? "<i class=\"far fa-moon\" aria-label=\"深色模式\"></i>"
+            : "<i class=\"far fa-lightbulb\" aria-label=\"浅色模式\"></i>";
+        };
+        // Update theme toggle content.
+        setThemeToggle(themeToggle, theme);
+        // User changed system settings, update.
+        preferenceQuery.addListener((event) => {
+          theme = event.matches ? "dark" : "light";
+          setThemeToggle(themeToggle, theme);
+          window.requestAnimationFrame(() => {
+            document.documentElement.setAttribute("data-theme", theme);
+          });
+          window.localStorage.setItem("theme", theme);
+        });
+        // Other page of site changed storage, update.
+        window.addEventListener("storage", (event) => {
+          if (event.key === "theme" && event.newValue !== event.oldValue) {
+            theme = event.newValue;
+            setThemeToggle(themeToggle, theme);
+            window.requestAnimationFrame(() => {
+              document.documentElement.setAttribute("data-theme", theme);
+            });
+          }
+        });
+        // User changed website settings, update.
+        themeToggle.addEventListener("click", (event) => {
+          theme = theme === "dark" ? "light" : "dark";
+          setThemeToggle(themeToggle, theme);
+          window.requestAnimationFrame(() => {
+            document.documentElement.setAttribute("data-theme", theme);
+          });
+          window.localStorage.setItem("theme", theme);
+        });
+        // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
+        // A modern way to show date in user's format.
+        // But it shows date only by default, no time.
+        const formatter = new Intl.DateTimeFormat("zh-Hans", {
+          "year": "numeric",
+          "month": "2-digit",
+          "day": "2-digit",
+          "weekday": "short",
+          "hour": "2-digit",
+          "minute": "2-digit",
+          "second": "2-digit",
+          "timeZoneName": "short",
+          "hour12": false
+        });
+        elementsEach(
+          document.querySelectorAll("time.post-full-date"),
+          (e, i) => {
+            const date = new Date(e.getAttribute("datetime"));
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/formatToParts
+            const parts = formatter.formatToParts(date);
+            const obj = {};
+            for (let {type, value} of parts) {
+              obj[type] = value
+            }
+            e.innerHTML = `${obj["year"]}-${obj["month"]}-${obj["day"]} ${obj["weekday"]} ${obj["hour"]}:${obj["minute"]}:${obj["second"]} ${obj["timeZoneName"]}`
+          }
+        );
+        elementsEach(
+          document.querySelectorAll(".post figure.code-block"),
+          (e, i) => {
+            const lang = e.getAttribute("data-lang");
+            elementBefore(e, createElementFromString([
+              "<div class=\"code-titlebar\">",
+                "<div class=\"titlebar-left\">",
+                  "<button class=\"copy\" aria-label=\"复制\"><i class=\"far fa-copy\"></i></button>",
+                "</div>",
+                "<div class=\"titlebar-center\">",
+                  lang != null && lang.length ? lang.toUpperCase() : "代码",
+                "</div>",
+                "<div class=\"titlebar-right\">",
+                  "<button class=\"button-dot dot-minimize\" aria-label=\"Decoration\"></button>",
+                  "<button class=\"button-dot dot-maximize\" aria-label=\"Decoration\"></button>",
+                  "<button class=\"button-dot dot-close\" aria-label=\"Decoration\"></button>",
+                "</div>",
+              "</div>"
+            ].join("")));
+          }
+        );
+        const cb = new ClipboardJS("button.copy", {
+          "target": (trigger) => {
+              // Get target element by DOM API.
+              // trigger.parentNode.parentNode is code-titlebar.
+              // nextElementSibling is figure.highlight, lastChild is pre.code.
+              return trigger.parentNode.parentNode.nextElementSibling.lastChild;
+          }
+        });
+        cb.on("success", (e) => {
+          e.clearSelection();
+          const trigger = e.trigger;
+          // Change button text as a user tip.
+          trigger.innerHTML = "<i class=\"far fa-check-square\"></i>";
+          trigger.classList.add("copied");
+          // Change button text back;
+          window.setTimeout(() => {
+            trigger.innerHTML = "<i class=\"far fa-copy\"></i>";
+            trigger.classList.remove("copied");
+          }, 1500);
+        });
+      });
+    </script>
+    
+    <title>使用HMCL启动Minecraft - STARRY-S' Blog</title>
+  </head>
+  <body itemscope itemtype="http://schema.org/WebPage">
+    
+<header id="header" class="header" style="background: #33363b;">
+  <div class="container">
+    <div class="header-container">
+      <div class="header-title">
+        <div class="title"><a href="/">STARRY-S' Blog</a></div>
+        
+        <div class="subtitle">Morning.</div>
+        
+      </div>
+      
+      <div class="logo">
+        <img src="/images/logo.webp" alt="logo">
+      </div>
+      
+    </div>
+    <nav id="nav" class="nav">
+      <button class="nav-toggle" id="nav-toggle" aria-hidden="true">
+        <i class="fas fa-bars" aria-label="切换导航栏"></i>
+      </button>
+      <ul id="menu" role="menubar" aria-hidden="false">
+        
+        <li role="menuitem"><a href="/"><i class="fas fa-home"></i><span class="menu-text">首页</span></a></li>
+        
+        <li role="menuitem"><a href="/archives/"><i class="fas fa-archive"></i><span class="menu-text">归档</span></a></li>
+        
+        <li role="menuitem"><a href="/categories/"><i class="fas fa-th-list"></i><span class="menu-text">分类</span></a></li>
+        
+        <li role="menuitem"><a href="/tags/"><i class="fas fa-tags"></i><span class="menu-text">标签</span></a></li>
+        
+        <li role="menuitem"><a href="/about/"><i class="fas fa-user-edit"></i><span class="menu-text">关于</span></a></li>
+        
+      </ul>
+      <button class="theme-toggle" id="theme-toggle">
+        
+      </button>
+    </nav>
+  </div>
+</header>
+
+
+    <main id="main" class="main">
+      <div class="container">
+        <div class="main-container">
+          <div class="content">
+            
+<div id="page" class="page">
+  <article class="article post card" itemscope itemtype="http://schema.org/Article">
+    <div class="post-block">
+      <link itemprop="mainEntityOfPage" href="https://blog.starry-s.moe/posts/hmcl-minecraft/">
+      <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+        
+        <meta itemprop="name" content="STARRY-S">
+        <meta itemprop="description" content="夜的共鸣颤动不停，孤独将声音冻结">
+        <meta itemprop="image" content="/images/avatar.jpg">
+        
+      </span>
+      <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+        <meta itemprop="name" content="STARRY-S' Blog">
+      </span>
+    </div>
+    <header class="post-header">
+      <div class="post-title" itemprop="name headline">
+        <a class="title-link" href="/posts/hmcl-minecraft/" itemprop="url">使用HMCL启动Minecraft</a>
+      </div>
+      <div class="post-meta">
+        
+        <div class="post-date meta-block">
+          <i class="far fa-calendar-check"></i><span><time class="post-full-date" title="post-date" itemprop="dateCreated datePublished" datetime="2018-07-29T09:26:35.000Z">7/29/2018, 5:26:35 PM</time></span>
+        </div>
+        
+        
+        
+        
+        <div class="post-categories meta-block">
+          
+          <i class="far fa-folder-open"></i><span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Minecraft/" itemprop="url" rel="index"><span itemprop="name">Minecraft</span></a></span>
+        </div>
+        
+        
+        
+        <div class="post-comment-count meta-block">
+          <i class="far fa-comments"></i><span><a href="/posts/hmcl-minecraft/#comment-results" itemprop="discussionUrl"><span class="post-comment-count comment-count" data-comment-identifier="使用HMCL启动Minecraft" itemprop="commentCount">阅读评论</span></a></span>
+        </div>
+        
+        
+      </div>
+    </header>
+    <main class="post-main" id="scrollspy-container" itemprop="articleBody">
+      <p>终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( <del>没钱买鼠标？</del> )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。</p>
+<a id="more"></a>
+
+<div class="alert-red">
+本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。
+</div>
+
+<blockquote>
+<p>本教程将分为二个部分，第一部分将指导你如何使用HMCL启动器安装并使用Minecraft（非网易代理版），第二部分处理一些常见的问题。
+本教程主要写给Windows用户，我想Linux用户不太需要我的教程了吧。。
+可能有人是刚接触电脑的新人，所以我尽可能的把每一步都写详细清楚，方便大家的理解。</p>
+</blockquote>
+<p>本教程仅提供所述内容的下载连接，游戏的版权归Mojang所有。</p>
+<p>顺便说一下网易版并不支持MacOS哈哈哈哈。。。。</p>
+<h2 id="%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A"><a class="header-link" href="/posts/hmcl-minecraft/#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A"></a>第一部分：</h2>
+<p><strong>如果你尚未在官网购买正版的Minecraft，你可以使用HMCL（<a href="https://github.com/huanghongxun/HMCL" target="_blank" rel="external nofollow noreferrer noopener">Hello Minecraft Launcher</a> )启动器下载并运行MC。</strong></p>
+<ol>
+<li><p>你需要确保你的电脑已安装java8。下载java：<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html" target="_blank" rel="external nofollow noreferrer noopener">http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</a></p>
+</li>
+<li><p>接下来你需要下载HMCL启动器。</p>
+</li>
+</ol>
+<p>我建议去<a href="https://ci.huangyuhui.net/job/HMCL/" target="_blank" rel="external nofollow noreferrer noopener">HMCL的官方服务器</a> 下载所需的<code>exe</code>文件，最好不要从贴吧/论坛下载来路不明/非最新版本的HMCL启动器。</p>
+<p>选择最新版本的后缀为<code>.exe</code>的文件下载即可。或者你可以下载后缀为<code>.jar</code>的文件（用于Linux，MacOS）</p>
+<ol start="3">
+<li>新建一个文件夹（放在你喜欢的位置例如桌面），将下载的<code>exe/jar</code>文件复制到这里。</li>
+</ol>
+<p>Windows用户直接双击exe文件运行即可，</p>
+<p>Linux用户你下载的是jar文件所以如果你想运行你需要新建一个可执行文件：</p>
+<figure data-raw="$ cd 你的文件夹名称
+$ echo &quot;java -jar hmcl-对应的版本号.jar&quot; > ./start.sh
+$ chmod 744 ./start.sh
+" class="code-block"><pre class="code"><code>$ cd 你的文件夹名称
+$ echo "java -jar hmcl-对应的版本号.jar" &gt; ./start.sh
+$ chmod 744 ./start.sh
+</code></pre></figure>
+<p>然后在终端执行<code>./start.sh</code>。</p>
+<p>或者直接在终端执行<code>java -jar hmcl-*.jar</code>即可。</p>
+<ol start="4">
+<li>设置一个你喜欢的名字并一直使用它，选择离线模式</li>
+</ol>
+<p>在HMCL里点击右下角的加号下载游戏文件,建议将游戏下载到你启动器所在的文件夹内。</p>
+<p><strong>如果你已购买正版Minecraft，在确保java安装好后直接去官网下载启动器再到启动器中下载游戏即可，可能会因网络原因速度慢，这是正常现象。</strong></p>
+<p><strong>请支持正版，RMB165，可使用支付宝。</strong></p>
+<h2 id="%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A"><a class="header-link" href="/posts/hmcl-minecraft/#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A"></a>第二部分：</h2>
+<ol>
+<li>笔记本双显卡用户请确保你正确的安装了显卡驱动（新买的笔记本不知道什么是显卡驱动就默认已经安装好了），NVIDA显卡用户在桌面右键选择NVIDIA控制面板（没有这个选项可能是你的显卡驱动没安装好），选择 <strong>3D设置-&gt;管理3D设置</strong> ，选择添加，找到你安装的JAVA目录下的java.exe，将其设置为高性能处理器。然后保存设置并退出。（ps现在市面上新出的笔记本用集成显卡玩这个游戏也已经很流畅了）</li>
+</ol>
+<p>在游戏中按F3，若右侧有NVIDIA字样就说明你已成功的使用独显运行游戏了，在左侧可以观察帧数。</p>
+<ol start="2">
+<li><p>Linux用户如果可以启动HMCL但是无法启动游戏错误报告是有关OpenGL的话在确定显卡驱动配置正常后检查一下是否安装了<code>xorg-xrandr</code>。</p>
+</li>
+<li><p>64位系统的用户不要安装32位的java，不仅影响性能而且对可使用的内存大小也有限制。</p>
+</li>
+<li><p>Linux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 <a href="https://sh.alynx.xyz/posts/2017/02/16/Steam-with-Bumblebee/" target="_blank" rel="external nofollow noreferrer noopener">Linux下使Steam调用Bumblebee使用独显</a>,当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。</p>
+</li>
+</ol>
+<h2 id="%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%9A"><a class="header-link" href="/posts/hmcl-minecraft/#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%9A"></a>相关内容：</h2>
+<ul>
+<li><a href="https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&amp;variant=zh-cn" target="_blank" rel="external nofollow noreferrer noopener">教程/成功地启动游戏-Minecraft Wiki</a></li>
+<li><a href="https://minecraft.net/zh-hans/" target="_blank" rel="external nofollow noreferrer noopener">官方网站|Minecraft</a></li>
+<li><a href="https://blog.starry-s.me/posts/raspberrypi-mc-server/" target="_blank" rel="external nofollow noreferrer noopener">树莓派之我的世界服务器</a></li>
+</ul>
+<p>如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。</p>
+
+    </main>
+    <footer class="post-footer">
+      
+      <div class="post-tags">
+        <a class="post-tag button" href="/tags/Minecraft/" rel="tag"><i class="fas fa-tag"></i>Minecraft</a><a class="post-tag button" href="/tags/HMCL/" rel="tag"><i class="fas fa-tag"></i>HMCL</a>
+      </div>
+      
+    </footer>
+  </article>
+  
+  <nav class="page-nav">
+    <div class="page-nav-next page-nav-item">
+      
+      <a href="/posts/xiaomi_r3g_openwrt/" rel="next" title="小米路由器3G折腾之刷OpenWrt记录"><i class="fas fa-angle-left"></i><span class="nav-title">小米路由器3G折腾之刷OpenWrt记录</span></a>
+      
+    </div>
+    <div class="page-nav-prev page-nav-item">
+      
+      <a href="/posts/spring-2/" rel="prev" title="Spring - 2"><span class="nav-title">Spring - 2</span><i class="fas fa-angle-right"></i></a>
+      
+    </div>
+  </nav>
+  
+  
+  
+
+<div class="reward" id="reward">
+  <div class="reward-info" id="reward-info">
+    <span>Support Me!</span>
+  </div>
+  <button id="reward-button" class="button reward-button" disable="enable"><i class="fas fa-donate"></i>打赏</button>
+  <div id="qr" class="qr" style="display: none;" aria-hidden="true">
+    
+    <div id="wechatpay">
+      <img id="wechatpay-qr" src="/images/wechatpay.jpg" alt="微信支付"/>
+      <span>微信支付</span>
+    </div>
+    
+    
+    <div id="alipay">
+      <img id="alipay-qr" src="/images/alipay.jpg" alt="支付宝"/>
+      <span>支付宝</span>
+    </div>
+    
+    
+  </div>
+</div>
+
+
+
+  
+  
+  
+<div class="comment" id="comment">
+  
+  <script defer type="text/javascript" src="/js/comment.js"></script>
+  <script type="text/javascript">
+    documentReady(() => {
+      loadCommentCount({
+        "user": "STARRY-S",
+        "repo": "Blog",
+        "containerClass": "comment-count"
+      });
+    });
+  </script>
+  
+  <div class="comment-results" id="comment-results">
+    <div class="sk-wave" id="sk-wave">
+      <div class="sk-rect sk-rect1"></div>
+      <div class="sk-rect sk-rect2"></div>
+      <div class="sk-rect sk-rect3"></div>
+      <div class="sk-rect sk-rect4"></div>
+      <div class="sk-rect sk-rect5"></div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    documentReady(() => {
+      loadComment({
+        "user": "STARRY-S",
+        "repo": "Blog",
+        "perPage": "10",
+        "sendButtonText": "去评论",
+        "noCommentText": "这个页面还没有评论，现在就去评论吧！",
+        "failText": "你可能达到了 API 请求频率上限，请等待一段时间再刷新。",
+        "title": "使用HMCL启动Minecraft",
+        "queryString": window.location.search,
+        "basePath": "/posts/hmcl-minecraft/",
+        "containerID": "comment-results"
+      }).then(() => {
+        // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
+        // A modern way to show date in user's format.
+        // But it shows date only by default, no time.
+        const formatter = new Intl.DateTimeFormat("zh-Hans", {
+          "year": "numeric",
+          "month": "2-digit",
+          "day": "2-digit",
+          "weekday": "short",
+          "hour": "2-digit",
+          "minute": "2-digit",
+          "second": "2-digit",
+          "timeZoneName": "short",
+          "hour12": false
+        });
+        elementsEach(
+          document.querySelectorAll("time.comment-full-date"),
+          (e, i) => {
+            const date = new Date(e.getAttribute("datetime"));
+            // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/formatToParts
+            const parts = formatter.formatToParts(date);
+            const obj = {};
+            for (let {type, value} of parts) {
+              obj[type] = value
+            }
+            e.innerHTML = `${obj["year"]}-${obj["month"]}-${obj["day"]} ${obj["weekday"]} ${obj["hour"]}:${obj["minute"]}:${obj["second"]} ${obj["timeZoneName"]}`
+          }
+        );
+        elementsEach(
+          document.querySelectorAll("div.comment-content img"),
+          (e, i) => {
+            // If an image works as link,
+            // stop adding link styles to it.
+            if (e.parentNode.tagName.toLowerCase() === "a") {
+              e.parentNode.classList.add("img-link");
+            }
+          }
+        );
+      });
+    });
+  </script>
+  
+  
+</div>
+
+
+  
+</div>
+
+          </div>
+          
+          
+          
+<aside class="sidebar" id="sidebar">
+  
+  <div class="search" role="search">
+    <form action="/search/" method="get">
+      <button type="submit" class="search-submit" aria-label="搜索"><i class="fas fa-search"></i></button><input type="search" id="search-input" class="search-input" name="q" results="0" placeholder="搜索" aria-label="搜索">
+    </form>
+  </div>
+  
+  <div class="info sidebar-item" id="info">
+    
+    <img class="author-avatar" src="/images/avatar.jpg" alt="STARRY-S">
+    
+    <div class="author-name">STARRY-S</div>
+    
+    <div class="author-description">夜的共鸣颤动不停，孤独将声音冻结</div>
+    
+    <div class="site-count">
+      
+      
+      
+      
+      <div class="archives-count count-block">
+        <div class="site-count-title">归档</div>
+        <div><a href="/archives/">25</a></div>
+      </div>
+      
+      
+      
+      <div class="categories-count count-block">
+        <div class="site-count-title">分类</div>
+        <div><a href="/categories/">14</a></div>
+      </div>
+      
+      
+      
+      <div class="tags-count count-block">
+        <div class="site-count-title">标签</div>
+        <div><a href="/tags/">31</a></div>
+      </div>
+      
+      
+      
+      
+    </div>
+    
+    <div class="rss">
+      <a class="rss-link button sidebar-item" href="/atom.xml"><i class="fas fa-rss"></i>RSS</a>
+    </div>
+    
+  </div>
+  <div class="sidebar-sticky">
+    
+    
+    <hr>
+    <div class="post-toc sidebar-item">
+      <div><i class="fas fa-list-ol"></i>文章目录</div>
+      
+      
+      <ol class="toc" id="scrollspy-target">
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A">第一部分：</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A">第二部分：</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%9A">相关内容：</a>
+          
+        </li>
+      
+      </ol>
+      
+    </div>
+    
+    
+    
+    <hr>
+    <div class="social-link sidebar-item">
+      <div><i class="far fa-address-card"></i>社交链接</div>
+      <ul>
+        
+        <li><i class="fas fa-envelope"></i><a href="mailto:hxstarrys@gmail.com" target="_blank" rel="external nofollow noreferrer noopener">E-Mail</a></li>
+        
+        <li><i class="fab fa-github"></i><a href="https://github.com/STARRY-S" target="_blank" rel="external nofollow noreferrer noopener">GitHub</a></li>
+        
+        <li><i class="fab fa-telegram-plane"></i><a href="https://t.me/STARRY-S" target="_blank" rel="external nofollow noreferrer noopener">Telegram</a></li>
+        
+        <li><i class="fas fa-film"></i><a href="https://space.bilibili.com/19189337" target="_blank" rel="external nofollow noreferrer noopener">Bilibili</a></li>
+        
+        <li><i class="fab fa-weibo"></i><a href="https://weibo.com/u/6990977018" target="_blank" rel="external nofollow noreferrer noopener">Weibo</a></li>
+        
+      </ul>
+    </div>
+    
+    
+    <hr>
+    <div class="blogroll sidebar-item">
+      <div><i class="fas fa-user-friends"></i>友情链接</div>
+      <ul>
+        
+        <li><i class="fas fa-link"></i><a href="https://alynx.one/" target="_blank" rel="external nofollow noreferrer noopener">喵's Homepage</a></li>
+        
+        <li><i class="fas fa-link"></i><a href="https://lgiki.net/" target="_blank" rel="external nofollow noreferrer noopener">LGiki's Blog</a></li>
+        
+        <li><i class="fas fa-link"></i><a href="https://blog.bladehiker.com" target="_blank" rel="external nofollow noreferrer noopener">BladeHiker's HammerShop</a></li>
+        
+      </ul>
+    </div>
+    
+  </div>
+</aside>
+
+
+          
+        </div>
+      </div>
+    </main>
+    
+<footer id="footer" class="footer" style="background: #33363b;">
+  <div class="container">
+    <div class="back-to-top">
+      <button id="back-to-top" class="back-to-top" aria-label="回到顶部"><i class="fas fa-angle-double-up"></i></button>
+    </div>
+    <div class="footer-container">
+      <div class="footer-left">
+        <div class="copyright">
+          <span class="author"><i class="far fa-edit"></i>STARRY-S</span><span class="years"><i class="far fa-copyright"></i><span id="years-text">2016</span></span><span class="creative-commons"><i class="fab fa-creative-commons"></i><a href="http://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="external nofollow noreferrer noopener">BY-NC-ND 4.0</a></span>
+        </div>
+        
+        <div class="busuanzi">
+          <span id="busuanzi_container_site_pv"><i class="fas fa-eye" aria-label="站点点击量" aria-hidden="false"></i><span id="busuanzi_value_site_pv"></span></span><span id="busuanzi_container_site_uv"><i class="fas fa-user" aria-label="站点用户数" aria-hidden="false"></i><span id="busuanzi_value_site_uv"></span></span><span id="busuanzi_container_page_pv"><i class="fas fa-file-alt"></i><span id="busuanzi_value_page_pv" aria-label="页面点击量" aria-hidden="false"></span></span>
+        </div>
+        
+      </div>
+      <div class="footer-right">
+        <div class="custom-info">
+          
+          托管于<i class="fab fa-github-alt"></i><a href="https://pages.github.com/" target="_blank" rel="noreferrer noopener">GitHub Pages</a>
+          
+        </div>
+        <div class="powered-by">
+          由 <a href="https://hikaru.alynx.one/" target="_blank" rel="external nofollow noreferrer noopener">Hikaru</a> 强力驱动<i class="fab fa-node-js"></i>主题 <a href="https://github.com/AlynxZhou/hikaru-theme-aria/" target="_blank" rel="external nofollow noreferrer noopener">ARIA</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+  </body>
+</html>
+<!-- Page built by Hikaru v1.10.2 at 2022-02-11T12:35:45.419Z. -->
