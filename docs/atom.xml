@@ -7,7 +7,7 @@
   
   <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/" />
   
-  <updated>2022-01-01T17:09:24.000Z</updated>
+  <updated>2022-02-26T15:07:52.000Z</updated>
   
   <id>https://blog.starry-s.moe/</id>
   
@@ -19,6 +19,122 @@
   <generator uri="https://github.com/AlynxZhou/hikaru-generator-feed/" version="v2.3.4">Hikaru Generator Feed</generator>
   
   
+  
+  
+  
+  <entry>
+    <title>电脑换壳——先马趣造</title>
+    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/sama-quzao/" />
+    <id>https://blog.starry-s.moe/posts/sama-quzao/</id>
+    
+    <author>
+      <name>STARRY-S</name>
+      <email>hxstarrys@gmail.com</email>
+    </author>
+    
+    
+    <published>2022-02-26T15:07:52.000Z</published>
+    
+    
+    <updated>2022-02-26T15:07:52.000Z</updated>
+    
+    
+    <summary type="html">
+      &lt;p&gt;年初的时候买了先马趣造这个机箱，买这个机箱的主要的原因是先马鲁班太大了，之前买先马鲁班的时候没有考虑到机箱便携性的问题，因为台式机压根就没啥便携性可言。&lt;/p&gt;
+&lt;p&gt;然额因为咱今年上半年要去北京，觉得台式机留在家里不用有些不忍心，所以某天在网上闲逛的时候看到了这款机箱。看了很多网上的评测视频后才决定入手。&lt;/p&gt;
+&lt;p&gt;现在距离刚入手这台机箱已经过去一个多月了，前一阵子一直在忙所以没时间更新博客，于是直到现在咱才把换机箱这件事更新到博客上。&lt;/p&gt;
+
+    </summary>
+    
+    
+    <content type="html">
+      &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
+&lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
+&lt;p&gt;年初的时候买了先马趣造这个机箱，买这个机箱的主要的原因是先马鲁班太大了，之前买先马鲁班的时候没有考虑到机箱便携性的问题，因为台式机压根就没啥便携性可言。&lt;/p&gt;
+&lt;p&gt;然额因为咱今年上半年要去北京，觉得台式机留在家里不用有些不忍心，所以某天在网上闲逛的时候看到了这款机箱。看了很多网上的评测视频后才决定入手。&lt;/p&gt;
+&lt;p&gt;现在距离刚入手这台机箱已经过去一个多月了，前一阵子一直在忙所以没时间更新博客，于是直到现在咱才把换机箱这件事更新到博客上。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+ &lt;!--APlayer--&gt;
+&lt;div id=&quot;aplayer0&quot; style=&quot;background: var(--color-main-background)&quot;&gt;&lt;/div&gt;
+&lt;script&gt;
+const ap0 = new APlayer ({
+    container: document.getElementById(&quot;aplayer0&quot;),
+    theme: &quot;#33363b&quot;,
+    fixed: false,
+    listFolded: false,
+    listMaxHeight: false,
+    lrcType: false,
+    mini: false,
+    volume: 0.7,
+    order: &quot;list&quot;,
+    loop: &quot;all&quot;,
+    autoplay: false,
+    audio: [{
+        name: &quot;Hadouken&quot;,
+        artist: &quot;Lupus Nocte&quot;,
+        url: &quot;https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_2347605056_3c82_3c52_f174_d9f0840383db65d1f00568c39a10ccf5.m4a&quot;,
+        cover: &quot;https://music.starry-s.moe:2053/music/cover/109951164946319365.jpg&quot;,
+        lrc: &quot;&quot;,
+        theme: &quot;#985600&quot;
+    }]
+});
+&lt;/script&gt; 
+
+&lt;h2 id=&quot;%E9%85%8D%E7%BD%AE&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/sama-quzao/#%E9%85%8D%E7%BD%AE&quot;&gt;&lt;/a&gt;配置&lt;/h2&gt;
+&lt;p&gt;CPU、主板、显卡、电源、硬盘、CPU散热以及内存这些用的还是上一篇“&lt;a href=&quot;/posts/build-desktop/&quot;&gt;我们来组装一台电脑吧&lt;/a&gt;”里面讲的配置。&lt;/p&gt;
+&lt;p&gt;除此之外咱买了一个直径8CM的小风扇(ARCTIC P8)，和一个超薄的1.5CM厚的风扇(ID-COOLING TF9125)。&lt;/p&gt;
+&lt;p&gt;配置方面没有太大改动，因为不打算装侧玻璃板，所以咱这次没有装RGB灯条。&lt;/p&gt;
+&lt;h2 id=&quot;%E8%A3%85%E6%9C%BA&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/sama-quzao/#%E8%A3%85%E6%9C%BA&quot;&gt;&lt;/a&gt;装机&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/sama-quzao/images/6.jpg&quot; alt=&quot;&amp;quot;最终的样子&amp;quot;&quot; title=&quot;最终的样子&quot;&gt;&lt;/p&gt;
+&lt;p&gt;装机过程还是很顺利的，因为新机箱体积比较小，可供操作的空间有限，所以花了很长时间才装完。一开始还比较担心显卡太长会不会和右侧的ATX电源产生冲突，
+不过华硕B550重炮手的主板的PCIE4X16是在第二槽，第一槽是个PCIE1，所以装上显卡后没有影响到右侧全模组电源的电源线，
+但是显卡的底部空间很小，没办法塞下一个正常厚度的风扇了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/sama-quzao/images/2.jpg&quot; alt=&quot;&amp;quot;底部风扇&amp;quot;&quot; title=&quot;机箱底部&quot;&gt;&lt;/p&gt;
+&lt;p&gt;后来咱买了一个1.5cm厚的超薄风扇帮助显卡散热，不过风扇的尺寸咱买小了，本来应该买12cm的风扇咱买了个9cm的，到手后发现把风扇斜过来也能勉强固定住，于是就不打算换了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;div style=&quot;margin:auto; text-align:center;&quot;&gt;
+&lt;img style=&quot;width: 100%;&quot; alt=&quot;顶部&quot; title=&quot;顶部&quot; src=&quot;/posts/sama-quzao/images/3.jpg&quot;&gt;
+&lt;/div&gt;
+
+&lt;br&gt;
+
+&lt;div style=&quot;margin:auto; text-align:center;&quot;&gt;
+&lt;img style=&quot;width: 70%;&quot; alt=&quot;正面&quot; title=&quot;正面&quot; src=&quot;/posts/sama-quzao/images/5.jpg&quot;&gt;
+&lt;/div&gt;
+
+&lt;br&gt;
+
+&lt;p&gt;机箱顶部用的是之前买的先马冰洞静音风扇，虽然不支持PWM调速但是很静音。然后因为右侧的空间被ATX电源占用了所以顶部只能装一个风扇。&lt;/p&gt;
+&lt;p&gt;发热量大户实际上是显卡，CPU产生的热量很容易就能散开。所以所有风扇低速运行时，CPU和显卡的待机温度才比室温高十几度，只有玩游戏时CPU和显卡温度会高一些。&lt;/p&gt;
+&lt;p&gt;把所有零件全部装上之后，就没有空间装机械硬盘了，不过还好我只有一块2.5寸固态硬盘，勉强塞在了前面板背面的硬盘位中。&lt;/p&gt;
+&lt;p&gt;因为机箱空间有限，所以理线是个大难题，机箱几乎没有可理线的空间，所以我只好把一大团电线捆在一起。&lt;/p&gt;
+&lt;h2 id=&quot;%E6%9C%80%E7%BB%88%E6%95%88%E6%9E%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/sama-quzao/#%E6%9C%80%E7%BB%88%E6%95%88%E6%9E%9C&quot;&gt;&lt;/a&gt;最终效果&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/posts/sama-quzao/images/7.jpg&quot; alt=&quot;&amp;quot;最终效果&amp;quot;&quot; title=&quot;最终效果&quot;&gt;&lt;/p&gt;
+&lt;p&gt;白色机箱的确比黑色机箱好看很多，而且我反而觉得白色机箱更不容易脏一些，因为之前的黑色机箱手一摸就是油乎乎的大手印，但是这个白色机箱就没有。&lt;/p&gt;
+&lt;p&gt;在网上看到有人在机箱前面贴苹果贴纸的，不过咱找了一下高中时买的Arch Linux贴纸，贴到了机箱顶部。&lt;/p&gt;
+&lt;p&gt;趣造的机箱四面八方全是散热孔，所以就算咱把一个M-ATX机箱里面的所有东西全都塞到了这个小盒子里面，温度也并没有上升。要说影响的话，就是没有可以塞机械硬盘和摆手办的地方了（&lt;/p&gt;
+&lt;p&gt;如果想塞机械硬盘的话，我得把我的ATX电源换成SFX电源。然后把CPU散热换成水冷或者下压式散热之类的，才能倒出空间装机械硬盘。不过咱买这个机箱目的就是为了能放到行李箱里面拉走，所以装机械硬盘的话容易在路上颠坏了。而固态就没这个担心。&lt;/p&gt;
+&lt;p&gt;然后就是个人感觉先马趣造这机箱设计得还蛮不错的，机箱的所有地方都能拆，装机的时候可以先把机箱拆得只剩下一个铁架子，所以实际上装机没有增添太多难度。就是理线费劲了一些。全模组电源自带的模组线是真的硬。&lt;/p&gt;
+&lt;p&gt;因为机箱小，去北京实习的时候咱买了个28寸的超大行李箱，于是这个行李箱在塞下这个机箱之后还能塞很多衣服。总之肯定是不会出现像上次那样坐高铁我一个人把机箱和显示器从北京扛回老家的情况了。&lt;/p&gt;
+&lt;br&gt;
+
+&lt;p&gt;&lt;strong&gt;STARRY-S&lt;/strong&gt;&lt;/p&gt;
+
+    </content>
+    
+    
+    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/" />
+    
+    
+    <category term="日常" label="日常" scheme="https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/" />
+    
+    <category term="装机" label="装机" scheme="https://blog.starry-s.moe/tags/%E8%A3%85%E6%9C%BA/" />
+    
+    <category term="台式机" label="台式机" scheme="https://blog.starry-s.moe/tags/%E5%8F%B0%E5%BC%8F%E6%9C%BA/" />
+    
+  </entry>
   
   
   
@@ -604,7 +720,6 @@ bind_port = 6000
     <summary type="html">
       &lt;p&gt;很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。&lt;/p&gt;
 &lt;div class=&quot;alert-blue&quot;&gt;
-本篇会随着后续的发展而不定期更新&lt;br&gt;
 因包含插图，为了浏览体验我只对图片进行了适量压缩，&lt;br&gt;
 网络不好的用户可能需要多花一些时间加载。&lt;br&gt;
 &lt;/div&gt;
@@ -618,7 +733,6 @@ bind_port = 6000
 &lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
 &lt;p&gt;很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。&lt;/p&gt;
 &lt;div class=&quot;alert-blue&quot;&gt;
-本篇会随着后续的发展而不定期更新&lt;br&gt;
 因包含插图，为了浏览体验我只对图片进行了适量压缩，&lt;br&gt;
 网络不好的用户可能需要多花一些时间加载。&lt;br&gt;
 &lt;/div&gt;
@@ -740,15 +854,19 @@ const ap0 = new APlayer ({
 &lt;p&gt;所以还是台式机最香，觉得硬盘不够用了我就可以买块新硬盘扯根线扩容，主板上有4个内存插槽够我插很多根内存。CPU也都是可拆卸的只要主板支持我还可以继续升级，而且我可以选择没有集成显卡的CPU，显示器直连独显不用被那些驱动问题弄得头疼。&lt;/p&gt;
 &lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
 &lt;p&gt;其实最初我是想把装机的过程录下来拍成VLOG的，但是租的房子空间有限加上不想露脸，我一说话还会紧张不会组织语言，而且我没带三脚架，所以为了节省体力我只是拍几张照片放到博客上。&lt;/p&gt;
-&lt;p&gt;尽管现在这个电脑显卡很差不能打大型游戏，但是他的强悍的CPU性能已经足够我干很多事情了。一开始想测试一下CPU性能于是下载了Linux内核，用默认生成的&lt;code&gt;config&lt;/code&gt;，&lt;code&gt;make -j12&lt;/code&gt;编译。然后找个工具(&lt;code&gt;lm_sensors&lt;/code&gt;)查看一下CPU温度。当我还没配好配置文件时突然发现内核他编译好了。&lt;/p&gt;
-&lt;p&gt;然而除了写代码之外我暂时还没想好什么其他的使用这个电脑的方法。因为有点舍不得电费加上没有外网IP所以我也不打算把它当服务器用。&lt;/p&gt;
+&lt;p&gt;&lt;del&gt;尽管现在这个电脑显卡很差不能打大型游戏，但是他的强悍的CPU性能已经足够我干很多事情了。&lt;/del&gt; 一开始想测试一下CPU性能于是下载了Linux内核，用默认生成的&lt;code&gt;config&lt;/code&gt;，&lt;code&gt;make -j12&lt;/code&gt;编译。然后找个工具(&lt;code&gt;lm_sensors&lt;/code&gt;)查看一下CPU温度。当我还没配好配置文件时突然发现内核他编译好了。&lt;/p&gt;
+&lt;p&gt;然而除了写代码之外我暂时还没想好什么其他的使用这个电脑的方法。因为有点舍不得电费加上没有公网IP所以我也不打算把它当服务器用。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;可能有人会更关心我在北京实习的相关事情，其实我并不是不想写在博客里面，而是想等过几个月有了一个比较完整的实习体验后再写，因为最近每天都很忙而且心情变化很复杂，毕竟自己一个人离开学校到北京。所以我不想把某一刻的心情写在博客上当作我这一阵子的整体体验，现在还不是做总结的时候（心情好的话，也许我会写在今年年终总结上吧）。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;hr&gt;
+&lt;h2 id=&quot;%E5%90%8E%E7%BB%AD&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/build-desktop/#%E5%90%8E%E7%BB%AD&quot;&gt;&lt;/a&gt;后续&lt;/h2&gt;
+&lt;p&gt;2022-02-26补充:&lt;/p&gt;
+&lt;p&gt;咱给这个电脑换了新的机箱，考虑了一下如果把换新机箱的内容添加到这里的话，会对原有的我组装电脑的内容产生影响，所以我新开了一篇博客，感兴趣的可以去看：&lt;a href=&quot;/posts/sama-quzao/&quot;&gt;电脑换壳——先马趣造&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;以后组装电脑相关的博客，都会在标签 &lt;a href=&quot;/tags/%E5%8F%B0%E5%BC%8F%E6%9C%BA/&quot;&gt;台式机&lt;/a&gt; 里面找到。&lt;/p&gt;
 &lt;br&gt;
 
-&lt;p&gt;&lt;strong&gt;by STARRY-S&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;STARRY-S&lt;/strong&gt;&lt;/p&gt;
 
     </content>
     
@@ -4856,109 +4974,6 @@ reboot
     <category term="路由器" label="路由器" scheme="https://blog.starry-s.moe/tags/%E8%B7%AF%E7%94%B1%E5%99%A8/" />
     
     <category term="OpenWrt" label="OpenWrt" scheme="https://blog.starry-s.moe/tags/OpenWrt/" />
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>使用HMCL启动Minecraft</title>
-    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/hmcl-minecraft/" />
-    <id>https://blog.starry-s.moe/posts/hmcl-minecraft/</id>
-    
-    <author>
-      <name>STARRY-S</name>
-      <email>hxstarrys@gmail.com</email>
-    </author>
-    
-    
-    <published>2018-07-29T09:26:35.000Z</published>
-    
-    
-    <updated>2018-07-29T09:26:35.000Z</updated>
-    
-    
-    <summary type="html">
-      &lt;p&gt;终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( &lt;del&gt;没钱买鼠标？&lt;/del&gt; )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。&lt;/p&gt;
-
-    </summary>
-    
-    
-    <content type="html">
-      &lt;p&gt;终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( &lt;del&gt;没钱买鼠标？&lt;/del&gt; )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-
-&lt;div class=&quot;alert-red&quot;&gt;
-本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。
-&lt;/div&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;本教程将分为二个部分，第一部分将指导你如何使用HMCL启动器安装并使用Minecraft（非网易代理版），第二部分处理一些常见的问题。
-本教程主要写给Windows用户，我想Linux用户不太需要我的教程了吧。。
-可能有人是刚接触电脑的新人，所以我尽可能的把每一步都写详细清楚，方便大家的理解。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;本教程仅提供所述内容的下载连接，游戏的版权归Mojang所有。&lt;/p&gt;
-&lt;p&gt;顺便说一下网易版并不支持MacOS哈哈哈哈。。。。&lt;/p&gt;
-&lt;h2 id=&quot;%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%EF%BC%9A&quot;&gt;&lt;/a&gt;第一部分：&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;如果你尚未在官网购买正版的Minecraft，你可以使用HMCL（&lt;a href=&quot;https://github.com/huanghongxun/HMCL&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Hello Minecraft Launcher&lt;/a&gt; )启动器下载并运行MC。&lt;/strong&gt;&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;你需要确保你的电脑已安装java8。下载java：&lt;a href=&quot;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;接下来你需要下载HMCL启动器。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;我建议去&lt;a href=&quot;https://ci.huangyuhui.net/job/HMCL/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;HMCL的官方服务器&lt;/a&gt; 下载所需的&lt;code&gt;exe&lt;/code&gt;文件，最好不要从贴吧/论坛下载来路不明/非最新版本的HMCL启动器。&lt;/p&gt;
-&lt;p&gt;选择最新版本的后缀为&lt;code&gt;.exe&lt;/code&gt;的文件下载即可。或者你可以下载后缀为&lt;code&gt;.jar&lt;/code&gt;的文件（用于Linux，MacOS）&lt;/p&gt;
-&lt;ol start=&quot;3&quot;&gt;
-&lt;li&gt;新建一个文件夹（放在你喜欢的位置例如桌面），将下载的&lt;code&gt;exe/jar&lt;/code&gt;文件复制到这里。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;Windows用户直接双击exe文件运行即可，&lt;/p&gt;
-&lt;p&gt;Linux用户你下载的是jar文件所以如果你想运行你需要新建一个可执行文件：&lt;/p&gt;
-&lt;figure data-raw=&quot;$ cd 你的文件夹名称
-$ echo &amp;quot;java -jar hmcl-对应的版本号.jar&amp;quot; &gt; ./start.sh
-$ chmod 744 ./start.sh
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ cd 你的文件夹名称
-$ echo &quot;java -jar hmcl-对应的版本号.jar&quot; &amp;gt; ./start.sh
-$ chmod 744 ./start.sh
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;然后在终端执行&lt;code&gt;./start.sh&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;或者直接在终端执行&lt;code&gt;java -jar hmcl-*.jar&lt;/code&gt;即可。&lt;/p&gt;
-&lt;ol start=&quot;4&quot;&gt;
-&lt;li&gt;设置一个你喜欢的名字并一直使用它，选择离线模式&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;在HMCL里点击右下角的加号下载游戏文件,建议将游戏下载到你启动器所在的文件夹内。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;如果你已购买正版Minecraft，在确保java安装好后直接去官网下载启动器再到启动器中下载游戏即可，可能会因网络原因速度慢，这是正常现象。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;请支持正版，RMB165，可使用支付宝。&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&quot;%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%EF%BC%9A&quot;&gt;&lt;/a&gt;第二部分：&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;笔记本双显卡用户请确保你正确的安装了显卡驱动（新买的笔记本不知道什么是显卡驱动就默认已经安装好了），NVIDA显卡用户在桌面右键选择NVIDIA控制面板（没有这个选项可能是你的显卡驱动没安装好），选择 &lt;strong&gt;3D设置-&amp;gt;管理3D设置&lt;/strong&gt; ，选择添加，找到你安装的JAVA目录下的java.exe，将其设置为高性能处理器。然后保存设置并退出。（ps现在市面上新出的笔记本用集成显卡玩这个游戏也已经很流畅了）&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;在游戏中按F3，若右侧有NVIDIA字样就说明你已成功的使用独显运行游戏了，在左侧可以观察帧数。&lt;/p&gt;
-&lt;ol start=&quot;2&quot;&gt;
-&lt;li&gt;&lt;p&gt;Linux用户如果可以启动HMCL但是无法启动游戏错误报告是有关OpenGL的话在确定显卡驱动配置正常后检查一下是否安装了&lt;code&gt;xorg-xrandr&lt;/code&gt;。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;64位系统的用户不要安装32位的java，不仅影响性能而且对可使用的内存大小也有限制。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Linux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 &lt;a href=&quot;https://sh.alynx.xyz/posts/2017/02/16/Steam-with-Bumblebee/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;Linux下使Steam调用Bumblebee使用独显&lt;/a&gt;,当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&quot;%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%9A&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/hmcl-minecraft/#%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%EF%BC%9A&quot;&gt;&lt;/a&gt;相关内容：&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&amp;amp;variant=zh-cn&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;教程/成功地启动游戏-Minecraft Wiki&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://minecraft.net/zh-hans/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;官方网站|Minecraft&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;https://blog.starry-s.me/posts/raspberrypi-mc-server/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;树莓派之我的世界服务器&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。&lt;/p&gt;
-
-    </content>
-    
-    
-    <category term="Minecraft" label="Minecraft" scheme="https://blog.starry-s.moe/categories/Minecraft/" />
-    
-    
-    <category term="Minecraft" label="Minecraft" scheme="https://blog.starry-s.moe/tags/Minecraft/" />
-    
-    <category term="HMCL" label="HMCL" scheme="https://blog.starry-s.moe/tags/HMCL/" />
     
   </entry>
   
