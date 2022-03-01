@@ -7,7 +7,7 @@
   
   <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/" />
   
-  <updated>2022-02-26T15:07:52.000Z</updated>
+  <updated>2022-03-01T14:24:17.000Z</updated>
   
   <id>https://blog.starry-s.moe/</id>
   
@@ -19,6 +19,188 @@
   <generator uri="https://github.com/AlynxZhou/hikaru-generator-feed/" version="v2.3.4">Hikaru Generator Feed</generator>
   
   
+  
+  
+  
+  <entry>
+    <title>自建RSS服务器：Miniflux</title>
+    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/miniflux-build/" />
+    <id>https://blog.starry-s.moe/posts/miniflux-build/</id>
+    
+    <author>
+      <name>STARRY-S</name>
+      <email>hxstarrys@gmail.com</email>
+    </author>
+    
+    
+    <published>2022-03-01T14:24:17.000Z</published>
+    
+    
+    <updated>2022-03-01T14:24:17.000Z</updated>
+    
+    
+    <summary type="html">
+      &lt;p&gt;之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。&lt;/p&gt;
+&lt;p&gt;最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。&lt;/p&gt;
+&lt;p&gt;思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。&lt;/p&gt;
+
+    </summary>
+    
+    
+    <content type="html">
+      &lt;p&gt;之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。&lt;/p&gt;
+&lt;p&gt;最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。&lt;/p&gt;
+&lt;p&gt;思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。&lt;/p&gt;
+&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
+
+&lt;hr&gt;
+&lt;h2 id=&quot;%E5%87%86%E5%A4%87&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/miniflux-build/#%E5%87%86%E5%A4%87&quot;&gt;&lt;/a&gt;准备&lt;/h2&gt;
+&lt;p&gt;Miniflux官方文档（EN）：&lt;a href=&quot;https://miniflux.app/docs/index.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;https://miniflux.app/docs/index.html&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;%E5%AE%89%E8%A3%85&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/miniflux-build/#%E5%AE%89%E8%A3%85&quot;&gt;&lt;/a&gt;安装&lt;/h2&gt;
+&lt;p&gt;此部分配合官方文档食用：&lt;a href=&quot;https://miniflux.app/docs/installation.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;https://miniflux.app/docs/installation.html&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/miniflux-build/#%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A&quot;&gt;&lt;/a&gt;配置数据库：&lt;/h3&gt;
+&lt;p&gt;首先需要安装postgresql数据库。安装方法因发行版而异，网上一搜就有。&lt;/p&gt;
+&lt;figure data-raw=&quot;# Switch to the postgres user
+$ sudo su - postgres
+
+# Create a database user for miniflux
+$ createuser -P miniflux
+
+# Create a database for miniflux that belongs to our user
+$ createdb -O miniflux miniflux
+
+# Create the extension hstore as superuser
+$ psql miniflux -c &#039;create extension hstore&#039;
+
+# Change postgres password
+$ psql
+&gt; \password
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;# Switch to the postgres user
+$ sudo su - postgres
+
+# Create a database user for miniflux
+$ createuser -P miniflux
+
+# Create a database for miniflux that belongs to our user
+$ createdb -O miniflux miniflux
+
+# Create the extension hstore as superuser
+$ psql miniflux -c &#039;create extension hstore&#039;
+
+# Change postgres password
+$ psql
+&amp;gt; \password
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;h3 id=&quot;%E5%AE%89%E8%A3%85Miniflux%EF%BC%9A&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/miniflux-build/#%E5%AE%89%E8%A3%85Miniflux%EF%BC%9A&quot;&gt;&lt;/a&gt;安装Miniflux：&lt;/h3&gt;
+&lt;p&gt;不同的发行版使用方法不一样，咱的这台服务器为Ubuntu，所以参照&lt;a href=&quot;https://miniflux.app/docs/howto.html#apt-repo&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;这里的教程&lt;/a&gt;配置APT源，安装Miniflux。&lt;/p&gt;
+&lt;figure data-raw=&quot;curl -s https://apt.miniflux.app/KEY.gpg | sudo apt-key add -
+echo &amp;quot;deb https://apt.miniflux.app/ /&amp;quot; | sudo tee /etc/apt/sources.list.d/miniflux.list &gt; /dev/null
+apt update
+apt install miniflux
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;curl -s https://apt.miniflux.app/KEY.gpg | sudo apt-key add -
+echo &quot;deb https://apt.miniflux.app/ /&quot; | sudo tee /etc/apt/sources.list.d/miniflux.list &amp;gt; /dev/null
+apt update
+apt install miniflux
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;%E9%85%8D%E7%BD%AEMiniflux&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/miniflux-build/#%E9%85%8D%E7%BD%AEMiniflux&quot;&gt;&lt;/a&gt;配置Miniflux&lt;/h2&gt;
+&lt;p&gt;默认配置文件为：&lt;code&gt;/etc/miniflux.conf&lt;/code&gt;。&lt;/p&gt;
+&lt;figure data-raw=&quot;# See https://miniflux.app/docs/configuration.html
+
+LISTEN_ADDR=0.0.0.0:8080
+LOG_DATE_TIME=yes
+DATABASE_URL=user=postgres password=&lt;YOURPASSWORD&gt; dbname=miniflux sslmode=disable
+
+# Run SQL migrations automatically
+# RUN_MIGRATIONS=1
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;# See https://miniflux.app/docs/configuration.html
+
+LISTEN_ADDR=0.0.0.0:8080
+LOG_DATE_TIME=yes
+DATABASE_URL=user=postgres password=&amp;lt;YOURPASSWORD&amp;gt; dbname=miniflux sslmode=disable
+
+# Run SQL migrations automatically
+# RUN_MIGRATIONS=1
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;之后线将刚刚创建的数据库用户&lt;code&gt;miniflux&lt;/code&gt;设置为超级用户。&lt;/p&gt;
+&lt;figure data-raw=&quot;$ sudo su - postgres
+$ psql
+&gt; ALTER USER miniflux WITH SUPERUSER;
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ sudo su - postgres
+$ psql
+&amp;gt; ALTER USER miniflux WITH SUPERUSER;
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;使用以下指令创建数据库表，并创建用户：&lt;/p&gt;
+&lt;figure data-raw=&quot;$ miniflux -c /etc/miniflux.conf -migrate
+$ miniflux -c /etc/miniflux.conf -create-admin
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ miniflux -c /etc/miniflux.conf -migrate
+$ miniflux -c /etc/miniflux.conf -create-admin
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;之后将&lt;code&gt;miniflux&lt;/code&gt;切换回普通用户。&lt;/p&gt;
+&lt;figure data-raw=&quot;$ sudo su - postgres
+$ psql
+&gt; ALTER USER miniflux WITH NOSUPERUSER;
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ sudo su - postgres
+$ psql
+&amp;gt; ALTER USER miniflux WITH NOSUPERUSER;
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;最后重新启动&lt;code&gt;miniflux&lt;/code&gt;。&lt;/p&gt;
+&lt;figure data-raw=&quot;$ sudo systemctl restart miniflux
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;$ sudo systemctl restart miniflux
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;h2 id=&quot;%E9%85%8D%E7%BD%AESSL%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/miniflux-build/#%E9%85%8D%E7%BD%AESSL%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89&quot;&gt;&lt;/a&gt;配置SSL（可选）&lt;/h2&gt;
+&lt;p&gt;使用nginx转发流量，可以将服务器套在Cloudflare下面。&lt;/p&gt;
+&lt;p&gt;编辑nginx的服务器配置文件，创建一个端口为443的服务器，并指定SSL key的位置：&lt;/p&gt;
+&lt;figure data-raw=&quot;server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+
+    server_name miniflux;
+
+    ssl_certificate /path/to/server.crt;
+    ssl_certificate_key /path/to/server.key;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+    location / {
+            proxy_pass  http://127.0.0.1:8080;
+    }
+}
+&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+
+    server_name miniflux;
+
+    ssl_certificate /path/to/server.crt;
+    ssl_certificate_key /path/to/server.key;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+    location / {
+            proxy_pass  http://127.0.0.1:8080;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+&lt;p&gt;之后执行&lt;code&gt;sudo systemctl restart nginx&lt;/code&gt;，访问服务器地址即可。&lt;/p&gt;
+&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/miniflux-build/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
+&lt;p&gt;Miniflux支持Fever和Google Reader等第三方服务，参考&lt;a href=&quot;https://miniflux.app/docs/services.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;官方文档&lt;/a&gt;，可以在服务器的设置-&amp;gt;集成页面中配置，之后在别的设备中安装客户端，可以阅读订阅的文章，比网页版好用一些。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;STARRY-S&lt;/strong&gt;&lt;/p&gt;
+
+    </content>
+    
+    
+    <category term="教程" label="教程" scheme="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/" />
+    
+    <category term="其他" label="其他" scheme="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/%E5%85%B6%E4%BB%96/" />
+    
+    
+    <category term="教程" label="教程" scheme="https://blog.starry-s.moe/tags/%E6%95%99%E7%A8%8B/" />
+    
+    <category term="Miniflux" label="Miniflux" scheme="https://blog.starry-s.moe/tags/Miniflux/" />
+    
+    <category term="RSS" label="RSS" scheme="https://blog.starry-s.moe/tags/RSS/" />
+    
+  </entry>
   
   
   
@@ -4769,211 +4951,6 @@ const ap2 = new APlayer ({
     <category term="日常" label="日常" scheme="https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/" />
     
     <category term="摄影" label="摄影" scheme="https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/" />
-    
-  </entry>
-  
-  
-  
-  <entry>
-    <title>小米路由器3G折腾之刷OpenWrt记录</title>
-    <link rel="alternate" type="text/html" href="https://blog.starry-s.moe/posts/xiaomi_r3g_openwrt/" />
-    <id>https://blog.starry-s.moe/posts/xiaomi_r3g_openwrt/</id>
-    
-    <author>
-      <name>STARRY-S</name>
-      <email>hxstarrys@gmail.com</email>
-    </author>
-    
-    
-    <published>2019-02-18T16:49:20.000Z</published>
-    
-    
-    <updated>2021-01-23T04:36:44.000Z</updated>
-    
-    
-    <summary type="html">
-      &lt;p&gt;生命不息, 折腾不止...&lt;/p&gt;
-
-    </summary>
-    
-    
-    <content type="html">
-      &lt;link href=&quot;/css/APlayer.min.css&quot; rel=&quot;stylesheet&quot;&gt;
-&lt;script src= &quot;/js/APlayer.min.js&quot;&gt;&lt;/script&gt;
-&lt;p&gt;生命不息, 折腾不止...&lt;/p&gt;
-&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;
-
-&lt;hr&gt;
-&lt;div class=&quot;alert-red&quot;&gt;本篇由于创作时间过于久远, 作者已无法保证其准确性, 内容仅供参考。&lt;/div&gt;
-
- &lt;!--APlayer--&gt;
-&lt;div id=&quot;aplayer0&quot; style=&quot;background: var(--color-main-background)&quot;&gt;&lt;/div&gt;
-&lt;script&gt;
-const ap0 = new APlayer ({
-    container: document.getElementById(&quot;aplayer0&quot;),
-    theme: &quot;#33363b&quot;,
-    fixed: false,
-    listFolded: false,
-    listMaxHeight: false,
-    lrcType: false,
-    mini: false,
-    volume: 0.7,
-    order: &quot;list&quot;,
-    loop: &quot;all&quot;,
-    autoplay: false,
-    audio: [{
-        name: &quot;Mallow Flower&quot;,
-        artist: &quot;Otokaze&quot;,
-        url: &quot;https://music.starry-s.moe:2053/music/969d_ef88_965d_f8693c4f0a65db94a9cc0ebb9be2bd06.mp3&quot;,
-        cover: &quot;https://music.starry-s.moe:2053/music/cover/781752767371058.jpg&quot;,
-        lrc: &quot;&quot;,
-        theme: &quot;#EFCE82&quot;
-    }]
-});
-&lt;/script&gt; 
-
-&lt;h2 id=&quot;%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C&quot;&gt;&lt;/a&gt;准备工作&lt;/h2&gt;
-&lt;p&gt;你至少需要以下工具：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;路由器本体&lt;/li&gt;
-&lt;li&gt;网线&lt;/li&gt;
-&lt;li&gt;一个已格式化为FAT/FAT32格式的U盘, 用来刷开发者固件和ssh激活工具&lt;/li&gt;
-&lt;li&gt;一根怼&lt;code&gt;Reset&lt;/code&gt;钮的针&lt;/li&gt;
-&lt;li&gt;Windows用户需要一个SSH软件（例如：&lt;a href=&quot;https://putty.org&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;putty&lt;/a&gt;）&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www1.miwifi.com/miwifi_download.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;小米路由器客户端&lt;/a&gt;, 用来绑定你的小米账号&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#SSH%E5%88%B0%E8%B7%AF%E7%94%B1%E5%99%A8&quot;&gt;&lt;/a&gt;SSH到路由器&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;路由器重启后指示灯会变为蓝色, 若变为红色则为刷机失败。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;安装开发者固件并开启SSH权限：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;在&lt;a href=&quot;http://www1.miwifi.com/miwifi_download.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;MiWiFi下载页面&lt;/a&gt;下载所需要的路由器开发者固件（ROM -&amp;gt; ROM for R3G开发版）,命名为&lt;code&gt;miwifi.bin&lt;/code&gt;。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;路由器断电, 将下载好的开发者固件放入U盘插入路由器USB接口, 捅住reset扭接上电源后待指示灯为黄色闪烁时松开, 数分钟后路由器会自动重启, 此过程不要乱动路由器。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;小米路由器客户端登陆小米账号绑定路由器设备, 此过程需要路由器联网。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://www1.miwifi.com/miwifi_open.html&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;MiWiFi开放平台&lt;/a&gt;登陆小米账号下载ssh激活工具命名为&lt;code&gt;miwifi_ssh.bin&lt;/code&gt;, 记下root密码。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;操作方式同第二步骤, 刷入ssh激活工具。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;SSH到路由器:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;Windows系统用putty, ip为&lt;code&gt;191.168.31.1&lt;/code&gt;, 用户名：&lt;code&gt;root&lt;/code&gt;, 密码为下载激活ssh工具时记下的密码。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;Unix/Linux系统终端执行：&lt;code&gt;ssh root@191.168.31.1&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;如果在ssh到路由器时遇到no matching key exchange method found错误，编辑&lt;code&gt;~/.ssh/config&lt;/code&gt;, 加入下面两行：&lt;/p&gt;
-&lt;figure data-raw=&quot;Host *
-    KexAlgorithms +diffie-hellman-group1-sha1
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;Host *
-    KexAlgorithms +diffie-hellman-group1-sha1
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E5%85%A5Bootloader%EF%BC%88%E6%8E%A8%E8%8D%90%E5%8F%AF%E9%80%89%EF%BC%89&quot;&gt;&lt;/a&gt;刷入Bootloader（推荐/可选）&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考&lt;a href=&quot;https://www.right.com.cn/forum/forum.php?mod=viewthread&amp;amp;tid=267455&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;这篇帖子&lt;/a&gt;, 不过为了防止变砖, 还是推荐刷Breed。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;Breed原作者为hackpascal, &lt;a href=&quot;https://breed.hackpascal.net/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;此处为下载地址&lt;/a&gt;, 文件名为&lt;code&gt;breed-mt7621-xiaomi-r3g.bin&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;第一种方法是ssh到路由器后通过&lt;code&gt;wget&lt;/code&gt;下载breed文件再刷入（需要确保路由器联网）, 下载地址为https所以需要加上&lt;code&gt;--no-check-certificate&lt;/code&gt;参数。&lt;/p&gt;
-&lt;figure data-raw=&quot;cd /tmp
-wget --no-check-certificate https://breed.hackpascal.net/breed-mt7621-xiaomi-r3g.bin -O breed.bin
-mtd -r write breed.bin Bootloader
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;cd /tmp
-wget --no-check-certificate https://breed.hackpascal.net/breed-mt7621-xiaomi-r3g.bin -O breed.bin
-mtd -r write breed.bin Bootloader
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;另一种方法是将breed通过U盘拷贝到路由器再刷入。&lt;/p&gt;
-&lt;figure data-raw=&quot;mkdir /tmp/sdcard
-mount /dev/sda1 /tmp/sdcard
-mtd -r write /tmp/sdcard/breed.bin Bootloader
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;mkdir /tmp/sdcard
-mount /dev/sda1 /tmp/sdcard
-mtd -r write /tmp/sdcard/breed.bin Bootloader
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;p&gt;路由器刷写完毕后会自动重启, &lt;strong&gt;在写入Breed的过程中不要动路由器&lt;/strong&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;%E5%88%B7%E6%9C%BA&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E5%88%B7%E6%9C%BA&quot;&gt;&lt;/a&gt;刷机&lt;/h2&gt;
-&lt;p&gt;下载所需固件：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;tuna镜像站的OpenWrt下载地址：&lt;a href=&quot;https://mirrors.tuna.tsinghua.edu.cn/lede/releases/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;https://mirrors.tuna.tsinghua.edu.cn/lede/releases/&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;官方下载地址: &lt;a href=&quot;https://downloads.openwrt.org/releases/&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;https://downloads.openwrt.org/releases/&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&quot;%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;&lt;/a&gt;使用Breed的刷机方法&lt;/h3&gt;
-&lt;p&gt;按照hackpascal的说法是：&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;如果kernel0存在kernel1不存在, 那么启动kernel0
-如果kernel1存在kernel0不存在, 那么启动kernel1
-如果kernel0和kernel1都存在, 那么检查环境变量 &lt;code&gt;xiaomi.r3g.bootfw&lt;/code&gt; 的值, 如果存在且值为 2, 那么启动kernel1, 否则启动kernel0&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;简单来说就是：路由器有两个内核, 需要在Breed里设置环境变量让路由器启动kernel1。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;刷入Openwrt固件到Kernel1&lt;/p&gt;
-&lt;figure data-raw=&quot;mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-kernel1.bin kernel1
-mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-rootfs0.bin rootfs0
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-kernel1.bin kernel1
-mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-rootfs0.bin rootfs0
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;路由器断电, 捅住reset按钮后通电, 待指示灯变为蓝色闪烁后用网线连接路由器到电脑, 浏览器打开网址&lt;code&gt;192.168.1.1&lt;/code&gt;, 进入Breed界面。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;在环境变量编辑里添加&lt;code&gt;xiaomi.r3g.bootfw&lt;/code&gt;字段, 值为&lt;code&gt;2&lt;/code&gt;,保存后重启即可进入Openwrt。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&quot;%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#%E6%B2%A1%E6%9C%89%E5%88%B7%E5%85%A5Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95&quot;&gt;&lt;/a&gt;没有刷入Breed的刷机方法&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;a href=&quot;https://openwrt.org/toh/xiaomi/mir3g&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;OpenWrt官网提供的教程&lt;/a&gt;是在没有刷入Breed的情况下刷入OpenWrt固件的。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;ssh到路由器, 导入固件后刷机。&lt;/p&gt;
-&lt;figure data-raw=&quot;mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-kernel1.bin kernel1
-mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-rootfs0.bin rootfs0
-nvram set flag_try_sys1_failed=1
-nvram commit
-
-reboot
-&quot; class=&quot;code-block&quot;&gt;&lt;pre class=&quot;code&quot;&gt;&lt;code&gt;mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-kernel1.bin kernel1
-mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-rootfs0.bin rootfs0
-nvram set flag_try_sys1_failed=1
-nvram commit
-
-reboot
-&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-&lt;hr&gt;
-&lt;h2 id=&quot;Others&quot;&gt;&lt;a class=&quot;header-link&quot; href=&quot;/posts/xiaomi_r3g_openwrt/#Others&quot;&gt;&lt;/a&gt;Others&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;如果刷了Breed + Pandavan/PandoraBox后想换回OpenWrt的话, 首先在Breed中刷回小米路由器开发版的官方固件, 然后SSH到路由器按照上述的使用Breed的刷机方法再刷机。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;USB3.0会对路由器的2.4G频段信号造成干扰。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;OpenWrt默认语言为英文, 可安装&lt;code&gt;luci-i18n-base-zh-cn&lt;/code&gt;,&lt;code&gt;luci-i18n-base-zh-tw&lt;/code&gt;安装简体/繁体中文。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;&lt;a href=&quot;http://openwrt-dist.sourceforge.net&quot; target=&quot;_blank&quot; rel=&quot;external nofollow noreferrer noopener&quot;&gt;OpenWrt-dist&lt;/a&gt;可拓展更多功能。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;为优化软件包安装速度, 可将opkg源改为国内：&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;  LuCI -&amp;gt; System -&amp;gt; Software -&amp;gt; Configuration 中将 Distribution feeds 的&lt;code&gt;http://downloads.openwrt.org&lt;/code&gt;替换为&lt;code&gt;http://mirrors.tuna.tsinghua.edu.cn/lede&lt;/code&gt;。&lt;/p&gt;
-&lt;ol start=&quot;6&quot;&gt;
-&lt;li&gt;OpenWrt可安装软件包&lt;code&gt;libustream-openssl&lt;/code&gt; &lt;code&gt;libustream-mbedtls&lt;/code&gt;解决&lt;code&gt;wget&lt;/code&gt;无法访问https服务器问题。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;  然后建议把opkg源能改为https的都改为https。&lt;/p&gt;
-
-    </content>
-    
-    
-    <category term="教程" label="教程" scheme="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/" />
-    
-    <category term="路由器" label="路由器" scheme="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/%E8%B7%AF%E7%94%B1%E5%99%A8/" />
-    
-    
-    <category term="教程" label="教程" scheme="https://blog.starry-s.moe/tags/%E6%95%99%E7%A8%8B/" />
-    
-    <category term="路由器" label="路由器" scheme="https://blog.starry-s.moe/tags/%E8%B7%AF%E7%94%B1%E5%99%A8/" />
-    
-    <category term="OpenWrt" label="OpenWrt" scheme="https://blog.starry-s.moe/tags/OpenWrt/" />
     
   </entry>
   

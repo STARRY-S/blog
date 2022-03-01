@@ -11,13 +11,13 @@
     
     <meta name="author" content="STARRY-S">
     
-    <meta name="description" content="春天来了。 多图预警">
+    <meta name="description" content="之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。 最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些， 而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。 思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。">
     
     
     <meta name="keywords" content="Life, ARIA, Hikaru, STARRY-S, Arch Linux, Linux, Music">
     
     <meta name="generator" content="Hikaru v1.12.1">
-    <link rel="canonical" href="https://blog.starry-s.moe/posts/spring-2/">
+    <link rel="canonical" href="https://blog.starry-s.moe/posts/miniflux-build/">
     
     <link rel="apple-touch-icon" sizes="180x180" href="/favicons/apple-touch-icon.png">
     
@@ -245,7 +245,7 @@
       });
     </script>
     
-    <title>Spring - 2 - STARRY-S' Blog</title>
+    <title>自建RSS服务器：Miniflux - STARRY-S' Blog</title>
   </head>
   <body itemscope itemtype="http://schema.org/WebPage">
     
@@ -297,7 +297,7 @@
 <div id="page" class="page">
   <article class="article post card" itemscope itemtype="http://schema.org/Article">
     <div class="post-block">
-      <link itemprop="mainEntityOfPage" href="https://blog.starry-s.moe/posts/spring-2/">
+      <link itemprop="mainEntityOfPage" href="https://blog.starry-s.moe/posts/miniflux-build/">
       <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
         
         <meta itemprop="name" content="STARRY-S">
@@ -311,12 +311,12 @@
     </div>
     <header class="post-header">
       <div class="post-title" itemprop="name headline">
-        <a class="title-link" href="/posts/spring-2/" itemprop="url">Spring - 2</a>
+        <a class="title-link" href="/posts/miniflux-build/" itemprop="url">自建RSS服务器：Miniflux</a>
       </div>
       <div class="post-meta">
         
         <div class="post-date meta-block">
-          <i class="far fa-calendar-check"></i><span><time class="post-full-date" title="post-date" itemprop="dateCreated datePublished" datetime="2018-04-05T10:05:11.000Z">4/5/2018, 6:05:11 PM</time></span>
+          <i class="far fa-calendar-check"></i><span><time class="post-full-date" title="post-date" itemprop="dateCreated datePublished" datetime="2022-03-01T14:24:17.000Z">3/1/2022, 10:24:17 PM</time></span>
         </div>
         
         
@@ -324,45 +324,161 @@
         
         <div class="post-categories meta-block">
           
-          <i class="far fa-folder-open"></i><span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/%E6%97%A5%E5%B8%B8/" itemprop="url" rel="index"><span itemprop="name">日常</span></a></span><i class="fas fa-angle-right"></i><span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/%E6%97%A5%E5%B8%B8/Spring/" itemprop="url" rel="index"><span itemprop="name">Spring</span></a></span>
+          <i class="far fa-folder-open"></i><span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/%E6%95%99%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">教程</span></a></span><i class="fas fa-angle-right"></i><span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/%E6%95%99%E7%A8%8B/%E5%85%B6%E4%BB%96/" itemprop="url" rel="index"><span itemprop="name">其他</span></a></span>
         </div>
         
         
         
         <div class="post-comment-count meta-block">
-          <i class="far fa-comments"></i><span><a href="/posts/spring-2/#comment-results" itemprop="discussionUrl"><span class="post-comment-count comment-count" data-comment-identifier="Spring - 2" itemprop="commentCount">阅读评论</span></a></span>
+          <i class="far fa-comments"></i><span><a href="/posts/miniflux-build/#comment-results" itemprop="discussionUrl"><span class="post-comment-count comment-count" data-comment-identifier="自建RSS服务器：Miniflux" itemprop="commentCount">阅读评论</span></a></span>
         </div>
         
         
       </div>
     </header>
     <main class="post-main" id="scrollspy-container" itemprop="articleBody">
-      <p><img src="/posts/spring-2/images/05.jpeg" alt="Spring" title="Flowers"></p>
-<h2 id="%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82"><a class="header-link" href="/posts/spring-2/#%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82"></a>春天来了。</h2>
-<div class="alert-blue">
-多图预警
-</div>
-
+      <p>之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。</p>
+<p>最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。</p>
+<p>思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。</p>
 <a id="more"></a>
 
-<p><img src="/posts/spring-2/images/01.jpeg" alt="Spring 1"></p>
-<p><img src="/posts/spring-2/images/02.jpeg" alt="Spring 2"></p>
-<p><img src="/posts/spring-2/images/03.jpeg" alt="Spring 3"></p>
-<p><img src="/posts/spring-2/images/04.jpeg" alt="Spring 4"></p>
-<p><img src="/posts/spring-2/images/06.jpeg" alt="Spring 6"></p>
-<p><img src="/posts/spring-2/images/07.jpeg" alt="Spring 7"></p>
-<p><img src="/posts/spring-2/images/08.jpeg" alt="Spring 8"></p>
 <hr>
-<h2 id="Spring-2"><a class="header-link" href="/posts/spring-2/#Spring-2"></a>Spring - 2</h2>
-<blockquote>
-<p>拍摄自2018-3-28</p>
-</blockquote>
+<h2 id="%E5%87%86%E5%A4%87"><a class="header-link" href="/posts/miniflux-build/#%E5%87%86%E5%A4%87"></a>准备</h2>
+<p>Miniflux官方文档（EN）：<a href="https://miniflux.app/docs/index.html" target="_blank" rel="external nofollow noreferrer noopener">https://miniflux.app/docs/index.html</a></p>
+<h2 id="%E5%AE%89%E8%A3%85"><a class="header-link" href="/posts/miniflux-build/#%E5%AE%89%E8%A3%85"></a>安装</h2>
+<p>此部分配合官方文档食用：<a href="https://miniflux.app/docs/installation.html" target="_blank" rel="external nofollow noreferrer noopener">https://miniflux.app/docs/installation.html</a></p>
+<h3 id="%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A"><a class="header-link" href="/posts/miniflux-build/#%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A"></a>配置数据库：</h3>
+<p>首先需要安装postgresql数据库。安装方法因发行版而异，网上一搜就有。</p>
+<figure data-raw="# Switch to the postgres user
+$ sudo su - postgres
+
+# Create a database user for miniflux
+$ createuser -P miniflux
+
+# Create a database for miniflux that belongs to our user
+$ createdb -O miniflux miniflux
+
+# Create the extension hstore as superuser
+$ psql miniflux -c 'create extension hstore'
+
+# Change postgres password
+$ psql
+> \password
+" class="code-block"><pre class="code"><code># Switch to the postgres user
+$ sudo su - postgres
+
+# Create a database user for miniflux
+$ createuser -P miniflux
+
+# Create a database for miniflux that belongs to our user
+$ createdb -O miniflux miniflux
+
+# Create the extension hstore as superuser
+$ psql miniflux -c 'create extension hstore'
+
+# Change postgres password
+$ psql
+&gt; \password
+</code></pre></figure>
+<h3 id="%E5%AE%89%E8%A3%85Miniflux%EF%BC%9A"><a class="header-link" href="/posts/miniflux-build/#%E5%AE%89%E8%A3%85Miniflux%EF%BC%9A"></a>安装Miniflux：</h3>
+<p>不同的发行版使用方法不一样，咱的这台服务器为Ubuntu，所以参照<a href="https://miniflux.app/docs/howto.html#apt-repo" target="_blank" rel="external nofollow noreferrer noopener">这里的教程</a>配置APT源，安装Miniflux。</p>
+<figure data-raw="curl -s https://apt.miniflux.app/KEY.gpg | sudo apt-key add -
+echo &quot;deb https://apt.miniflux.app/ /&quot; | sudo tee /etc/apt/sources.list.d/miniflux.list > /dev/null
+apt update
+apt install miniflux
+" class="code-block"><pre class="code"><code>curl -s https://apt.miniflux.app/KEY.gpg | sudo apt-key add -
+echo "deb https://apt.miniflux.app/ /" | sudo tee /etc/apt/sources.list.d/miniflux.list &gt; /dev/null
+apt update
+apt install miniflux
+</code></pre></figure>
+<h2 id="%E9%85%8D%E7%BD%AEMiniflux"><a class="header-link" href="/posts/miniflux-build/#%E9%85%8D%E7%BD%AEMiniflux"></a>配置Miniflux</h2>
+<p>默认配置文件为：<code>/etc/miniflux.conf</code>。</p>
+<figure data-raw="# See https://miniflux.app/docs/configuration.html
+
+LISTEN_ADDR=0.0.0.0:8080
+LOG_DATE_TIME=yes
+DATABASE_URL=user=postgres password=<YOURPASSWORD> dbname=miniflux sslmode=disable
+
+# Run SQL migrations automatically
+# RUN_MIGRATIONS=1
+" class="code-block"><pre class="code"><code># See https://miniflux.app/docs/configuration.html
+
+LISTEN_ADDR=0.0.0.0:8080
+LOG_DATE_TIME=yes
+DATABASE_URL=user=postgres password=&lt;YOURPASSWORD&gt; dbname=miniflux sslmode=disable
+
+# Run SQL migrations automatically
+# RUN_MIGRATIONS=1
+</code></pre></figure>
+<p>之后线将刚刚创建的数据库用户<code>miniflux</code>设置为超级用户。</p>
+<figure data-raw="$ sudo su - postgres
+$ psql
+> ALTER USER miniflux WITH SUPERUSER;
+" class="code-block"><pre class="code"><code>$ sudo su - postgres
+$ psql
+&gt; ALTER USER miniflux WITH SUPERUSER;
+</code></pre></figure>
+<p>使用以下指令创建数据库表，并创建用户：</p>
+<figure data-raw="$ miniflux -c /etc/miniflux.conf -migrate
+$ miniflux -c /etc/miniflux.conf -create-admin
+" class="code-block"><pre class="code"><code>$ miniflux -c /etc/miniflux.conf -migrate
+$ miniflux -c /etc/miniflux.conf -create-admin
+</code></pre></figure>
+<p>之后将<code>miniflux</code>切换回普通用户。</p>
+<figure data-raw="$ sudo su - postgres
+$ psql
+> ALTER USER miniflux WITH NOSUPERUSER;
+" class="code-block"><pre class="code"><code>$ sudo su - postgres
+$ psql
+&gt; ALTER USER miniflux WITH NOSUPERUSER;
+</code></pre></figure>
+<p>最后重新启动<code>miniflux</code>。</p>
+<figure data-raw="$ sudo systemctl restart miniflux
+" class="code-block"><pre class="code"><code>$ sudo systemctl restart miniflux
+</code></pre></figure>
+<h2 id="%E9%85%8D%E7%BD%AESSL%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><a class="header-link" href="/posts/miniflux-build/#%E9%85%8D%E7%BD%AESSL%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"></a>配置SSL（可选）</h2>
+<p>使用nginx转发流量，可以将服务器套在Cloudflare下面。</p>
+<p>编辑nginx的服务器配置文件，创建一个端口为443的服务器，并指定SSL key的位置：</p>
+<figure data-raw="server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+
+    server_name miniflux;
+
+    ssl_certificate /path/to/server.crt;
+    ssl_certificate_key /path/to/server.key;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+    location / {
+            proxy_pass  http://127.0.0.1:8080;
+    }
+}
+" class="code-block"><pre class="code"><code>server {
+    listen 443 ssl default_server;
+    listen [::]:443 ssl default_server;
+
+    server_name miniflux;
+
+    ssl_certificate /path/to/server.crt;
+    ssl_certificate_key /path/to/server.key;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+
+    location / {
+            proxy_pass  http://127.0.0.1:8080;
+    }
+}
+</code></pre></figure>
+<p>之后执行<code>sudo systemctl restart nginx</code>，访问服务器地址即可。</p>
+<h2 id="Others"><a class="header-link" href="/posts/miniflux-build/#Others"></a>Others</h2>
+<p>Miniflux支持Fever和Google Reader等第三方服务，参考<a href="https://miniflux.app/docs/services.html" target="_blank" rel="external nofollow noreferrer noopener">官方文档</a>，可以在服务器的设置-&gt;集成页面中配置，之后在别的设备中安装客户端，可以阅读订阅的文章，比网页版好用一些。</p>
+<p><strong>STARRY-S</strong></p>
 
     </main>
     <footer class="post-footer">
       
       <div class="post-tags">
-        <a class="post-tag button" href="/tags/%E6%91%84%E5%BD%B1/" rel="tag"><i class="fas fa-tag"></i>摄影</a><a class="post-tag button" href="/tags/Spring/" rel="tag"><i class="fas fa-tag"></i>Spring</a><a class="post-tag button" href="/tags/Flowers/" rel="tag"><i class="fas fa-tag"></i>Flowers</a>
+        <a class="post-tag button" href="/tags/%E6%95%99%E7%A8%8B/" rel="tag"><i class="fas fa-tag"></i>教程</a><a class="post-tag button" href="/tags/Miniflux/" rel="tag"><i class="fas fa-tag"></i>Miniflux</a><a class="post-tag button" href="/tags/RSS/" rel="tag"><i class="fas fa-tag"></i>RSS</a>
       </div>
       
     </footer>
@@ -371,12 +487,10 @@
   <nav class="page-nav">
     <div class="page-nav-next page-nav-item">
       
-      <a href="/posts/hmcl-minecraft/" rel="next" title="使用HMCL启动Minecraft"><i class="fas fa-angle-left"></i><span class="nav-title">使用HMCL启动Minecraft</span></a>
-      
     </div>
     <div class="page-nav-prev page-nav-item">
       
-      <a href="/posts/spring/" rel="prev" title="Spring"><span class="nav-title">Spring</span><i class="fas fa-angle-right"></i></a>
+      <a href="/posts/sama-quzao/" rel="prev" title="电脑换壳——先马趣造"><span class="nav-title">电脑换壳——先马趣造</span><i class="fas fa-angle-right"></i></a>
       
     </div>
   </nav>
@@ -442,9 +556,9 @@
         "sendButtonText": "去评论",
         "noCommentText": "这个页面还没有评论，现在就去评论吧！",
         "failText": "你可能达到了 API 请求频率上限，请等待一段时间再刷新。",
-        "title": "Spring - 2",
+        "title": "自建RSS服务器：Miniflux",
         "queryString": window.location.search,
-        "basePath": "/posts/spring-2/",
+        "basePath": "/posts/miniflux-build/",
         "containerID": "comment-results"
       }).then(() => {
         // https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
@@ -561,13 +675,49 @@
       
         <li>
           
-          <a class="list-group-item toc-link" href="#%E6%98%A5%E5%A4%A9%E6%9D%A5%E4%BA%86%E3%80%82">春天来了。</a>
+          <a class="list-group-item toc-link" href="#%E5%87%86%E5%A4%87">准备</a>
           
         </li>
       
         <li>
           
-          <a class="list-group-item toc-link" href="#Spring-2">Spring - 2</a>
+          <a class="list-group-item toc-link" href="#%E5%AE%89%E8%A3%85">安装</a>
+          
+          
+      <ol >
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A">配置数据库：</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E5%AE%89%E8%A3%85Miniflux%EF%BC%9A">安装Miniflux：</a>
+          
+        </li>
+      
+      </ol>
+      
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E9%85%8D%E7%BD%AEMiniflux">配置Miniflux</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#%E9%85%8D%E7%BD%AESSL%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89">配置SSL（可选）</a>
+          
+        </li>
+      
+        <li>
+          
+          <a class="list-group-item toc-link" href="#Others">Others</a>
           
         </li>
       
@@ -652,4 +802,4 @@
 
   </body>
 </html>
-<!-- Page built by Hikaru v1.12.1 at 2022-03-01T14:28:08.422Z. -->
+<!-- Page built by Hikaru v1.12.1 at 2022-03-01T14:28:08.388Z. -->
