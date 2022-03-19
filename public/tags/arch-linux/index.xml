@@ -1,0 +1,43 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Arch Linux - 标签 - STARRY-S&#39; Blog</title>
+        <link>https://blog.starry-s.moe/tags/arch-linux/</link>
+        <description>Arch Linux - 标签 - STARRY-S&#39; Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>hxstarrys@gmail.com (STARRY-S)</managingEditor>
+            <webMaster>hxstarrys@gmail.com (STARRY-S)</webMaster><lastBuildDate>Sat, 25 Sep 2021 22:20:03 &#43;0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/arch-linux/" rel="self" type="application/rss+xml" /><item>
+    <title>使用树莓派搭建一个NAS</title>
+    <link>https://blog.starry-s.moe/posts/raspberry_pi_nas/</link>
+    <pubDate>Sat, 25 Sep 2021 22:20:03 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/raspberry_pi_nas/</guid>
+    <description><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>]]></description>
+</item><item>
+    <title>联想R7000P安装Arch Linux的常见问题</title>
+    <link>https://blog.starry-s.moe/posts/lenovo-r7000p/</link>
+    <pubDate>Mon, 22 Mar 2021 19:51:32 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/lenovo-r7000p/</guid>
+    <description><![CDATA[<blockquote>
+<p>本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。</p>
+</blockquote>
+<p>旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&hellip;</p>
+<p>于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。</p>
+<p>所以隔了这么久我终于更新博客了。</p>]]></description>
+</item><item>
+    <title>解决笔记本外接HIDPI显示器的缩放问题</title>
+    <link>https://blog.starry-s.moe/posts/laptop-dualscreen-hidpi-scale/</link>
+    <pubDate>Sat, 09 Jan 2021 22:12:54 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/laptop-dualscreen-hidpi-scale/</guid>
+    <description><![CDATA[<p>前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经<a href="/posts/archlinux-pavilion-gaming-laptop/" rel="">配置好了optimus-manager</a>，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。</p>
+<p>然后一看4K屏上的字小得瞎眼。</p>
+<p>如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。</p>]]></description>
+</item><item>
+    <title>惠普光影精灵4在Arch Linux下使用Optimus Manager配置双显卡</title>
+    <link>https://blog.starry-s.moe/posts/archlinux-pavilion-gaming-laptop/</link>
+    <pubDate>Sun, 19 Jul 2020 15:29:57 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/archlinux-pavilion-gaming-laptop/</guid>
+    <description><![CDATA[<p>自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, <del>尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下</del>（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。</p>]]></description>
+</item></channel>
+</rss>

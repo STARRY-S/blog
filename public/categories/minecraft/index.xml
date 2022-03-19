@@ -1,0 +1,41 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Minecraft - 分类 - STARRY-S&#39; Blog</title>
+        <link>https://blog.starry-s.moe/categories/minecraft/</link>
+        <description>Minecraft - 分类 - STARRY-S&#39; Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>hxstarrys@gmail.com (STARRY-S)</managingEditor>
+            <webMaster>hxstarrys@gmail.com (STARRY-S)</webMaster><lastBuildDate>Tue, 14 Dec 2021 17:58:19 &#43;0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/minecraft/" rel="self" type="application/rss+xml" /><item>
+    <title>Java版Minecraft修复log4j漏洞</title>
+    <link>https://blog.starry-s.moe/posts/minecraft-log4j2-fix/</link>
+    <pubDate>Tue, 14 Dec 2021 17:58:19 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/minecraft-log4j2-fix/</guid>
+    <description><![CDATA[<p>11号中午(CST)，咱收到了Cloudflare发来的安全邮件，提醒我Apache Log4j存在严重0 day漏洞，</p>
+<p>不过直到第二天咱在B站上看到了有Up主直播Minecraft的过程中电脑变矿机了，我才意识到事情的严重性。</p>
+<p>还好咱的Minecraft服务器玩的人比较少，停服升级Fabric并下载了Minecraft官方提供的有关log4j的配置文件，
+还好没有受到影响。</p>
+<p>所以咱把配置方法整理一下写在这里帮助一下有需要的人。</p>]]></description>
+</item><item>
+    <title>使用HMCL启动Minecraft</title>
+    <link>https://blog.starry-s.moe/posts/hmcl-minecraft/</link>
+    <pubDate>Sun, 29 Jul 2018 17:26:35 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/hmcl-minecraft/</guid>
+    <description><![CDATA[<p>终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( <del>没钱买鼠标？</del> )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。</p>]]></description>
+</item><item>
+    <title>树莓派之我的世界服务器</title>
+    <link>https://blog.starry-s.moe/posts/raspberrypi-mc-server/</link>
+    <pubDate>Fri, 25 Nov 2016 15:01:28 &#43;0000</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/raspberrypi-mc-server/</guid>
+    <description><![CDATA[<div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。</div>
+        </div>
+    </div>
+<p>刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。</p>]]></description>
+</item></channel>
+</rss>

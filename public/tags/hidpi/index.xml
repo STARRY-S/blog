@@ -1,0 +1,17 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>HIDPI - 标签 - STARRY-S&#39; Blog</title>
+        <link>https://blog.starry-s.moe/tags/hidpi/</link>
+        <description>HIDPI - 标签 - STARRY-S&#39; Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>hxstarrys@gmail.com (STARRY-S)</managingEditor>
+            <webMaster>hxstarrys@gmail.com (STARRY-S)</webMaster><lastBuildDate>Sat, 09 Jan 2021 22:12:54 &#43;0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/hidpi/" rel="self" type="application/rss+xml" /><item>
+    <title>解决笔记本外接HIDPI显示器的缩放问题</title>
+    <link>https://blog.starry-s.moe/posts/laptop-dualscreen-hidpi-scale/</link>
+    <pubDate>Sat, 09 Jan 2021 22:12:54 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/laptop-dualscreen-hidpi-scale/</guid>
+    <description><![CDATA[<p>前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经<a href="/posts/archlinux-pavilion-gaming-laptop/" rel="">配置好了optimus-manager</a>，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。</p>
+<p>然后一看4K屏上的字小得瞎眼。</p>
+<p>如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。</p>]]></description>
+</item></channel>
+</rss>

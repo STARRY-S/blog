@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>使用树莓派搭建一个NAS - STARRY-S&#39; Blog</title><meta name="Description" content=""><meta property="og:title" content="使用树莓派搭建一个NAS" />
+<meta property="og:description" content="把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.starry-s.moe/posts/raspberry_pi_nas/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-09-25T22:20:03+08:00" />
+<meta property="article:modified_time" content="2021-09-29T01:07:48+08:00" /><meta property="og:site_name" content="STARRY-S&#39; Blog" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="使用树莓派搭建一个NAS"/>
+<meta name="twitter:description" content="把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。"/>
+<meta name="application-name" content="STARRY-S&#39; Blog">
+<meta name="apple-mobile-web-app-title" content="STARRY-S&#39; Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.starry-s.moe/posts/raspberry_pi_nas/" /><link rel="prev" href="https://blog.starry-s.moe/posts/build-desktop/" /><link rel="next" href="https://blog.starry-s.moe/posts/minecraft-log4j2-fix/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "使用树莓派搭建一个NAS",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.starry-s.moe\/posts\/raspberry_pi_nas\/"
+        },"genre": "posts","keywords": "树莓派, Arch Linux, Samba, NAS","wordcount":  3145 ,
+        "url": "https:\/\/blog.starry-s.moe\/posts\/raspberry_pi_nas\/","datePublished": "2021-09-25T22:20:03+08:00","dateModified": "2021-09-29T01:07:48+08:00","publisher": {
+            "@type": "Organization",
+            "name": "STARRY-S"},"author": {
+                "@type": "Person",
+                "name": "STARRY-S"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="auto" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="STARRY-S&#39; Blog">STARRY-S&#39; Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"><i class='fa-solid fa-house'></i> 主页 </a><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="STARRY-S&#39; Blog">STARRY-S&#39; Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/" title=""><i class='fa-solid fa-house'></i>主页</a><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">使用树莓派搭建一个NAS</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://starry-s.moe" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>STARRY-S</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%95%99%E7%A8%8B/"><i class="far fa-folder fa-fw"></i>教程</a>&nbsp;<a href="/categories/%E6%A0%91%E8%8E%93%E6%B4%BE/"><i class="far fa-folder fa-fw"></i>树莓派</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-09-25">2021-09-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3145 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#准备工作">准备工作</a></li>
+    <li><a href="#装系统">装系统</a></li>
+    <li><a href="#配置网络">配置网络</a>
+      <ul>
+        <li><a href="#无线网络">无线网络</a></li>
+        <li><a href="#配置有线网络">配置有线网络</a></li>
+        <li><a href="#配置防火墙">配置防火墙</a></li>
+      </ul>
+    </li>
+    <li><a href="#samba">Samba</a>
+      <ul>
+        <li><a href="#配置服务器">配置服务器</a></li>
+        <li><a href="#访问服务器">访问服务器</a></li>
+      </ul>
+    </li>
+    <li><a href="#frp内网穿透">Frp内网穿透</a></li>
+    <li><a href="#others">Others</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<meting-js url="https://music.starry-s.moe:2053/music/070b_0208_540c_0af9917fa85b6e8d26efcf2d4d0a6706.m4a" name="紫雨UNITED まさかのアリス突撃編" artist="岩杉夏 / イザベル / あゆ" cover="https://music.starry-s.moe:2053/music/cover/109951166006696770.jpg" theme="#3d79d9"></meting-js>
+<blockquote>
+<p>这歌太魔性了哈哈哈哈</p>
+</blockquote>
+<h2 id="准备工作">准备工作</h2>
+<ul>
+<li>树莓派以及所需的电源（废话）</li>
+<li>16G以上的高速内存卡用来写系统镜像</li>
+<li>硬盘（可以选择买移动硬盘或者直接买硬盘盒和机械硬盘自己组装）</li>
+<li>网络设备：路由器、网线</li>
+<li>（非必须）键盘、显示器、连接线等</li>
+</ul>
+<p>树莓派我使用的是高一时买的树莓派3B（满满的回忆），硬盘是上半年为了存照片而买的西数2T移动硬盘，因为暂时闲置所以拿来一起组个云盘玩。</p>
+<p>内存卡需要质量好的不容易坏而且读写比较快的卡。</p>
+<h2 id="装系统">装系统</h2>
+<p>系统咱安装的是<a href="https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3" target="_blank" rel="noopener noreffer">ArchLinux ARM</a>，安装教程直接看官方文档即可。</p>
+<p>一开始咱为了发挥树莓派3B的64位CPU的性能，我下载了64位的系统镜像，但是在配置无线连接的时候（可能是）驱动问题卡死，因为急着睡觉所以重新格式化内存卡后被迫安装32位的系统。</p>
+<p>安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。</p>
+<p>在格式化<code>root</code>分区时一开始想尝试一下树莓派上跑<code>btrfs</code>，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了<code>ext4</code>，<del>不然我一晚上不用睡觉了</del>。</p>
+<p>在分区时除了<code>boot</code>和<code>root</code>之外，我额外分了2G的<code>swap</code>分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（<del>这话咋读着这么别扭呢</del>）</p>
+<p>因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。</p>
+<p>把移动硬盘接到树莓派后<code>lsblk</code>查看以下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。</p>
+<p>如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅<a href="https://wiki.archlinux.org/title/fdisk" target="_blank" rel="noopener noreffer">Wiki (fdisk)</a>，因为往博客上写的话太难理解了别人肯定看不懂。</p>
+<p>最后咱把2T移动硬盘格式化成这个样子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># fdisk -l /dev/sda
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device          Start        End    Sectors  Size Type
+</span></span><span class="line"><span class="cl">/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+</span></span><span class="line"><span class="cl">/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+</span></span></code></pre></div><p>其中的1T打算格式化为<code>btrfs</code>给Samba用，其余的800G打算格式化为<code>NTFS</code>留着给Windows当个移动硬盘。</p>
+<p>创建分区时别忘了更改分区类型，给Linux用的就是<code>Linux filesystem</code>，给Windows用的就是<code>Microsoft basic data</code>，
+不然机械硬盘连接到Windows系统中将不显示分区，或者就是一直提醒你：该分区不可用，然后让你格式化，到时候一不小心点错了可是会丢数据的。</p>
+<p>安装<code>btrfs-progs</code>和<code>ntfs-3g</code>，之后格式化硬盘（NTFS还是建议到Windows系统中格式化）。</p>
+<p>格式化btrfs的时候加个<code>-L</code>参数设置分区的标签，这样方便在fstab中设置开机自动挂载。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ lsblk                                # 一定要看清楚自己格式化的分区名字
+</span></span><span class="line"><span class="cl">$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+</span></span></code></pre></div><p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区和移动硬盘。</p>
+<pre tabindex="0"><code># &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+/dev/mmcblk0p1  /boot   vfat    defaults        0       0
+LABEL=swap      none    swap    defaults        0       0
+LABEL=samba     /samba  btrfs   defaults        0       0
+</code></pre><p>重启系统后如果正常的话，分区会被自动挂载。</p>
+<h2 id="配置网络">配置网络</h2>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。</p>
+<p>除非你能保证你执行的每个命令都肥肠正确。</p>
+</div>
+        </div>
+    </div>
+<h3 id="无线网络">无线网络</h3>
+<p>因为我电脑离路由器肥肠远，所以为了方便我还要给树莓派配置无线网络。首先照着<a href="https://wiki.archlinux.org/title/Netctl" target="_blank" rel="noopener noreffer">Wiki上的netctl页面</a>安装了<code>wifi-menu</code>所需要用的<code>dialog</code>，然后就用<code>wifi-menu</code>连接wifi了。不过为了方便以后连接，我需要给他设置静态IP：</p>
+<p>首先使用你比较喜欢的文本编辑器打开<code>wifi-menu</code>自动生成的配置文件，并修改成以下的样子</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf"># /etc/netctl.d/wlan0-YourWifiName
+
+Description=&#39;Automatically generated profile by wifi-menu&#39;
+Interface=wlan0
+Connection=wireless
+Security=wpa
+ESSID=Your Wifi Name
+IP=static
+Address=(&#39;192.168.xxx.xxx/24&#39;)
+Gateway=&#39;192.168.xxx.1&#39;
+DNS=&#39;8.8.8.8&#39;
+Key=YOUR WIFI PASSWORD
+</code></pre><p>其中修改<code>Address</code>为你想设置的CIDR地址、<code>Gateway</code>为默认网关、以及<code>DNS</code>。</p>
+<p>最后修改<code>Key</code>为Wifi密码（明文），如果需要加密的话可以去wiki上找相应方法。</p>
+<p>之后<code>sudo netctl enable wlan0-YourWifiName</code>设置好开机自动连接即可。</p>
+<p>这时候聪明的小伙伴会想到：我想使用网线联网并配置静态IP，该怎么办呢？</p>
+<h3 id="配置有线网络">配置有线网络</h3>
+<p>默认情况下，有线接口<code>eth0</code>使用<code>systemd-network</code>配置了<code>DHCP</code>，所以我们不需要改<code>netctl</code>的配置文件，只编辑<code>/etc/systemd/network/eth0.network</code>这个配置文件改成静态IP地址就好了。</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Match]
+Name=eth0
+
+[Network]
+Address=192.168.xxx.xxx/24
+Gateway=192.168.xxx.1
+DNS=8.8.8.8
+</code></pre><p>重启系统后，使用<code>ip addr</code>检查设备的IP地址是否正确。</p>
+<h3 id="配置防火墙">配置防火墙</h3>
+<p>首先安装<code>ufw</code>。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫<strong>Uncomplicated Filewall</strong>，所以咱先用ufw配置防火墙）</p>
+<p>食用方法请参见<a href="https://wiki.archlinux.org/title/Uncomplicated_Firewall" target="_blank" rel="noopener noreffer">Wiki页面</a>。</p>
+<p>因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：</p>
+<pre tabindex="0"><code># Create or Edit /etc/ufw/applications.d/samba, add following content:
+
+[Samba]
+title=LanManager-like file and printer server for Unix
+description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
+ports=137,138/udp|139,445/tcp
+</code></pre><p>之后root账户执行<code>ufw app update Samba</code>加载配置文件，然后<code>ufw allow Samba</code>允许Samba的端口。</p>
+<p>如果你的树莓派上还装有其他服务（比如http，https等），别忘了<code>ufw allow PORT</code>开放端口，尤其是别忘了开SSH端口。</p>
+<p>最后<code>ufw status</code>查看防火墙状态信息，<code>ufw enable</code>开启防火墙。</p>
+<h2 id="samba">Samba</h2>
+<p>配合<a href="https://wiki.archlinux.org/title/Samba" target="_blank" rel="noopener noreffer">Arch Wiki</a>食用。</p>
+<p>首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：</p>
+<pre tabindex="0"><code>$ sudo groupadd -r sambausers          # 新建用户组
+$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+</code></pre><p>（咱写的很详细了吧</p>
+<h3 id="配置服务器">配置服务器</h3>
+<p>安装好<code>samba</code>安装包后，需要手动去<code>/etc/samba/</code>创建<code>smb.conf</code>配置文件，可以到<a href="https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD" target="_blank" rel="noopener noreffer">Samba git repository</a>中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf"># /etc/samba/smb.conf
+
+[global]
+# 修改工作组的名字
+workgroup = MYGROUP
+# 服务器描述
+server string = Raspberry pi Samba Server
+
+# 在文件末尾添加共享文件夹目录及相关配置
+[sambashare]
+comment = Sample share file.
+path = /path/to/your/samba/folder
+writable = yes
+browsable = yes
+create mask = 0755
+directory mask = 0755
+read only = no
+guest ok = no  # 允许访客随意登录
+</code></pre><p>配置好文件后，启动<code>smb.service</code>和<code>nmb.service</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now smb.service
+</span></span><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now nmb.service
+</span></span></code></pre></div><h3 id="访问服务器">访问服务器</h3>
+<p>咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接<code>smb://192.168.xxx.xxx</code>，
+输入用户组、用户名和密码登录就可以访问共享文件夹。</p>
+<p>Windows系统中，首先需要到 控制面板-&gt;程序-&gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
+打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
+<h2 id="frp内网穿透">Frp内网穿透</h2>
+<blockquote>
+<p>配合<a href="https://gofrp.org/docs/" target="_blank" rel="noopener noreffer">frp文档</a>食用更佳</p>
+</blockquote>
+<p>首先在frp的<a href="https://github.com/fatedier/frp/releases" target="_blank" rel="noopener noreffer">GitHub Release</a>页面下载安装包。</p>
+<p>如果是树莓派用的话就下载<code>arm</code>版本的安装包即可。Arch Linux可以在ArchLinux CN源或AUR中安装<code>frpc</code>和<code>frps</code>作为客户端和服务端。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 树莓派上下载编译好的文件</span>
+</span></span><span class="line"><span class="cl">$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl"><span class="c1"># 解压</span>
+</span></span><span class="line"><span class="cl">$ tar -zxvf ./frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> frp_0.37.1_linux_arm/
+</span></span><span class="line"><span class="cl"><span class="c1"># 编辑配置文件</span>
+</span></span><span class="line"><span class="cl">$ vim ./frpc.ini
+</span></span><span class="line"><span class="cl">$ ./frpc -c ./frpc.ini
+</span></span></code></pre></div><p>客户端配置文件的格式可参考如下：</p>
+<pre tabindex="0"><code>[common]
+server_addr = server ip
+server_port = 6000
+
+[samba]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 445
+remote_port = 6003
+</code></pre><p>其中端口号和<code>token</code>按需要自行更改，Samba服务的<code>tcp</code>端口号为<code>445</code>。</p>
+<p>服务端配置文件格式如下：</p>
+<pre tabindex="0"><code>[common]
+bind_port = 6000
+</code></pre><p>为了安全，别忘了配置<a href="https://gofrp.org/docs/reference/server-configures/#%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81" target="_blank" rel="noopener noreffer">权限验证</a>，同时别忘了修改服务器的防火墙设置。</p>
+<h2 id="others">Others</h2>
+<p>所以到此为止，咱的Samba服务器就搭建好了。</p>
+<p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>
+<!-- raw HTML omitted -->
+<p><strong>by STARRY-S</strong></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-09-29</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a>,&nbsp;<a href="/tags/arch-linux/">Arch Linux</a>,&nbsp;<a href="/tags/samba/">Samba</a>,&nbsp;<a href="/tags/nas/">NAS</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/build-desktop/" class="prev" rel="prev" title="我们来组装一台电脑吧"><i class="fas fa-angle-left fa-fw"></i>我们来组装一台电脑吧</a>
+            <a href="/posts/minecraft-log4j2-fix/" class="next" rel="next" title="Java版Minecraft修复log4j漏洞">Java版Minecraft修复log4j漏洞<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.94.2">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2016 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://starry-s.moe" target="_blank">STARRY-S</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/aplayer/APlayer.min.css"><link rel="stylesheet" href="/lib/aplayer/dark.min.css"><script type="text/javascript" src="https://starry-s-blog.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/aplayer/APlayer.min.js"></script><script type="text/javascript" src="/lib/meting/Meting.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":9999},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-70DHXLE02Z', { 'anonymize_ip': true });
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-70DHXLE02Z" async></script></body>
+</html>

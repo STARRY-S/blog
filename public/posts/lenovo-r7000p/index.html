@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>联想R7000P安装Arch Linux的常见问题 - STARRY-S&#39; Blog</title><meta name="Description" content=""><meta property="og:title" content="联想R7000P安装Arch Linux的常见问题" />
+<meta property="og:description" content="
+本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。
+
+旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&hellip;
+于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) &#43; R7 4800H还是很香的，打守望屁股终于能稳定200&#43;fps了。
+所以隔了这么久我终于更新博客了。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://blog.starry-s.moe/posts/lenovo-r7000p/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-22T19:51:32+08:00" />
+<meta property="article:modified_time" content="2021-04-11T13:50:48+08:00" /><meta property="og:site_name" content="STARRY-S&#39; Blog" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="联想R7000P安装Arch Linux的常见问题"/>
+<meta name="twitter:description" content="
+本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。
+
+旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&hellip;
+于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) &#43; R7 4800H还是很香的，打守望屁股终于能稳定200&#43;fps了。
+所以隔了这么久我终于更新博客了。"/>
+<meta name="application-name" content="STARRY-S&#39; Blog">
+<meta name="apple-mobile-web-app-title" content="STARRY-S&#39; Blog"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://blog.starry-s.moe/posts/lenovo-r7000p/" /><link rel="prev" href="https://blog.starry-s.moe/posts/xiaomi-r3g-ttl-flash/" /><link rel="next" href="https://blog.starry-s.moe/posts/spring-4/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "联想R7000P安装Arch Linux的常见问题",
+        "inLanguage": "zh-CN",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/blog.starry-s.moe\/posts\/lenovo-r7000p\/"
+        },"genre": "posts","keywords": "Arch Linux, Lenovo R7000P","wordcount":  2875 ,
+        "url": "https:\/\/blog.starry-s.moe\/posts\/lenovo-r7000p\/","datePublished": "2021-03-22T19:51:32+08:00","dateModified": "2021-04-11T13:50:48+08:00","publisher": {
+            "@type": "Organization",
+            "name": "STARRY-S"},"author": {
+                "@type": "Person",
+                "name": "STARRY-S"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="auto" header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="STARRY-S&#39; Blog">STARRY-S&#39; Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/"><i class='fa-solid fa-house'></i> 主页 </a><a class="menu-item" href="/posts/"> 文章 </a><a class="menu-item" href="/tags/"> 标签 </a><a class="menu-item" href="/categories/"> 分类 </a><a class="menu-item" href="/about/"> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="STARRY-S&#39; Blog">STARRY-S&#39; Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="搜索文章标题或内容..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/" title=""><i class='fa-solid fa-house'></i>主页</a><a class="menu-item" href="/posts/" title="">文章</a><a class="menu-item" href="/tags/" title="">标签</a><a class="menu-item" href="/categories/" title="">分类</a><a class="menu-item" href="/about/" title="">关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">联想R7000P安装Arch Linux的常见问题</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="https://starry-s.moe" title="Author" target="_blank" rel="noopener noreffer author" class="author"><i class="fas fa-user-circle fa-fw"></i>STARRY-S</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/linux/"><i class="far fa-folder fa-fw"></i>Linux</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-03-22">2021-03-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2875 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#安装arch-linux">安装Arch Linux</a>
+      <ul>
+        <li><a href="#屏幕亮度不能调节">屏幕亮度不能调节</a></li>
+        <li><a href="#gdm不自启动">GDM不自启动</a></li>
+        <li><a href="#optimus-manager">Optimus Manager</a></li>
+      </ul>
+    </li>
+    <li><a href="#windows">Windows</a></li>
+    <li><a href="#others">Others</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><blockquote>
+<p>本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。</p>
+</blockquote>
+<p>旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&hellip;</p>
+<p>于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。</p>
+<p>所以隔了这么久我终于更新博客了。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<meting-js url="https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_2660462601_5de2_ff1b_7e9f_3314960c90b9d68875a3d640df5d283a.mp4" name="Underground" artist="Lindsey Stirling" cover="https://music.starry-s.moe:2053/music/cover/109951164174520818.jpg" theme="#CC8888"></meting-js>
+<hr>
+<h2 id="安装arch-linux">安装Arch Linux</h2>
+<p>到手后就把之前买的西数SN750 1T固态换到了新电脑上，顺便格式化重装了个系统。</p>
+<p>双M2插槽配上1T + 500G NVME，美汁汁。</p>
+<p>于是直接给Linux分了150G root，16G SWAP，500G HOME（有点奢侈）， 然后还分了100G用来存steam游戏，剩下的全扔给Windows。</p>
+<p>装Linux过程中只遇到了终端的警报声有些大这个问题（插耳机时声音依旧从扬声器输出），别的问题都没遇到。</p>
+<p>之前的电脑总是遇到奇葩问题，用旧版本Linux内核关机或者<code>lspci</code>时会卡死，显卡驱动装不好会导致开机死机，声卡驱动一直有问题听歌时音量大一点就爆音，HDMI接口直连的NVIDIA显卡所以显卡驱动没配置好独显不工作时没办法外接显示器(后来才知道type c接口有DP视频输出)。</p>
+<p>新电脑买来装完系统后就遇到了一点小问题网上搜一下就解决了。</p>
+<h3 id="屏幕亮度不能调节">屏幕亮度不能调节</h3>
+<p><del>开个浏览器能把眼睛晃瞎</del></p>
+<p>网上查了一下只有在bios设置为独显直连时解决亮度不能调节的方法，在混合显卡模式下，存在<a href="https://bugzilla.opensuse.org/show_bug.cgi?id=1180749" target="_blank" rel="noopener noreffer">AMD显卡亮度用16位值表示而不是8位值表示</a>的这个BUG (Feature?)所以没办法调节亮度。</p>
+<p>所以<code>cat /sys/class/backlight/amdgpu_bl0/actual_brightness</code>得到的是一个大于255的数。</p>
+<p>确保内核和显卡驱动都是最新的情况下，编辑内核参数<code>amdgpu.backlight=0</code>和<code>acpi_backlight=vendor</code>，可以解决混合模式下AMD显卡不能调节亮度这个问题。</p>
+<p>如果你经常切换混合模式和显卡直连模式的话：</p>
+<p>安装显卡驱动<code>xf86-video-amdgpu</code>和<code>nvidia</code>以及按需要安装nvidia的其他组件。</p>
+<p>复制<code>/usr/share/X11/xorg.conf.d/10-nvidia-drm-outputclass.conf</code>到<code>/etc/X11/xorg.conf.d/</code></p>
+<p>编辑<code>/etc/X11/xorg.conf.d/10-nvidia-drm-outputclass.conf</code>在<code>EndSection</code>前添加一行参数允许nvidia驱动调节亮度。</p>
+<pre tabindex="0"><code>Option &#34;RegistryDwords&#34; &#34;EnableBrightnessControl=1&#34;
+</code></pre><p>之后编辑<code>/etc/modprobe.d/blacklist.conf</code>禁用闭源驱动<code>nouveau</code>和<code>ideapad_laptop</code>，让显卡驱动调节亮度。</p>
+<pre tabindex="0"><code># /etc/modprobe.d/blacklist.conf
+
+blacklist nouveau
+blacklist ideapad_laptop
+</code></pre><p>编辑内核参数添加<code>acpi_backlight=vendor</code>和<code>amdgpu.backlight=0</code>。</p>
+<p>以systemd-boot为例:</p>
+<pre tabindex="0"><code># /boot/loader/entries/arch.conf
+
+options acpi_backlight=vendor
+options amdgpu.backlight=0
+</code></pre><p>最后重启电脑就能调亮度了。</p>
+<h3 id="gdm不自启动">GDM不自启动</h3>
+<p>开机时GDM不会自动显示出来而是得手动切TTY2再切回TTY1才能显示。</p>
+<p>查Wiki得知是因为GDM在显卡驱动被加载之前就启动了。</p>
+<p><a href="https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_%28e%29GPU_is_present" target="_blank" rel="noopener noreffer">参照Wiki</a>，设置<a href="https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start" target="_blank" rel="noopener noreffer">KMS早启动</a>。</p>
+<p>编辑<code>/etc/mkinitcpio.conf</code></p>
+<pre tabindex="0"><code># /etc/mkinitcpio.conf
+
+MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm amdgpu radeon)
+</code></pre><p>如果你只使用独显直连模式的话可以去掉<code>amdgpu</code>和<code>radeon</code>。</p>
+<p>然后<code>sudo mkinitcpio -p linux</code>重新生成内核镜像，之后重启。</p>
+<p>这么做会使Wayland在开机时被禁用，所以在混合模式使用AMD显卡开机时无法使用Wayland，<a href="https://wiki.archlinux.org/index.php/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default" target="_blank" rel="noopener noreffer">参见Wiki</a>。</p>
+<p>将<code>/usr/lib/udev/rules.d/61-gdm.rules</code>复制到<code>/etc/udev/rules.d/</code>，并编辑<code>61-gdm.rules</code>将下面这一行注释掉：</p>
+<pre tabindex="0"><code>DRIVER==&#34;nvidia&#34;, RUN+=&#34;/usr/lib/gdm-disable-wayland&#34;
+</code></pre><p>之后重启电脑再开机<code>echo $XDG_SESSION_TYPE</code>就可以检查现在使用的是<code>wayland</code>了。</p>
+<h3 id="optimus-manager">Optimus Manager</h3>
+<p>因为独显功耗太高了，使用独显直连模式在浏览网页写文档这类的轻度工作时电池待机只能2小时，用混合模式的话能待机4.5小时，外加上我也不打那些对性能要求很高的游戏，
+所以日常使用时就在Bios里设置显卡为混合模式。</p>
+<p>然后在Linux系统里安装<code>optimus-manager</code>，修改配置为：使用电池开机时关掉NVIDIA显卡，只让AMD集显工作；有外接电源时则使用“hybrid”混合模式，如果需要玩游戏的话用<a href="https://wiki.archlinux.org/index.php/PRIME#PRIME_render_offload" target="_blank" rel="noopener noreffer">nvidia-prime</a>让独显运行游戏。</p>
+<p>Optimus Manager的配置方法和之前我<a href="/posts/archlinux-pavilion-gaming-laptop/" rel="">之前配置旧电脑时</a>讲的基本一样，唯一区别就是这电脑是AMD，旧电脑是Intel。</p>
+<p>所以编辑配置文件修改了这些地方：</p>
+<pre tabindex="0"><code># /etc/optimus-manager/optimus-manager.conf
+
+# 设置开机自动切换显卡模式
+startup_mode=auto
+
+# 使用电池时关掉独立显卡降低功耗
+startup_auto_battery_mode=integrated
+
+# 使用外接电源时为混合模式
+startup_auto_extpower_mode=hybrid
+
+[amd]
+# 因为安装的xf86-video-amdgpu, 所以修改驱动改为amdgpu
+driver=amdgpu
+</code></pre><p>安装好<code>nvidia-prime</code>后在混合显卡模式（hybrid）下，使用<code>prime-run</code>让独显运行游戏。</p>
+<p>如果想让Steam以独显运行游戏，修改启动参数为<code>prime-run %command%</code>。</p>
+<h2 id="windows">Windows</h2>
+<p>在Windows系统下显卡独连时字体渲染有些蹦，设置了ClearType之后还是没啥改善。</p>
+<p>主要是Visual Studio 2019的字体渲染真的瞎眼，最后装了Text Sharp插件换了Jet Brains字体才看起来正常了一些。</p>
+<p>最后在NVIDIA控制面板全局设置里把平滑处理全关了，字体的锯齿才消失。</p>
+<p>貌似是因为NVIDIA把文本编辑器当游戏渲染了。</p>
+<hr>
+<h2 id="others">Others</h2>
+<ul>
+<li>
+<p>在Linux系统里会遇到按Fn+Esc键时FnLock的灯没有亮这个问题，不过不影响FnLock的正常使用，所以就忽视了。</p>
+</li>
+<li>
+<p>如果要用诱骗线充电的话，用optimus-manager把独显关掉（用<code>nvidia-smi</code>得知独显在不使用的情况下仍有5W的功耗），然后装一个CPU功率调节的软件，例如<code>cpupower-gui</code><!-- raw HTML omitted -->AUR<!-- raw HTML omitted -->，设置为节电模式，实测用小米65W GaN充电器给电脑充电，轻度使用没有卡顿掉电的情况。</p>
+</li>
+<li>
+<p>因为之前趁着狗东打折加上买显示器送的100E卡，只花了两百多买了一个紫米20移动电源（<del>板砖</del>），25000毫安且支持100WPD充电。按照上面讲的方法在电池满电的情况下一边轻度使用电脑一边充电，充电宝能用4小时左右，然后笔记本的电池还能续航4至5小时。（实在是因为原装充电器它太沉了）</p>
+</li>
+<li>
+<p>目前来看觉得这电脑还是蛮香的，AMD的CPU性能很强而且比intel版的Y7000P便宜一千块钱。尽管现在已经有二线厂商做AMD 5800系的笔记本了但是4800H的性能依旧够用，RTX3060显卡就当它是空气吧就算发售也是残血而且抢不到。</p>
+</li>
+<li>
+<p>然后就是电脑没有雷电3接口，只有一个支持USB3.2 Gen1的type c接口且支持DP1.2视频输出，不过USB接口倒是挺多的，电脑用到现在没有遇到啥AMD CPU引起的兼容性问题。</p>
+</li>
+</ul>
+<hr>
+<p><figure><a class="lightgallery" href="/posts/lenovo-r7000p/images/1.jpg" title="GNOME 40" data-thumbnail="/posts/lenovo-r7000p/images/1.jpg" data-sub-html="<h2>GNOME 40</h2><p>GNOME 40</p>">
+        <img
+            class="lazyload"
+            src="/svg/loading.min.svg"
+            data-src="images/1.jpg"
+            data-srcset="/posts/lenovo-r7000p/images/1.jpg, images/1.jpg 1.5x, /posts/lenovo-r7000p/images/1.jpg 2x"
+            data-sizes="auto"
+            alt="/posts/lenovo-r7000p/images/1.jpg" />
+    </a><figcaption class="image-caption">GNOME 40</figcaption>
+    </figure></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-04-11</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/arch-linux/">Arch Linux</a>,&nbsp;<a href="/tags/lenovo-r7000p/">Lenovo R7000P</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/xiaomi-r3g-ttl-flash/" class="prev" rel="prev" title="小米路由器3G之使用TTL串口刷机救砖"><i class="fas fa-angle-left fa-fw"></i>小米路由器3G之使用TTL串口刷机救砖</a>
+            <a href="/posts/spring-4/" class="next" rel="next" title="Spring - 4">Spring - 4<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">由 <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.94.2">Hugo</a> 强力驱动 | 主题 - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2016 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="https://starry-s.moe" target="_blank">STARRY-S</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/aplayer/APlayer.min.css"><link rel="stylesheet" href="/lib/aplayer/dark.min.css"><script type="text/javascript" src="https://starry-s-blog.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.stemmer.support.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.zh.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/aplayer/APlayer.min.js"></script><script type="text/javascript" src="/lib/meting/Meting.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":9999},"comment":{},"search":{"highlightTag":"em","lunrLanguageCode":"zh","lunrSegmentitURL":"/lib/lunr/lunr.segmentit.js","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-70DHXLE02Z', { 'anonymize_ip': true });
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-70DHXLE02Z" async></script></body>
+</html>

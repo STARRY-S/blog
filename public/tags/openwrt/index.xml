@@ -1,0 +1,25 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>OpenWrt - 标签 - STARRY-S&#39; Blog</title>
+        <link>https://blog.starry-s.moe/tags/openwrt/</link>
+        <description>OpenWrt - 标签 - STARRY-S&#39; Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>hxstarrys@gmail.com (STARRY-S)</managingEditor>
+            <webMaster>hxstarrys@gmail.com (STARRY-S)</webMaster><lastBuildDate>Fri, 22 Jan 2021 22:10:01 &#43;0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/openwrt/" rel="self" type="application/rss+xml" /><item>
+    <title>小米路由器3G之使用TTL串口刷机救砖</title>
+    <link>https://blog.starry-s.moe/posts/xiaomi-r3g-ttl-flash/</link>
+    <pubDate>Fri, 22 Jan 2021 22:10:01 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/xiaomi-r3g-ttl-flash/</guid>
+    <description><![CDATA[<p>本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。</p>
+<p>然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。</p>
+<p>之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。</p>
+<p>(在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意&hellip;)</p>]]></description>
+</item><item>
+    <title>小米路由器3G折腾之刷OpenWrt记录</title>
+    <link>https://blog.starry-s.moe/posts/xiaomi_r3g_openwrt/</link>
+    <pubDate>Tue, 19 Feb 2019 00:49:20 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/xiaomi_r3g_openwrt/</guid>
+    <description><![CDATA[<p>生命不息, 折腾不止&hellip;</p>]]></description>
+</item></channel>
+</rss>

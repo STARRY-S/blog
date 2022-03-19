@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>OpenGL - 分类 - STARRY-S&#39; Blog</title>
+        <link>https://blog.starry-s.moe/categories/opengl/</link>
+        <description>OpenGL - 分类 - STARRY-S&#39; Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>hxstarrys@gmail.com (STARRY-S)</managingEditor>
+            <webMaster>hxstarrys@gmail.com (STARRY-S)</webMaster><lastBuildDate>Mon, 10 May 2021 21:33:10 &#43;0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/opengl/" rel="self" type="application/rss+xml" /><item>
+    <title>Learn OpenGL</title>
+    <link>https://blog.starry-s.moe/posts/learn_opengl/</link>
+    <pubDate>Mon, 10 May 2021 21:33:10 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/learn_opengl/</guid>
+    <description><![CDATA[<p>其实咱很久很久以前就开始看<a href="https://learnopengl-cn.github.io/" target="_blank" rel="noopener noreffer">LearnOpenGL CN</a>这个网站了&hellip;&hellip;</p>]]></description>
+</item></channel>
+</rss>

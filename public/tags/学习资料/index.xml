@@ -1,0 +1,23 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>学习资料 - 标签 - STARRY-S&#39; Blog</title>
+        <link>https://blog.starry-s.moe/tags/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/</link>
+        <description>学习资料 - 标签 - STARRY-S&#39; Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>hxstarrys@gmail.com (STARRY-S)</managingEditor>
+            <webMaster>hxstarrys@gmail.com (STARRY-S)</webMaster><lastBuildDate>Mon, 10 May 2021 21:33:10 &#43;0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/" rel="self" type="application/rss+xml" /><item>
+    <title>Learn OpenGL</title>
+    <link>https://blog.starry-s.moe/posts/learn_opengl/</link>
+    <pubDate>Mon, 10 May 2021 21:33:10 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/learn_opengl/</guid>
+    <description><![CDATA[<p>其实咱很久很久以前就开始看<a href="https://learnopengl-cn.github.io/" target="_blank" rel="noopener noreffer">LearnOpenGL CN</a>这个网站了&hellip;&hellip;</p>]]></description>
+</item><item>
+    <title>51单片机习题整理</title>
+    <link>https://blog.starry-s.moe/posts/learn-mcs8051/</link>
+    <pubDate>Tue, 03 Nov 2020 20:19:36 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://blog.starry-s.moe/posts/learn-mcs8051/</guid>
+    <description><![CDATA[<p>赶在<del>期中考试</del>(骑磨烤柿)前把单片机的课后习题整理出来&hellip;</p>
+<p>(实在是没什么可拿来更新博客的了, 就干脆写点复习资料吧&hellip;)</p>]]></description>
+</item></channel>
+</rss>
