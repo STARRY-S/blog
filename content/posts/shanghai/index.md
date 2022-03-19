@@ -22,16 +22,6 @@ categories:
 
 ![](images/IMG_4138-1.jpg)
 
-<!--
-{
-    "name": "光の旋律",
-    "artist": "Kalafina",
-    "theme": "#444",
-    "url": "https://music.starry-s.moe:2053/music/Hikari_No_Senritsu.mp3",
-    "cover": "https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/Hikari_No_Senritsu.mp3" name="光の旋律" artist="Kalafina" cover="https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg" theme="#444" >}}
 
 很久以前就有想去上海的念头了。
@@ -47,16 +37,6 @@ categories:
 ------
 
 ![龙阳路](images/IMG_3617-1.jpg "龙阳路")
-
-<!--
-{
-    "name": "aquarium",
-    "artist": "Víctor Vergara",
-    "theme": "#3333aa",
-    "url": "https://music.starry-s.moe:2053/music/4098_d136_0a0a_ea008ceca6a370b79cdc52db597556d0.mp3",
-    "cover": "https://music.starry-s.moe:2053/music/cover/1379887099097990.jpg"
-}
--->
 
 {{< music url="https://music.starry-s.moe:2053/music/4098_d136_0a0a_ea008ceca6a370b79cdc52db597556d0.mp3" name="aquarium" artist="Víctor Vergara" cover="https://music.starry-s.moe:2053/music/cover/1379887099097990.jpg" theme="#3333aa" >}}
 
@@ -83,16 +63,6 @@ categories:
 ------
 
 ![迪士尼](images/5.jpg "迪士尼")
-
-<!--
-{
-    "name": "遊園施設",
-    "artist": "帆足圭吾",
-    "theme": "#44aa44",
-    "url": "https://music.starry-s.moe:2053/music/540b_075e_0453_cae9f8037d04c81f84993977b01792ec.m4a",
-    "cover": "https://music.starry-s.moe:2053/music/cover/18710389371705314.jpg"
-}
--->
 
 {{< music url="https://music.starry-s.moe:2053/music/540b_075e_0453_cae9f8037d04c81f84993977b01792ec.m4a" name="遊園施設" artist="帆足圭吾" cover="https://music.starry-s.moe:2053/music/cover/18710389371705314.jpg" theme="#44aa44" >}}
 

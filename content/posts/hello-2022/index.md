@@ -14,16 +14,6 @@ categories:
 
 <!--more-->
 
-<!--
-{
-    "name": "How to Love",
-    "artist": "A-One",
-    "theme": "#f11c62",
-    "url": "https://music.starry-s.moe:2053/music/070e_530e_020b_0dd79823b4ddc4a054895ae0101d5eae.m4a",
-    "cover": "https://music.starry-s.moe:2053/music/cover/7951668093293588.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/070e_530e_020b_0dd79823b4ddc4a054895ae0101d5eae.m4a" name="How to Love" artist="A-One" cover="https://music.starry-s.moe:2053/music/cover/7951668093293588.jpg" theme="#f11c62" >}}
 
 ----

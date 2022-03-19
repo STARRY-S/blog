@@ -25,16 +25,6 @@ categories:
 
 -----
 
-<!--
-{
-    "name": "sand dream",
-    "artist": "Revo / 梶浦由記",
-    "theme": "#6e5c00",
-    "url": "https://music.starry-s.moe:2053/music/41d7_92fe_3e2f_49b31565f5b2dc00df4d8fb14b1bc59f.mp3",
-    "cover": "https://music.starry-s.moe:2053/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/41d7_92fe_3e2f_49b31565f5b2dc00df4d8fb14b1bc59f.mp3" name="sand dream" artist="Revo / 梶浦由記" cover="https://music.starry-s.moe:2053/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg" theme="#6e5c00" >}}
 
 > 听日推时遇到了这首非常好听的歌，很想把它插入到博客当中，于是我决定开始写这篇计划了很久但一直没有动笔的博客

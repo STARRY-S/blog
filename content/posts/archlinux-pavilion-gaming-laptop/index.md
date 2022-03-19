@@ -17,16 +17,6 @@ categories:
 
 ------
 
-<!--
-{
-    "name": "Kaleidoscope",
-    "artist": "Vicetone / Grace Grundy",
-    "theme": "#A26208",
-    "url": "https://music.starry-s.moe:2053/music/560e_0558_060b_adc45c798222ffa86a4d1a0cb6ddf18f.m4a",
-    "cover": "https://music.starry-s.moe:2053/music/cover/18671906464338403.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/560e_0558_060b_adc45c798222ffa86a4d1a0cb6ddf18f.m4a" name="Kaleidoscope" artist="Vicetone / Grace Grundy" cover="https://music.starry-s.moe:2053/music/cover/18671906464338403.jpg" theme="#A26208" >}}
 
 ## 先描述一下踩坑经过

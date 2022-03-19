@@ -30,16 +30,6 @@ math:
 本篇文章使用MathJax显示数学公式，在使用RSS阅读器时会出现无法正确显示的情况。
 {{< /admonition >}}
 
-<!--
-{
-    "name": "春はゆく",
-    "artist": "Aimer",
-    "theme": "#25AFF5",
-    "url": "https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_1630142819_fc9d_8785_4c2c_8abd7ec40b9695cbf53de173e782f195.m4a",
-    "cover": "https://music.starry-s.moe:2053/music/cover/109951164785068521.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_1630142819_fc9d_8785_4c2c_8abd7ec40b9695cbf53de173e782f195.m4a" name="春はゆく" artist="Aimer" cover="https://music.starry-s.moe:2053/music/cover/109951164785068521.jpg" theme="#25AFF5" >}}
 
 ## 硬件结构\&指令系统

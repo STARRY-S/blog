@@ -35,16 +35,6 @@ categories:
 
 ----
 
-<!--
-{
-    "name": "Oblivious",
-    "artist": "Kalafina",
-    "theme": "#7c7c7c",
-    "url": "https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_8776653719_722d_c783_516e_072d631639c3a9e51d99be99dfae261f.m4a",
-    "cover": "https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_8776653719_722d_c783_516e_072d631639c3a9e51d99be99dfae261f.m4a" name="Oblivious" artist="Kalafina" cover="https://music.starry-s.moe:2053/music/cover/Kalafina All Time Best 2008-2018 small.jpg" theme="#7c7c7c" >}}
 
 ## 俯瞰风景

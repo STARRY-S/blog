@@ -19,16 +19,6 @@ categories:
 
 <!--more-->
 
-<!--
-{
-    "name": "Hadouken",
-    "artist": "Lupus Nocte",
-    "theme": "#985600",
-    "url": "https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_2347605056_3c82_3c52_f174_d9f0840383db65d1f00568c39a10ccf5.m4a",
-    "cover": "https://music.starry-s.moe:2053/music/cover/109951164946319365.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_2347605056_3c82_3c52_f174_d9f0840383db65d1f00568c39a10ccf5.m4a" name="Hadouken" artist="Lupus Nocte" cover="https://music.starry-s.moe:2053/music/cover/109951164946319365.jpg" theme="#985600" >}}
 
 ## 配置

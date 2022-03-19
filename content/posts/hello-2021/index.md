@@ -15,16 +15,6 @@ categories:
 
 <!--more-->
 
-<!--
-{
-    "name": "Gloria",
-    "artist": "Kalafina",
-    "theme": "#cc2222",
-    "url": "https://music.starry-s.moe:2053/music/kalafina-gloria.aac",
-    "cover": "https://music.starry-s.moe:2053/music/cover/2505786999756176.png"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/kalafina-gloria.aac" name="Gloria" artist="Kalafina" cover="https://music.starry-s.moe:2053/music/cover/2505786999756176.png" theme="#cc2222" >}}
 
 ------

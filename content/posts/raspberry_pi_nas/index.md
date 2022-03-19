@@ -17,16 +17,6 @@ categories:
 
 <!--more-->
 
-<!--
-{
-    "name": "紫雨UNITED まさかのアリス突撃編",
-    "artist": "岩杉夏 / イザベル / あゆ",
-    "theme": "#3d79d9",
-    "url": "https://music.starry-s.moe:2053/music/070b_0208_540c_0af9917fa85b6e8d26efcf2d4d0a6706.m4a",
-    "cover": "https://music.starry-s.moe:2053/music/cover/109951166006696770.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/070b_0208_540c_0af9917fa85b6e8d26efcf2d4d0a6706.m4a" name="紫雨UNITED まさかのアリス突撃編" artist="岩杉夏 / イザベル / あゆ" cover="https://music.starry-s.moe:2053/music/cover/109951166006696770.jpg" theme="#3d79d9" >}}
 
 > 这歌太魔性了哈哈哈哈
@@ -162,7 +152,7 @@ DNS=8.8.8.8
 
 [Samba]
 title=LanManager-like file and printer server for Unix
-description=The Samba software suite is a collection of programs that implements the SMB/CIFS protocol for unix systems, allowing you to serve files and printers to Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred to as the LanManager or NetBIOS protocol.
+description=Samba
 ports=137,138/udp|139,445/tcp
 ```
 

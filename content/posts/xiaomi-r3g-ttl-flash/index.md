@@ -25,16 +25,6 @@ categories:
 
 ## 砖了
 
-<!--
-{
-    "name": "crescent in the sky",
-    "artist": "Stepan Voles",
-    "theme": "#2233ee",
-    "url": "https://music.starry-s.moe:2053/music/396e_a80d_10de_076d0b69c03bd2673595bd17ce939f69.mp3",
-    "cover": "https://music.starry-s.moe:2053/music/cover/1379887099097990.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/396e_a80d_10de_076d0b69c03bd2673595bd17ce939f69.mp3" name="crescent in the sky" artist="Stepan Voles" cover="https://music.starry-s.moe:2053/music/cover/1379887099097990.jpg" theme="#2233ee" >}}
 
 --------

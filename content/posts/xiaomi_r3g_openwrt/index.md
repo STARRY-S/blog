@@ -23,16 +23,6 @@ categories:
 本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。
 {{< /admonition >}}
 
-<!--
-{
-    "name": "Mallow Flower",
-    "artist": "Otokaze",
-    "theme": "#EFCE82",
-    "url": "https://music.starry-s.moe:2053/music/969d_ef88_965d_f8693c4f0a65db94a9cc0ebb9be2bd06.mp3",
-    "cover": "https://music.starry-s.moe:2053/music/cover/781752767371058.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/969d_ef88_965d_f8693c4f0a65db94a9cc0ebb9be2bd06.mp3" name="Mallow Flower" artist="Otokaze" cover="https://music.starry-s.moe:2053/music/cover/781752767371058.jpg" theme="#EFCE82" >}}
 
 ## 准备工作

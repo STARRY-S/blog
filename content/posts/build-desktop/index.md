@@ -13,28 +13,13 @@ categories:
 
 很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。
 
-<!-- <div class="">
-因包含插图，为了浏览体验我只对图片进行了适量压缩，<br>
-网络不好的用户可能需要多花一些时间加载。<br>
-</div> -->
+<!--more-->
 
 {{< admonition info "" true >}}
 因包含插图，为了浏览体验我只对图片进行了适量压缩，
 
 网络不好的用户可能需要多花一些时间加载。
 {{< /admonition >}}
-
-<!--more-->
-
-<!--
-{
-    "name": "砂塵の彼方へ",
-    "artist": "Revo / 梶浦由記",
-    "theme": "#6e5c00",
-    "url": "https://music.starry-s.moe:2053/music/ae9d_b321_c72a_e5c3e5bb99a9461050bcf04c68886dad.mp3",
-    "cover": "https://music.starry-s.moe:2053/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg"
-}
--->
 
 {{< music url="https://music.starry-s.moe:2053/music/ae9d_b321_c72a_e5c3e5bb99a9461050bcf04c68886dad.mp3" name="砂塵の彼方へ" artist="Revo / 梶浦由記" cover="https://music.starry-s.moe:2053/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg" theme="#6e5c00" >}}
 

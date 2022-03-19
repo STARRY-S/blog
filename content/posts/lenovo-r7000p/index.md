@@ -20,16 +20,6 @@ categories:
 
 <!--more-->
 
-<!--
-{
-    "name": "Underground",
-    "artist": "Lindsey Stirling",
-    "theme": "#CC8888",
-    "url": "https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_2660462601_5de2_ff1b_7e9f_3314960c90b9d68875a3d640df5d283a.mp4",
-    "cover": "https://music.starry-s.moe:2053/music/cover/109951164174520818.jpg"
-}
--->
-
 {{< music url="https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_2660462601_5de2_ff1b_7e9f_3314960c90b9d68875a3d640df5d283a.mp4" name="Underground" artist="Lindsey Stirling" cover="https://music.starry-s.moe:2053/music/cover/109951164174520818.jpg" theme="#CC8888" >}}
 
 -------
