@@ -11,7 +11,6 @@ categories:
 - 游戏
 - 尼尔
 ---
-!["遊樂園廢墟"](images/NieR_Automata_20210115172747.jpg "遊樂園廢墟")
 
 这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。
 
@@ -24,6 +23,8 @@ categories:
 <!--more-->
 
 -----
+
+!["遊樂園廢墟"](images/NieR_Automata_20210115172747.jpg "遊樂園廢墟")
 
 {{< music url="https://music.starry-s.moe:2053/music/41d7_92fe_3e2f_49b31565f5b2dc00df4d8fb14b1bc59f.mp3" name="sand dream" artist="Revo / 梶浦由記" cover="https://music.starry-s.moe:2053/music/cover/gfp7e39qcxSOYuoTx9zbaA==_716881581332123.jpg" theme="#6e5c00" >}}
 

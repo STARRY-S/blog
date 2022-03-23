@@ -10,13 +10,11 @@ tags:
 categories:
 - 日常
 ---
-<div style="text-align:center">
-  <img src="images/shanghai.jpg" />
-</div>
+不要问我为什么过了这么久才把这篇文章码出来…
 
 <!--more-->
 
-不要问我为什么过了这么久才把这篇文章码出来…
+![](images/shanghai.jpg)
 
 -----
 

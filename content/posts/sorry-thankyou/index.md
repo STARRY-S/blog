@@ -10,15 +10,13 @@ categories:
 - 日常
 ---
 
-<div style="text-align:center">
-  <img src="images/snow.jpg" alt="Snow" title="Snow">
-</div>
-
 想了很久不知道以什么来作为本篇文章的开头，不确定自己真的想说些什么，但是我还是带着确切目的来写这篇文章的。
 
 这一个月发生了一些不太愉快的事，可能不算很大吧但是对我来说这个影响真的很大。我不知道应该从何说起，先静下来带上耳机慢慢的想慢慢的写。
 
 <!--more-->
+
+!["Snow](images/snow.jpg "Snow")
 
 ------
 

@@ -11,15 +11,15 @@ categories:
 # comment: true
 ---
 
-![Lunar tear](/posts/hello-2021/images/1.jpg "Lunar tear")
+本来我已经戴好耳机准备睡觉了的，突然想起来2020年的年终总结还没有写，恰好脑子里有想写的东西，于是大概构思了一下，便从床上爬起来开灯打开电脑开写年终总结。
 
 <!--more-->
+
+![Lunar tear](/posts/hello-2021/images/1.jpg "Lunar tear")
 
 {{< music url="https://music.starry-s.moe:2053/music/kalafina-gloria.aac" name="Gloria" artist="Kalafina" cover="https://music.starry-s.moe:2053/music/cover/2505786999756176.png" theme="#cc2222" >}}
 
 ------
-
-本来我已经戴好耳机准备睡觉了的，突然想起来2020年的年终总结还没有写，恰好脑子里有想写的东西，于是大概构思了一下，便从床上爬起来开灯打开电脑开写年终总结。
 
 因为思路不是很稳定，总是写了删删了写，所以隔了这么久才把原本已经放弃了不打算写的年终总结重新写出来。
 

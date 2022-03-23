@@ -10,8 +10,6 @@ categories:
 - Linux
 ---
 
-> 本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。
-
 旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了...
 
 于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。
@@ -21,6 +19,8 @@ categories:
 <!--more-->
 
 {{< music url="https://music.starry-s.moe:2053/music/obj_wonDkMOGw6XDiTHCmMOi_2660462601_5de2_ff1b_7e9f_3314960c90b9d68875a3d640df5d283a.mp4" name="Underground" artist="Lindsey Stirling" cover="https://music.starry-s.moe:2053/music/cover/109951164174520818.jpg" theme="#CC8888" >}}
+
+> 本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。
 
 -------
 
