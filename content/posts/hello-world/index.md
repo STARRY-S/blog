@@ -6,7 +6,6 @@ tags:
 - Hello World
 categories:
 - Hello World
-# comment: true
 ---
 
 你好，世界！
@@ -23,8 +22,8 @@ categories:
 #include <stdio.h>
 int main(int argc, char *argv[])
 {
-    printf("Hello World!\n");
-    return 0;
+        printf("Hello World!\n");
+        return 0;
 }
 ```
 

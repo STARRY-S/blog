@@ -16,9 +16,9 @@ tags: about
 
 - 一名普通的学生党。
 
-- 常用的网名是STARRY-S，当起这个网名的原因只不过是想仿照Linux上的`sudo -s`这个指令而已，你可以直接叫我Starry。
+- 常用的网名是STARRY-S，当初起这个网名的原因只不过是想仿照Linux上的`sudo -s`这个指令而已，你可以直接叫我Starry。
 
-- Linux用户，首选发行版为Arch Linux，图形界面只用过GNOME。喜欢的编程语言有C, JavaScript, Java。
+- Arch Linux用户，图形界面只用过GNOME。喜欢的编程语言有C, JavaScript, Java。
 
 - 咱喜欢的游戏: Minecraft Java Edition, 守望先锋, NieR:Automata, NieR:Replicant, Detroit: Become Human, Portal。
 
@@ -42,7 +42,7 @@ tags: about
 
 - 偶尔在B站发视频, 是一名没有几个粉丝、很久不更新视频的“年更”UP主, 不追求播放量和粉丝数, 有人喜欢就行。
 
-- 值得一提的是，性格/人格方面，在[16Personalities](https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95)上测的人格为“[调停者](https://www.16personalities.com/ch/infp-%E4%BA%BA%E6%A0%BC)”。
+- 值得一提的是，性格/人格方面，在[16Personalities](https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95)上测的人格为“[INFP-T 调停者](https://www.16personalities.com/ch/infp-%E4%BA%BA%E6%A0%BC)”。
 
 - 不擅长的几个领域：社交、数学、运动、自律等。
 
