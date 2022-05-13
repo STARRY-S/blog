@@ -102,18 +102,37 @@ categories:
     rm dtb
     ln -sf dtbs dtb
     ```
-    编辑`armbianEnv.txt`，添加一行`fdtfile=rockchip/rk3399-nanopi-r4s.dtb`。
+    编辑`armbianEnv.txt`，在末尾添加一行`fdtfile=rockchip/rk3399-rockpro64.dtb`。
+
+{{< admonition tips "Note" true >}}
+在`/boot/dtb/rockchip`目录下是可以找到`rk3399-nanopi-r4s.dtb`文件的，但是目前用这个DTB的话会导致PCIE不能正常工作，导致LAN口无法使用。
+`dmesg`的输出为：
+
+```prolog
+dmesg | grep pci
+[    0.538310] ehci-pci: EHCI PCI platform driver
+[    0.559708] ohci-pci: OHCI PCI platform driver
+[    2.999933] rockchip-pcie f8000000.pcie: host bridge /pcie@f8000000 ranges:
+[    2.999974] rockchip-pcie f8000000.pcie:      MEM 0x00fa000000..0x00fbdfffff -> 0x00fa000000
+[    2.999987] rockchip-pcie f8000000.pcie:       IO 0x00fbe00000..0x00fbefffff -> 0x00fbe00000
+[    3.000410] rockchip-pcie f8000000.pcie: no vpcie12v regulator found
+[    3.500881] rockchip-pcie f8000000.pcie: PCIe link training gen1 timeout!
+[    3.500944] rockchip-pcie: probe of f8000000.pcie failed with error -110
+```
+于是就先用rockpro64的DTB文件了。
+{{< /admonition >}}
 
 3. 创建uBoot镜像和initramfs。
-    ```
+    ```bash
     pacman -S uboot-tools
     mkimage -A arm64 -T ramdisk -n uInitrd -d /boot/initramfs-linux.img /boot/uInitrd-initramfs-linux.img
     ln -sf /boot/uInitrd-initramfs-linux.img /boot/uInitrd
     ```
 
-    创建个`packman`的钩子，在以后更新`linux-aarch64`的时候自动的重新构建uboot和initramfs。
+    创建个`pacman`的钩子，在以后更新`linux-aarch64`的时候自动的重新构建uboot和initramfs。
+
     在`mkdir -p /etc/pacman.d/hooks`目录下创建`/etc/pacman.d/hooks/initramfs.hook`
-    ```
+    ```pacmanconf
     [Trigger]
     Operation = Install
     Operation = Upgrade
