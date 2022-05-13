@@ -151,7 +151,7 @@ theme = "LoveIt"
 
   [params.page.code]
     copy = true
-    maxShownLines = 9999
+    maxShownLines = 50
 
 [author]
   name = "STARRY-S"
@@ -167,6 +167,10 @@ theme = "LoveIt"
 [markup]
   # (https://gohugo.io/content-management/syntax-highlighting)
   [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    lineNos = true
+    lineNumbersInTable = true
     # false (https://github.com/dillonzq/LoveIt/issues/158)
     noClasses = false
 
