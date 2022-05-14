@@ -217,7 +217,7 @@ Name=enp1s0
 [Network]
 Address=10.0.0.1/24
 DHCPServer=true
-IPMasquerade=ipv4
+IPMasquerade=both
 
 [DHCPServer]
 PoolOffset=100
@@ -227,7 +227,7 @@ EmitDNS=yes
 ```
 
 我这个配置是给LAN口设置了静态IP地址`10.0.0.1`，掩码`255.255.255.0`，启用了DHCP服务器，
-设置了IPv4数据转发(packet forwarding)。
+设置了IPv4数据“伪装”(packets forwarded from the network interface will be appear as coming from the local host)。
 
 有关配置文件的参数可以使用`man systemd.network`查询。
 
