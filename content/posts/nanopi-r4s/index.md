@@ -147,12 +147,109 @@ dmesg | grep pci
     ```
 4. 重启，`uname -a`输出的应该是新版本的内核了。
 
+    有个细节，用armbian的DTB文件时，开机后SYS LED灯是闪烁的，但是换到rockpro60的DTB文件后只有PWR灯长亮，别的灯都不闪了。
+
+## Router
+
+虽然装的是Arch Linux ARM系统，但是这并不代表它不能作为一个路由器使用。
+
+系统默认用的是`systemd-networkd`管理网络，所以以下内容使用`systemd-networkd`配置路由器，暂时没遇到问题，如果不行的话我再换别的。
+
+> 参考: [Router - ArchWiki](https://wiki.archlinux.org/title/Router)
+
+### 重命名网络接口
+
+> 这一步并非必须，但是我有遇到重启系统后网口从`eth0`变成`eth1`的情况，所以还是给网口重命个名好一些。
+
+首先移除并备份`/etc/systemd/network`中原有的配置文件。
+
+```bash
+cd /etc/systemd/network
+
+# backup config files
+mv ./* /root/
+```
+
+获取WAN口的mac地址。
+
+```bash
+cat /sys/class/net/eth0/address
+12:34:56:78:90:ab
+```
+
+创建`10-extern0.link`，重命名`eth0`到`extern0`。
+
+```pacmanconf
+[Match]
+MACAddress=12:34:56:78:90:ab
+
+[Link]
+Description=WAN
+Name=extern0
+```
+
+另一个网口(LAN)在开机时`systemd-networkd`会自动给他重命名为`enp1s0`。
+
+### WAN口配置DHCP客户端
+
+这里我是把R4S的WAN口接到另一台路由器的LAN上，所以配置的是DHCP客户端。如果你打算直接把路由器接光猫，而且你的猫设置了桥接，那么你可能需要配置PPPOE。
+
+创建`20-extern0.network`。
+
+```pacmanconf
+[Match]
+Name=extern0
+
+[Network]
+DHCP=yes
+```
+
+### LAN口配置静态IP和DHCP服务器
+
+给LAN口设置成另一个网络的静态IP地址，并配置DHCP服务器，给连接到LAN口的机器分配同一个网络下的其他IP地址。
+
+创建`20-enp1s0.network`。
+
+```pacmanconf
+[Match]
+Name=enp1s0
+
+[Network]
+Address=10.0.0.1/24
+DHCPServer=true
+IPMasquerade=ipv4
+
+[DHCPServer]
+PoolOffset=100
+PoolSize=100
+EmitDNS=yes
+# DNS=8.8.8.8
+```
+
+我这个配置是给LAN口设置了静态IP地址`10.0.0.1`，掩码`255.255.255.0`，启用了DHCP服务器，
+设置了IPv4数据转发(packet forwarding)。
+
+有关配置文件的参数可以使用`man systemd.network`查询。
+
+暂时还没搞懂怎么折腾IPv6，如果配置好IPv6的话我再补上……
+
 ## 后续
 
-之后咱装了JDK以及一堆我常用的小组件。为了测试性能，我把我以前备份的Minecraft服务器复制到R4S上跑了一下试试。我的服务器之前是在疼讯云学生主机上跑的(1核2G)，装了好多性能优化插件(lithium，phosphor，carpet...)，版本是1.16.4，抱着尝试的心态跑了一下这个服务器结果发现很流畅，一开始区块加载的时候CPU的6个核心全跑满，之后就恢复到正常水平了。刚才尝试了一下长时间的生成区块貌似没什么大的问题，只要别一直用鞘翅跑图就行，性能比这学生云主机好很多，不过强多少我并没测。
+之后咱装了JDK以及一堆我常用的小组件。为了测试性能，我把我以前备份的Minecraft服务器复制到R4S上跑了一下试试。我的服务器之前是在疼讯云学生主机上跑的(1核2G)，装了好多性能优化插件(lithium，phosphor，carpet...)，版本是1.16.4，抱着尝试的心态跑了一下这个服务器结果发现很流畅，一开始区块加载的时候CPU的6个核心全跑满，之后就恢复到正常水平了。刚才尝试了一下长时间的生成区块貌似没什么大的问题，只要别一直用鞘翅跑图就行，应该是内存够用了所以运行效果要好一些，不过单核性能来讲的话肯定还是X86吊打R4S的。
 
-毕竟这就是半个巴掌大小的主机，跑MC的时候CPU温度才不到50度，根本不需要主动散热，功耗还特别低。
+毕竟这就是半个巴掌大小的机器，跑MC的时候CPU温度才不到50度，应该不需要主动散热，功耗才十多瓦……
 
 !["MineCraft Server Performance"](images/nanopi_performance.png "MineCraft Server Performance")
 
 !["Arch Linux ARM"](images/nanopi_neofetch.png "Arch Linux ARM")
+
+## 参烤链接
+
+- [NanoPi R4S](https://www.friendlyelec.com/index.php?route=product/product&product_id=284)
+- [NanoPi R4S - FriendlyELEC WiKi](https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S)
+- [Installing Arch Linux AArch64 on the NanoPi R2S](https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d)
+- [Generic AArch64 Installation | Arch Linux ARM](https://archlinuxarm.org/platforms/armv8/generic)
+- [Router - ArchWiki](https://wiki.archlinux.org/title/Router)
+- [systemd-networkd - ArchWiki](https://wiki.archlinux.org/title/Systemd-networkd)
+- [systemd.network(5) — Arch manual pages](https://man.archlinux.org/man/systemd.network.5)
+- [在 NanoPi R2S 上安装 Archlinuxarm - 知乎](https://zhuanlan.zhihu.com/p/392619184)
