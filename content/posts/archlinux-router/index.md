@@ -17,6 +17,8 @@ categories:
 
 > 这里偷偷骂一下长城宽带没人反对吧
 
+{{< music url="https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_13287892216_8848_3b33_7abe_743eaf028a8fe43e88062b8a9b147512.m4a" name="Light Particle（Original Mix）" artist="Young Xxxg" cover="https://music.starry-s.moe:2053/music/cover/109951167114792839.jpg" theme="#FF8000" >}}
+
 ## 准备工作
 
 按照Arch Wiki的[Router页面](https://wiki.archlinux.org/title/Router#Connection_sharing)，你的电脑需要符合安装Arch Linux的基础硬件要求，且至少具备俩物理网口。
@@ -44,11 +46,11 @@ IP='static'
 Address=('10.10.10.1/24')
 
 IP6='static'
-Address6=('fd00:aaaa:bbbb::0001/64')
+Address6=('fdaa:aaaa:bbbb::0001/64')
 SkipNoCarrier=yes
 ```
 
-以上配置将为LAN口设定IPv4的地址为`10.10.10.1`，IPv6的地址为`fd00:aaaa:bbbb::0001`。
+以上配置将为LAN口设定IPv4的地址为`10.10.10.1`，IPv6的地址为`fdaa:aaaa:bbbb::0001`。
 你可以给这个网口设定任意的局域网IP地址，通常为`10.*`，`172.*`，`192.168.*`这些网段的任意一个地址，
 IPv6的局域网网段为`fd00::/8`，通俗一点讲就是`fd**`开头的一般都是局域网的IP地址。
 
@@ -86,7 +88,7 @@ netctl enable extern0-profile
     link/ether fa:97:da:d8:9d:8a brd ff:ff:ff:ff:ff:ff
     inet 10.10.10.1/24 brd 10.10.10.255 scope global intern0
        valid_lft forever preferred_lft forever
-    inet6 fd00:aaaa:bbbb::1/64 scope global nodad
+    inet6 fdaa:aaaa:bbbb::1/64 scope global nodad
        valid_lft forever preferred_lft forever
     inet6 fe80::f897:daff:fed8:9d8a/64 scope link
        valid_lft forever preferred_lft forever
@@ -134,7 +136,7 @@ domain=foo.bar
 # Setup IPv4 DHCP
 dhcp-range=10.10.10.100,10.10.10.255,255.255.255.0,12h
 # Setup IPv6 DHCP
-dhcp-range=fd00:aaaa:bbbb::000a, fd00:aaaa:bbbb::ffff, 64, 12h
+dhcp-range=fdaa:aaaa:bbbb::000a, fdaa:aaaa:bbbb::ffff, 64, 12h
 ```
 
 使用`systemctl enable --now dnsmasq.service`启动`dnsmasq`，
@@ -147,7 +149,7 @@ dhcp-range=fd00:aaaa:bbbb::000a, fd00:aaaa:bbbb::ffff, 64, 12h
 
 首先[参照Wiki](https://wiki.archlinux.org/title/Internet_sharing#Enable_packet_forwarding)，开启数据包转发的功能。
 
-之后安装`iptables`，配置流量伪装。
+之后安装`iptables`，配置ipv4和ipv6的流量伪装。
 
 ```
 iptables -A FORWARD -i intern0 -j ACCEPT
@@ -158,9 +160,12 @@ iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 iptables -A FORWARD -i intern0 -o ppp0 -j ACCEPT
 
 iptables -t mangle -A FORWARD -o ppp0 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+
+ip6tables -t nat -A POSTROUTING -o ppp0 -j MASQUERADE
 ```
 
-之后可使用`iptables-save -f /etc/iptables/iptables.rules`将ip桌子的规则保存下来。
+之后可使用`iptables-save -f /etc/iptables/iptables.rules`和
+`ip6tables-save -f /etc/iptables/ip6tables.rules`将ip桌子的规则保存下来。
 
 ## Done
 
