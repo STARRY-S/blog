@@ -14,6 +14,8 @@ categories:
 
 ![](images/1.jpg)
 
+{{< music url="https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_9105009162_c821_5409_0b52_4f1456608eb3882d46c5a6d21cf108c0.m4a" name="Preparation" artist="梶浦由记" cover="https://music.starry-s.moe:2053/music/cover/680597697605533.jpg" theme="#FF8000" >}}
+
 ----
 
 实在是不想以“时间过得真快啊”这种烂大街的句子作为开头，但是我实在想不出什么更好听的句子出来。
