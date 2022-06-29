@@ -14,17 +14,19 @@ tags: about
 
 ## About Me
 
-- 一名普通的学生党。
+- 刚毕业。
 
-- 常用的网名是STARRY-S，当初起这个网名的原因只不过是想仿照Linux上的`sudo -s`这个指令而已，你可以直接叫我Starry。
+- 常用的网名是STARRY-S，当初起这个网名的原因是想仿照Linux上的`sudo -s`这个指令，你可以直接叫我Starry。
 
-- Arch Linux用户，图形界面只用过GNOME。喜欢的编程语言有C, JavaScript, Java。
+- Arch Linux用户，图形界面只用过GNOME，除此之外还用过SUSE的系统(Leap和TW和SLE), 学过一些[openQA](https://open.qa)的使用，对Linux和开源比较感兴趣, 除此之外最近在学Go和容器相关的知识。
 
-- 咱喜欢的游戏: Minecraft Java Edition, 守望先锋, NieR:Automata, NieR:Replicant, Detroit: Become Human, Portal。
+- 咱喜欢的游戏: MineCraft Java Edition, FinalFantasy VII, NieR:Automata, NieR:Replicant, Detroit: Become Human, Portal, 守望先锋。
 
   以及咱之前还玩过PUBG, FGO, 饥荒, 崩坏3等。
 
 - 因为喜欢玩游戏(雾)，所以想学一些有关OpenGL、渲染相关的东西，并想尝试着自己写点什么东西出来。
+
+  可以看看咱最近写的这个项目，还在开发中：[Aperture](https://github.com/STARRY-S/Aperture)
 
 - 咱喜欢的动漫/电影: 空之境界、Fate系列、某科学的超电磁炮、君主·埃尔梅罗二世事件簿、声之形、秒速5厘米、利兹与青鸟、狼与香辛料。
 
@@ -42,7 +44,7 @@ tags: about
 
 - 偶尔在B站发视频, 是一名没有几个粉丝、很久不更新视频的“年更”UP主, 不追求播放量和粉丝数, 有人喜欢就行。
 
-- 值得一提的是，性格/人格方面，在[16Personalities](https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95)上测的人格为“[INFP-T 调停者](https://www.16personalities.com/ch/infp-%E4%BA%BA%E6%A0%BC)”。
+- 值得一提的是，性格/人格方面，在[16Personalities](https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95)上测的人格为“[INFP-A 调停者](https://www.16personalities.com/ch/infp-%E4%BA%BA%E6%A0%BC)”。
 
 - 不擅长的几个领域：社交、数学、运动、自律等。
 
