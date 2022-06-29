@@ -17,7 +17,7 @@ categories:
 
 > 这里偷偷骂一下长城宽带没人反对吧
 
-{{< music url="https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_13287892216_8848_3b33_7abe_743eaf028a8fe43e88062b8a9b147512.m4a" name="Light Particle（Original Mix）" artist="Young Xxxg" cover="https://music.starry-s.moe:2053/music/cover/109951167114792839.jpg" theme="#FF8000" >}}
+{{< music url="https://music.starry-s.moe:2053/music/obj_w5rDlsOJwrLDjj7CmsOj_13287892216_8848_3b33_7abe_743eaf028a8fe43e88062b8a9b147512.m4a" name="Light Particle（Original Mix）" artist="Young Xxxg" cover="https://music.starry-s.moe:2053/music/cover/109951167114792839.jpg" theme="#2E9AFE" >}}
 
 ## 准备工作
 
