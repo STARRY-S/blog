@@ -14,6 +14,8 @@ tags: about
 
 ## About Me
 
+- **PGP fingerprint: `E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2`**
+
 - 刚毕业。
 
 - 常用的网名是STARRY-S，当初起这个网名的原因是想仿照Linux上的`sudo -s`这个指令，你可以直接叫我Starry。
