@@ -118,7 +118,7 @@ DRIVER=="nvidia", RUN+="/usr/lib/gdm-disable-wayland"
 
 然后在Linux系统里安装`optimus-manager`，修改配置为：使用电池开机时关掉NVIDIA显卡，只让AMD集显工作；有外接电源时则使用“hybrid”混合模式，如果需要玩游戏的话用[nvidia-prime](https://wiki.archlinux.org/index.php/PRIME#PRIME_render_offload)让独显运行游戏。
 
-Optimus Manager的配置方法和之前我[之前配置旧电脑时](/posts/archlinux-pavilion-gaming-laptop/)讲的基本一样，唯一区别就是这电脑是AMD，旧电脑是Intel。
+Optimus Manager的配置方法和之前我[之前配置旧电脑时](/posts/2021/archlinux-pavilion-gaming-laptop/)讲的基本一样，唯一区别就是这电脑是AMD，旧电脑是Intel。
 
 所以编辑配置文件修改了这些地方：
 

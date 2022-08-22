@@ -113,7 +113,7 @@ categories:
 
 ## Done
 
-第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照[小米路由器3G折腾之刷OpenWrt记录](/posts/Xiaomi_Miwifi_3G/#使用Breed的刷机方法)这篇文章刷OpenWrt。
+第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照[小米路由器3G折腾之刷OpenWrt记录](/posts/2019/xiaomi_r3g_openwrt/#使用Breed的刷机方法)这篇文章刷OpenWrt。
 
 ``` text
 BusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash)

@@ -23,7 +23,7 @@ categories:
 
 ## 配置
 
-CPU、主板、显卡、电源、硬盘、CPU散热以及内存这些用的还是上一篇“[我们来组装一台电脑吧](/posts/build-desktop/)”里面讲的配置。
+CPU、主板、显卡、电源、硬盘、CPU散热以及内存这些用的还是上一篇“[我们来组装一台电脑吧](/posts/2021/build-desktop/)”里面讲的配置。
 
 除此之外咱买了一个直径8CM的小风扇(ARCTIC P8)，和一个超薄的1.5CM厚的风扇(ID-COOLING TF9125)。
 

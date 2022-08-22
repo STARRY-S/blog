@@ -11,7 +11,7 @@ categories:
 - Linux
 ---
 
-之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用`systemd-networkd`配置了一个简易的软路由。不过`systemd-networkd`不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为[R4S上手体验](/posts/nanopi-r4s/)的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。
+之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用`systemd-networkd`配置了一个简易的软路由。不过`systemd-networkd`不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为[R4S上手体验](/posts/2022/nanopi-r4s/)的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。
 
 <!--more-->
 
