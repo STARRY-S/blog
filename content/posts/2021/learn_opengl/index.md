@@ -338,7 +338,7 @@ glEnableVertexAttribArray(1);
 
  - 第六个参数为偏移量，因为我们定义的数组中前三个数字代表顶点坐标，后三个数字代表颜色，所以传递顶点坐标时，偏移量为0，传递颜色时偏移量为`3 * sizeof(float)`。
 
-![VBO中内存数据](https://learnopengl-cn.github.io/img/01/05/vertex_attribute_pointer_interleaved.png)
+![VBO中内存数据](https://learnopengl-cn.github.io/img/01/05/vertex_attribute_pointer_interleaved.png "VBO中内存数据")
 
 之后使用`glEnableVertexAttribArray`告诉OpenGL启用顶点着色器上这个位置的数据。
 

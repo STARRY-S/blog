@@ -17,14 +17,14 @@ categories:
 
 {{< music url="https://music.starry-s.moe:2053/music/4d6b_af91_c8ab_7e676adf998cd77b5d6b8a8e095d4066.mp3" name="辉く空の静寂には" artist="Kalafina" cover="https://music.starry-s.moe:2053/music/cover/109951163710392062.jpg" theme="#776666" >}}
 
-![](images/IMG_4238-1.JPG)
+![](images/IMG_4238-1.JPG "Sakura")
 
-![](images/IMG_4150-1.JPG)
+![](images/IMG_4150-1.JPG "桃花或者是杏花")
 
-![](images/IMG_4204-1.JPG)
+![](images/IMG_4204-1.JPG "应该是桃花")
 
-![](images/IMG_4245-1.JPG)
+![](images/IMG_4245-1.JPG "樱花")
 
-![](images/IMG_4242-1.JPG)
+![](images/IMG_4242-1.JPG "樱花")
 
-![](images/IMG_4216-1.JPG)
+![](images/IMG_4216-1.JPG "樱花")

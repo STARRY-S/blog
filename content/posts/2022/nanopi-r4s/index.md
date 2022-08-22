@@ -32,7 +32,7 @@ categories:
 
 咱收到货后第一件事就是找螺丝刀和塑料卡片把这漏油器拆开看看（
 
-![](images/nanopi_7.jpg)
+![](images/nanopi_7.jpg "主板正面")
 
 芯片的布局可以在[R4S的商品页面](https://www.friendlyelec.com/index.php?route=product/product&product_id=284)查到，[官方Wiki](https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S)上也有更多关于R4S的介绍。
 

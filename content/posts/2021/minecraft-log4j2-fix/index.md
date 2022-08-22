@@ -53,7 +53,7 @@ categories:
   上下载对应你的游戏版本的配置文件`log4j2_XXXX.xml`，把它放到`.minecraft/versions/1.16.4/`目录下（1.16.4为你的游戏版本），之后打开启动器，
   设置JVM启动参数添加`-Dlog4j.configurationFile=log4j2_XXXX.xml`。
 
-  ![](images/1.png)
+  ![](images/1.png "Example")
 
 - 游戏版本1.17：
 
