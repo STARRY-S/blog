@@ -12,7 +12,7 @@ categories:
 # comment: true
 ---
 
-前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经[配置好了optimus-manager](/posts/archlinux-pavilion-gaming-laptop/)，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。
+前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经[配置好了optimus-manager](/posts/2021/archlinux-pavilion-gaming-laptop/)，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。
 
 然后一看4K屏上的字小得瞎眼。
 

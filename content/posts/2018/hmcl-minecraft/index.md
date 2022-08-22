@@ -71,12 +71,12 @@ $ chmod 744 ./start.sh
 
 3. 64位系统的用户不要安装32位的java，不仅影响性能而且对可使用的内存大小也有限制。
 
-4. Linux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 [Linux下使Steam调用Bumblebee使用独显](https://sh.alynx.xyz/posts/2017/02/16/Steam-with-Bumblebee/),当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。
+4. Linux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 [Linux下使Steam调用Bumblebee使用独显](https://sh.alynx.one/posts/Steam-with-Bumblebee/),当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。
 
 ## 相关内容：
 
 * [教程/成功地启动游戏-Minecraft Wiki](https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&variant=zh-cn)
 * [官方网站|Minecraft](https://minecraft.net/zh-hans/)
-* [树莓派之我的世界服务器](https://blog.starry-s.me/posts/raspberrypi-mc-server/)
+* [树莓派之我的世界服务器](https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/)
 
 如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。
