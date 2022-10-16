@@ -581,10 +581,7 @@ math:
 
 7. 打印机数据输入接口和P1直接相连，STB接口和P3.4相连，BUSY接口和P3.3相连，不使用ACK应答信号，编写将外部存储器`1000H-100FH`的数据发送到打印机打印的子程序。
 
-   <div style="text-align:center">
-    <image src="images/1.jpg"/>
-   </div>
-   <br/>
+   ![](images/1.jpg " ")
 
    ``` asm
    PRINT:
