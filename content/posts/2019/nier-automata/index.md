@@ -25,6 +25,8 @@ tags:
 >
 > and wonder if we'll ever have the chance to kill him.
 
+{{< music netease song 468490595 >}}
+
 ![](images/20190214220213_1.jpg " ")
 
 ![](images/20190217002539_1.jpg " ")

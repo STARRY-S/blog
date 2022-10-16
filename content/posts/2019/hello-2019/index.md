@@ -11,11 +11,11 @@ categories:
 
 <!--more-->
 
-{{< bilibili av10859786 >}}
+{{< bilibili BV19x411Y7yX >}}
 
 ---
 
-{{< bilibili av27306952 >}}
+{{< bilibili BV19s411N7bi >}}
 
 ---
 
@@ -25,7 +25,7 @@ categories:
 
 {{< music netease song 467164552 >}}
 
-{{< bilibili av3818869 >}}
+{{< bilibili BV1Zs411X7N9 >}}
 
 {{< music netease song 525238081 >}}
 
