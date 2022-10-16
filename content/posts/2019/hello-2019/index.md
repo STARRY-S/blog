@@ -11,23 +11,23 @@ categories:
 
 <!--more-->
 
-<iframe src="//player.bilibili.com/player.html?aid=10859786&cid=17963248&page=1" width="600" height="450" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+{{< bilibili av10859786 >}}
 
 ---
 
-<iframe src="//player.bilibili.com/player.html?aid=27306952&cid=47083743&page=1" width=600 height=450 scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+{{< bilibili av27306952 >}}
 
 ---
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=22660765&auto=0&height=66"></iframe>
+{{< music netease song 22660765 >}}
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=27571001&auto=0&height=66"></iframe>
+{{< music netease song 27571001 >}}
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=467164552&auto=0&height=66"></iframe>
+{{< music netease song 467164552 >}}
 
-<https://www.bilibili.com/video/av3818869>
+{{< bilibili av3818869 >}}
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=525238081&auto=0&height=66"></iframe>
+{{< music netease song 525238081 >}}
 
 ![](images/misakamikoto.png " ")
 
@@ -35,13 +35,13 @@ categories:
 
 ---
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=auto height=auto src="//music.163.com/outchain/player?type=2&id=446627347&auto=0&height=66"></iframe>
+{{< music netease song 446627347 >}}
 
 ![](images/liz_und_blue_bird.jpg " ")
 
 ---
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=448053&auto=0&height=66"></iframe>
+{{< music netease song 448053 >}}
 
 ![Saber](images/saber-3.jpg " ")
 

@@ -16,16 +16,16 @@ categories:
 
 ---
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=412911872&auto=1&height=66"></iframe>
+{{< music netease song 412911872 >}}
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=408277643&auto=1&height=66"></iframe>
+{{< music netease song 408277643 >}}
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=460628799&auto=1&height=66"></iframe>
+{{< music netease song 460628799 >}}
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=408277644&auto=1&height=66"></iframe>
+{{< music netease song 408277644 >}}
 
 ---
 
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=529659114&auto=1&height=66"></iframe>
+{{< music netease song 529659114 >}}
 
 ![秒速5厘米](images/5cm_per_second_2.jpg "秒速五厘米")

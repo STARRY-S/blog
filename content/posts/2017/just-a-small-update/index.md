@@ -21,6 +21,6 @@ categories:
 
 ![Love](images/image3.jpg " ")
 
-<iframe src="//player.bilibili.com/player.html?aid=810872&cid=1176840&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="600" height="450"> </iframe>
+{{< bilibili av810872 >}}
 
-## ——Just A Small Update.
+## Just A Small Update.
