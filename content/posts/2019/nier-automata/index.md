@@ -23,7 +23,7 @@ tags:
 >
 > I often think about the God who blessed us with this cryptic puzzle
 >
-> and wonder if we’ll ever have the chance to kill him."
+> and wonder if we'll ever have the chance to kill him.
 
 ![](images/20190214220213_1.jpg " ")
 
