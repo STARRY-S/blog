@@ -14,6 +14,8 @@ categories:
 
 <!--more-->
 
+{{< music netease song 590443 >}}
+
 目前有两个虚拟机可选，一个是 由 C# 编写的 [Ryujinx](https://github.com/Ryujinx/Ryujinx)，另一个是由 C++ 编写的 [yuzu](https://github.com/yuzu-emu/yuzu)，这俩都是开源软件而且都能在 Linux 上运行，咱选的是后者。
 
 ---
