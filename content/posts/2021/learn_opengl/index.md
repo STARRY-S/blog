@@ -232,10 +232,7 @@ while(!glfwWindowShouldClose(window))
 
 尝试编译代码，可以看到一个黑色（深灰）的窗口，按`ESC`或`Q`即可结束运行。
 
-<!-- ![Window](images/create_window.png "创建窗口") -->
-<div style="text-align:center">
-    <img src="images/create_window.png" alt="Window" title="创建窗口">
-</div>
+![Window](images/create_window.png "创建窗口")
 
 如果你遇到什么问题，可以[对照一下代码](learn-code-1/main.c)是否有问题。
 
@@ -473,9 +470,7 @@ configure_file(src/fragment.glsl fragment.glsl COPYONLY)
 
 编译后运行程序，可以看到一个五颜六色的三角形，它的左下角为红色，右下角为绿色，顶点为蓝色。
 
-<div style="text-align:center">
-    <img src="images/draw_triangle.png" alt="三角形" title="三角形">
-</div>
+![三角形](images/draw_triangle.png "三角形")
 
 
 如果你遇到了问题，或者哪里不太明白，可以看咱写好的代码：
