@@ -30,15 +30,15 @@ theme = "LoveIt"
     # 更现代的 SVG 网站图标, 可替代旧的 .png 和 .ico 文件
     # svgFavicon = ""
     # Android 浏览器主题色
-    themeColor = "#ffffff"
+    themeColor = "#232323"
     # Safari 图标颜色
-    iconColor = "#5bbad5"
+    iconColor = "#232323"
     # Windows v8-10磁贴颜色
-    tileColor = "#da532c"
+    tileColor = "#232323"
 
   # 搜索配置
   [params.search]
-    enable = false
+    enable = true
     # 搜索引擎的类型 ("lunr", "algolia")
     type = "lunr"
     # 文章内容最长索引长度
@@ -111,12 +111,12 @@ theme = "LoveIt"
   # 作者的社交信息设置
   [params.social]
     GitHub = "STARRY-S"
-    Telegram = "STARRY-S"
-    Weibo = "6990977018"
+    # Telegram = "STARRY-S"
+    # Weibo = "6990977018"
     Steam = "hxstarry-s"
     Bilibili = "19189337"
     Email = "hxstarrys@gmail.com"
-    Twitter = "hxstarrys2022"
+    # Twitter = "hxstarrys2022"
     RSS = true
 
   [params.page.comment]
@@ -175,51 +175,67 @@ theme = "LoveIt"
     noClasses = false
 
 [languages]
-  # [languages.en]
-  #   weight = 1
-  #   title = "STARRY-S' Blog"
-  #   languageCode = "en"
-  #   languageName = "EN"
-  #   hasCJKLanguage = true
-  #   [[languages.en.menu.main]]
-  #     identifier = "posts"
-  #     pre = ""
-  #     post = ""
-  #     name = "Posts"
-  #     url = "/posts/"
-  #     title = ""
-  #     weight = 1
-  #   [[languages.en.menu.main]]
-  #     identifier = "tags"
-  #     pre = ""
-  #     post = ""
-  #     name = "Tags"
-  #     url = "/tags/"
-  #     title = ""
-  #     weight = 2
-  #   [[languages.en.menu.main]]
-  #     identifier = "categories"
-  #     pre = ""
-  #     post = ""
-  #     name = "Categories"
-  #     url = "/categories/"
-  #     title = ""
-  #     weight = 3
-  #   [[languages.en.menu.main]]
-  #     identifier = "about"
-  #     pre = ""
-  #     post = ""
-  #     name = "About"
-  #     url = "/about/"
-  #     title = ""
-  #     weight = 4
+  [languages.en]
+    weight = 10
+    title = "STARRY-S' Blog"
+    languageCode = "en"
+    languageName = "English"
+    hasCJKLanguage = false
+    [[languages.en.menu.main]]
+      identifier = "home"
+      pre = ""
+      post = ""
+      name = "Home"
+      url = "/"
+      title = ""
+      weight = 1
+    [[languages.en.menu.main]]
+      identifier = "posts"
+      pre = ""
+      post = ""
+      name = "Posts"
+      url = "/posts/"
+      title = ""
+      weight = 2
+    [[languages.en.menu.main]]
+      identifier = "tags"
+      pre = ""
+      post = ""
+      name = "Tags"
+      url = "/tags/"
+      title = ""
+      weight = 3
+    [[languages.en.menu.main]]
+      identifier = "categories"
+      pre = ""
+      post = ""
+      name = "Categories"
+      url = "/categories/"
+      title = ""
+      weight = 4
+    [[languages.en.menu.main]]
+      identifier = "about"
+      pre = ""
+      post = ""
+      name = "About"
+      url = "/about/"
+      title = ""
+      weight = 5
 
   [languages.zh-cn]
-    weight = 2
+    weight = 10
     title = "STARRY-S' Blog"
-    languageCode = "zh-CN"
-    languageName = "CN"
+    languageCode = "zh-cn"
+    languageName = "简体中文"
     hasCJKLanguage = true
+    [[languages.zh-cn.menu.main]]
+      identifier = "home"
+      pre = ""
+      post = ""
+      name = "主页"
+      url = "/"
+      title = ""
+      weight = 1
     [[languages.zh-cn.menu.main]]
       identifier = "posts"
       pre = ""
@@ -227,7 +243,7 @@ theme = "LoveIt"
       name = "文章"
       url = "/posts/"
       title = ""
-      weight = 1
+      weight = 2
     [[languages.zh-cn.menu.main]]
       identifier = "tags"
       pre = ""
@@ -235,7 +251,7 @@ theme = "LoveIt"
       name = "标签"
       url = "/tags/"
       title = ""
-      weight = 2
+      weight = 3
     [[languages.zh-cn.menu.main]]
       identifier = "categories"
       pre = ""
@@ -243,7 +259,7 @@ theme = "LoveIt"
       name = "分类"
       url = "/categories/"
       title = ""
-      weight = 3
+      weight = 4
     [[languages.zh-cn.menu.main]]
       identifier = "about"
       pre = ""
@@ -251,4 +267,7 @@ theme = "LoveIt"
       name = "关于"
       url = "/about/"
       title = ""
-      weight = 4
+      weight = 5
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
