@@ -16,7 +16,7 @@ Welcome to my blog.
 
 PGP fingerprint: `E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2`
 
-Im an `Arch Linux` user.
+I am an `Arch Linux` user.
 
 **English is not my prefer language.**
 
