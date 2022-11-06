@@ -2,7 +2,7 @@
 title: 月姫 -A piece of blue glass moon-
 date: 2022-10-28T20:15:42+08:00
 layout: post
-draft: true
+draft: false
 tags:
 - 游戏
 - 月姬
