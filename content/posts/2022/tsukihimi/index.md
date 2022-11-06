@@ -191,6 +191,6 @@ categories:
 
 -----
 
-{{< figure src="images/2.png" title="" >}}
+{{< figure src="images/2.png" title="呐。那个，让我看看" >}}
 
 > 感谢汉化组提供的中文翻译: <https://tsukihimecn.github.io/>
