@@ -17,27 +17,27 @@ categories:
 
 {{< music url="https://music.starry-s.moe:2053/music/4d6b_af91_c8ab_7e676adf998cd77b5d6b8a8e095d4066.mp3" name="辉く空の静寂には" artist="Kalafina" cover="https://music.starry-s.moe:2053/music/cover/109951163710392062.jpg" theme="#776666" >}}
 
-![](images/01.jpg "1")
+{{< figure src="images/01.jpg" title="" >}}
 
-![](images/02.jpg "2")
+{{< figure src="images/02.jpg" title="" >}}
 
-![](images/03.jpg "3")
+{{< figure src="images/03.jpg" title="" >}}
 
-![](images/04.jpg "4")
+{{< figure src="images/04.jpg" title="" >}}
 
-![](images/05.jpg "5")
+{{< figure src="images/05.jpg" title="" >}}
 
-![](images/06.jpg "6")
+{{< figure src="images/06.jpg" title="" >}}
 
-![](images/07.jpg "7")
+{{< figure src="images/07.jpg" title="" >}}
 
-![](images/08.jpg "8")
+{{< figure src="images/08.jpg" title="" >}}
 
-![](images/11.jpg "9")
+{{< figure src="images/11.jpg" title="" >}}
 
-![](images/12.jpg "10")
+{{< figure src="images/12.jpg" title="" >}}
 
-![](images/13.jpg "11")
+{{< figure src="images/13.jpg" title="" >}}
 
 ----
 

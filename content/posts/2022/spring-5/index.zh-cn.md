@@ -30,21 +30,21 @@ categories:
 
 照片中的这些花我叫不出名字来，哪些是樱花我也忘了，因为在我眼里这些只是一群花而已，没啥太大区别。
 
-![](images/01.jpg "1")
+{{< figure src="images/01.jpg" title="" >}}
 
-![](images/02.jpg "2")
+{{< figure src="images/02.jpg" title="" >}}
 
-![](images/03.jpg "3")
+{{< figure src="images/03.jpg" title="" >}}
 
-![](images/04.jpg "4")
+{{< figure src="images/04.jpg" title="" >}}
 
-![](images/05.jpg "5")
+{{< figure src="images/05.jpg" title="" >}}
 
-![](images/06.jpg "6")
+{{< figure src="images/06.jpg" title="" >}}
 
-![](images/07.jpg "7")
+{{< figure src="images/07.jpg" title="" >}}
 
-![](images/08.jpg "8")
+{{< figure src="images/08.jpg" title="" >}}
 
 ## 三月中旬的暴雪
 
@@ -53,11 +53,11 @@ categories:
 
 所以很开心，那天恰巧是在家办公，于是晚上趁天还没黑就跑到小区楼下拍了几张雪景图。
 
-![](images/11.jpg "9")
+{{< figure src="images/11.jpg" title="" >}}
 
-![](images/12.jpg "10")
+{{< figure src="images/12.jpg" title="" >}}
 
-![](images/13.jpg "11")
+{{< figure src="images/13.jpg" title="" >}}
 
 这种在三月中下旬下这么大雪的情况说实话在北京应该蛮少见的吧。
 
