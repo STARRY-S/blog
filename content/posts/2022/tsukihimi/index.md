@@ -1,6 +1,7 @@
 ---
 title: 月姫 -A piece of blue glass moon-
 date: 2022-10-28T20:15:42+08:00
+lastmod: 2020-11-06T18:06:30+08:00
 layout: post
 draft: false
 tags:
