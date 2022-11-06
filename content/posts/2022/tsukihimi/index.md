@@ -11,7 +11,7 @@ categories:
 - 月姬
 ---
 
-{{< figure src="images/1.png" title="" >}}
+{{< figure src="/posts/2022/tsukihimi/images/1.png" title="" >}}
 
 想不懂咱是怎么忍住恐惧在大晚上的玩通关这游戏的公主线的……
 
