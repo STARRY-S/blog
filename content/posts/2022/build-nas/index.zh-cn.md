@@ -14,6 +14,8 @@ categories:
 
 <!--more-->
 
+{{< music netease song 22682819 >}}
+
 ## 起因
 
 不用树莓派的原因是，它是 ARM 架构的微型“电脑”，Arch Linux 官方只支持 x86_64 架构的系统，Arch Linux ARM 准确来说实际上是个第三方的系统。
