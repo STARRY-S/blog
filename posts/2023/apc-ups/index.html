@@ -1,0 +1,199 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><title>入手一台家用级 APC UPS - STARRY-S' Blog</title><meta name=Description content="This is my cool site"><meta property="og:title" content="入手一台家用级 APC UPS"><meta property="og:description" content="为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。"><meta property="og:type" content="article"><meta property="og:url" content="https://blog.starry-s.moe/posts/2023/apc-ups/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-01-08T11:05:02+08:00"><meta property="article:modified_time" content="2023-01-08T11:05:02+08:00"><meta property="og:site_name" content="STARRY-S' Blog"><meta name=twitter:card content="summary"><meta name=twitter:title content="入手一台家用级 APC UPS"><meta name=twitter:description content="为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。"><meta name=application-name content="STARRY-S' Blog"><meta name=apple-mobile-web-app-title content="STARRY-S' Blog"><meta name=theme-color content="#232323"><meta name=msapplication-TileColor content="#232323"><link rel="shortcut icon" type=image/x-icon href=/favicon.ico><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#232323><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://blog.starry-s.moe/posts/2023/apc-ups/><link rel=prev href=https://blog.starry-s.moe/posts/2023/hello-2023/><link rel=stylesheet href=/css/style.min.css><link rel=preload href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.1.1/css/all.min.css></noscript><link rel=preload href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css as=style onload='this.onload=null,this.rel="stylesheet"'><noscript><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@4.1.1/animate.min.css></noscript><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"入手一台家用级 APC UPS","inLanguage":"zh-cn","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/blog.starry-s.moe\/posts\/2023\/apc-ups\/"},"genre":"posts","keywords":"碎碎念, 日常","wordcount":1492,"url":"https:\/\/blog.starry-s.moe\/posts\/2023\/apc-ups\/","datePublished":"2023-01-08T11:05:02+08:00","dateModified":"2023-01-08T11:05:02+08:00","publisher":{"@type":"Organization","name":""},"author":{"@type":"Person","name":"STARRY-S"},"description":""}</script></head><body data-header-desktop=auto data-header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem("theme")?localStorage.getItem("theme")==="dark":"auto"==="auto"?window.matchMedia("(prefers-color-scheme: dark)").matches:"auto"==="dark")&&document.body.setAttribute("theme","dark")</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/ title="STARRY-S' Blog">STARRY-S' Blog</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/>主页 </a><a class=menu-item href=/posts/>文章 </a><a class=menu-item href=/tags/>标签 </a><a class=menu-item href=/categories/>分类 </a><a class=menu-item href=/about/>关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id=search-desktop>
+<input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span>
+</span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw" aria-hidden=true></i>
+</a><a href=javascript:void(0); class="menu-item language" title=选择语言><i class="fa fa-globe" aria-hidden=true></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value"><option value=/posts/2023/apc-ups/ selected>简体中文</option></select></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/ title="STARRY-S' Blog">STARRY-S' Blog</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw" aria-hidden=true></i></a>
+<a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw" aria-hidden=true></i></a>
+<span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin" aria-hidden=true></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/ title>主页</a><a class=menu-item href=/posts/ title>文章</a><a class=menu-item href=/tags/ title>标签</a><a class=menu-item href=/categories/ title>分类</a><a class=menu-item href=/about/ title>关于</a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw" aria-hidden=true></i>
+</a><a href=javascript:void(0); class=menu-item title=选择语言><i class="fa fa-globe fa-fw" aria-hidden=true></i>
+<select class=language-select onchange="location=this.value"><option value=/posts/2023/apc-ups/ selected>简体中文</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">入手一台家用级 APC UPS</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=https://starry-s.moe title=Author target=_blank rel="noopener noreffer author" class=author><i class="fas fa-user-circle fa-fw" aria-hidden=true></i>STARRY-S</a></span>&nbsp;<span class=post-category>收录于 <a href=/categories/%E6%97%A5%E5%B8%B8/><i class="far fa-folder fa-fw" aria-hidden=true></i>日常</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw" aria-hidden=true></i>&nbsp;<time datetime=2023-01-08>2023-01-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden=true></i>&nbsp;约 1492 字&nbsp;
+<i class="far fa-clock fa-fw" aria-hidden=true></i>&nbsp;预计阅读 3 分钟&nbsp;</div></div><div class="details toc" id=toc-static data-kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right" aria-hidden=true></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#安装-apcupsd>安装 apcupsd</a></li><li><a href=#配置自动休眠>配置自动休眠</a><ul><li><a href=#配置休眠后关闭-ups-电源>配置休眠后关闭 UPS 电源</a></li></ul></li><li><a href=#其他>其他</a></li></ul></nav></div></div><div class=content id=content><p>为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。</p><div class="details admonition info open"><div class="details-summary admonition-title"><i class="icon fas fa-info-circle fa-fw" aria-hidden=true></i>信息<i class="details-icon fas fa-angle-right fa-fw" aria-hidden=true></i></div><div class=details-content><div class=admonition-content>参烤链接: <a href=https://wiki.archlinux.org/title/APC_UPS target=_blank rel="noopener noreffer">APC UPS - ArchWiki</a></div></div></div><hr><p>UPS 到手后花了半个多小时读使用说明书，然后第一件事是把 UPS 的断电报警蜂鸣器关掉，省得我不在公寓的时候停电了 UPS 叫个没完吵到邻居。</p><p>之后在装 UPS 之前先把我电脑支架背面一团电线重新整理了一遍，现在是台式机、显示器、NAS、光猫、路由器、无线 AP 都放在一起了，他们的电源线、网线、数据线、显示器线都团在了一起，整理起来炒鸡麻烦。</p><p>先把漏油器、光猫和 NAS 的电源都插 UPS 上，然后接好 UPS 的 USB 数据线到 NAS 上。</p><h2 id=安装-apcupsd>安装 apcupsd</h2><p>安装 <code>apcupsd</code>，然后 <code>systemctl enable --now apcupsd.service</code>。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-console data-lang=console><span class=line><span class=cl><span class=gp>$</span> sudo apcaccess status
+</span></span><span class=line><span class=cl><span class=go>APC      : 001,036,0869
+</span></span></span><span class=line><span class=cl><span class=go>DATE     : 2023-01-08 11:09:23 +0800
+</span></span></span><span class=line><span class=cl><span class=go>HOSTNAME : ApertureNAS
+</span></span></span><span class=line><span class=cl><span class=go>VERSION  : 3.14.14 (31 May 2016) unknown
+</span></span></span><span class=line><span class=cl><span class=go>UPSNAME  : ApertureNAS
+</span></span></span><span class=line><span class=cl><span class=go>CABLE    : USB Cable
+</span></span></span><span class=line><span class=cl><span class=go>DRIVER   : USB UPS Driver
+</span></span></span><span class=line><span class=cl><span class=go>UPSMODE  : Stand Alone
+</span></span></span><span class=line><span class=cl><span class=go>STARTTIME: 2023-01-02 23:57:44 +0800
+</span></span></span><span class=line><span class=cl><span class=go>MODEL    : Back-UPS BK650M2-CH
+</span></span></span><span class=line><span class=cl><span class=go>STATUS   : ONLINE
+</span></span></span><span class=line><span class=cl><span class=go>......
+</span></span></span></code></pre></td></tr></table></div></div><p>先把 NAS 里所有的应用都停掉，之后编辑 <code>/etc/apcupsd/apcupsd.conf</code>，把 <code>TIMEOUT</code> 改为 <code>1</code>，然后给 UPS 断电，这时 NAS 会自动关机。</p><blockquote><p>UPS 重新连接电源后，NAS 可能会自动开机，我的 NAS 是这样，但不确定所有 NAS 都这样。</p></blockquote><h2 id=配置自动休眠>配置自动休眠</h2><p>按照 Wiki 配置停电后自动休眠 (Hibernate / 休眠到硬盘)。</p><blockquote><p>在此之前，需要创建 swap 分区 (或 swap file)，然后配置休眠需要的内核参数并重构 <code>initramfs</code>。</p></blockquote><p>以 root 用户创建 <code>/usr/local/bin/hibernate</code>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-sh data-lang=sh><span class=line><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># Hibernate the system - designed to be called via symlink from /etc/apcupsd</span>
+</span></span><span class=line><span class=cl><span class=c1># directory in case of apcupsd initiating a shutdown/reboot.  Can also be used</span>
+</span></span><span class=line><span class=cl><span class=c1># interactively or from any script to cause a hibernate.</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 可以在这里加一些在休眠之前执行的操作，例如让 bot 发个邮件提醒停电了之类的</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Wall message</span>
+</span></span><span class=line><span class=cl><span class=c1># 广播消息</span>
+</span></span><span class=line><span class=cl>wall -n System will be hibernate soon
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>sleep <span class=m>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Do the hibernate</span>
+</span></span><span class=line><span class=cl><span class=c1># 执行休眠</span>
+</span></span><span class=line><span class=cl>/usr/bin/systemctl hibernate
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># At this point system should be hibernated - when it comes back, we resume this script here</span>
+</span></span><span class=line><span class=cl><span class=c1># 现在，系统应当已经休眠了，当系统恢复运行的时候，脚本会继续从这里执行</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 可以在这里加一些在系统恢复之后的操作，例如让 bot 发个邮件提醒电力恢复了啥的</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># On resume, tell controlling script (/etc/apcupsd/apccontrol) NOT to continue with default action (i.e. shutdown).</span>
+</span></span><span class=line><span class=cl><span class=nb>exit</span> <span class=m>99</span>
+</span></span></code></pre></td></tr></table></div></div><p>别忘了赋予可执行权限。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-console data-lang=console><span class=line><span class=cl><span class=gp>#</span> chmod +x /usr/local/bin/hibernate
+</span></span></code></pre></td></tr></table></div></div><p>创建软链接把脚本链接到 <code>/etc/apcupsd</code> 目录下面。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-console data-lang=console><span class=line><span class=cl><span class=gp>#</span> ln -s /usr/local/bin/hibernate /etc/apcupsd/doshutdown
+</span></span></code></pre></td></tr></table></div></div><p>此时给 UPS 断电后，NAS 会自动休眠，等一两分钟 NAS 会完成休眠，但 UPS 仍处于运行状态没有关机，长时间停电的话，UPS 的电量会耗尽。</p><p>UPS 接回电源后，NAS 会从休眠中恢复。</p><h3 id=配置休眠后关闭-ups-电源>配置休眠后关闭 UPS 电源</h3><p>创建 <code>/usr/lib/systemd/system-sleep/ups-kill</code>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=k>case</span> <span class=nv>$2</span> in
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># In the event the computer is hibernating.</span>
+</span></span><span class=line><span class=cl>  hibernate<span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=nv>$1</span> in
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=c1># Going into a hibernate state.</span>
+</span></span><span class=line><span class=cl>       pre<span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>         <span class=c1># See if this is a powerfail situation.</span>
+</span></span><span class=line><span class=cl>         <span class=k>if</span> <span class=o>[</span> -f /etc/apcupsd/powerfail <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>           <span class=nb>echo</span>
+</span></span><span class=line><span class=cl>           <span class=nb>echo</span> <span class=s2>&#34;ACPUPSD will now power off the UPS&#34;</span>
+</span></span><span class=line><span class=cl>           <span class=nb>echo</span>
+</span></span><span class=line><span class=cl>           /etc/apcupsd/apccontrol killpower
+</span></span><span class=line><span class=cl>           <span class=nb>echo</span>
+</span></span><span class=line><span class=cl>           <span class=nb>echo</span> <span class=s2>&#34;Please ensure that the UPS has powered off before rebooting&#34;</span>
+</span></span><span class=line><span class=cl>           <span class=nb>echo</span> <span class=s2>&#34;Otherwise, the UPS may cut the power during the reboot!!!&#34;</span>
+</span></span><span class=line><span class=cl>           <span class=nb>echo</span>
+</span></span><span class=line><span class=cl>         <span class=k>fi</span>
+</span></span><span class=line><span class=cl>       <span class=p>;;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>       <span class=c1># Coming out of a hibernate state.</span>
+</span></span><span class=line><span class=cl>       post<span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>         <span class=c1># If there are remnants from a powerfail situation, remove them.</span>
+</span></span><span class=line><span class=cl>         <span class=k>if</span> <span class=o>[</span> -f /etc/apcupsd/powerfail <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>           rm /etc/apcupsd/powerfail
+</span></span><span class=line><span class=cl>         <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>         <span class=c1># This may also exist, need to remove it.</span>
+</span></span><span class=line><span class=cl>         <span class=k>if</span> <span class=o>[</span> -f /etc/nologin <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>           rm /etc/nologin
+</span></span><span class=line><span class=cl>         <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	 <span class=c1># Restart the daemon; otherwise it may be unresponsive in a</span>
+</span></span><span class=line><span class=cl>         <span class=c1># second powerfailure situation.</span>
+</span></span><span class=line><span class=cl>	 systemctl restart apcupsd
+</span></span><span class=line><span class=cl>       <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    <span class=k>esac</span>
+</span></span><span class=line><span class=cl>  <span class=p>;;</span>
+</span></span><span class=line><span class=cl><span class=k>esac</span>
+</span></span></code></pre></td></tr></table></div></div><p>赋予可执行权限：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-console data-lang=console><span class=line><span class=cl><span class=gp>#</span> chmod +x /usr/lib/systemd/system-sleep/ups-kill
+</span></span></code></pre></td></tr></table></div></div><p>接下来给 UPS 断电，NAS 会自动休眠，等 NAS 休眠后再过几分钟 UPS 也会关机。</p><p>UPS 关机后，给 UPS 接上电源，这时 UPS 会自动开机，然后 NAS 也会从休眠中恢复。</p><blockquote><p>不要在 UPS 还没关机的时候给 UPS 重新接回电源，会导致 UPS 关机后 NAS 刚从休眠中恢复就被强制断电。</p></blockquote><h2 id=其他>其他</h2><p>折腾 UPS 的时候顺手给 NAS 换了个散热器升级了一下内存。AMD 原装散热器有亿点点吵所以换成了咱之前买的 ITX 散热器。</p><figure><img src=images/1.jpg></figure><p>用咱写的 telebot 查看一下空载时的 CPU 温度才不到 30 度。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>CPU: +28.2°C
+</span></span><span class=line><span class=cl>Uptime: 0.15 Hour
+</span></span><span class=line><span class=cl>TotalRAM: 46.45G
+</span></span><span class=line><span class=cl>FreeRAM: 42.66G
+</span></span><span class=line><span class=cl>AvailableRAM: 43.91G
+</span></span><span class=line><span class=cl>TotalSwap: 46.00G
+</span></span><span class=line><span class=cl>FreeSwap: 46.00G
+</span></span></code></pre></td></tr></table></div></div><p>运行一个虚拟机一个 MineCraft 服务器，CPU 温度不到 40，所以很安静。</p><p>但是 UPS 它有噪音，晚上睡觉的时候能听见 UPS 它嗡嗡响，比 AMD 散热器的风扇动静还大，这个实在是无解，算了就先这样吧。</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2023-01-08</span></div></div><div class=post-info-line><div class=post-info-md></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://blog.starry-s.moe/posts/2023/apc-ups/ data-title="入手一台家用级 APC UPS" data-hashtags=碎碎念,日常><i class="fab fa-twitter fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://blog.starry-s.moe/posts/2023/apc-ups/ data-hashtag=碎碎念><i class="fab fa-facebook-square fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="分享到 Hacker News" data-sharer=hackernews data-url=https://blog.starry-s.moe/posts/2023/apc-ups/ data-title="入手一台家用级 APC UPS"><i class="fab fa-hacker-news fa-fw" aria-hidden=true></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://blog.starry-s.moe/posts/2023/apc-ups/ data-title="入手一台家用级 APC UPS"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@7.3.0/icons/line.svg aria-hidden=true></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://blog.starry-s.moe/posts/2023/apc-ups/ data-title="入手一台家用级 APC UPS"><i class="fab fa-weibo fa-fw" aria-hidden=true></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw" aria-hidden=true></i>&nbsp;<a href=/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/>碎碎念</a>,&nbsp;<a href=/tags/%E6%97%A5%E5%B8%B8/>日常</a></section><section><span><a href=javascript:void(0); onclick=window.history.back()>返回</a></span>&nbsp;|&nbsp;<span><a href=/>主页</a></span></section></div><div class=post-nav><a href=/posts/2023/hello-2023/ class=prev rel=prev title="Hello 2023"><i class="fas fa-angle-left fa-fw" aria-hidden=true></i>Hello 2023</a></div></div><div id=comments><div id=disqus_thread class=comment></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://disqus.com/?ref_noscript>Disqus</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.108.0">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden=true></i> LoveIt</a></div><div class=footer-line itemscope itemtype=http://schema.org/CreativeWork><i class="far fa-copyright fa-fw" aria-hidden=true></i><span itemprop=copyrightYear>2016 - 2023</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=https://starry-s.moe target=_blank>STARRY-S</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc-nd/4.0/ target=_blank>CC BY-NC-ND 4.0</a></span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw" aria-hidden=true></i>
+</a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw" aria-hidden=true></i></a></div><script type=text/javascript src=https://starry-s-blog.disqus.com/embed.js defer></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.38.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lunr@2.3.9/lunr.min.js></script><script type=text/javascript src=/lib/lunr/lunr.stemmer.support.min.js></script><script type=text/javascript src=/lib/lunr/lunr.zh.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.3.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.11/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.5.1/sharer.min.js></script><script type=text/javascript>window.config={code:{copyTitle:"复制到剪贴板",maxShownLines:50},comment:{},search:{highlightTag:"em",lunrIndexURL:"/index.json",lunrLanguageCode:"zh",lunrSegmentitURL:"/lib/lunr/lunr.segmentit.js",maxResultLength:10,noResultsFound:"没有找到结果",snippetLength:50,type:"lunr"}}</script><script type=text/javascript src=/js/theme.min.js></script><script type=text/javascript>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date),gtag("config","G-70DHXLE02Z",{anonymize_ip:!0})</script><script type=text/javascript src="https://www.googletagmanager.com/gtag/js?id=G-70DHXLE02Z" async></script></body></html>
