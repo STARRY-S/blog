@@ -467,19 +467,6 @@
                 href="https://blog.starry-s.moe/"
                 />
   </url><url>
-    <loc>https://blog.starry-s.moe/gallery/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://blog.starry-s.moe/en/gallery/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://blog.starry-s.moe/gallery/"
-                />
-  </url><url>
     <loc>https://blog.starry-s.moe/posts/</loc>
     <lastmod>2023-11-11T15:55:22+08:00</lastmod>
     <xhtml:link
@@ -516,6 +503,19 @@
                 rel="alternate"
                 hreflang="zh"
                 href="https://blog.starry-s.moe/series/"
+                />
+  </url><url>
+    <loc>https://blog.starry-s.moe/gallery/</loc>
+    <lastmod>2023-11-11T16:20:01+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.starry-s.moe/en/gallery/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://blog.starry-s.moe/gallery/"
                 />
   </url>
 </urlset>

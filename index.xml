@@ -5034,8 +5034,9 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
     </item>
     
     
+    
     <item>
-      <title>Gallery</title>
+      <title>相册</title>
       <link>https://blog.starry-s.moe/gallery/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
@@ -11481,7 +11482,6 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </blockquote>
 ]]></content:encoded>
     </item>
-    
     
   </channel>
 </rss>
