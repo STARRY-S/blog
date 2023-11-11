@@ -98,6 +98,8 @@ languages:
         imageHeight: 160
         imageTitle:
         buttons:
+          - name: Homepage
+            url: https://starry-s.moe
           - name: GitHub
             url: https://github.com/STARRY-S
           - name: Gallery
@@ -258,8 +260,7 @@ outputs:
   - JSON # is necessary
 
 copyright:
-  © 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) <br/>
-  <span id="busuanzi_container_site_pv">访问量<span id="busuanzi_value_site_pv"></span>次</span> |
+  © 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)
 hasCJKLanguage: true
-enableGitInfo: true
+enableGitInfo: false
 timeout: 60000
