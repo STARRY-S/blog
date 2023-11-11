@@ -88,6 +88,22 @@ languages:
         name: About
         url: /about/
         weight: 60
+    params:
+      profileMode:
+        enabled: true # needs to be explicitly set
+        title: STARRY-S' Blog
+        subtitle: "Morning"
+        imageUrl: "/apple-touch-icon.png"
+        imageWidth: 160
+        imageHeight: 160
+        imageTitle:
+        buttons:
+          - name: GitHub
+            url: https://github.com/STARRY-S
+          - name: Gallery
+            url: /en/gallery/
+          - name: About
+            url: about
 
 params:
   # set production to enable google analytics, opengraph,
