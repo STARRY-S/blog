@@ -1,5 +1,5 @@
 ---
-title: Gallery
+title: 相册
 ShowBreadCrumbs: false
 showtoc: false
 ShowReadingTime: false
