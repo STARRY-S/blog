@@ -12,7 +12,88 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)</copyright>
-    <lastBuildDate>Wed, 18 Oct 2023 21:42:02 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 11 Nov 2023 21:10:48 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>如何选择 zip 和 tar 文件格式</title>
+      <link>https://blog.starry-s.moe/posts/2023/zip-tar/</link>
+      <pubDate>Sat, 11 Nov 2023 21:10:48 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/zip-tar/</guid>
+      <description>&lt;p&gt;最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。</p>
+<hr>
+<h2 id="tar-文件格式">tar 文件格式</h2>
+<p>tar 格式早期是为了将数据记录在磁带上的（现在貌似也可以？），这种归档格式很简单，要将一个文件写入 tar 包的时候，首先写入记录文件信息的 header，在 header 之后记录文件的数据（tar 格式不支持压缩所以是直接把文件数据拷贝在了 header 后面）。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">+--------+
+</span></span><span class="line"><span class="cl">| header |
+</span></span><span class="line"><span class="cl">+--------+
+</span></span><span class="line"><span class="cl">|  data  |
+</span></span><span class="line"><span class="cl">+--------+
+</span></span><span class="line"><span class="cl">| header |
+</span></span><span class="line"><span class="cl">+--------+
+</span></span><span class="line"><span class="cl">|  data  |
+</span></span><span class="line"><span class="cl">+--------+
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">+--------+
+</span></span><span class="line"><span class="cl">| header |
+</span></span><span class="line"><span class="cl">+--------+
+</span></span><span class="line"><span class="cl">|  data  |
+</span></span><span class="line"><span class="cl">+--------+
+</span></span><span class="line"><span class="cl">|  end   |
+</span></span><span class="line"><span class="cl">+--------+
+</span></span></code></pre></div><p>tar 有多种不同的格式，他们的 header 定义不同。这里用 Linux 系统上常用的 <code>tar</code> 工具（GNU tar），
+GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.gnu.org/software/tar/manual/html_node/Standard.html">Basic Tar Format</a>。</p>
+<p>GNU tar 的源码可以通过下面的方式克隆下载下来。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> git clone https://git.savannah.gnu.org/git/tar.git
+</span></span></code></pre></div><p>在 <code>src/tar.h</code> 源码中可以找到 <code>posix_header</code> 的结构定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">struct</span> <span class="n">posix_header</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>				<span class="cm">/* byte offset */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>		<span class="cm">/*   0 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">mode</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>			<span class="cm">/* 100 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">uid</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>			<span class="cm">/* 108 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">gid</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>			<span class="cm">/* 116 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">size</span><span class="p">[</span><span class="mi">12</span><span class="p">];</span>		<span class="cm">/* 124 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">mtime</span><span class="p">[</span><span class="mi">12</span><span class="p">];</span>		<span class="cm">/* 136 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">chksum</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>		<span class="cm">/* 148 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">typeflag</span><span class="p">;</span>		<span class="cm">/* 156 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">linkname</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>		<span class="cm">/* 157 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">magic</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>		<span class="cm">/* 257 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">version</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>		<span class="cm">/* 263 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">uname</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>		<span class="cm">/* 265 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">gname</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>		<span class="cm">/* 297 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">devmajor</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>		<span class="cm">/* 329 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">devminor</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>		<span class="cm">/* 337 */</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">prefix</span><span class="p">[</span><span class="mi">155</span><span class="p">];</span>		<span class="cm">/* 345 */</span>
+</span></span><span class="line"><span class="cl">				<span class="cm">/* 500 */</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>上面 header 的定义可以看出默认情况下文件名 <code>name</code> 长度不能超过 99 (最后一位要存储 <code>\0</code>)，但似乎后面 tar 协议支持了长文件名的情况，至于如何支持的不在本篇讨论范围内。</p>
+<p>除了 <code>posix_header</code> 之外，还有 <code>star_header</code>、<code>gnu_header</code> 等 header 定义，至于这些 header 是如何被定义的以及他们的优缺点不在本篇的讨论范围内。</p>
+<p>tar 的每个 block 都是 512 字节：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* tar files are made in basic blocks of this size.  */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define BLOCKSIZE 512
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">union</span> <span class="n">block</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="n">BLOCKSIZE</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">posix_header</span> <span class="n">header</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">star_header</span> <span class="n">star_header</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">oldgnu_header</span> <span class="n">oldgnu_header</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">sparse_header</span> <span class="n">sparse_header</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">star_in_header</span> <span class="n">star_in_header</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="n">star_ext_header</span> <span class="n">star_ext_header</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>tar 文件的 end 是由至少两个 block size （1024字节）的空白（<code>\0</code>）组成。</p>
+<h3 id="栗子">栗子</h3>
+<p>因此这里可以用上面的 <code>posix_header</code> 结构简单的写一个创建 tar 归档的程序。</p>
+<p>代码太长了所以放在了 <a href="https://github.com/STARRY-S/tar-example-c">这里</a>。</p>
+<h3 id="压缩">压缩</h3>
+<p>在创建 tar 格式的文件时是不支持压缩的（除非你想魔改创建 tar 格式的步骤，但没这个必要）。如果想压缩的话可以把整个 tar 归档用 gzip/bzip2/zstd 等许多其他压缩格式进行压缩，文件后缀以 <code>tar.gz/tar.bz2/tar.zstd</code> 等。因为是先将文件写入 tar 归档，再将 tar 归档进行压缩，所以压缩的效果会比把文件单独压缩再合并成一个 tar 包效果要好一些。</p>
+<h2 id="zip-文件格式">zip 文件格式</h2>
+<blockquote>
+<p>睡觉，明天再写。</p>
+</blockquote>]]></content:encoded>
+    </item>
+    
     <item>
       <title>修复缩小磁盘空间后受损的 GPT 分区表</title>
       <link>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</link>
