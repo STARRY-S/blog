@@ -12,11 +12,11 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)</copyright>
-    <lastBuildDate>Sat, 11 Nov 2023 21:10:48 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 12 Nov 2023 01:35:41 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何选择 zip 和 tar 文件格式</title>
       <link>https://blog.starry-s.moe/posts/2023/zip-tar/</link>
-      <pubDate>Sat, 11 Nov 2023 21:10:48 +0800</pubDate>
+      <pubDate>Sun, 12 Nov 2023 01:35:41 +0800</pubDate>
       
       <guid>https://blog.starry-s.moe/posts/2023/zip-tar/</guid>
       <description>&lt;p&gt;最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。&lt;/p&gt;</description>
