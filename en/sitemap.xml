@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://blog.starry-s.moe/en/posts/2023/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2023-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -15,8 +15,21 @@
                 href="https://blog.starry-s.moe/en/posts/2023/"
                 />
   </url><url>
+    <loc>https://blog.starry-s.moe/en/posts/</loc>
+    <lastmod>2023-01-01T00:00:00+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://blog.starry-s.moe/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.starry-s.moe/en/posts/"
+                />
+  </url><url>
     <loc>https://blog.starry-s.moe/en/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2023-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -29,7 +42,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/posts/2021/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2021-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -42,7 +55,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/posts/2020/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2020-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -55,7 +68,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/posts/2019/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2019-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -68,7 +81,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/posts/2018/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2018-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -81,7 +94,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/posts/2017/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2017-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -94,7 +107,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/categories/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2016-08-22T14:22:54+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -107,7 +120,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/posts/2016/hello-world/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2016-08-22T14:22:54+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -120,7 +133,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/tags/hello-world/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2016-08-22T14:22:54+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -133,7 +146,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/categories/hello-world/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2016-08-22T14:22:54+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -146,7 +159,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/tags/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2016-08-22T14:22:54+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -159,7 +172,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/about/</loc>
-    <lastmod>2023-11-11T16:31:28+08:00</lastmod>
+    <lastmod>2023-08-24T20:36:41+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -172,7 +185,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/posts/2016/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
+    <lastmod>2016-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -185,7 +198,6 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/archives/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -198,7 +210,6 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/gallery/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -210,21 +221,7 @@
                 href="https://blog.starry-s.moe/en/gallery/"
                 />
   </url><url>
-    <loc>https://blog.starry-s.moe/en/posts/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://blog.starry-s.moe/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://blog.starry-s.moe/en/posts/"
-                />
-  </url><url>
     <loc>https://blog.starry-s.moe/en/search/</loc>
-    <lastmod>2023-11-11T15:55:22+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
