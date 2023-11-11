@@ -16,7 +16,7 @@ My native language is not English, so there are many posts that I can't translat
 
 ## About Me
 
-I'm an Arch Linux user who has a fondness for Linux. I frequently write code and delve into interesting, abstract concepts.
+I'm an Arch Linux user who has a fondness for Linux. I frequently write code and hacking some interesting, abstract concepts.
 
 In my spare time, I occasionally do photography. Photos are available on the [gallery](/en/gallery/) page.
 
