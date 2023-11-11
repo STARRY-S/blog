@@ -1,0 +1,26 @@
+<script>
+  const images = document.querySelectorAll('img');
+
+  Array.from(images).forEach(image => {
+    image.addEventListener('load', () => fitImage(image));
+    if (image.complete && image.naturalWidth !== 0) {
+      fitImage(image);
+    }
+  });
+
+  function fitImage(image) {
+    const pathname = window.location.pathname;
+    if (!pathname.includes("/posts/")) {
+      return;
+    }
+    image.style.marginLeft = 'auto';
+    image.style.marginRight = 'auto';
+    // If image is portrait && width / height < 1.1
+    if (image.naturalWidth / image.naturalHeight < 1.1) {
+      image.style.maxWidth = '60%';
+      image.style.height = 'auto';
+    }
+  }
+</script>
+
+<script src="/js/home-info.js"></script>

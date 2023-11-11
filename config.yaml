@@ -1,0 +1,249 @@
+baseURL: 'https://blog.starry-s.moe/'
+title: "STARRY-S' Blog"
+theme:
+  - "PaperMod"
+  - "hugo-shortcode-gallery"
+paginate: 10
+defaultContentLanguage: zh
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: true
+buildFuture: true
+buildExpired: false
+enableEmoji: false
+
+googleAnalytics: G-70DHXLE02Z
+disqusShortname: starry-s-blog
+
+minify:
+  disableXML: true
+  minifyOutput: false
+
+languages:
+  zh:
+    languageName: "Chinese"
+    weight: 20
+    taxonomies:
+      category: categories
+      tag: tags
+      series: series
+    menu:
+      main:
+      - identifier: gallery
+        name: 相册
+        url: /gallery/
+        weight: 10
+      - identifier: archives
+        name: 归档
+        url: /archives/
+        weight: 20
+      - identifier: tags
+        name: 标签
+        url: /tags/
+        weight: 30
+      - identifier: categories
+        name: 分类
+        url: /categories/
+        weight: 40
+      - identifier: search
+        name: 搜索
+        url: /search/
+        weight: 50
+      - identifier: about
+        name: 关于
+        url: /about/
+        weight: 60
+  en:
+    languageName: ":en:"
+    languageAltTitle: English
+    weight: 10
+    taxonomies:
+      category: categories
+      tag: tags
+      series: series
+    menu:
+      main:
+      - identifier: gallery
+        name: Gallery
+        url: /gallery/
+        weight: 10
+      - identifier: archives
+        name: Archives
+        url: /archives/
+        weight: 20
+      - identifier: tags
+        name: Tags
+        url: /tags/
+        weight: 30
+      - identifier: categories
+        name: Categories
+        url: /categories/
+        weight: 40
+      - identifier: search
+        name: Search
+        url: /search/
+        weight: 50
+      - identifier: about
+        name: About
+        url: /about/
+        weight: 60
+
+params:
+  # set production to enable google analytics, opengraph,
+  # twitter-cards and schema.
+  env: production
+  title: STARRY-S' Blog
+  description: "Morning."
+  keywords: [Blog, STARRY-S, PaperMod]
+  author: STARRY-S
+  images: ["avatar.png"]
+  DateFormat: "2006-01-02 15:04:05 MST"
+  defaultTheme: auto # dark, light
+  disableThemeToggle: false
+  ShowReadingTime: true
+  ShowShareButtons: false
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowCodeCopyButtons: true
+  ShowWordCount: true
+  ShowRssButtonInSectionTermList: true
+  ShowFullTextinRSS: true
+  UseHugoToc: true
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  comments: true
+  hidemeta: false
+  hideSummary: false
+  showtoc: true
+  tocopen: false
+
+  assets:
+    disableHLJS: true # to disable highlight.js
+    # disableFingerprinting: true
+    favicon: "/favicon-32x32.png"
+    favicon16x16: "/favicon-16x16.png"
+    favicon32x32: "/favicon-32x32.png"
+    apple_touch_icon: "/apple-touch-icon.png"
+    safari_pinned_tab: "/apple-touch-icon.png"
+
+  # label:
+  #   text: "Home"
+  #   icon: /apple-touch-icon.png
+  #   iconHeight: 28
+
+  # profile-mode
+  profileMode:
+    enabled: false # needs to be explicitly set
+    title: STARRY-S' Blog
+    subtitle: "This is subtitle"
+    imageUrl: "/apple-touch-icon.png"
+    imageWidth: 120
+    imageHeight: 120
+    imageTitle: my image
+    buttons:
+      - name: Posts
+        url: posts
+      - name: Tags
+        url: tags
+
+  # home-info mode
+  homeInfoParams:
+    Title: "STARRY-S' Blog ❤️"
+    Content: <span id="random-home-info"></span>
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/STARRY-S"
+    - name: telegram
+      url: "https://t.me/HxSTARRYS"
+    - name: bilibili
+      url: "https://space.bilibili.com/19189337"
+    - name: email
+      url: "mailto:starry@starry-s.moe"
+    - name: rss
+      url: "/index.xml"
+
+  analytics:
+    google:
+      SiteVerificationTag: ""
+    bing:
+      SiteVerificationTag: ""
+    yandex:
+      SiteVerificationTag: ""
+
+  cover:
+    hidden: false # hide everywhere but not in structured data
+    hiddenInList: true # hide on list pages and home
+    hiddenInSingle: true # hide on single page
+
+  editPost:
+    URL: "https://github.com/STARRY-S/Blog/tree/main/content"
+    Text: "Edit Text" # edit text
+    appendFilePath: true # to append file path to Edit link
+
+  # for search
+  # https://fusejs.io/api/options.html
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: ["title", "permalink", "summary", "content"]
+
+# Read: https://github.com/adityatelange/hugo-PaperMod/wiki/FAQs#using-hugos-syntax-highlighter-chroma
+pygmentsUseClasses: true
+markup:
+  highlight:
+    anchorLineNos: false
+    codeFences: true
+    guessSyntax: true
+    hl_Lines: ""
+    hl_inline: false
+    lineAnchors: ""
+    lineNoStart: 1
+    lineNos: false
+    lineNumbersInTable: true
+    noClasses: false
+    noHl: false
+    style: onedark
+    tabWidth: 4
+  goldmark:
+    renderer:
+      unsafe: true # Allow HTML in md files
+
+privacy:
+  vimeo:
+    disabled: false
+    simple: true
+  twitter:
+    disabled: false
+    enableDNT: true
+    simple: true
+  instagram:
+    disabled: false
+    simple: true
+  youtube:
+    disabled: false
+    privacyEnhanced: true
+
+services:
+  instagram:
+    disableInlineCSS: true
+  twitter:
+    disableInlineCSS: true
+
+outputs:
+  home:
+  - HTML
+  - RSS
+  - JSON # is necessary
+
+copyright:
+  © 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) <br/>
+  <span id="busuanzi_container_site_pv">访问量<span id="busuanzi_value_site_pv"></span>次</span> |
+hasCJKLanguage: true
+enableGitInfo: true
+timeout: 60000

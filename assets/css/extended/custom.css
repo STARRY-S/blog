@@ -1,0 +1,54 @@
+code {
+    font-family: Monaco, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+    color: var(--code-color);
+}
+
+/* Fixes iOS font sizing anomaly */
+/* https://github.com/adityatelange/hugo-PaperMod/issues/828#issuecomment-1171994855 */
+code {
+    text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: Roboto, "Noto Sans", "Noto Sans CJK", "open sans", "helvetica neue", sans-serif;
+}
+
+.spoiler {
+    color: black;
+    background-color:black;
+}
+
+.spoiler:hover{
+    color: white;
+}
+
+:root{
+    --code-color: #233333;
+    --main-width: 900px;
+    --image-title-color: #888;
+    font-size: 18px;
+}
+
+.dark{
+    --code-color: #ffeeaa;
+    --image-title-color: #999;
+}
+
+.aplayer-title {
+    color: #222222;
+}
+
+.aplayer-list-title {
+    color: #222222;
+}
+
+.image-title {
+    text-align: center;
+    color: var(--image-title-color);
+    margin-top: -0.8em;
+    margin-bottom: 0;
+    font-size: 0.9em;
+}
