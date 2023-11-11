@@ -18,7 +18,7 @@ My native language is not English, so there are many posts that I can't translat
 
 I'm an Arch Linux user who has a fondness for Linux. I frequently write code and delve into interesting, abstract concepts.
 
-In my spare time, I occasionally do photography. Photos are available on the [gallery](/gallery/) page.
+In my spare time, I occasionally do photography. Photos are available on the [gallery](/en/gallery/) page.
 
 - PGP Fingerprint: `E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2`
 - Email: [starry@starry-s.moe](mailto:starry@starry-s.moe)
