@@ -1,0 +1,1095 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>教程 on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/</link>
+    <description>Recent content in 教程 on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Wed, 18 Oct 2023 21:42:02 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>修复缩小磁盘空间后受损的 GPT 分区表</title>
+      <link>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</link>
+      <pubDate>Wed, 18 Oct 2023 21:42:02 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</guid>
+      <description>&lt;p&gt;磁盘的扩容和分区的扩/缩容场景很常见，比如分区用着用着快满了，而磁盘有空闲的未分区空间，而这块区域恰好在这块分区的后面，这时可以对分区扩容。
+在使用虚拟机（例如 QEMU）时，假设起初虚拟机的磁盘只创建了 20G，但用久了会存在不够用的情况，这时可以对磁盘扩容，之后再调整分区的大小。&lt;/p&gt;
+&lt;p&gt;但是最近遇到了一个需要对磁盘缩容的场景，例如把一个 64G 的 U 盘用 &lt;code&gt;dd&lt;/code&gt; 将整个磁盘的数据写入到一个 8G 的 U盘中（当然这个 64G U盘实际使用的分区大小不能大于前 8G）。
+或者要把一个原本 50G 的 qcow2 虚拟磁盘缩小成 10G，用来制作别的镜像什么的。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>磁盘的扩容和分区的扩/缩容场景很常见，比如分区用着用着快满了，而磁盘有空闲的未分区空间，而这块区域恰好在这块分区的后面，这时可以对分区扩容。
+在使用虚拟机（例如 QEMU）时，假设起初虚拟机的磁盘只创建了 20G，但用久了会存在不够用的情况，这时可以对磁盘扩容，之后再调整分区的大小。</p>
+<p>但是最近遇到了一个需要对磁盘缩容的场景，例如把一个 64G 的 U 盘用 <code>dd</code> 将整个磁盘的数据写入到一个 8G 的 U盘中（当然这个 64G U盘实际使用的分区大小不能大于前 8G）。
+或者要把一个原本 50G 的 qcow2 虚拟磁盘缩小成 10G，用来制作别的镜像什么的。</p>
+<meting-js server="netease" type="song" id="1348679974" theme="#233333"></meting-js>
+<p>按照正常的思路，缩小磁盘空间之前要先缩小分区（还要缩小文件系统），确保分区都位于磁盘的前面，这样磁盘在截断后文件系统不会受损，大致步骤可以分为：</p>
+<ol>
+<li>
+<p>缩小文件系统：例如使用 <code>btrfs filesystem resize</code> 缩小 BTRFS 文件系统至待缩小的分区的大小，确保文件系统的大小不超过分区大小。</p>
+</li>
+<li>
+<p>缩小分区：可以使用 <code>fdisk</code> 先删掉待缩小的分区，之后再重新创建新的分区，重建分区时设定新的分区的大小，且不要删除已有的 <code>btrfs</code> 或其他文件系统签名。这样在缩小分区的同时，不需要重新格式化，因此分区中的文件没有丢失。</p>
+<p>（除了 <code>fdisk</code>，还可以用 <code>sfdisk</code>，<code>gdisk</code> 或 <code>parted</code> 等工具调整分区）</p>
+</li>
+<li>
+<p>确保分区都位于磁盘的起始位置后，执行磁盘缩小的操作，将磁盘末端未使用的数据截断。</p>
+</li>
+</ol>
+<p>GPT / MBR 分区表咱凭感觉来猜的话，是存储在磁盘的起始位置的，所以如果磁盘缩小时，将磁盘末端一些数据截断正常情况下应该是不会影响到存储在起始位置的分区表的。</p>
+<p>但是，在一些情况下，会出现缩小完磁盘空间后分区表受损的情况。</p>
+<h2 id="举个栗子">举个栗子</h2>
+<ol>
+<li>
+<p>首先使用 <code>qemu-img create</code> 创建一块 10G 的 QEMU 虚拟机磁盘。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> qemu-img create -f qcow2 disk1.qcow2 10G
+</span></span><span class="line"><span class="cl"><span class="go">Formatting &#39;disk1.qcow2&#39;, fmt=qcow2 cluster_size=65536 extended_l2=off compression_type=zlib size=10737418240 lazy_refcounts=off refcount_bits=16
+</span></span></span></code></pre></div></li>
+<li>
+<p>使用 <code>qemu-nbd</code> 工具将 qcow2 磁盘镜像与 Linux 内核通过 <a href="https://www.kernel.org/doc/Documentation/blockdev/nbd.txt">nbd</a> 连接，这样可以在不启动 QEMU 虚拟机的情况下直接对 qcow2 磁盘分区进行操作。</p>
+<p>加载 <code>nbd</code> 内核模块，其中 <code>max_part</code> 参数是磁盘允许的最大分区数，默认为 0 所以这里需要把数值改大一点。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo modprobe nbd <span class="nv">max_part</span><span class="o">=</span><span class="m">8</span>
+</span></span></code></pre></div><p>将创建的 <code>disk1.qcow2</code> 镜像与 <code>/dev/nbd0</code> 连接。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo qemu-nbd -c /dev/nbd0 ./disk1.qcow2
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> lsblk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+</span></span></span><span class="line"><span class="cl"><span class="go">nbd0  43:0    0  10G  0 disk
+</span></span></span></code></pre></div><p>使用 <code>fdisk</code> 初始化 GPT 分区表，并随便新建几个分区。</p>
+<blockquote>
+<p>咱都是 Arch Linux 用户了，fdisk 就不用我再详细说了吧。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
+</span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device does not contain a recognized partition table.
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new DOS (MBR) disklabel with disk identifier 0xf5c43a4b.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): g
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new GPT disklabel (GUID: 2EB767AB-0958-461B-B56D-697B3305AC83).
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1-128, default 1):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (2048-20971486, default 2048):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-20971486, default 20969471): +512M
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 1 of type &#39;Linux filesystem&#39; and of size 512 MiB.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): t
+</span></span></span><span class="line"><span class="cl"><span class="go">Selected partition 1
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition type or alias (type L to list all): 1
+</span></span></span><span class="line"><span class="cl"><span class="go">Changed type of partition &#39;Linux filesystem&#39; to &#39;EFI System&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-20971486, default 1050624):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-20971486, default 20969471):
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 9.5 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="go">The partition table has been altered.
+</span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
+</span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
+</span></span></span></code></pre></div><p>本栗中，磁盘新建了两个分区，<code>/dev/nbd0p1</code> 是 512M 大小的 EFI 分区，剩余空间 <code>/dev/nbd0p2</code> 是 root 分区。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk -l /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 10 GiB, 10737418240 bytes, 20971520 sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 2EB767AB-0958-461B-B56D-697B3305AC83
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 20969471 19918848  9.5G Linux filesystem
+</span></span></span></code></pre></div><p>之后简单的格式化一下两个分区，挂载并往里面写一些文件进去。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo mkfs.vfat -F <span class="m">32</span> /dev/nbd0p1
+</span></span><span class="line"><span class="cl"><span class="go">mkfs.fat 4.2 (2021-01-31)
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo mkfs.btrfs /dev/nbd0p2
+</span></span><span class="line"><span class="cl"><span class="go">btrfs-progs v6.5.2
+</span></span></span><span class="line"><span class="cl"><span class="go">See https://btrfs.readthedocs.io for more information.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Performing full device TRIM /dev/nbd0p2 (9.50GiB) ...
+</span></span></span><span class="line"><span class="cl"><span class="go">NOTE: several default settings have changed in version 5.15, please make sure
+</span></span></span><span class="line"><span class="cl"><span class="go">    this does not affect your deployments:
+</span></span></span><span class="line"><span class="cl"><span class="go">    - DUP for metadata (-m dup)
+</span></span></span><span class="line"><span class="cl"><span class="go">    - enabled no-holes (-O no-holes)
+</span></span></span><span class="line"><span class="cl"><span class="go">    - enabled free-space-tree (-R free-space-tree)
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Label:              (null)
+</span></span></span><span class="line"><span class="cl"><span class="go">UUID:               a5fb30e5-eb5f-4a0b-8d2a-106e04e1488b
+</span></span></span><span class="line"><span class="cl"><span class="go">Node size:          16384
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size:        4096
+</span></span></span><span class="line"><span class="cl"><span class="go">Filesystem size:    9.50GiB
+</span></span></span><span class="line"><span class="cl"><span class="go">Block group profiles:
+</span></span></span><span class="line"><span class="cl"><span class="go">Data:             single            8.00MiB
+</span></span></span><span class="line"><span class="cl"><span class="go">Metadata:         DUP             256.00MiB
+</span></span></span><span class="line"><span class="cl"><span class="go">System:           DUP               8.00MiB
+</span></span></span><span class="line"><span class="cl"><span class="go">SSD detected:       yes
+</span></span></span><span class="line"><span class="cl"><span class="go">Zoned device:       no
+</span></span></span><span class="line"><span class="cl"><span class="go">Incompat features:  extref, skinny-metadata, no-holes, free-space-tree
+</span></span></span><span class="line"><span class="cl"><span class="go">Runtime features:   free-space-tree
+</span></span></span><span class="line"><span class="cl"><span class="go">Checksum:           crc32c
+</span></span></span><span class="line"><span class="cl"><span class="go">Number of devices:  1
+</span></span></span><span class="line"><span class="cl"><span class="go">Devices:
+</span></span></span><span class="line"><span class="cl"><span class="go">   ID        SIZE  PATH
+</span></span></span><span class="line"><span class="cl"><span class="go">    1     9.50GiB  /dev/nbd0p2
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> mkdir -p mnt
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p2 mnt
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mkdir ./mnt/<span class="o">{</span>boot,home<span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p1 mnt/boot
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo touch ./mnt/example.txt
+</span></span></code></pre></div></li>
+<li>
+<p>使用 <code>btrfs filesystem resize</code> 缩小 root 分区中的 BTRFS 文件系统大小至 7G，之后使用 <code>fdisk</code> 缩小 root 分区大小至 7G。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo btrfs filesystem resize 7G mnt
+</span></span><span class="line"><span class="cl"><span class="go">Resize device id 1 (/dev/nbd0p2) from 9.50GiB to 7.00GiB
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sync
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo umount -R ./mnt
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
+</span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): d
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1,2, default 2): 2
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Partition 2 has been deleted.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-20971486, default 1050624):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-20971486, default 20969471): +7G
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 7 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition #2 contains a btrfs signature.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">The partition table has been altered.
+</span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
+</span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo fdisk -l /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 10 GiB, 10737418240 bytes, 20971520 sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 2EB767AB-0958-461B-B56D-697B3305AC83
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 15730687 14680064    7G Linux filesystem
+</span></span></span></code></pre></div><p>调整完分区大小后，因为这里没有移除 BTRFS 签名，所以分区的文件没有被删除，执行 <code>lsblk -no NAME,UUID /dev/nbd0</code> 可以看到 <code>/dev/nbd0p2</code> 的 UUID 也没有变化，和上面执行 <code>mkfs.btrfs</code> 时输出的一致。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> lsblk -no NAME,UUID /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">nbd0
+</span></span></span><span class="line"><span class="cl"><span class="go">├─nbd0p1 C6B7-EF70
+</span></span></span><span class="line"><span class="cl"><span class="go">└─nbd0p2 a5fb30e5-eb5f-4a0b-8d2a-106e04e1488b
+</span></span></span></code></pre></div></li>
+<li>
+<p>断开 NBD 连接，缩小 qcow2 磁盘大小到 8G。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo qemu-nbd -d /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0 disconnected
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> qemu-img resize ./disk1.qcow2 --shrink 8G
+</span></span><span class="line"><span class="cl"><span class="go">Image resized.
+</span></span></span></code></pre></div></li>
+<li>
+<p>重新将 qcow2 磁盘连接到 <code>/dev/nbd0</code>，会发现上面创建的磁盘中的几块分区不见了！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo qemu-nbd -c /dev/nbd0 ./disk1.qcow2
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk -l /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 8 GiB, 8589934592 bytes, 16777216 sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: dos
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 0x00000000
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device      Boot Start      End  Sectors Size Id Type
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1          1 16777215 16777215   8G ee GPT
+</span></span></span></code></pre></div><p><code>fdisk</code> 输出中包含一条错误提示：<code>GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.</code>，大致意思是 GPT 分区表中记录的区块数量 (sectors) 和磁盘实际的区块数不一致。</p>
+</li>
+</ol>
+<h2 id="修复受损的分区表">修复受损的分区表</h2>
+<p>所以修复上面栗子中受损的 GPT 分区表的办法是，重新建一个 GPT 分区表，并按照之前的分区位置，重建分区。</p>
+<p>这里重建分区时要注意，需要输入精确的区块位置，而不是类似 <code>+50M</code> 这样模糊的值。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
+</span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): g
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new GPT disklabel (GUID: 3C587DB1-5978-45D2-AB05-9135D273D06D).
+</span></span></span><span class="line"><span class="cl"><span class="go">The device contains &#39;PMBR&#39; signature and it will be removed by a write command. See fdisk(8) man page and --wipe option for more details.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1-128, default 1):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (2048-16777182, default 2048):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-16777182, default 16775167): 1050623
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 1 of type &#39;Linux filesystem&#39; and of size 512 MiB.
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition #1 contains a vfat signature.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-16777182, default 1050624):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-16777182, default 16775167): 15730687
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 7 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition #2 contains a btrfs signature.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): t
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1,2, default 2): 1
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition type or alias (type L to list all): 1
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Changed type of partition &#39;Linux filesystem&#39; to &#39;EFI System&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">The partition table has been altered.
+</span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
+</span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
+</span></span></span></code></pre></div><p>重建分区表后，不出意外的话，重新挂载分区是能访问分区中的文件的，分区的 UUID 也没有发生改动。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> lsblk -no NAME,UUID /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">nbd0
+</span></span></span><span class="line"><span class="cl"><span class="go">├─nbd0p1 C6B7-EF70
+</span></span></span><span class="line"><span class="cl"><span class="go">└─nbd0p2 a5fb30e5-eb5f-4a0b-8d2a-106e04e1488b
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo -l fdisk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 8 GiB, 8589934592 bytes, 16777216 sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 3C587DB1-5978-45D2-AB05-9135D273D06D
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 15730687 14680064    7G Linux filesystem
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo mount /dev/nbd0p2 mnt
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p1 mnt/boot
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ls -alh mnt
+</span></span><span class="line"><span class="cl"><span class="go">total 20K
+</span></span></span><span class="line"><span class="cl"><span class="go">drwxr-xr-x 2 root     root     4.0K Jan  1  1970 boot
+</span></span></span><span class="line"><span class="cl"><span class="go">-rw-r--r-- 1 root     root        0 Oct 18 22:36 example.txt
+</span></span></span><span class="line"><span class="cl"><span class="go">drwxr-xr-x 1 root     root        0 Oct 18 22:34 home
+</span></span></span></code></pre></div><h2 id="sfdisk-备份分区表">sfdisk 备份分区表</h2>
+<p>如果觉得重建分区表时，分区的位置记不住的话（废话正常人谁能背下来这一串数字），<code>sfdisk</code> 的 <code>--dump</code> 参数可以备份分区表。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo sfdisk --dump /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">label: gpt
+</span></span></span><span class="line"><span class="cl"><span class="go">label-id: 3C587DB1-5978-45D2-AB05-9135D273D06D
+</span></span></span><span class="line"><span class="cl"><span class="go">device: /dev/nbd0
+</span></span></span><span class="line"><span class="cl"><span class="go">unit: sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">first-lba: 2048
+</span></span></span><span class="line"><span class="cl"><span class="go">last-lba: 16777182
+</span></span></span><span class="line"><span class="cl"><span class="go">sector-size: 512
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">/dev/nbd0p1 : start=        2048, size=     1048576, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=496140B3-C491-470B-98D7-BB95F55266A7
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 : start=     1050624, size=    14680064, type=0FC63DAF-8483-4772-8E79-3D69D8477DE4, uuid=F918E93D-FB1D-4652-9657-CE24A29ADEA5
+</span></span></span></code></pre></div><p>在执行磁盘缩小操作之前，可以先使用 <code>sfdisk</code> 导出分区表，缩小磁盘后再恢复。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">Backup partition table
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sfdisk --dump /dev/nbd0 &gt; nbd0.txt
+</span></span><span class="line"><span class="cl"><span class="go">Remove the `last-lba` line
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> grep -v last-lba nbd0.txt &gt; partition-backup.txt
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">After shrinking the disk size...
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Restore the backup partition table
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sfdisk /dev/nbd0 &lt; partition-backup.txt
+</span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>yuzu - Switch 虚拟机</title>
+      <link>https://blog.starry-s.moe/posts/2022/switch-emulator/</link>
+      <pubDate>Sun, 16 Oct 2022 15:48:46 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/switch-emulator/</guid>
+      <description>&lt;p&gt;一直想玩的游戏没有官方汉化，Switch 的游戏文件没破解的话是没办法装汉化插件的，尽管咱有 Switch OLED 港版主机，但是破解有被封的可能而且过程过于麻烦，破解后就不能联网了，所以咱在买了正版游戏但是看不懂日语后无奈之下选择了虚拟机，正好水一篇博客。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>一直想玩的游戏没有官方汉化，Switch 的游戏文件没破解的话是没办法装汉化插件的，尽管咱有 Switch OLED 港版主机，但是破解有被封的可能而且过程过于麻烦，破解后就不能联网了，所以咱在买了正版游戏但是看不懂日语后无奈之下选择了虚拟机，正好水一篇博客。</p>
+<meting-js server="netease" type="song" id="590443" theme="#233333"></meting-js>
+<p>目前有两个虚拟机可选，一个是 由 C# 编写的 <a href="https://github.com/Ryujinx/Ryujinx">Ryujinx</a>，另一个是由 C++ 编写的 <a href="https://github.com/yuzu-emu/yuzu">yuzu</a>，这俩都是开源软件而且都能在 Linux 上运行，咱选的是后者。</p>
+<hr>
+<p>yuzu 提供的教程需要短接器和一张TF卡以及 switch 本体，从 switch 中获取 <code>prod.keys</code> 和 <code>title.keys</code> （非必须），喜欢折腾的可以买个短接器慢慢鼓捣，教程链接：<a href="https://yuzu-emu.org/help/quickstart/">https://yuzu-emu.org/help/quickstart/</a>。如果懒得折腾的话从网上找个现成的 key 文件也能用。</p>
+<p>Arch Linux 可以从 archlinuxcn 源或者 AUR 中获取。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S yuzu-git
+</span></span></code></pre></div><p>第一次启动时会提示缺少 keys，可先忽略，选择左上角 <code>File-&gt;Open yuzu Folder</code>，新建一个 <code>keys</code> 文件夹，将 <code>prod.keys</code> 复制进去后重启软件。</p>
+<p>yuzu 可以在不手动安装系统的情况下运行游戏，所以添加了游戏所在的文件夹就能玩了。</p>
+<p><img loading="lazy" src="images/1.png" alt="" />
+
+</p>
+<p>然后就是在设置里面改一下手柄的按键布局，因为用习惯了 Xbox 手柄，所以咱把 A 和 B 位置对调了一下。</p>
+<p><img loading="lazy" src="images/2.png" alt="" />
+
+</p>
+<hr>
+<p>后续：</p>
+<p>Yuzu 2023-05-21 之后的版本对宝可梦做了些优化导致玩月姬时文字花屏乱码，玩月姬的话不要下载 2023-05-21 (1440) 之后的版本。</p>
+<p>然后 Arch Linux 最近滚完系统后遇到了 yuzu 的 Qt 启动失败报错：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
+</span></span><span class="line"><span class="cl">qt.qpa.plugin: Could not find the Qt platform plugin &#34;wayland&#34; in &#34;&#34;
+</span></span><span class="line"><span class="cl">This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Available platform plugins are: xcb.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">zsh: IOT instruction (core dumped)  yuzu
+</span></span></code></pre></div><p>查了一阵子找到的解决办法是设置 <code>QT_PLUGIN_PATH=/usr/lib/qt/plugins</code> 环境变量，覆盖掉 yuzu 安装包自带的 Qt 插件而是改用系统的。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>移动GM220-S光猫改桥接小记</title>
+      <link>https://blog.starry-s.moe/posts/2022/gm220-s-bridge-mode/</link>
+      <pubDate>Thu, 07 Jul 2022 17:54:35 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/gm220-s-bridge-mode/</guid>
+      <description>&lt;p&gt;最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。</p>
+<p>因为我不知道PPPoE拨号的帐号和密码，尽管这个光猫的超级密码网上一搜就能找到，但是我不知道PPPoE帐号的密码就算改了桥接也没办法拨号。
+于是先借助网上能搜到的资料尝试把宽带帐号的密码给搞出来。</p>
+<hr>
+<p>一开始尝试着登录光猫的后台页面，在设置拨号上网的页面那里F12大法，把<code>input</code>元素的<code>type=&quot;password&quot;</code>改成<code>type=&quot;text&quot;</code>，
+但是发现这里预填写的密码已经是加密过的<code>******</code>，因此这个方法行不通。</p>
+<p>然后看教程有说尝试打开光猫的telnet，把配置文件用ftp传出来，但是试了一下所有的尝试打开telnet的方式在这个光猫上都不好使，于是这个方法也行不通。</p>
+<p>之后在光猫登录管理员帐号之后，在“管理-&gt;设备管理-&gt;USB备份配置&quot;这里找到了可以把配置文件备份到U盘的地方，
+于是找了一张空内存卡格式化成<code>FAT32</code>，放读卡器里插在光猫上，把配置文件备份到U盘上。</p>
+<p><img loading="lazy" src="images/1.png" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">备份至USB</p>
+</p>
+<blockquote>
+<p>这里备份之后不要立即把U盘拔下来，貌似光猫在备份完配置文件后没有立即把数据<code>sync</code>到U盘中，需要等一阵子再拔U盘。
+等多久我也不确定，反复试几次直到U盘上出现了<code>e8_Config_Backup</code>文件夹就可以了。</p>
+</blockquote>
+<p>然后下载<a href="http://www.nirsoft.net/utils/router_password_recovery.html#DownloadLinks">RouterPassView</a>，
+用这个工具打开配置文件，就可以找到里面光猫上的所有配置了，包括宽带帐号和密码。</p>
+<p>之后在网络设置里面改桥接，就可以用软路由拨号上网辣。</p>
+<hr>
+<p>使用了一下移动的宽带发现貌似他们把所有的ICMP的ECHO回显请求屏蔽掉了，所以尝试ping任何IP都是不通的。别的貌似没什么问题。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>在Arch Linux上配置软路由</title>
+      <link>https://blog.starry-s.moe/posts/2022/archlinux-router/</link>
+      <pubDate>Wed, 08 Jun 2022 00:49:34 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/archlinux-router/</guid>
+      <description>&lt;p&gt;之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用&lt;code&gt;systemd-networkd&lt;/code&gt;配置了一个简易的软路由。不过&lt;code&gt;systemd-networkd&lt;/code&gt;不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为&lt;a href=&#34;https://blog.starry-s.moe/posts/2022/nanopi-r4s/&#34;&gt;R4S上手体验&lt;/a&gt;的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用<code>systemd-networkd</code>配置了一个简易的软路由。不过<code>systemd-networkd</code>不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为<a href="/posts/2022/nanopi-r4s/">R4S上手体验</a>的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。</p>
+<blockquote>
+<p>这里偷偷骂一下长城宽带没人反对吧</p>
+</blockquote>
+<h2 id="准备工作">准备工作</h2>
+<p>按照Arch Wiki的<a href="https://wiki.archlinux.org/title/Router#Connection_sharing">Router页面</a>，你的电脑需要符合安装Arch Linux的基础硬件要求，且至少具备俩物理网口。</p>
+<p>个人觉得软路由没必要非得刷*WRT或者其他路由器专用系统，也没必要搞个爱快群辉什么的系统，我只想给他装我喜欢的发行版，然后我自己配置我需要的服务，只要有两个以上的物理网口就可以配置路由功能，给他们配置DHCP和流量转发就完事了，这样搞出来的路由器更符合咱自己的需求，相对来讲也更灵活一些，不用受限于那些路由器/NAS定制的系统，而缺点则是比较折腾，有可能不稳定。</p>
+<p>安装系统的步骤咱跳过不讲了，Wiki上有的东西没必要在这里重复一遍。</p>
+<h2 id="配置ip地址">配置IP地址</h2>
+<p>首先，将你电脑的两个物理网口一个用作WAN口（连接广域网），一个用作LAN口（连接局域网），有需要的可以自行修改网口的名称（通常默认的网卡名字为<code>eth*</code>，或者<code>enp*s*</code>）。
+为了和Wiki同步，这里假设WAN口的名字为<code>extern0</code>，用来指连接到广域网的网口，LAN口的名字为<code>intern0</code>，代指连接到局域网的网口。</p>
+<p>本篇使用<code>netctl</code>配置网络，在修改配置文件之前，需要先停掉其他配置网络的服务。</p>
+<p>给LAN口配置一个静态IP地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl/intern0-profile
+</span></span><span class="line"><span class="cl"># Config file for intern0 (LAN)
+</span></span><span class="line"><span class="cl">Description=&#39;Private Interface. (LAN)&#39;
+</span></span><span class="line"><span class="cl">Interface=intern0
+</span></span><span class="line"><span class="cl">Connection=ethernet
+</span></span><span class="line"><span class="cl">IP=&#39;static&#39;
+</span></span><span class="line"><span class="cl">Address=(&#39;10.10.10.1/24&#39;)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">IP6=&#39;static&#39;
+</span></span><span class="line"><span class="cl">Address6=(&#39;fdaa:aaaa:bbbb::0001/64&#39;)
+</span></span><span class="line"><span class="cl">SkipNoCarrier=yes
+</span></span></code></pre></div><p>以上配置将为LAN口设定IPv4的地址为<code>10.10.10.1</code>，IPv6的地址为<code>fdaa:aaaa:bbbb::0001</code>。
+你可以给这个网口设定任意的局域网IP地址，通常为<code>10.*</code>，<code>172.*</code>，<code>192.168.*</code>这些网段的任意一个地址，
+IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**</code>开头的一般都是局域网的IP地址。</p>
+<p>之后给WAN口配置DHCP或PPPoE协议。</p>
+<blockquote>
+<p>配置DHCP的方式自行翻Wiki或者看example，这里不重复讲了。</p>
+</blockquote>
+<p>在配置PPPoE之前需要安装<code>ppp</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl/extern0-profile
+</span></span><span class="line"><span class="cl"># Config file for public interface (WAN)
+</span></span><span class="line"><span class="cl">Description=&#39;Public Interface. (WAN)&#39;
+</span></span><span class="line"><span class="cl">Interface=extern0
+</span></span><span class="line"><span class="cl">Connection=pppoe
+</span></span><span class="line"><span class="cl">User=&#39;username&#39;
+</span></span><span class="line"><span class="cl">Password=&#39;samplepasswd&#39;
+</span></span><span class="line"><span class="cl"># IP6=stateless
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Always keep a connection established
+</span></span><span class="line"><span class="cl">ConnectionMode=&#39;persist&#39;
+</span></span></code></pre></div><p>使用以下命令启动<code>netctl</code>的配置文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">netctl enable intern0-profile
+</span></span><span class="line"><span class="cl">netctl enable extern0-profile
+</span></span></code></pre></div><p>重启路由器，将WAN口与光猫的网口连接，使用<code>ip addr</code>查看网络设备的IP地址，顺利的话，可以看到一个名为<code>ppp0</code>的网口，并获取了一个运营商分给你的IP地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1: intern0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000
+</span></span><span class="line"><span class="cl">    link/ether fa:97:da:d8:9d:8a brd ff:ff:ff:ff:ff:ff
+</span></span><span class="line"><span class="cl">    inet 10.10.10.1/24 brd 10.10.10.255 scope global intern0
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">    inet6 fdaa:aaaa:bbbb::1/64 scope global nodad
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">    inet6 fe80::f897:daff:fed8:9d8a/64 scope link
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">2: extern0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq state UP group default qlen 1000
+</span></span><span class="line"><span class="cl">    link/ether ca:1f:4a:9b:29:df brd ff:ff:ff:ff:ff:ff
+</span></span><span class="line"><span class="cl">    inet6 fe80::c81f:4aff:fe9b:29df/64 scope link
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">3: ppp0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu 1492 qdisc fq_codel state UNKNOWN group default qlen 3
+</span></span><span class="line"><span class="cl">    link/ppp
+</span></span><span class="line"><span class="cl">    inet 123.123.123.123 peer 123.123.123.1/32 scope global ppp0
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">    inet6 240e:aaaa:bbbb:cccc:::eeee/64 scope global dynamic mngtmpaddr
+</span></span><span class="line"><span class="cl">       valid_lft 259132sec preferred_lft 172732sec
+</span></span><span class="line"><span class="cl">    inet6 fe80::aaaa:bbbb:cccc:dddd peer fe80::aaaa:bbbb:cccc:dddd/128 scope link
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span></code></pre></div><p>如果遇到了问题，可以使用<code>systemctl status netctl@extern0\\x2dprofile.service</code>查看一下错误信息。
+如果是认证失败的话，重启几次这个service说不定就好了。</p>
+<h2 id="配置dns和dhcp">配置DNS和DHCP</h2>
+<p>安装<code>dnsmasq</code>，编辑<code>/etc/dnsmasq.conf</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Setup listen address
+</span></span><span class="line"><span class="cl">listen-address=10.10.10.1,127.0.0.1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Do not read /etc/resolv.conf
+</span></span><span class="line"><span class="cl">no-resolv
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Use following dns servers
+</span></span><span class="line"><span class="cl">server=114.114.114.114
+</span></span><span class="line"><span class="cl">server=8.8.8.8
+</span></span><span class="line"><span class="cl">server=8.8.4.4
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Bind interface
+</span></span><span class="line"><span class="cl">interface=intern0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Setup domain
+</span></span><span class="line"><span class="cl">expand-hosts
+</span></span><span class="line"><span class="cl">domain=foo.bar
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Setup IPv4 DHCP
+</span></span><span class="line"><span class="cl">dhcp-range=10.10.10.100,10.10.10.255,255.255.255.0,12h
+</span></span><span class="line"><span class="cl"># Setup IPv6 DHCP
+</span></span><span class="line"><span class="cl">dhcp-range=fdaa:aaaa:bbbb::000a, fdaa:aaaa:bbbb::ffff, 64, 12h
+</span></span></code></pre></div><p>使用<code>systemctl enable --now dnsmasq.service</code>启动<code>dnsmasq</code>，
+之后重启路由器，使用网线连接将电脑连接到路由器的LAN口，顺利的话可以自动获取一个IP地址。</p>
+<p>如果没获取到IP地址的话，有可能是DHCP服务器的问题，先尝试在电脑上手动设置一个IP地址，之后尝试ping路由器的IP（<code>10.10.10.1</code>）。
+如果还是无法连接到路由器的话，就需要重新检查一下路由器的配置了。</p>
+<h2 id="网络共享">网络共享</h2>
+<p>首先<a href="https://wiki.archlinux.org/title/Internet_sharing#Enable_packet_forwarding">参照Wiki</a>，开启数据包转发的功能。</p>
+<p>之后安装<code>iptables</code>，配置ipv4和ipv6的流量伪装。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">iptables -A FORWARD -i intern0 -j ACCEPT
+</span></span><span class="line"><span class="cl">iptables -A FORWARD -o intern0 -j ACCEPT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">iptables -t nat -A POSTROUTING -o ppp0 -j MASQUERADE
+</span></span><span class="line"><span class="cl">iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+</span></span><span class="line"><span class="cl">iptables -A FORWARD -i intern0 -o ppp0 -j ACCEPT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">iptables -t mangle -A FORWARD -o ppp0 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ip6tables -t nat -A POSTROUTING -o ppp0 -j MASQUERADE
+</span></span></code></pre></div><p>之后可使用<code>iptables-save -f /etc/iptables/iptables.rules</code>和
+<code>ip6tables-save -f /etc/iptables/ip6tables.rules</code>将ip桌子的规则保存下来。</p>
+<h2 id="done">Done</h2>
+<p>以上配置完成后，按理来说路由器就已经配置好了。</p>
+<p>调试的过程为首先在路由器上尝试ping一个广域网的域名或IP地址（<code>8.8.8.8</code>），之后将路由器与电脑用网线连接，
+电脑应当通过DHCP自动获取到一个随机的IP地址。
+之后在电脑上尝试打开一些理应能打开的网站，应该是能打开的。</p>
+<p>如果能电脑可以ping通一个广域网的IP，但是打不开网站的话，就检查一下路由器DNS配置，
+如果路由器上能ping通一个广域网的IP，但电脑连IP地址都ping不通，那就去检查一下ip桌子的流量伪装规则，检查一下网口名字有没有写对之类的。</p>
+<p>之后如果一切都调试成功的话，就可以把家里的无线路由器改成“有线中继”模式了，这样家里的无线路由器将只作为一个无线AP使用，路由的功能将全部由刚刚配置好的软路由实现。</p>
+<p>配置好“有线中继”模式后，电脑连接无线WIFI后获得的IP地址应当是软路由分配的IP地址，网段为刚刚咱们设置的<code>10.10.10.*</code>，
+而不再是<code>192.168.*</code>的IP地址了。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>NanoPi R4S上手 &amp; 安装Arch Linux ARM</title>
+      <link>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</link>
+      <pubDate>Fri, 13 May 2022 00:32:40 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</guid>
+      <description>&lt;p&gt;前两天下单了个Nano Pi R4S，4G内存的版本。通常情况下这玩意别人都把他当软路由用，但是今天咱收到货后想了一会拍大腿一寻思这玩意不就是个ARM架构的小电脑嘛~&lt;/p&gt;
+&lt;p&gt;所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>前两天下单了个Nano Pi R4S，4G内存的版本。通常情况下这玩意别人都把他当软路由用，但是今天咱收到货后想了一会拍大腿一寻思这玩意不就是个ARM架构的小电脑嘛~</p>
+<p>所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。</p>
+<meting-js server="netease" type="song" id="19563215" theme="#233333"></meting-js>
+<h2 id="开箱">开箱</h2>
+<p><img loading="lazy" src="images/nanopi_1.jpg" alt="&amp;ldquo;USB 3.0、SD卡插槽以及三脚架接口&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">USB 3.0、SD卡插槽以及三脚架接口</p>
+</p>
+<p><img loading="lazy" src="images/nanopi_2.jpg" alt="&amp;ldquo;供电接口和网口&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">供电接口和网口</p>
+</p>
+<p><img loading="lazy" src="images/nanopi_3.jpg" alt="&amp;ldquo;正面&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">正面</p>
+</p>
+<h2 id="拆解">拆解</h2>
+<p>咱收到货后第一件事就是找螺丝刀和塑料卡片把这漏油器拆开看看（</p>
+<p><img loading="lazy" src="images/nanopi_7.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">主板正面</p>
+</p>
+<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
+<h2 id="arch-linux-arm">Arch Linux ARM</h2>
+<p>在Arch Linux ARM (简称alarm) 官网上没找到对R4S的官方的支持，简单搜了一下armbian有对R4S的官方支持。</p>
+<p>因为用惯了<strong>滚动更新</strong>发行版，所以不想用*bian系统，而*WRT系统的软件包相对其他发行版而言更少一些，系统也相当于被魔改过，所以除了做漏油器之外几乎干不了别的，所以这是我想安装Arch Linux的理由。</p>
+<p>然后咱搜到了一篇给<a href="https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d">NanoPi R2S安装alarm的教程</a>，评论里有人提到了给R4S安装也是可以的。</p>
+<p>所以咱大致把这个教程翻译一下，再修改一些R2S和R4S在安装时的区别。</p>
+<p>以下内容需结合alarm的 <a href="https://archlinuxarm.org/platforms/armv8/generic">aarch64通用安装教程</a>食用，像更新pacman-key，ssh的密码之类的部分咱就不在这里重复了。</p>
+<h3 id="准备sd卡">准备SD卡</h3>
+<ol start="0">
+<li>
+<p>下载armbian的镜像，下载链接自行谷歌。</p>
+<blockquote>
+<p>通常下载好的文件是<code>xz</code>格式的压缩文件，需要使用<code>unxz</code>解压成<code>img</code>镜像。</p>
+</blockquote>
+</li>
+<li>
+<p>将armbian镜像的<code>bootloader</code>和<code>uboot</code>(32-32767区块的部分)用<code>dd</code>写到SD卡中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Clean the sector before 32
+</span></span><span class="line"><span class="cl">dd if=/dev/zero of=/dev/sdX bs=1M count=32
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Write uBoot and bootloader
+</span></span><span class="line"><span class="cl">dd if=Armbian_*.img of=/dev/sdX skip=31 seek=31 bs=512 count=32736
+</span></span></code></pre></div><blockquote>
+<p>其实可以直接用<code>dd</code>把armbian的整个镜像写到内存卡中然后插入R4S开机，第一次开机后他会自动重新给内存卡分区，然后只需把<code>/dev/sdX1</code>格式化成ext4就能安装alarm了。</p>
+</blockquote>
+</li>
+<li>
+<p>使用<code>fdisk</code>给内存卡分区并格式化文件系统</p>
+<p>创建分区时先按<code>o</code>创建个MBR分区表，然后按<code>n</code>添加分区。第一个分区的起始区块(sector)需要设置为32768，通常情况下分一个区就够用了，或者你可以像我这样分俩区，一个给swap，不过实际没啥必要。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Disk /dev/mmcblk1: 29.72 GiB, 31914983424 bytes, 62333952 sectors
+</span></span><span class="line"><span class="cl">Units: sectors of 1 * 512 = 512 bytes
+</span></span><span class="line"><span class="cl">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span><span class="line"><span class="cl">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span><span class="line"><span class="cl">Disklabel type: dos
+</span></span><span class="line"><span class="cl">Disk identifier: 0x33fc535e
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device         Boot    Start      End  Sectors  Size Id Type
+</span></span><span class="line"><span class="cl">/dev/mmcblk1p1         32768 53944319 53911552 25.7G 83 Linux
+</span></span><span class="line"><span class="cl">/dev/mmcblk1p2      53944320 62333951  8389632    4G 82 Linux swap / Solaris
+</span></span></code></pre></div><p>创建完分区后，把<code>root</code>分区<code>mkfs.ext4</code>格式化成ext4，swap分区用<code>mkswap</code>格式化。</p>
+</li>
+<li>
+<p>解压alarm系统文件到root分区中</p>
+</li>
+<li>
+<p>复制并替换armbian的<code>/boot</code>中的文件到新建分区的<code>/boot</code>文件夹中。</p>
+</li>
+<li>
+<p>编辑<code>/boot/armbianEnv.txt</code>，更新<code>rootdev</code>的UUID
+使用<code>blkid</code>或者<code>lsblk -o+UUID</code>可以查看UUID，注意是<strong>UUID</strong>不是PARTUUID。</p>
+</li>
+<li>
+<p>插电，开机 (<del>此处不会出现五安大电牛</del>)，网线连接R4S的WAN口到路由器的LAN口，第一次开机需要生成SSH Key所以时间会久一些，然后就可以ssh到R4S上去辣。</p>
+</li>
+</ol>
+<h3 id="内核">内核</h3>
+<p>上述的安装步骤使用的armbian的内核，可以正常开机，但是想用Arch Linux stock aarch64内核的话，得替换一下DTB文件。（DTB文件是啥我目前还不清楚，如果后续弄明白了再更新到博客上吧）</p>
+<ol>
+<li>
+<p>ssh到R4S中，安装<code>linux-aarch64</code>。</p>
+</li>
+<li>
+<p>修改使用的DTB文件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /boot
+</span></span><span class="line"><span class="cl">rm dtb
+</span></span><span class="line"><span class="cl">ln -sf dtbs dtb
+</span></span></code></pre></div><p>编辑<code>armbianEnv.txt</code>，在末尾添加一行<code>fdtfile=rockchip/rk3399-rockpro64.dtb</code>。</p>
+<blockquote>
+<p>在<code>/boot/dtb/rockchip</code>目录下是可以找到<code>rk3399-nanopi-r4s.dtb</code>文件的，但是目前用这个DTB的话会导致PCIE不能正常工作，导致LAN口无法使用。
+<code>dmesg</code>的输出为：</p>
+</blockquote>
+<blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-prolog" data-lang="prolog"><span class="line"><span class="cl"><span class="s">dmesg</span> <span class="p">|</span> <span class="s">grep</span> <span class="s">pci</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">0.538310</span><span class="p">]</span> <span class="s">ehci</span><span class="o">-</span><span class="nn">pci</span><span class="p">:</span> <span class="nv">EHCI</span> <span class="nv">PCI</span> <span class="s">platform</span> <span class="s">driver</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">0.559708</span><span class="p">]</span> <span class="s">ohci</span><span class="o">-</span><span class="nn">pci</span><span class="p">:</span> <span class="nv">OHCI</span> <span class="nv">PCI</span> <span class="s">platform</span> <span class="s">driver</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">2.999933</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span> <span class="s">host</span> <span class="s">bridge</span> <span class="o">/</span><span class="s">pcie@f8000000</span> <span class="nn">ranges</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">2.999974</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span>      <span class="nv">MEM</span> <span class="mh">0x00fa000000</span><span class="p">.</span><span class="mf">.0</span><span class="s">x00fbdfffff</span> <span class="s">-&gt;</span> <span class="mh">0x00fa000000</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">2.999987</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span>       <span class="nv">IO</span> <span class="mh">0x00fbe00000</span><span class="p">.</span><span class="mf">.0</span><span class="s">x00fbefffff</span> <span class="s">-&gt;</span> <span class="mh">0x00fbe00000</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.000410</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span> <span class="s">no</span> <span class="s">vpcie12v</span> <span class="s">regulator</span> <span class="s">found</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.500881</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span> <span class="nv">PCIe</span> <span class="s">link</span> <span class="s">training</span> <span class="s">gen1</span> <span class="s">timeout</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.500944</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="nn">pcie</span><span class="p">:</span> <span class="s">probe</span> <span class="s">of</span> <span class="s">f8000000</span><span class="p">.</span><span class="s">pcie</span> <span class="s">failed</span> <span class="s">with</span> <span class="s">error</span> <span class="o">-</span><span class="mi">110</span>
+</span></span></code></pre></div><p>于是就先用rockpro64的DTB文件了。</p>
+</blockquote>
+</li>
+<li>
+<p>创建uBoot镜像和initramfs。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pacman -S uboot-tools
+</span></span><span class="line"><span class="cl">mkimage -A arm64 -T ramdisk -n uInitrd -d /boot/initramfs-linux.img /boot/uInitrd-initramfs-linux.img
+</span></span><span class="line"><span class="cl">ln -sf /boot/uInitrd-initramfs-linux.img /boot/uInitrd
+</span></span></code></pre></div><p>创建个<code>pacman</code>的钩子，在以后更新<code>linux-aarch64</code>的时候自动的重新构建uboot和initramfs。</p>
+<p>在<code>mkdir -p /etc/pacman.d/hooks</code>目录下创建<code>/etc/pacman.d/hooks/initramfs.hook</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Trigger]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Operation</span> <span class="o">=</span> Install<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Operation</span> <span class="o">=</span> Upgrade<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Type</span> <span class="o">=</span> Package<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Target</span> <span class="o">=</span> linux-aarch64<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[Action]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Description</span> <span class="o">=</span> Generate uInitrd<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Exec</span> <span class="o">=</span> /usr/bin/mkimage -A arm64 -T ramdisk -n uInitrd -d /boot/initramfs-linux.img /boot/uInitrd-initramfs-linux.img<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">When</span> <span class="o">=</span> PostTransaction<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Depends</span> <span class="o">=</span> uboot-tools<span class="err">
+</span></span></span></code></pre></div></li>
+<li>
+<p>重启，<code>uname -a</code>输出的应该是新版本的内核了。</p>
+<p>有个细节，用armbian的DTB文件时，开机后SYS LED灯是闪烁的，但是换到rockpro60的DTB文件后只有PWR灯长亮，别的灯都不闪了。</p>
+</li>
+</ol>
+<h2 id="router">Router</h2>
+<p>虽然装的是Arch Linux ARM系统，但是这并不代表它不能作为一个路由器使用。</p>
+<p>系统默认用的是<code>systemd-networkd</code>管理网络，所以以下内容使用<code>systemd-networkd</code>配置路由器，暂时没遇到问题，如果不行的话我再换别的。</p>
+<blockquote>
+<p>参考: <a href="https://wiki.archlinux.org/title/Router">Router - ArchWiki</a></p>
+</blockquote>
+<h3 id="重命名网络接口">重命名网络接口</h3>
+<blockquote>
+<p>这一步并非必须，但是我有遇到重启系统后网口从<code>eth0</code>变成<code>eth1</code>的情况，所以还是给网口重命个名好一些。</p>
+</blockquote>
+<p>首先移除并备份<code>/etc/systemd/network</code>中原有的配置文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /etc/systemd/network
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># backup config files</span>
+</span></span><span class="line"><span class="cl">mv ./* /root/
+</span></span></code></pre></div><p>获取WAN口的mac地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /sys/class/net/eth0/address
+</span></span><span class="line"><span class="cl">12:34:56:78:90:ab
+</span></span></code></pre></div><p>创建<code>10-extern0.link</code>，重命名<code>eth0</code>到<code>extern0</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">MACAddress</span><span class="o">=</span>12:34:56:78:90:ab<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[Link]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Description</span><span class="o">=</span>WAN<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>extern0<span class="err">
+</span></span></span></code></pre></div><p>另一个网口(LAN)在开机时<code>systemd-networkd</code>会自动给他重命名为<code>enp1s0</code>。</p>
+<h3 id="wan口配置dhcp客户端">WAN口配置DHCP客户端</h3>
+<p>这里我是把R4S的WAN口接到另一台路由器的LAN上，所以配置的是DHCP客户端。如果你打算直接把路由器接光猫，而且你的猫设置了桥接，那么你可能需要配置PPPOE。</p>
+<p>创建<code>20-extern0.network</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>extern0<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[Network]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">DHCP</span><span class="o">=</span>yes<span class="err">
+</span></span></span></code></pre></div><h3 id="lan口配置静态ip和dhcp服务器">LAN口配置静态IP和DHCP服务器</h3>
+<p>给LAN口设置成另一个网络的静态IP地址，并配置DHCP服务器，给连接到LAN口的机器分配同一个网络下的其他IP地址。</p>
+<p>创建<code>20-enp1s0.network</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>enp1s0<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[Network]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Address</span><span class="o">=</span>10.0.0.1/24<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">DHCPServer</span><span class="o">=</span>true<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">IPMasquerade</span><span class="o">=</span>both<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[DHCPServer]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">PoolOffset</span><span class="o">=</span>100<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">PoolSize</span><span class="o">=</span>100<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">EmitDNS</span><span class="o">=</span>yes<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c1"># DNS=8.8.8.8</span><span class="err">
+</span></span></span></code></pre></div><p>我这个配置是给LAN口设置了静态IP地址<code>10.0.0.1</code>，掩码<code>255.255.255.0</code>，启用了DHCP服务器，
+设置了IPv4数据“伪装”(packets forwarded from the network interface will be appear as coming from the local host)。</p>
+<p>有关配置文件的参数可以使用<code>man systemd.network</code>查询。</p>
+<p>暂时还没搞懂怎么折腾IPv6，如果配置好IPv6的话我再补上……</p>
+<h2 id="后续">后续</h2>
+<p>之后咱装了JDK以及一堆我常用的小组件。为了测试性能，我把我以前备份的Minecraft服务器复制到R4S上跑了一下试试。我的服务器之前是在疼讯云学生主机上跑的(1核2G)，装了好多性能优化插件(lithium，phosphor，carpet&hellip;)，版本是1.16.4，抱着尝试的心态跑了一下这个服务器结果发现很流畅，一开始区块加载的时候CPU的6个核心全跑满，之后就恢复到正常水平了。刚才尝试了一下长时间的生成区块貌似没什么大的问题，只要别一直用鞘翅跑图就行，应该是内存够用了所以运行效果要好一些，不过单核性能来讲的话肯定还是X86吊打R4S的。</p>
+<p>毕竟这就是半个巴掌大小的机器，跑MC的时候CPU温度才不到50度，应该不需要主动散热，功耗才十多瓦……</p>
+<p><img loading="lazy" src="images/nanopi_performance.png" alt="&amp;ldquo;MineCraft Server Performance&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">MineCraft Server Performance</p>
+</p>
+<p><img loading="lazy" src="images/nanopi_neofetch.png" alt="&amp;ldquo;Arch Linux ARM&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Arch Linux ARM</p>
+</p>
+<h2 id="参烤链接">参烤链接</h2>
+<ul>
+<li><a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">NanoPi R4S</a></li>
+<li><a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">NanoPi R4S - FriendlyELEC WiKi</a></li>
+<li><a href="https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d">Installing Arch Linux AArch64 on the NanoPi R2S</a></li>
+<li><a href="https://archlinuxarm.org/platforms/armv8/generic">Generic AArch64 Installation | Arch Linux ARM</a></li>
+<li><a href="https://wiki.archlinux.org/title/Router">Router - ArchWiki</a></li>
+<li><a href="https://wiki.archlinux.org/title/Systemd-networkd">systemd-networkd - ArchWiki</a></li>
+<li><a href="https://man.archlinux.org/man/systemd.network.5">systemd.network(5) — Arch manual pages</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/392619184">在 NanoPi R2S 上安装 Archlinuxarm - 知乎</a></li>
+</ul>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>自建RSS服务器：Miniflux</title>
+      <link>https://blog.starry-s.moe/posts/2022/miniflux-build/</link>
+      <pubDate>Tue, 01 Mar 2022 22:24:17 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/miniflux-build/</guid>
+      <description>&lt;p&gt;之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。&lt;/p&gt;
+&lt;p&gt;最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。&lt;/p&gt;
+&lt;p&gt;思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。</p>
+<p>最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。</p>
+<p>思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。</p>
+<hr>
+<h2 id="准备">准备</h2>
+<p>Miniflux官方文档（EN）：<a href="https://miniflux.app/docs/index.html">https://miniflux.app/docs/index.html</a></p>
+<h2 id="安装">安装</h2>
+<p>此部分配合官方文档食用：<a href="https://miniflux.app/docs/installation.html">https://miniflux.app/docs/installation.html</a></p>
+<h3 id="配置数据库">配置数据库：</h3>
+<p>首先需要安装postgresql数据库。安装方法因发行版而异，网上一搜就有。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Switch to the postgres user
+</span></span><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create a database user for miniflux
+</span></span><span class="line"><span class="cl">$ createuser -P miniflux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create a database for miniflux that belongs to our user
+</span></span><span class="line"><span class="cl">$ createdb -O miniflux miniflux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create the extension hstore as superuser
+</span></span><span class="line"><span class="cl">$ psql miniflux -c &#39;create extension hstore&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Change postgres password
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; \password
+</span></span></code></pre></div><h3 id="安装miniflux">安装Miniflux：</h3>
+<p>不同的发行版使用方法不一样，咱的这台服务器为Ubuntu，所以参照<a href="https://miniflux.app/docs/howto.html#apt-repo">这里的教程</a>配置APT源，安装Miniflux。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -s https://apt.miniflux.app/KEY.gpg | sudo apt-key add -
+</span></span><span class="line"><span class="cl">echo &#34;deb https://apt.miniflux.app/ /&#34; | sudo tee /etc/apt/sources.list.d/miniflux.list &gt; /dev/null
+</span></span><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install miniflux
+</span></span></code></pre></div><h2 id="配置miniflux">配置Miniflux</h2>
+<p>默认配置文件为：<code>/etc/miniflux.conf</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># See https://miniflux.app/docs/configuration.html
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">LISTEN_ADDR=0.0.0.0:8080
+</span></span><span class="line"><span class="cl">LOG_DATE_TIME=yes
+</span></span><span class="line"><span class="cl">DATABASE_URL=user=postgres password=&lt;YOURPASSWORD&gt; dbname=miniflux sslmode=disable
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Run SQL migrations automatically
+</span></span><span class="line"><span class="cl"># RUN_MIGRATIONS=1
+</span></span></code></pre></div><p>之后线将刚刚创建的数据库用户<code>miniflux</code>设置为超级用户。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; ALTER USER miniflux WITH SUPERUSER;
+</span></span></code></pre></div><p>使用以下指令创建数据库表，并创建用户：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ miniflux -c /etc/miniflux.conf -migrate
+</span></span><span class="line"><span class="cl">$ miniflux -c /etc/miniflux.conf -create-admin
+</span></span></code></pre></div><p>之后将<code>miniflux</code>切换回普通用户。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; ALTER USER miniflux WITH NOSUPERUSER;
+</span></span></code></pre></div><p>最后重新启动<code>miniflux</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo systemctl restart miniflux
+</span></span></code></pre></div><h2 id="配置ssl可选">配置SSL（可选）</h2>
+<p>使用nginx转发流量，可以将服务器套在Cloudflare下面。</p>
+<p>编辑nginx的服务器配置文件，创建一个端口为443的服务器，并指定SSL key的位置：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">server {
+</span></span><span class="line"><span class="cl">	listen 443 ssl default_server;
+</span></span><span class="line"><span class="cl">	listen [::]:443 ssl default_server;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	server_name miniflux;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	ssl_certificate /path/to/server.crt;
+</span></span><span class="line"><span class="cl">	ssl_certificate_key /path/to/server.key;
+</span></span><span class="line"><span class="cl">	ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	location / {
+</span></span><span class="line"><span class="cl">    		proxy_pass  http://127.0.0.1:8080;
+</span></span><span class="line"><span class="cl">	}
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>之后执行<code>sudo systemctl restart nginx</code>，访问服务器地址即可。</p>
+<h2 id="others">Others</h2>
+<p>Miniflux支持Fever和Google Reader等第三方服务，参考<a href="https://miniflux.app/docs/services.html">官方文档</a>，可以在服务器的设置-&gt;集成页面中配置，之后在别的设备中安装客户端，可以阅读订阅的文章，比网页版好用一些。</p>
+<p><strong>STARRY-S</strong></p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>使用树莓派搭建一个NAS</title>
+      <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
+      <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
+      <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
+<meting-js server="netease" type="song" id="750905" theme="#233333"></meting-js>
+<blockquote>
+<p>这歌太魔性了哈哈哈哈哈……</p>
+</blockquote>
+<h2 id="准备工作">准备工作</h2>
+<ul>
+<li>树莓派以及所需的电源（废话）</li>
+<li>16G以上的高速内存卡用来写系统镜像</li>
+<li>硬盘（可以选择买移动硬盘或者直接买硬盘盒和机械硬盘自己组装）</li>
+<li>网络设备：路由器、网线</li>
+<li>（非必须）键盘、显示器、连接线等</li>
+</ul>
+<p>树莓派我使用的是高一时买的树莓派3B（满满的回忆），硬盘是上半年为了存照片而买的西数2T移动硬盘，因为暂时闲置所以拿来一起组个云盘玩。</p>
+<p>内存卡需要质量好的不容易坏而且读写比较快的卡。</p>
+<h2 id="装系统">装系统</h2>
+<p>系统咱安装的是<a href="https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3">ArchLinux ARM</a>，安装教程直接看官方文档即可。</p>
+<p>一开始咱为了发挥树莓派3B的64位CPU的性能，我下载了64位的系统镜像，但是在配置无线连接的时候（可能是）驱动问题卡死，因为急着睡觉所以重新格式化内存卡后被迫安装32位的系统。</p>
+<p>安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。</p>
+<p>在格式化<code>root</code>分区时一开始想尝试一下树莓派上跑<code>btrfs</code>，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了<code>ext4</code>，<del>不然我一晚上不用睡觉了</del>。</p>
+<p>在分区时除了<code>boot</code>和<code>root</code>之外，我额外分了2G的<code>swap</code>分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（<del>这话咋读着这么别扭呢</del>）</p>
+<p>因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。</p>
+<p>把移动硬盘接到树莓派后<code>lsblk</code>查看一下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。</p>
+<p>如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅<a href="https://wiki.archlinux.org/title/fdisk">Wiki (fdisk)</a>，因为往博客上写的话太难理解了别人肯定看不懂。</p>
+<p>最后咱把2T移动硬盘格式化成这个样子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># fdisk -l /dev/sda
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device          Start        End    Sectors  Size Type
+</span></span><span class="line"><span class="cl">/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+</span></span><span class="line"><span class="cl">/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+</span></span></code></pre></div><p>其中的1T打算格式化为<code>btrfs</code>给Samba用，其余的800G打算格式化为<code>NTFS</code>留着给Windows当个移动硬盘。</p>
+<p>创建分区时别忘了更改分区类型，给Linux用的就是<code>Linux filesystem</code>，给Windows用的就是<code>Microsoft basic data</code>，
+不然机械硬盘连接到Windows系统中将不显示分区，或者就是一直提醒你：该分区不可用，然后让你格式化，到时候一不小心点错了可是会丢数据的。</p>
+<p>安装<code>btrfs-progs</code>和<code>ntfs-3g</code>，之后格式化硬盘（NTFS还是建议到Windows系统中格式化）。</p>
+<p>格式化btrfs的时候加个<code>-L</code>参数设置分区的标签，这样方便在fstab中设置开机自动挂载。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ lsblk                                # 一定要看清楚自己格式化的分区名字
+</span></span><span class="line"><span class="cl">$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+</span></span></code></pre></div><p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区和移动硬盘。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+</span></span><span class="line"><span class="cl">/dev/mmcblk0p1  /boot   vfat    defaults        0       0
+</span></span><span class="line"><span class="cl">LABEL=swap      none    swap    defaults        0       0
+</span></span><span class="line"><span class="cl">LABEL=samba     /samba  btrfs   defaults        0       0
+</span></span></code></pre></div><p>重启系统后如果正常的话，分区会被自动挂载。</p>
+<h2 id="配置网络">配置网络</h2>
+<blockquote>
+<p>配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。</p>
+<p>除非你能保证你执行的每个命令都肥肠正确。</p>
+</blockquote>
+<h3 id="无线网络">无线网络</h3>
+<p>因为我电脑离路由器肥肠远，所以为了方便我还要给树莓派配置无线网络。首先照着<a href="https://wiki.archlinux.org/title/Netctl">Wiki上的netctl页面</a>安装了<code>wifi-menu</code>所需要用的<code>dialog</code>，然后就用<code>wifi-menu</code>连接wifi了。不过为了方便以后连接，我需要给他设置静态IP：</p>
+<p>首先使用你比较喜欢的文本编辑器打开<code>wifi-menu</code>自动生成的配置文件，并修改成以下的样子</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl.d/wlan0-YourWifiName
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Description=&#39;Automatically generated profile by wifi-menu&#39;
+</span></span><span class="line"><span class="cl">Interface=wlan0
+</span></span><span class="line"><span class="cl">Connection=wireless
+</span></span><span class="line"><span class="cl">Security=wpa
+</span></span><span class="line"><span class="cl">ESSID=Your Wifi Name
+</span></span><span class="line"><span class="cl">IP=static
+</span></span><span class="line"><span class="cl">Address=(&#39;192.168.xxx.xxx/24&#39;)
+</span></span><span class="line"><span class="cl">Gateway=&#39;192.168.xxx.1&#39;
+</span></span><span class="line"><span class="cl">DNS=&#39;8.8.8.8&#39;
+</span></span><span class="line"><span class="cl">Key=YOUR WIFI PASSWORD
+</span></span></code></pre></div><p>其中修改<code>Address</code>为你想设置的CIDR地址、<code>Gateway</code>为默认网关、以及<code>DNS</code>。</p>
+<p>最后修改<code>Key</code>为Wifi密码（明文），如果需要加密的话可以去wiki上找相应方法。</p>
+<p>之后<code>sudo netctl enable wlan0-YourWifiName</code>设置好开机自动连接即可。</p>
+<p>这时候聪明的小伙伴会想到：我想使用网线联网并配置静态IP，该怎么办呢？</p>
+<h3 id="配置有线网络">配置有线网络</h3>
+<p>默认情况下，有线接口<code>eth0</code>使用<code>systemd-network</code>配置了<code>DHCP</code>，所以我们不需要改<code>netctl</code>的配置文件，只编辑<code>/etc/systemd/network/eth0.network</code>这个配置文件改成静态IP地址就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=eth0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">Address=192.168.xxx.xxx/24
+</span></span><span class="line"><span class="cl">Gateway=192.168.xxx.1
+</span></span><span class="line"><span class="cl">DNS=8.8.8.8
+</span></span></code></pre></div><p>重启系统后，使用<code>ip addr</code>检查设备的IP地址是否正确。</p>
+<h3 id="配置防火墙">配置防火墙</h3>
+<p>首先安装<code>ufw</code>。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫<strong>Uncomplicated Filewall</strong>，所以咱先用ufw配置防火墙）</p>
+<p>食用方法请参见<a href="https://wiki.archlinux.org/title/Uncomplicated_Firewall">Wiki页面</a>。</p>
+<p>因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Create or Edit /etc/ufw/applications.d/samba, add following content:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Samba]
+</span></span><span class="line"><span class="cl">title=LanManager-like file and printer server for Unix
+</span></span><span class="line"><span class="cl">description=Samba
+</span></span><span class="line"><span class="cl">ports=137,138/udp|139,445/tcp
+</span></span></code></pre></div><p>之后root账户执行<code>ufw app update Samba</code>加载配置文件，然后<code>ufw allow Samba</code>允许Samba的端口。</p>
+<p>如果你的树莓派上还装有其他服务（比如http，https等），别忘了<code>ufw allow PORT</code>开放端口，尤其是别忘了开SSH端口。</p>
+<p>最后<code>ufw status</code>查看防火墙状态信息，<code>ufw enable</code>开启防火墙。</p>
+<h2 id="samba">Samba</h2>
+<p>配合<a href="https://wiki.archlinux.org/title/Samba">Arch Wiki</a>食用。</p>
+<p>首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo groupadd -r sambausers          # 新建用户组
+</span></span><span class="line"><span class="cl">$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+</span></span><span class="line"><span class="cl">$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+</span></span><span class="line"><span class="cl">$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+</span></span><span class="line"><span class="cl">$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+</span></span><span class="line"><span class="cl">$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+</span></span></code></pre></div><p>（咱写的很详细了吧</p>
+<h3 id="配置服务器">配置服务器</h3>
+<p>安装好<code>samba</code>安装包后，需要手动去<code>/etc/samba/</code>创建<code>smb.conf</code>配置文件，可以到<a href="https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD">Samba git repository</a>中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/samba/smb.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[global]
+</span></span><span class="line"><span class="cl"># 修改工作组的名字
+</span></span><span class="line"><span class="cl">workgroup = MYGROUP
+</span></span><span class="line"><span class="cl"># 服务器描述
+</span></span><span class="line"><span class="cl">server string = Raspberry pi Samba Server
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 在文件末尾添加共享文件夹目录及相关配置
+</span></span><span class="line"><span class="cl">[sambashare]
+</span></span><span class="line"><span class="cl">comment = Sample share file.
+</span></span><span class="line"><span class="cl">path = /path/to/your/samba/folder
+</span></span><span class="line"><span class="cl">writable = yes
+</span></span><span class="line"><span class="cl">browsable = yes
+</span></span><span class="line"><span class="cl">create mask = 0755
+</span></span><span class="line"><span class="cl">directory mask = 0755
+</span></span><span class="line"><span class="cl">read only = no
+</span></span><span class="line"><span class="cl">guest ok = no  # 允许访客随意登录
+</span></span></code></pre></div><p>配置好文件后，启动<code>smb.service</code>和<code>nmb.service</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now smb.service
+</span></span><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now nmb.service
+</span></span></code></pre></div><h3 id="访问服务器">访问服务器</h3>
+<p>咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接<code>smb://192.168.xxx.xxx</code>，
+输入用户组、用户名和密码登录就可以访问共享文件夹。</p>
+<p>Windows系统中，首先需要到 控制面板-&gt;程序-&gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
+打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
+<h2 id="frp内网穿透">Frp内网穿透</h2>
+<blockquote>
+<p>配合<a href="https://gofrp.org/docs/">frp文档</a>食用更佳</p>
+</blockquote>
+<p>首先在frp的<a href="https://github.com/fatedier/frp/releases">GitHub Release</a>页面下载安装包。</p>
+<p>如果是树莓派用的话就下载<code>arm</code>版本的安装包即可。Arch Linux可以在ArchLinux CN源或AUR中安装<code>frpc</code>和<code>frps</code>作为客户端和服务端。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 树莓派上下载编译好的文件</span>
+</span></span><span class="line"><span class="cl">$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl"><span class="c1"># 解压</span>
+</span></span><span class="line"><span class="cl">$ tar -zxvf ./frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> frp_0.37.1_linux_arm/
+</span></span><span class="line"><span class="cl"><span class="c1"># 编辑配置文件</span>
+</span></span><span class="line"><span class="cl">$ vim ./frpc.ini
+</span></span><span class="line"><span class="cl">$ ./frpc -c ./frpc.ini
+</span></span></code></pre></div><p>客户端配置文件的格式可参考如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">server_addr = server ip
+</span></span><span class="line"><span class="cl">server_port = 6000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[samba]
+</span></span><span class="line"><span class="cl">type = tcp
+</span></span><span class="line"><span class="cl">local_ip = 127.0.0.1
+</span></span><span class="line"><span class="cl">local_port = 445
+</span></span><span class="line"><span class="cl">remote_port = 6003
+</span></span></code></pre></div><p>其中端口号和<code>token</code>按需要自行更改，Samba服务的<code>tcp</code>端口号为<code>445</code>。</p>
+<p>服务端配置文件格式如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">bind_port = 6000
+</span></span></code></pre></div><p>为了安全，别忘了配置<a href="https://gofrp.org/docs/reference/server-configures/#%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81">权限验证</a>，同时别忘了修改服务器的防火墙设置。</p>
+<h2 id="others">Others</h2>
+<p>所以到此为止，咱的Samba服务器就搭建好了。</p>
+<p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>小米路由器3G之使用TTL串口刷机救砖</title>
+      <link>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</link>
+      <pubDate>Fri, 22 Jan 2021 22:10:01 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</guid>
+      <description>&lt;p&gt;本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。&lt;/p&gt;
+&lt;p&gt;然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。&lt;/p&gt;
+&lt;p&gt;之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。&lt;/p&gt;
+&lt;p&gt;(在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意&amp;hellip;)&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。</p>
+<p>然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。</p>
+<p>之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。</p>
+<p>(在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意&hellip;)</p>
+<meting-js server="netease" type="song" id="409931672" theme="#233333"></meting-js>
+<h2 id="砖了">砖了</h2>
+<h2 id="拆机">拆机</h2>
+<p><img loading="lazy" src="images/1.jpg" alt="&amp;ldquo;路由器主板&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Are You OK?</p>
+</p>
+<blockquote>
+<p>北方冬季气候干燥，拆机时记得放静电，找根铁丝把自己连地线上 (找个金属外壳是接地的电器和自己连上也行)。</p>
+</blockquote>
+<p>拆开路由器外壳，卸下主板，顺手拆掉了散热片（屏蔽罩）。</p>
+<p>串口在图片上主板的左侧，旁边有标记，从上到下依次是<code>TX</code>、<code>GND</code>、<code>RX</code>、<code>1</code>。需要注意的是主板上的<code>TX</code>要接到usb串口的<code>RX</code>，主板上的<code>RX</code>要接到usb串口的<code>TX</code>，<code>GND</code>连<code>GND</code>，VCC不用连。为了防止接错线，小米还十分贴心的标注了每个接口对应的连接线的颜色。</p>
+<p><img loading="lazy" src="images/2.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">I&#39;m very OK!</p>
+</p>
+<p>找出家里吃灰好几年差点被我扔掉的电烙铁，刮刀头刮了半天电烙铁才上锡，把新买的杜邦线母线焊到主板上，和ttl串口线相连。</p>
+<p>(电烙铁太破了根本焊不上锡，焊得很丑，emmm)</p>
+<p>实际上可以买个4PIN单排针焊上去，把串口接到排针上就可以，我直接把电线焊到上面以后用起来会很麻烦。</p>
+<h2 id="刷机">刷机</h2>
+<blockquote>
+<p>以下部分基于Arch Linux，其他系统的操作方式可能不一样（例如Windows可能需要超级终端访问串口，再想办法开一个tftp服务器）
+刷机的原理: 通过ttl串口线连接路由器的主板，让路由器访问电脑上的tftp服务器，刷第三方Boot Loader。</p>
+</blockquote>
+<ol>
+<li>首先电脑上装一个tftp服务器。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo pacman -S tftp-hpa
+</span></span><span class="line"><span class="cl">$ sudo systemctl start tftpd.service
+</span></span></code></pre></div><p>tftp的默认目录为<code>/srv/tftp</code>。</p>
+<p>这里使用HackPascal制作的Breed（第三方Boot Loader），<a href="https://breed.hackpascal.net/">下载链接</a>，把下载好的Breed重命名为<code>breed.bin</code>，复制到tftp的默认目录。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ cd /srv/tftp
+</span></span><span class="line"><span class="cl">$ sudo cp ~/Downloads/breed-mt7620-xiaomi-r3g.bin breed.bin
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>路由器插网线连电脑，设置静态ip地址192.168.1.3/24，将串口和电脑连接，先不给路由器通电，通常情况下usb串口的设备名称为<code>/dev/ttyUSB0</code>，如果不确定的话可以<code>dmesg</code>查一下。</p>
+</li>
+<li>
+<p>使用<code>screen</code>连接串口，波特率为115200。</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo pacman -S screen
+</span></span><span class="line"><span class="cl">$ sudo screen /dev/ttyUSB0 115200
+</span></span></code></pre></div><p>路由器通电，终端上会显示路由器启动的信息，等几秒后在选择启动项的时候按9，通过TFTP加载Boot Loader。</p>
+<blockquote>
+<p>如果串口在连接到电脑的情况下主板通电时没有响应，那就断开usb串口先给主板通电后再连接串口。
+(我语文不好别骂我)
+如果路由器没有变砖可以正常启动（蓝灯长亮），在正常开机过程中不能选择启动项。此时可以尝试在路由器开机后长按reset按钮7s以上直到主板重启，便可以选择启动项。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Please choose the operation:
+</span></span><span class="line"><span class="cl"> 1: Load system code to SDRAM via TFTP.
+</span></span><span class="line"><span class="cl"> 2: Load system code then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl"> 3: Boot system code via Flash (default).
+</span></span><span class="line"><span class="cl"> 4: Entr boot command line interface.
+</span></span><span class="line"><span class="cl"> 7: Load Boot Loader code then write to Flash via Serial.
+</span></span><span class="line"><span class="cl"> 9: Load Boot Loader code then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You choosed 9
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">9: System Load Boot Loader then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl">Warning!! Erase Boot Loader in Flash then burn new one. Are you sure?(Y/N)y
+</span></span></code></pre></div><p>之后设置路由器主机地址（192.168.1.1）和TFTP服务器地址(192.168.1.3)以及文件名称(breed.bin)。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Please Input new ones /or Ctrl-C to discard
+</span></span><span class="line"><span class="cl">          Input device IP (192.168.31.1) ==:192.168.1.1
+</span></span><span class="line"><span class="cl">          Input server IP (192.168.31.3) ==:192.168.1.3
+</span></span><span class="line"><span class="cl">          Input Uboot filename (uboot.bin) ==:breed.bin
+</span></span></code></pre></div><p>按回车后开始刷机，过几秒钟后路由器会自动重启，第三方Boot Loader刷写完成。</p>
+<p>路由器断电，长按reset键的同时通电开机，灯闪烁后打开浏览器输入网址<code>http://192.168.1.1</code>便可访问breed后台。</p>
+<h2 id="done">Done</h2>
+<p>第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照<a href="/posts/2019/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95">小米路由器3G折腾之刷OpenWrt记录</a>这篇文章刷OpenWrt。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">BusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash)
+</span></span><span class="line"><span class="cl">Enter &#39;help&#39; for a list of built-in commands.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> -----------------------------------------------------
+</span></span><span class="line"><span class="cl">       Welcome to XiaoQiang!
+</span></span><span class="line"><span class="cl"> -----------------------------------------------------
+</span></span><span class="line"><span class="cl">  $$$$$$\  $$$$$$$\  $$$$$$$$\      $$\      $$\        $$$$$$\  $$\   $$\
+</span></span><span class="line"><span class="cl"> $$  __$$\ $$  __$$\ $$  _____|     $$ |     $$ |      $$  __$$\ $$ | $$  |
+</span></span><span class="line"><span class="cl"> $$ /  $$ |$$ |  $$ |$$ |           $$ |     $$ |      $$ /  $$ |$$ |$$  /
+</span></span><span class="line"><span class="cl"> $$$$$$$$ |$$$$$$$  |$$$$$\         $$ |     $$ |      $$ |  $$ |$$$$$  /
+</span></span><span class="line"><span class="cl"> $$  __$$ |$$  __$$&lt; $$  __|        $$ |     $$ |      $$ |  $$ |$$  $$&lt;
+</span></span><span class="line"><span class="cl"> $$ |  $$ |$$ |  $$ |$$ |           $$ |     $$ |      $$ |  $$ |$$ |\$$\
+</span></span><span class="line"><span class="cl"> $$ |  $$ |$$ |  $$ |$$$$$$$$\       $$$$$$$$$  |       $$$$$$  |$$ | \$$\
+</span></span><span class="line"><span class="cl"> \__|  \__|\__|  \__|\________|      \_________/        \______/ \__|  \__|
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@XiaoQiang:~#
+</span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

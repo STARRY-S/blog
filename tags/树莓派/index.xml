@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>树莓派 on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/</link>
+    <description>Recent content in 树莓派 on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sat, 25 Sep 2021 22:20:03 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用树莓派搭建一个NAS</title>
+      <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
+      <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
+      <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
+<meting-js server="netease" type="song" id="750905" theme="#233333"></meting-js>
+<blockquote>
+<p>这歌太魔性了哈哈哈哈哈……</p>
+</blockquote>
+<h2 id="准备工作">准备工作</h2>
+<ul>
+<li>树莓派以及所需的电源（废话）</li>
+<li>16G以上的高速内存卡用来写系统镜像</li>
+<li>硬盘（可以选择买移动硬盘或者直接买硬盘盒和机械硬盘自己组装）</li>
+<li>网络设备：路由器、网线</li>
+<li>（非必须）键盘、显示器、连接线等</li>
+</ul>
+<p>树莓派我使用的是高一时买的树莓派3B（满满的回忆），硬盘是上半年为了存照片而买的西数2T移动硬盘，因为暂时闲置所以拿来一起组个云盘玩。</p>
+<p>内存卡需要质量好的不容易坏而且读写比较快的卡。</p>
+<h2 id="装系统">装系统</h2>
+<p>系统咱安装的是<a href="https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3">ArchLinux ARM</a>，安装教程直接看官方文档即可。</p>
+<p>一开始咱为了发挥树莓派3B的64位CPU的性能，我下载了64位的系统镜像，但是在配置无线连接的时候（可能是）驱动问题卡死，因为急着睡觉所以重新格式化内存卡后被迫安装32位的系统。</p>
+<p>安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。</p>
+<p>在格式化<code>root</code>分区时一开始想尝试一下树莓派上跑<code>btrfs</code>，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了<code>ext4</code>，<del>不然我一晚上不用睡觉了</del>。</p>
+<p>在分区时除了<code>boot</code>和<code>root</code>之外，我额外分了2G的<code>swap</code>分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（<del>这话咋读着这么别扭呢</del>）</p>
+<p>因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。</p>
+<p>把移动硬盘接到树莓派后<code>lsblk</code>查看一下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。</p>
+<p>如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅<a href="https://wiki.archlinux.org/title/fdisk">Wiki (fdisk)</a>，因为往博客上写的话太难理解了别人肯定看不懂。</p>
+<p>最后咱把2T移动硬盘格式化成这个样子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># fdisk -l /dev/sda
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device          Start        End    Sectors  Size Type
+</span></span><span class="line"><span class="cl">/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+</span></span><span class="line"><span class="cl">/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+</span></span></code></pre></div><p>其中的1T打算格式化为<code>btrfs</code>给Samba用，其余的800G打算格式化为<code>NTFS</code>留着给Windows当个移动硬盘。</p>
+<p>创建分区时别忘了更改分区类型，给Linux用的就是<code>Linux filesystem</code>，给Windows用的就是<code>Microsoft basic data</code>，
+不然机械硬盘连接到Windows系统中将不显示分区，或者就是一直提醒你：该分区不可用，然后让你格式化，到时候一不小心点错了可是会丢数据的。</p>
+<p>安装<code>btrfs-progs</code>和<code>ntfs-3g</code>，之后格式化硬盘（NTFS还是建议到Windows系统中格式化）。</p>
+<p>格式化btrfs的时候加个<code>-L</code>参数设置分区的标签，这样方便在fstab中设置开机自动挂载。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ lsblk                                # 一定要看清楚自己格式化的分区名字
+</span></span><span class="line"><span class="cl">$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+</span></span></code></pre></div><p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区和移动硬盘。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+</span></span><span class="line"><span class="cl">/dev/mmcblk0p1  /boot   vfat    defaults        0       0
+</span></span><span class="line"><span class="cl">LABEL=swap      none    swap    defaults        0       0
+</span></span><span class="line"><span class="cl">LABEL=samba     /samba  btrfs   defaults        0       0
+</span></span></code></pre></div><p>重启系统后如果正常的话，分区会被自动挂载。</p>
+<h2 id="配置网络">配置网络</h2>
+<blockquote>
+<p>配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。</p>
+<p>除非你能保证你执行的每个命令都肥肠正确。</p>
+</blockquote>
+<h3 id="无线网络">无线网络</h3>
+<p>因为我电脑离路由器肥肠远，所以为了方便我还要给树莓派配置无线网络。首先照着<a href="https://wiki.archlinux.org/title/Netctl">Wiki上的netctl页面</a>安装了<code>wifi-menu</code>所需要用的<code>dialog</code>，然后就用<code>wifi-menu</code>连接wifi了。不过为了方便以后连接，我需要给他设置静态IP：</p>
+<p>首先使用你比较喜欢的文本编辑器打开<code>wifi-menu</code>自动生成的配置文件，并修改成以下的样子</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl.d/wlan0-YourWifiName
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Description=&#39;Automatically generated profile by wifi-menu&#39;
+</span></span><span class="line"><span class="cl">Interface=wlan0
+</span></span><span class="line"><span class="cl">Connection=wireless
+</span></span><span class="line"><span class="cl">Security=wpa
+</span></span><span class="line"><span class="cl">ESSID=Your Wifi Name
+</span></span><span class="line"><span class="cl">IP=static
+</span></span><span class="line"><span class="cl">Address=(&#39;192.168.xxx.xxx/24&#39;)
+</span></span><span class="line"><span class="cl">Gateway=&#39;192.168.xxx.1&#39;
+</span></span><span class="line"><span class="cl">DNS=&#39;8.8.8.8&#39;
+</span></span><span class="line"><span class="cl">Key=YOUR WIFI PASSWORD
+</span></span></code></pre></div><p>其中修改<code>Address</code>为你想设置的CIDR地址、<code>Gateway</code>为默认网关、以及<code>DNS</code>。</p>
+<p>最后修改<code>Key</code>为Wifi密码（明文），如果需要加密的话可以去wiki上找相应方法。</p>
+<p>之后<code>sudo netctl enable wlan0-YourWifiName</code>设置好开机自动连接即可。</p>
+<p>这时候聪明的小伙伴会想到：我想使用网线联网并配置静态IP，该怎么办呢？</p>
+<h3 id="配置有线网络">配置有线网络</h3>
+<p>默认情况下，有线接口<code>eth0</code>使用<code>systemd-network</code>配置了<code>DHCP</code>，所以我们不需要改<code>netctl</code>的配置文件，只编辑<code>/etc/systemd/network/eth0.network</code>这个配置文件改成静态IP地址就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=eth0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">Address=192.168.xxx.xxx/24
+</span></span><span class="line"><span class="cl">Gateway=192.168.xxx.1
+</span></span><span class="line"><span class="cl">DNS=8.8.8.8
+</span></span></code></pre></div><p>重启系统后，使用<code>ip addr</code>检查设备的IP地址是否正确。</p>
+<h3 id="配置防火墙">配置防火墙</h3>
+<p>首先安装<code>ufw</code>。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫<strong>Uncomplicated Filewall</strong>，所以咱先用ufw配置防火墙）</p>
+<p>食用方法请参见<a href="https://wiki.archlinux.org/title/Uncomplicated_Firewall">Wiki页面</a>。</p>
+<p>因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Create or Edit /etc/ufw/applications.d/samba, add following content:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Samba]
+</span></span><span class="line"><span class="cl">title=LanManager-like file and printer server for Unix
+</span></span><span class="line"><span class="cl">description=Samba
+</span></span><span class="line"><span class="cl">ports=137,138/udp|139,445/tcp
+</span></span></code></pre></div><p>之后root账户执行<code>ufw app update Samba</code>加载配置文件，然后<code>ufw allow Samba</code>允许Samba的端口。</p>
+<p>如果你的树莓派上还装有其他服务（比如http，https等），别忘了<code>ufw allow PORT</code>开放端口，尤其是别忘了开SSH端口。</p>
+<p>最后<code>ufw status</code>查看防火墙状态信息，<code>ufw enable</code>开启防火墙。</p>
+<h2 id="samba">Samba</h2>
+<p>配合<a href="https://wiki.archlinux.org/title/Samba">Arch Wiki</a>食用。</p>
+<p>首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo groupadd -r sambausers          # 新建用户组
+</span></span><span class="line"><span class="cl">$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+</span></span><span class="line"><span class="cl">$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+</span></span><span class="line"><span class="cl">$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+</span></span><span class="line"><span class="cl">$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+</span></span><span class="line"><span class="cl">$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+</span></span></code></pre></div><p>（咱写的很详细了吧</p>
+<h3 id="配置服务器">配置服务器</h3>
+<p>安装好<code>samba</code>安装包后，需要手动去<code>/etc/samba/</code>创建<code>smb.conf</code>配置文件，可以到<a href="https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD">Samba git repository</a>中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/samba/smb.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[global]
+</span></span><span class="line"><span class="cl"># 修改工作组的名字
+</span></span><span class="line"><span class="cl">workgroup = MYGROUP
+</span></span><span class="line"><span class="cl"># 服务器描述
+</span></span><span class="line"><span class="cl">server string = Raspberry pi Samba Server
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 在文件末尾添加共享文件夹目录及相关配置
+</span></span><span class="line"><span class="cl">[sambashare]
+</span></span><span class="line"><span class="cl">comment = Sample share file.
+</span></span><span class="line"><span class="cl">path = /path/to/your/samba/folder
+</span></span><span class="line"><span class="cl">writable = yes
+</span></span><span class="line"><span class="cl">browsable = yes
+</span></span><span class="line"><span class="cl">create mask = 0755
+</span></span><span class="line"><span class="cl">directory mask = 0755
+</span></span><span class="line"><span class="cl">read only = no
+</span></span><span class="line"><span class="cl">guest ok = no  # 允许访客随意登录
+</span></span></code></pre></div><p>配置好文件后，启动<code>smb.service</code>和<code>nmb.service</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now smb.service
+</span></span><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now nmb.service
+</span></span></code></pre></div><h3 id="访问服务器">访问服务器</h3>
+<p>咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接<code>smb://192.168.xxx.xxx</code>，
+输入用户组、用户名和密码登录就可以访问共享文件夹。</p>
+<p>Windows系统中，首先需要到 控制面板-&gt;程序-&gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
+打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
+<h2 id="frp内网穿透">Frp内网穿透</h2>
+<blockquote>
+<p>配合<a href="https://gofrp.org/docs/">frp文档</a>食用更佳</p>
+</blockquote>
+<p>首先在frp的<a href="https://github.com/fatedier/frp/releases">GitHub Release</a>页面下载安装包。</p>
+<p>如果是树莓派用的话就下载<code>arm</code>版本的安装包即可。Arch Linux可以在ArchLinux CN源或AUR中安装<code>frpc</code>和<code>frps</code>作为客户端和服务端。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 树莓派上下载编译好的文件</span>
+</span></span><span class="line"><span class="cl">$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl"><span class="c1"># 解压</span>
+</span></span><span class="line"><span class="cl">$ tar -zxvf ./frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> frp_0.37.1_linux_arm/
+</span></span><span class="line"><span class="cl"><span class="c1"># 编辑配置文件</span>
+</span></span><span class="line"><span class="cl">$ vim ./frpc.ini
+</span></span><span class="line"><span class="cl">$ ./frpc -c ./frpc.ini
+</span></span></code></pre></div><p>客户端配置文件的格式可参考如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">server_addr = server ip
+</span></span><span class="line"><span class="cl">server_port = 6000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[samba]
+</span></span><span class="line"><span class="cl">type = tcp
+</span></span><span class="line"><span class="cl">local_ip = 127.0.0.1
+</span></span><span class="line"><span class="cl">local_port = 445
+</span></span><span class="line"><span class="cl">remote_port = 6003
+</span></span></code></pre></div><p>其中端口号和<code>token</code>按需要自行更改，Samba服务的<code>tcp</code>端口号为<code>445</code>。</p>
+<p>服务端配置文件格式如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">bind_port = 6000
+</span></span></code></pre></div><p>为了安全，别忘了配置<a href="https://gofrp.org/docs/reference/server-configures/#%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81">权限验证</a>，同时别忘了修改服务器的防火墙设置。</p>
+<h2 id="others">Others</h2>
+<p>所以到此为止，咱的Samba服务器就搭建好了。</p>
+<p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>树莓派之我的世界服务器</title>
+      <link>https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/</link>
+      <pubDate>Fri, 25 Nov 2016 15:01:28 +0000</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/</guid>
+      <description>&lt;p&gt;刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。</p>
+<blockquote>
+<p>本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。</p>
+</blockquote>
+<blockquote>
+<p>终于可以继续更新博客了！原计划是11月之前更新博客的。不巧电脑出了问题，重装了一遍Arch Linux,后来又发生了一些事一直没能用电脑。由于开学到现在能放假供我写博客的时间少之又少，这篇原本在11月初就能发表的文章就这样被硬生生推迟到了11月末了。</p>
+</blockquote>
+<h2 id="材料以及工具">材料以及工具</h2>
+<ul>
+<li>树莓派一只 （包括所需要的C10的内存卡以及刷好的固件以及5v，2.5A充电器）</li>
+<li>一个支持DDNS的路由器（非必须）</li>
+</ul>
+<blockquote>
+<p>如果不想用树莓派建服务器的话也可以按照本教程在电脑上搭建服务器。</p>
+</blockquote>
+<h2 id="配置树莓派">配置树莓派</h2>
+<h3 id="调整gpu可使用的内存">调整GPU可使用的内存：</h3>
+<p>毕竟用树莓派开服务器不需要占用GPU，直接调低。</p>
+<p>Raspbian: <code>raspi-config</code>中将GPU内存分为16M。</p>
+<p>Arch Linux ARM: <code>/boot/config.txt</code>中更改GPU显存为16</p>
+<h2 id="安装java">安装JAVA</h2>
+<p>Archlinux ARM:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo pacman -S jre8-openjdk
+</span></span></code></pre></div><p>通用方法：
+前往 <strong><a href="http://www.oracle.com/technetwork/cn/java/javase/downloads/jdk8-downloads-2133151-zhs.html">JAVA下载页</a></strong> 下载树莓派（ARM架构，32位系统）所支持的JDK。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ mkdir ./java
+</span></span><span class="line"><span class="cl">$ tar -zxvf 你所下载的JDK.jar.gz -C ./java/
+</span></span></code></pre></div><p>在终端输入<code>./java/jdk1.8.0/bin/java -version</code>显示java的版本号。</p>
+<h2 id="部署服务器">部署服务器</h2>
+<p>本篇使用<a href="https://github.com/PaperMC/Paper">Paper MC</a>部署服务器。
+除了Paper之外还有Bukkit和Spigot以及原版可选。</p>
+<p>使用以下命令启动服务器。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ echo eula=True &gt; eula.txt
+</span></span><span class="line"><span class="cl">$ ./java/jdk*/bin/java -Xms512M -Xmx1024M -jar ./spigot.jar
+</span></span></code></pre></div><p>第一次运行会下载一些文件需要一定的时间。</p>
+<p>网上有很多服务器插件和Mod什么的。本章中不做过多介绍.</p>
+<h2 id="用screen-保持服务器一直运行而不被关掉">用screen 保持服务器一直运行而不被关掉。</h2>
+<p>首先安装好screen。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ screen
+</span></span><span class="line"><span class="cl">$ ./java/jdk1.8.0/bin/java -Xms512M -Xmx1024M -jar./paperclip.jar
+</span></span></code></pre></div><p>在配置好你的服务器后就可以和小伙伴一起联机了。经过测试几个人简单的联机运行蛮正常的。</p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

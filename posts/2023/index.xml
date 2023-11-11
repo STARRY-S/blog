@@ -1,0 +1,1491 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>2023 on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/posts/2023/</link>
+    <description>Recent content in 2023 on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/2023/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>修复缩小磁盘空间后受损的 GPT 分区表</title>
+      <link>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</link>
+      <pubDate>Wed, 18 Oct 2023 21:42:02 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</guid>
+      <description>&lt;p&gt;磁盘的扩容和分区的扩/缩容场景很常见，比如分区用着用着快满了，而磁盘有空闲的未分区空间，而这块区域恰好在这块分区的后面，这时可以对分区扩容。
+在使用虚拟机（例如 QEMU）时，假设起初虚拟机的磁盘只创建了 20G，但用久了会存在不够用的情况，这时可以对磁盘扩容，之后再调整分区的大小。&lt;/p&gt;
+&lt;p&gt;但是最近遇到了一个需要对磁盘缩容的场景，例如把一个 64G 的 U 盘用 &lt;code&gt;dd&lt;/code&gt; 将整个磁盘的数据写入到一个 8G 的 U盘中（当然这个 64G U盘实际使用的分区大小不能大于前 8G）。
+或者要把一个原本 50G 的 qcow2 虚拟磁盘缩小成 10G，用来制作别的镜像什么的。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>磁盘的扩容和分区的扩/缩容场景很常见，比如分区用着用着快满了，而磁盘有空闲的未分区空间，而这块区域恰好在这块分区的后面，这时可以对分区扩容。
+在使用虚拟机（例如 QEMU）时，假设起初虚拟机的磁盘只创建了 20G，但用久了会存在不够用的情况，这时可以对磁盘扩容，之后再调整分区的大小。</p>
+<p>但是最近遇到了一个需要对磁盘缩容的场景，例如把一个 64G 的 U 盘用 <code>dd</code> 将整个磁盘的数据写入到一个 8G 的 U盘中（当然这个 64G U盘实际使用的分区大小不能大于前 8G）。
+或者要把一个原本 50G 的 qcow2 虚拟磁盘缩小成 10G，用来制作别的镜像什么的。</p>
+<meting-js server="netease" type="song" id="1348679974" theme="#233333"></meting-js>
+<p>按照正常的思路，缩小磁盘空间之前要先缩小分区（还要缩小文件系统），确保分区都位于磁盘的前面，这样磁盘在截断后文件系统不会受损，大致步骤可以分为：</p>
+<ol>
+<li>
+<p>缩小文件系统：例如使用 <code>btrfs filesystem resize</code> 缩小 BTRFS 文件系统至待缩小的分区的大小，确保文件系统的大小不超过分区大小。</p>
+</li>
+<li>
+<p>缩小分区：可以使用 <code>fdisk</code> 先删掉待缩小的分区，之后再重新创建新的分区，重建分区时设定新的分区的大小，且不要删除已有的 <code>btrfs</code> 或其他文件系统签名。这样在缩小分区的同时，不需要重新格式化，因此分区中的文件没有丢失。</p>
+<p>（除了 <code>fdisk</code>，还可以用 <code>sfdisk</code>，<code>gdisk</code> 或 <code>parted</code> 等工具调整分区）</p>
+</li>
+<li>
+<p>确保分区都位于磁盘的起始位置后，执行磁盘缩小的操作，将磁盘末端未使用的数据截断。</p>
+</li>
+</ol>
+<p>GPT / MBR 分区表咱凭感觉来猜的话，是存储在磁盘的起始位置的，所以如果磁盘缩小时，将磁盘末端一些数据截断正常情况下应该是不会影响到存储在起始位置的分区表的。</p>
+<p>但是，在一些情况下，会出现缩小完磁盘空间后分区表受损的情况。</p>
+<h2 id="举个栗子">举个栗子</h2>
+<ol>
+<li>
+<p>首先使用 <code>qemu-img create</code> 创建一块 10G 的 QEMU 虚拟机磁盘。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> qemu-img create -f qcow2 disk1.qcow2 10G
+</span></span><span class="line"><span class="cl"><span class="go">Formatting &#39;disk1.qcow2&#39;, fmt=qcow2 cluster_size=65536 extended_l2=off compression_type=zlib size=10737418240 lazy_refcounts=off refcount_bits=16
+</span></span></span></code></pre></div></li>
+<li>
+<p>使用 <code>qemu-nbd</code> 工具将 qcow2 磁盘镜像与 Linux 内核通过 <a href="https://www.kernel.org/doc/Documentation/blockdev/nbd.txt">nbd</a> 连接，这样可以在不启动 QEMU 虚拟机的情况下直接对 qcow2 磁盘分区进行操作。</p>
+<p>加载 <code>nbd</code> 内核模块，其中 <code>max_part</code> 参数是磁盘允许的最大分区数，默认为 0 所以这里需要把数值改大一点。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo modprobe nbd <span class="nv">max_part</span><span class="o">=</span><span class="m">8</span>
+</span></span></code></pre></div><p>将创建的 <code>disk1.qcow2</code> 镜像与 <code>/dev/nbd0</code> 连接。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo qemu-nbd -c /dev/nbd0 ./disk1.qcow2
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> lsblk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
+</span></span></span><span class="line"><span class="cl"><span class="go">nbd0  43:0    0  10G  0 disk
+</span></span></span></code></pre></div><p>使用 <code>fdisk</code> 初始化 GPT 分区表，并随便新建几个分区。</p>
+<blockquote>
+<p>咱都是 Arch Linux 用户了，fdisk 就不用我再详细说了吧。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
+</span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device does not contain a recognized partition table.
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new DOS (MBR) disklabel with disk identifier 0xf5c43a4b.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): g
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new GPT disklabel (GUID: 2EB767AB-0958-461B-B56D-697B3305AC83).
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1-128, default 1):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (2048-20971486, default 2048):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-20971486, default 20969471): +512M
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 1 of type &#39;Linux filesystem&#39; and of size 512 MiB.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): t
+</span></span></span><span class="line"><span class="cl"><span class="go">Selected partition 1
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition type or alias (type L to list all): 1
+</span></span></span><span class="line"><span class="cl"><span class="go">Changed type of partition &#39;Linux filesystem&#39; to &#39;EFI System&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-20971486, default 1050624):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-20971486, default 20969471):
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 9.5 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="go">The partition table has been altered.
+</span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
+</span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
+</span></span></span></code></pre></div><p>本栗中，磁盘新建了两个分区，<code>/dev/nbd0p1</code> 是 512M 大小的 EFI 分区，剩余空间 <code>/dev/nbd0p2</code> 是 root 分区。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk -l /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 10 GiB, 10737418240 bytes, 20971520 sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 2EB767AB-0958-461B-B56D-697B3305AC83
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 20969471 19918848  9.5G Linux filesystem
+</span></span></span></code></pre></div><p>之后简单的格式化一下两个分区，挂载并往里面写一些文件进去。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo mkfs.vfat -F <span class="m">32</span> /dev/nbd0p1
+</span></span><span class="line"><span class="cl"><span class="go">mkfs.fat 4.2 (2021-01-31)
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo mkfs.btrfs /dev/nbd0p2
+</span></span><span class="line"><span class="cl"><span class="go">btrfs-progs v6.5.2
+</span></span></span><span class="line"><span class="cl"><span class="go">See https://btrfs.readthedocs.io for more information.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Performing full device TRIM /dev/nbd0p2 (9.50GiB) ...
+</span></span></span><span class="line"><span class="cl"><span class="go">NOTE: several default settings have changed in version 5.15, please make sure
+</span></span></span><span class="line"><span class="cl"><span class="go">    this does not affect your deployments:
+</span></span></span><span class="line"><span class="cl"><span class="go">    - DUP for metadata (-m dup)
+</span></span></span><span class="line"><span class="cl"><span class="go">    - enabled no-holes (-O no-holes)
+</span></span></span><span class="line"><span class="cl"><span class="go">    - enabled free-space-tree (-R free-space-tree)
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Label:              (null)
+</span></span></span><span class="line"><span class="cl"><span class="go">UUID:               a5fb30e5-eb5f-4a0b-8d2a-106e04e1488b
+</span></span></span><span class="line"><span class="cl"><span class="go">Node size:          16384
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size:        4096
+</span></span></span><span class="line"><span class="cl"><span class="go">Filesystem size:    9.50GiB
+</span></span></span><span class="line"><span class="cl"><span class="go">Block group profiles:
+</span></span></span><span class="line"><span class="cl"><span class="go">Data:             single            8.00MiB
+</span></span></span><span class="line"><span class="cl"><span class="go">Metadata:         DUP             256.00MiB
+</span></span></span><span class="line"><span class="cl"><span class="go">System:           DUP               8.00MiB
+</span></span></span><span class="line"><span class="cl"><span class="go">SSD detected:       yes
+</span></span></span><span class="line"><span class="cl"><span class="go">Zoned device:       no
+</span></span></span><span class="line"><span class="cl"><span class="go">Incompat features:  extref, skinny-metadata, no-holes, free-space-tree
+</span></span></span><span class="line"><span class="cl"><span class="go">Runtime features:   free-space-tree
+</span></span></span><span class="line"><span class="cl"><span class="go">Checksum:           crc32c
+</span></span></span><span class="line"><span class="cl"><span class="go">Number of devices:  1
+</span></span></span><span class="line"><span class="cl"><span class="go">Devices:
+</span></span></span><span class="line"><span class="cl"><span class="go">   ID        SIZE  PATH
+</span></span></span><span class="line"><span class="cl"><span class="go">    1     9.50GiB  /dev/nbd0p2
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> mkdir -p mnt
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p2 mnt
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mkdir ./mnt/<span class="o">{</span>boot,home<span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p1 mnt/boot
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo touch ./mnt/example.txt
+</span></span></code></pre></div></li>
+<li>
+<p>使用 <code>btrfs filesystem resize</code> 缩小 root 分区中的 BTRFS 文件系统大小至 7G，之后使用 <code>fdisk</code> 缩小 root 分区大小至 7G。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo btrfs filesystem resize 7G mnt
+</span></span><span class="line"><span class="cl"><span class="go">Resize device id 1 (/dev/nbd0p2) from 9.50GiB to 7.00GiB
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sync
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo umount -R ./mnt
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
+</span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): d
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1,2, default 2): 2
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Partition 2 has been deleted.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-20971486, default 1050624):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-20971486, default 20969471): +7G
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 7 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition #2 contains a btrfs signature.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">The partition table has been altered.
+</span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
+</span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo fdisk -l /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 10 GiB, 10737418240 bytes, 20971520 sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 2EB767AB-0958-461B-B56D-697B3305AC83
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 15730687 14680064    7G Linux filesystem
+</span></span></span></code></pre></div><p>调整完分区大小后，因为这里没有移除 BTRFS 签名，所以分区的文件没有被删除，执行 <code>lsblk -no NAME,UUID /dev/nbd0</code> 可以看到 <code>/dev/nbd0p2</code> 的 UUID 也没有变化，和上面执行 <code>mkfs.btrfs</code> 时输出的一致。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> lsblk -no NAME,UUID /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">nbd0
+</span></span></span><span class="line"><span class="cl"><span class="go">├─nbd0p1 C6B7-EF70
+</span></span></span><span class="line"><span class="cl"><span class="go">└─nbd0p2 a5fb30e5-eb5f-4a0b-8d2a-106e04e1488b
+</span></span></span></code></pre></div></li>
+<li>
+<p>断开 NBD 连接，缩小 qcow2 磁盘大小到 8G。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo qemu-nbd -d /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0 disconnected
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> qemu-img resize ./disk1.qcow2 --shrink 8G
+</span></span><span class="line"><span class="cl"><span class="go">Image resized.
+</span></span></span></code></pre></div></li>
+<li>
+<p>重新将 qcow2 磁盘连接到 <code>/dev/nbd0</code>，会发现上面创建的磁盘中的几块分区不见了！</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo qemu-nbd -c /dev/nbd0 ./disk1.qcow2
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk -l /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 8 GiB, 8589934592 bytes, 16777216 sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: dos
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 0x00000000
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device      Boot Start      End  Sectors Size Id Type
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1          1 16777215 16777215   8G ee GPT
+</span></span></span></code></pre></div><p><code>fdisk</code> 输出中包含一条错误提示：<code>GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.</code>，大致意思是 GPT 分区表中记录的区块数量 (sectors) 和磁盘实际的区块数不一致。</p>
+</li>
+</ol>
+<h2 id="修复受损的分区表">修复受损的分区表</h2>
+<p>所以修复上面栗子中受损的 GPT 分区表的办法是，重新建一个 GPT 分区表，并按照之前的分区位置，重建分区。</p>
+<p>这里重建分区时要注意，需要输入精确的区块位置，而不是类似 <code>+50M</code> 这样模糊的值。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
+</span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): g
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new GPT disklabel (GUID: 3C587DB1-5978-45D2-AB05-9135D273D06D).
+</span></span></span><span class="line"><span class="cl"><span class="go">The device contains &#39;PMBR&#39; signature and it will be removed by a write command. See fdisk(8) man page and --wipe option for more details.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1-128, default 1):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (2048-16777182, default 2048):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-16777182, default 16775167): 1050623
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 1 of type &#39;Linux filesystem&#39; and of size 512 MiB.
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition #1 contains a vfat signature.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
+</span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-16777182, default 1050624):
+</span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-16777182, default 16775167): 15730687
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 7 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition #2 contains a btrfs signature.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): t
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1,2, default 2): 1
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition type or alias (type L to list all): 1
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Changed type of partition &#39;Linux filesystem&#39; to &#39;EFI System&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">The partition table has been altered.
+</span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
+</span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
+</span></span></span></code></pre></div><p>重建分区表后，不出意外的话，重新挂载分区是能访问分区中的文件的，分区的 UUID 也没有发生改动。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> lsblk -no NAME,UUID /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">nbd0
+</span></span></span><span class="line"><span class="cl"><span class="go">├─nbd0p1 C6B7-EF70
+</span></span></span><span class="line"><span class="cl"><span class="go">└─nbd0p2 a5fb30e5-eb5f-4a0b-8d2a-106e04e1488b
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo -l fdisk /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 8 GiB, 8589934592 bytes, 16777216 sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
+</span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 3C587DB1-5978-45D2-AB05-9135D273D06D
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 15730687 14680064    7G Linux filesystem
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo mount /dev/nbd0p2 mnt
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p1 mnt/boot
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ls -alh mnt
+</span></span><span class="line"><span class="cl"><span class="go">total 20K
+</span></span></span><span class="line"><span class="cl"><span class="go">drwxr-xr-x 2 root     root     4.0K Jan  1  1970 boot
+</span></span></span><span class="line"><span class="cl"><span class="go">-rw-r--r-- 1 root     root        0 Oct 18 22:36 example.txt
+</span></span></span><span class="line"><span class="cl"><span class="go">drwxr-xr-x 1 root     root        0 Oct 18 22:34 home
+</span></span></span></code></pre></div><h2 id="sfdisk-备份分区表">sfdisk 备份分区表</h2>
+<p>如果觉得重建分区表时，分区的位置记不住的话（废话正常人谁能背下来这一串数字），<code>sfdisk</code> 的 <code>--dump</code> 参数可以备份分区表。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo sfdisk --dump /dev/nbd0
+</span></span><span class="line"><span class="cl"><span class="go">label: gpt
+</span></span></span><span class="line"><span class="cl"><span class="go">label-id: 3C587DB1-5978-45D2-AB05-9135D273D06D
+</span></span></span><span class="line"><span class="cl"><span class="go">device: /dev/nbd0
+</span></span></span><span class="line"><span class="cl"><span class="go">unit: sectors
+</span></span></span><span class="line"><span class="cl"><span class="go">first-lba: 2048
+</span></span></span><span class="line"><span class="cl"><span class="go">last-lba: 16777182
+</span></span></span><span class="line"><span class="cl"><span class="go">sector-size: 512
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">/dev/nbd0p1 : start=        2048, size=     1048576, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=496140B3-C491-470B-98D7-BB95F55266A7
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 : start=     1050624, size=    14680064, type=0FC63DAF-8483-4772-8E79-3D69D8477DE4, uuid=F918E93D-FB1D-4652-9657-CE24A29ADEA5
+</span></span></span></code></pre></div><p>在执行磁盘缩小操作之前，可以先使用 <code>sfdisk</code> 导出分区表，缩小磁盘后再恢复。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">Backup partition table
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sfdisk --dump /dev/nbd0 &gt; nbd0.txt
+</span></span><span class="line"><span class="cl"><span class="go">Remove the `last-lba` line
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> grep -v last-lba nbd0.txt &gt; partition-backup.txt
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">After shrinking the disk size...
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Restore the backup partition table
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sfdisk /dev/nbd0 &lt; partition-backup.txt
+</span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Kobo Libra 2 安装 KOReader</title>
+      <link>https://blog.starry-s.moe/posts/2023/kobo-libra-2/</link>
+      <pubDate>Tue, 05 Sep 2023 22:45:15 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/kobo-libra-2/</guid>
+      <description>&lt;p&gt;今年的六月初的时候赶着 618 活动入手了 Kobo Libra 2 电纸书，距离上次博客更新刚好过去一个月，想于是想着把 Kobo Libra 2 安装 KOReader 踩坑的记录写在这里刚好可以水一篇博客。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>今年的六月初的时候赶着 618 活动入手了 Kobo Libra 2 电纸书，距离上次博客更新刚好过去一个月，想于是想着把 Kobo Libra 2 安装 KOReader 踩坑的记录写在这里刚好可以水一篇博客。</p>
+<meting-js server="netease" type="song" id="1336969300" theme="#233333"></meting-js>
+<blockquote>
+<p>这首歌很魔性……</p>
+</blockquote>
+<p><img loading="lazy" src="images/001.jpg" alt="KOReader" />
+<p style="margin-bottom: -0.8em;" class="image-title">KOReader</p>
+</p>
+<p>Kobo 安装 KOReader 的教程可以参照 <a href="https://github.com/koreader/koreader/wiki/Installation-on-Kobo-devices">KOReader Wiki</a>。</p>
+<h2 id="important-notes">Important Notes</h2>
+<p>首先把 Kobo 连接到电脑，用文本编辑器打开 <code>.kobo/Kobo/Kobo eReader.conf</code>，确保存在以下配置文件，禁止阅读器加载隐藏文件夹中的内容：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[FeatureSettings]
+</span></span><span class="line"><span class="cl">ExcludeSyncFolders=(\\.(?!kobo|adobe).+|([^.][^/]*/)+\\..+)
+</span></span></code></pre></div><h2 id="manual-installation-methods">Manual Installation Methods</h2>
+<p>按照手动安装 KOReader 的步骤，有两种安装方式可选择：</p>
+<ol>
+<li>
+<p>第一种是在 <a href="https://github.com/NiLuJe/kfmon">KFMon</a> 的基础上安装 KOReader，需要先安装 KFMon，安装 KFMon 的教程以及文件的下载连接在<a href="http://www.mobileread.com/forums/showthread.php?t=274231">这里</a>。</p>
+</li>
+<li>
+<p>除此之外另一种安装方法是基于 <a href="https://www.mobileread.com/forums/showthread.php?t=329525">NickelMenu</a> 的方式安装 KOReader。</p>
+</li>
+</ol>
+<p>这里咱使用的是第二种基于 <a href="https://www.mobileread.com/forums/showthread.php?t=329525">NickelMenu</a> 的方式安装 KOReader。</p>
+<ol>
+<li>
+<p>首先下载 NickelMenu 的 <a href="https://github.com/pgaskin/NickelMenu/releases/latest/download/KoboRoot.tgz">KoboRoot.tgz</a> 安装包，像升级系统那样把压缩包拖到 <code>.kobo</code> 文件夹内，弹出 USB 后 Kobo 会自动重新更新。安装完成后 Kobo 右下角菜单栏会多一个 <code>NickelMenu</code> 菜单。</p>
+</li>
+<li>
+<p>在 <a href="https://build.koreader.rocks/download/">此处</a> 下载 KOReader 安装包，因为 Libra 2 等使用相似主板的电子书存在死机重启的不稳定 <a href="https://github.com/koreader/koreader/issues/9806">Bug</a> 建议先下载包含修复此问题的 <code>nightly build</code>（<a href="https://github.com/koreader/koreader/pull/10771#issuecomment-1662928674">参考 Issue</a>），文件名以 <code>koreader-kobo</code> 开头的为 Kobo 使用的安装包。</p>
+</li>
+<li>
+<p>再次将 Kobo 连接到电脑，将 KOReader 安装包解压到 <code>.adds</code> 目录下。</p>
+</li>
+<li>
+<p>新建 <code>.adds/nm/koreader</code> 文件，写入以下内容：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">menu_item:main:KOReader:cmd_spawn:quiet:exec /mnt/onboard/.adds/koreader/koreader.sh
+</span></span></code></pre></div></li>
+<li>
+<p>弹出 USB，等待设备同步完数据后，就可以在 Kobo 的右下角菜单栏中启动 KOReader 了。</p>
+</li>
+</ol>
+<h2 id="known-issues">Known Issues</h2>
+<p>使用过程中只遇到一个 KOReader 的严重影响体验的问题，就是上面说的阅读过程中会经常死机重启，可以在 <a href="https://github.com/koreader/koreader/issues/9806">这篇 Issue</a> 跟踪进度，目前可以尝试使用 <a href="https://github.com/koreader/koreader/pull/10771">这个 Patch</a>，安装 <code>nightly build</code> 的安装包尝试解决。</p>
+<h2 id="others">Others</h2>
+<p>贴几张看电纸书的效果图供参考，Kobo 的显示效果比咱之前用过的 KPW4 好太多了。图书的话基本是从网络上找盗版资源了，KOReader 能够对 PDF 重排所以对 PDF 的支持效果也比 Kindle 好很多。</p>
+<p><img loading="lazy" src="images/002.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/003.jpg" alt="" />
+
+</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>玩了三年的 Minecraft 生存存档</title>
+      <link>https://blog.starry-s.moe/posts/2023/minecraft/</link>
+      <pubDate>Sat, 08 Jul 2023 22:56:44 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/minecraft/</guid>
+      <description>&lt;p&gt;这个 Minecraft 存档是咱在 2020 年年初的时候建立的，起初是 1.15.2 单机生存，当时在 B 站学着 TIS 以及其他生电服的思路安装了一些生存辅助插件，后来升级到了 1.16.5，并在去年年底迁移到了我的 NAS 上改成了私人服务器。尽管玩了三年多的时间了但我从来没详细的在博客上记录这个存档，只有在前几年的年终总结中提到过“我在玩 Mincraft，今年建了什么建筑……”，眼瞅着三周年已经过去了，本来想录个纪念视频发 B 站上的，但因为太懒、不想学视频剪辑，这个计划一直咕咕了，不过最近想到可以把存档截图放博客里作为三周年纪念。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>这个 Minecraft 存档是咱在 2020 年年初的时候建立的，起初是 1.15.2 单机生存，当时在 B 站学着 TIS 以及其他生电服的思路安装了一些生存辅助插件，后来升级到了 1.16.5，并在去年年底迁移到了我的 NAS 上改成了私人服务器。尽管玩了三年多的时间了但我从来没详细的在博客上记录这个存档，只有在前几年的年终总结中提到过“我在玩 Mincraft，今年建了什么建筑……”，眼瞅着三周年已经过去了，本来想录个纪念视频发 B 站上的，但因为太懒、不想学视频剪辑，这个计划一直咕咕了，不过最近想到可以把存档截图放博客里作为三周年纪念。</p>
+<meting-js server="netease" type="song" id="812557" theme="#233333"></meting-js>
+<h2 id="出生点空置域">出生点空置域</h2>
+<p><img loading="lazy" src="images/0010.jpg" alt="出生点空置域" />
+<p style="margin-bottom: -0.8em;" class="image-title">出生点空置域</p>
+</p>
+<p>出生点已经被咱炸成空置域了，当时是在 2020 年花了几天的时间用三向轰炸机清理的空置域，y11 高度以下的岩浆并不碍事所以没有清理，现在的出生点空置域有一个收集末地刷沙机的简单收集装置（以后打算改成自动分类+潜影盒收集装置），橙色的建筑是地铁出生点站，图片右侧的是一个简易的刷鱼农场，主要靠这个农场获取墨鱼的黑色染料。</p>
+<h2 id="原点空置域">原点空置域</h2>
+<p><img loading="lazy" src="images/0020.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">原点</p>
+</p>
+<p>原点空置域是咱的第二个空置域，之所以叫原点是因为空置域的中心座标为 (x:0, z:0)，原点空置域里只有一个全物品（垃圾桶）分类装置，这个原点空置域我记得是 2021 年用三向炸的，全物品也是在 21 年上半年建的，现在全物品已经全部完工并正常使用了，不过这个全物品目前只收集了一半左右的可堆叠物品，因为有许多物品在单人生存中很少用到。</p>
+<p>全物品垃圾桶右边蓝色圆形的建筑是地铁原点站，顶上是一个仅装饰作用的“停机坪”。</p>
+<p><img loading="lazy" src="images/0030.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/0040.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/0050.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/0060.jpg" alt="" />
+
+</p>
+<p>全物品分类是这个存档里工程量最大的机器，当时建全物品时特地新建了一个村民交易所，买了巨多的石英和红石、萤石等建筑材料，清理水道时也花了巨长的时间。</p>
+<h2 id="生存基地">生存基地</h2>
+<p><img loading="lazy" src="images/0070.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">生存时第一个建造的房子</p>
+</p>
+<p><img loading="lazy" src="images/0080.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">由村庄改造的庭院</p>
+</p>
+<p><img loading="lazy" src="images/0090.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">生存基地俯瞰</p>
+</p>
+<p><img loading="lazy" src="images/0100.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">刷铁机、工厂、地铁站</p>
+</p>
+<p>当初建立存档后，是生存在出生点旁边的一个村庄里的，后来搬到了附近的河边，现在村庄已经没有村民了，被我改建成了一个中式的庭院。</p>
+<p>这个生存基地有一个简易的工厂，工厂一层是一个小型牧场和小型熔炉组和 1.15 版本能用的经验熔炉（升级到 1.16 后特性被修复了就不能用了），工厂二层有一个附魔台，三层是简易的村民交易所。工厂旁边有一个简易的刷铁机，尽管后来又盖更大的刷铁机了但这个没拆，尽管效率低点但一直能用。</p>
+<p>工厂侧面还有一个白桦树树场，效率蛮高的单人生存足够用了，后期的木材全是从这里获取的。生存基地的地下有一个能换乘三条线路的超大地铁站。</p>
+<p><img loading="lazy" src="images/0110.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">1 号线站厅</p>
+</p>
+<p><img loading="lazy" src="images/0120.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">1 号线站台</p>
+</p>
+<p><img loading="lazy" src="images/0130.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">空置域线站台</p>
+</p>
+<p><img loading="lazy" src="images/0140.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">2 号线站台</p>
+</p>
+<h2 id="工业基地">工业基地</h2>
+<p>工业基地有一个 320 超大熔炉组，然后是一个效率蛮高的刷石机和一个简易的复制铁轨的机器，地下有一个地铁工业基地站。</p>
+<p><img loading="lazy" src="images/0150.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">320 熔炉组</p>
+</p>
+<p><img loading="lazy" src="images/0160.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">刷石机 &amp; 铁轨复制机</p>
+</p>
+<h2 id="机场在建">机场（在建）</h2>
+<p><img loading="lazy" src="images/0170.jpg" alt="" />
+
+</p>
+<p>不得不说生存修机场真的太麻烦了，时间全用来整地形了，铺混凝土倒不是很费事。现在这个机场只有一条跑道，打算建航站楼但是工程量很大，需要很长的时间整理地形，所以一直在咕咕姑中。</p>
+<p><img loading="lazy" src="images/0180.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">地铁站 &amp; 刷铁机 &amp; 刷怪塔</p>
+</p>
+<p>机场旁边的海上有一个大型的 8 核心刷铁机、一个简易的混凝土固化机和一个刷怪塔以及一个地铁站。后期建地铁等建筑的所有混凝土都是在这个混凝土固化机固化的，然后尽管这个刷铁机效率不是特别高但是单机生存勉强够用了，不够用的话就多挂机刷一会（<code>/tick rate 200</code> 警告）……</p>
+<h2 id="摩天楼">摩天楼</h2>
+<p><img loading="lazy" src="images/0190.jpg" alt="" />
+
+</p>
+<p>其实这个地方我起的地名叫“三号村庄”，因为是第三个发现的村庄……</p>
+<p>本来计划建两个摩天楼的，但是建完一个之后，另一个楼就一直处于咕咕的状态。摩天楼旁边是一个大型的双岛式站台地铁站。</p>
+<h2 id="跨海大桥">跨海大桥</h2>
+<p><img loading="lazy" src="images/0200.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/0210.jpg" alt="" />
+
+</p>
+<p>这个存档里一共有俩跨海大桥，第一个桥是 2020 年暑期时建的，第二个桥是 22 年下半年建的。</p>
+<h2 id="甘蔗农场">甘蔗农场</h2>
+<p>甘蔗农场是今年上半年修建的，是一个简易的全自动甘蔗机，收集的甘蔗主要用于生成烟花火箭的原材料：纸。</p>
+<p><img loading="lazy" src="images/0310.jpg" alt="" />
+
+</p>
+<h2 id="村民交易所">村民交易所</h2>
+<p>在修建全物品分类以及地铁站装饰时，需要大量的石英和萤石，因此修建了这个带打折的村民交易所，因为没有建袭击农场，所以目前与村民交易的绿宝石都是从村民交易所卖铁换取的，而铁是靠村民制作的刷铁机刷出来的。<span class="spoiler" >深刻体现了什么叫“取之于民，用之于民”的资本家思想（逃</span></p>
+<p><img loading="lazy" src="images/0260.jpg" alt="" />
+
+</p>
+<p>村民交易所旁边还有一个咱自己设计的全自动农场，但是因为咱不缺食物（可以从村民那里买金胡萝卜吃），所以这个自动农场建好后一直在闲置。</p>
+<p><img loading="lazy" src="images/0270.jpg" alt="" />
+
+</p>
+<h2 id="海底神殿守卫者农场">海底神殿（守卫者农场）</h2>
+<p>生存中第一个发现的海底神殿，已经被改成了不需要清空水的袭击者农场（排水实在太麻烦了），目前所有建筑的海晶灯的原材料都是从这个农场获取的，海底神殿旁边是三号线地铁海底神殿站。</p>
+<p><img loading="lazy" src="images/0340.jpg" alt="" />
+
+</p>
+<h2 id="地狱猪人农场">地狱猪人农场</h2>
+<p>因为光影在地狱的效果不好所以咱把光影关掉了……</p>
+<p>这个猪人农场用来挂机刷经验以及获取金子，农场还包含了猪灵交易所，可以把刷取的金锭与猪灵换取石英、黑曜石、火焰弹等物品。</p>
+<p><img loading="lazy" src="images/0350.jpg" alt="" />
+
+</p>
+<h2 id="地铁">地铁</h2>
+<p>这个存档里目前有三十多个已建成的地铁站，还有十多个在建的地铁站，这里贴几张咱自认为设计得比较有特点的地铁站。</p>
+<p>首先是这个双层侧式站台的地铁站，上层是已经建成的 2 号线，下层是正在建设的通往机场的 6 号线：</p>
+<p><img loading="lazy" src="images/0220.jpg" alt="" />
+
+</p>
+<p>这个是 3 号线的末地传送门站，这个站直接修在了末地要塞里，上层是地铁站台，下层是由末地要塞改造成的末地传送门入口，同时保留了要塞的书房作为该地铁站的小型图书馆：</p>
+<p><img loading="lazy" src="images/0230.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">末地传送门 - 站台</p>
+</p>
+<p><img loading="lazy" src="images/0240.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">末地传送门 &amp; 图书馆</p>
+</p>
+<p>这个是村民交易所的地下的地铁站，用的云杉木作为柱子，还挺好看的：</p>
+<p><img loading="lazy" src="images/0250.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">村民交易所 - 站台</p>
+</p>
+<p>空置域西站：</p>
+<p><img loading="lazy" src="images/0280.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">3 号线（左）、1 号线（右）</p>
+</p>
+<p>一号线的保留了正线的侧式站台地铁站，方便甩站用（本次裂车本站不停靠）：</p>
+<p><img loading="lazy" src="images/0290.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">南湖公园站</p>
+</p>
+<p>一号线的地上段，弄了红石灯做了点简易的装饰：</p>
+<p><img loading="lazy" src="images/0300.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">冰工厂站</p>
+</p>
+<p>全物品分类旁边的原点站也很有特色，车站是圆柱体结构，两条线路十字交叉：</p>
+<p><img loading="lazy" src="images/0320.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">原点站</p>
+</p>
+<p>这个是二号线的车辆段，目前存档里只有二号线有车辆段（因为二号线太长了），别的线路还没有修车辆段的计划。</p>
+<p><img loading="lazy" src="images/0330.jpg" alt="" />
+
+</p>
+<hr>
+<p>以上基本是咱玩了三年的单人生存存档的全部内容了，还有些在建和小型的建筑个人认为没必要贴到这里，因为最近逐渐没有玩下去的兴趣了所以不知道以后还能不能继续坚持玩下去，所以想了一下这三年时间建的建筑蛮多的因此写到这里水一篇博客。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>当你刚开始尝试去写 Kubernetes Controller……</title>
+      <link>https://blog.starry-s.moe/posts/2023/kube-controller/</link>
+      <pubDate>Sat, 10 Jun 2023 02:33:58 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/kube-controller/</guid>
+      <description>&lt;p&gt;Controller 对初学着来说有那么亿点点抽象，虽然网络上能找到很多有关 Kubernetes Controller 的讲解，但是 Kubernetes 的学习过程往往是一个离散的而不是连续的过程。如果想弄懂 Controller 还是有蛮高门槛的，不要想着看完 Kubernetes 的文档，速成了 Kubernetes 的基本知识就去尝试写 Controller，这种操作就好比刚过完新手教程就去打高难副本，尽管能仿着 &lt;code&gt;sample-controller&lt;/code&gt; 写一个能“跑”的 Controller，但仅仅只能做到能“跑”的程度……&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;与标题有些不同，这篇博客主要讲的是萌新如何上手编写 Controller，如果你是 Kubernetes 初学者，希望这篇博客能帮助你建立编写 Controller 的学习曲线。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+      <content:encoded><![CDATA[<p>Controller 对初学着来说有那么亿点点抽象，虽然网络上能找到很多有关 Kubernetes Controller 的讲解，但是 Kubernetes 的学习过程往往是一个离散的而不是连续的过程。如果想弄懂 Controller 还是有蛮高门槛的，不要想着看完 Kubernetes 的文档，速成了 Kubernetes 的基本知识就去尝试写 Controller，这种操作就好比刚过完新手教程就去打高难副本，尽管能仿着 <code>sample-controller</code> 写一个能“跑”的 Controller，但仅仅只能做到能“跑”的程度……</p>
+<blockquote>
+<p>与标题有些不同，这篇博客主要讲的是萌新如何上手编写 Controller，如果你是 Kubernetes 初学者，希望这篇博客能帮助你建立编写 Controller 的学习曲线。</p>
+</blockquote>
+<h2 id="前期准备">前期准备</h2>
+<p>对刚接触 Kubernetes 的萌新来讲，这个体系还是蛮复杂和抽象的，只靠读文档看教程自学可不是那么容易。光是怎么安装一个 Kubernetes 集群，在不同的教程里就有无数种方法了。传统的安装 Kubernetes 的方法过于硬核，现在几乎没人选择这种方式部署集群了。咱常用的比较简单的方式有 <a href="https://k3s.io">k3s</a>，光靠一个脚本就能在虚拟机上一键部署一个轻量级的集群，很适合萌新（前提是你没有必须用包管理器安装任何软件的强迫症），但是如果你想在国内的网络环境靠这个脚本安装 <code>k3s</code> 的话，需要一些参数配置国内源，这里不再赘述。除此之外还可以<a href="https://ranchermanager.docs.rancher.com/zh/pages-for-subheaders/rancher-on-a-single-node-with-docker">用 Docker 方式部署一个单节点 Rancher</a>，Rancher 的 Web 界面可以更好的帮助萌新去管理 Kubernetes 资源（当然你还可以选择敲 <code>kubectl</code> 指令的方式），还有很多教程会推荐你使用 <code>minikube</code>，当然你可以选择任何一种方式去部署你自己的集群，只要你觉得这种方法适合你，而且部署的集群版本不要太低即可。</p>
+<p>如果想编写 Controller，你得有一定的 Kubernetes 基础（废话），并且熟悉 Go 语言（废话 x 2）。在看完 Kubernetes 文档，熟悉了 k8s 的资源和如何使用 <code>kubectl</code> 操作他们后，先别急着上手写 Controller。首先你得熟悉 <a href="https://github.com/kubernetes/client-go">client-go</a>，<code>client-go</code> 的代码能在 GitHub (<a href="https://github.com/kubernetes/client-go">https://github.com/kubernetes/client-go</a>) 中下载到，但记住它的 Go Module 为 <code>k8s.io/client-go</code>，不在 <code>github.com</code>。</p>
+<p>首先了解一些常见的 Kuberntes API 类型，知道 Kubernetes 的资源对象是怎么在 <code>client-go</code> 中用 Go 语言表示的，并如何调用 API 去管理他们（而不是仅凭 <code>kubectl</code> 命令行客户端去管理他们），
+这里不单单有 <code>client-go</code> 这一个 Git 仓库，还有 <code>k8s.io/api</code>, <code>k8s.io/apimachinery</code> 等仓库，后面写 Controller 时会经常用到这些 API。认识一下 <code>TypeMeta</code> 和 <code>ObjectMeta</code> （代码位置在<a href="https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go">这里</a>），每个资源对象的 Go 结构中都包含这些数据（除此之外每个资源还有 <code>Spec</code>, <code>Status</code> 等），写代码时会经常用到 <code>json/yaml</code> 的 <code>Marshal/Unmarshal</code> 操作，熟悉到这个程度就可以了。</p>
+<p>然后是 Kubernetes 的自定义资源（Custom Resource, CR）这个概念，k8s 内置了一些 Resource 资源对象，例如 <code>pod</code>, <code>deployment</code>, <code>service</code>, <code>secret</code> 等，你可以用 <code>kubectl</code> 去 <code>get/describe/create/delete...</code> 这些资源，但如果你想往 k8s 中添加一些你自己的自定义资源，比如你想定义一个资源叫做 <code>database</code>，你用 <code>kubectl create database ...</code> 就能创建一个你自己想要的数据库，像 <code>create pod</code>, <code>create secret</code> 那样，然后还能对你的自定义资源对象进行 <code>describe/delete/update...</code> 等操作，就需要用到自定义资源（开发者更习惯叫他的简写 CR，以及自定义资源定义的简写 CRD）。Controller 就是用来管理这些 CRs 的。在开发 Controller 时我们需要定义 CR 中包含哪些数据，然后使用代码生成器生成资源的 <code>DeepCopy</code> 等方法，减少不必要的重复代码编写。</p>
+<blockquote>
+<p>可以不用把每个细节都尝试弄懂，把基本概念过一遍就行，学习 Kubernetes 的过程是一个离散的过程而不是连续的过程，当碰到哪个地方不明白卡住的时候直接跳过去看后面的内容就行啦~</p>
+</blockquote>
+<h2 id="什么是-controller">什么是 Controller</h2>
+<p>在上面介绍 CR 的定义时有解释 Controller 是用来管理 CR 的，比如我们执行 <code>kubectl create database ...</code> （实际是执行 <code>kubectl apply -f</code> 部署了一个 <code>Kind</code> 为 <code>database</code> 的 YAML，不能直接 <code>create database</code>，但这么说比较方便理解~）创建了一个 <code>database</code> 类型的资源，因为这个资源是我们自定义的，所以 Kubernetes 只是在 etcd 数据库中记录了：“我们创建了一个 <code>database</code> 资源，他的数据内容是什么什么……”，并没有进行创建数据库的操作！而 Controller 就是用来管理 Database 资源的生命周期的，比如我们 <code>create database</code> 之后，Controller 会发现我们新建了一个 Database 资源，然后会去创建一个 Database Deployment。当我们 <code>delete database</code> 时，Controller 会注意到我们删除了 Database，之后执行资源释放一系列操作。</p>
+<p>往简单了讲，Controller 干的事情就是对比资源当前实际的状态和我们设定的资源状态是否一致。比如这个资源定义的 <code>replicas</code> 为 2，但实际只有一个 Pod 在运行，Controller 就会再去创建一个 Pod 使其实际的 <code>replicas</code> 为 2。</p>
+<p>当然 Controller 实现起来比这复杂多了，可不是一个简单的 <code>for</code> 循环不断从 Kube API 中查询资源然后做对比这么简单，这用到了 Cache 缓存机制和 Informer 消息提醒机制，减少 Kube API 请求次数，读取内存中的状态缓存什么的，听不懂没关系，以后会懂的……</p>
+<h2 id="sample-controller">sample-controller</h2>
+<p><code>github.com/kubernetes/sample-controller</code> 项目是一个样例 Controller，所有的初学者都是靠这个项目学习 Controller 的，相当于是高难副本中最简单的了，可以把这个样例 Controller 改造为自己的 Controller，用来学习。</p>
+<p>本篇教程以编写 <code>database-controller</code> 为例，按照 <code>sample-controller</code> 的 Controller 框架编写一个数据库的 Controller，重点在于怎么上手写 Controller，不在数据库。</p>
+<p>将 <code>sample-controller</code> 代码克隆到本地 <code>$GOPATH</code> 目录下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> midir -p <span class="nv">$GOPATH</span>/src/github.com/&lt;USERNAME&gt;/ <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/github.com/&lt;USERNAME&gt;/
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> git clone git@github.com:kubernetes/sample-controller.git <span class="o">&amp;&amp;</span> <span class="nb">cd</span> sample-controller
+</span></span></code></pre></div><h3 id="初始化-controller">初始化 Controller</h3>
+<p>按照 <code>sample-controller</code> 的 Controller 框架，将其修改为我们想要实现的 Controller。</p>
+<ul>
+<li>修改项目名称为 <code>database-controller</code>，修改 <code>git remote</code>。</li>
+<li>编辑 <code>go.mod</code> 修改 Module 名称，把代码的 <code>k8s.io/sample-controller</code> 改为 <code>github.com/&lt;USERNAME&gt;/database-controller</code>。</li>
+<li>编辑 <code>hack/boilerplate.go.txt</code> 中的版权信息。</li>
+<li>修改 <code>README</code>，<code>OWNERS</code>，<code>SECURITY_CONTACTS</code> 等信息。</li>
+<li>编辑执行<strong>代码生成器</strong>的脚本 <a href="https://github.com/kubernetes/sample-controller/blob/master/hack/update-codegen.sh">hack/update-codegen.sh</a>
+<ul>
+<li>编辑脚本中的代码生成器所在位置，脚本中原本写的是使用了 <code>go mod vendor</code> 将 Go 依赖都放到了项目的 <code>vendor</code> 目录下时生成器的位置，按实际情况进行修改（比如改成 <code>$GOPATH</code> 目录下）。</li>
+<li>编辑 <code>code-generator</code> 的参数，把 <code>k8s.io/sample-controller</code> 改成 <code>github.com/&lt;USERNAME&gt;/database-controller</code>, 并编辑 <code>--output-base</code> 的目录位置。</li>
+<li>执行代码生成器脚本，确保能正确生成代码。</li>
+</ul>
+</li>
+</ul>
+<p>之后修改 <code>pkg/apis/samplecontroller</code> 目录为 <code>pkg/apis/databasecontroller</code>，同时把 <code>samplecontroller</code> 包修改为 <code>databasecontroller</code>。</p>
+<ul>
+<li>把代码中所有使用了 <code>samplecontroller</code> 包的地方都改为 <code>databasecontroller</code>（被代码生成器生成的代码可以不用改，后面会重新生成代码）。</li>
+<li>修改 <code>pkg/apis/databasecontroller/register.go</code> 的 <code>GroupName</code> 为 <code>database.&lt;YOUR_DOMAIN&gt;</code>，例如 <code>database.example.io</code>。</li>
+<li>修改代码生成器的注释，把 <code>pkg/apis/databasecontroller/v1alpha1/doc.go</code> 的 <code>groupName</code> 修改为 <code>database.example.io</code>。</li>
+<li>重新执行代码生成器 <code>./hack/update-codegen.sh</code>。</li>
+</ul>
+<p>先简单熟悉一下修改后的项目的代码结构：</p>
+<ul>
+<li>
+<p><code>main.go</code> 中先构建了 Kubernetes 和 <code>database-controller</code> 的 <code>Client</code>，之后基于 <code>Client</code> 构建了 <code>SharedInformer</code>，最后创建并启动 Controller。</p>
+<p>简单来讲，<code>Informer</code> 在资源发生改动时，调用相应事件的处理函数，它可以对“增加”，“更新”，“删除”三种事件进行“监控”处理（一点也不简单，太抽象了）。然后 Informer 还充当了缓存的作用，查询资源状态时只需要查询 Informer 的缓存即可，不需要反复调用 Kube API，减少性能损耗。</p>
+</li>
+<li>
+<p><code>controller.go</code> 包含这些内容：</p>
+<ul>
+<li>构建 Controller 的 <code>NewController</code>、启动 Controller 的 <code>Run</code>，还有 Informer 在不同事件（Event）进行处理的函数……</li>
+<li>创建 Deployment 的函数，<code>sample-controller</code> 中的 CRD Kind 为 <code>foo</code>，这个 <code>foo</code> 创建的 Deployment 是一个 <code>nginx</code> Pod，有点抽象，后面要把 <code>foo</code> 改成咱们要实现的 <code>database</code>，原理实际都没变。</li>
+</ul>
+<p>Controller 结构体中包含了：</p>
+<ul>
+<li><code>kubernetes</code> 和代码生成器生成的 <code>database</code> 的 <code>clientSet</code>。</li>
+<li>Informer 的 Lister，用来从缓存中获取资源。</li>
+<li><code>workqueue</code>：Rate Limit 消息队列。
+Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取资源并处理。Informer 在接收到状态更新后，会把更新的状态入队列，然后另一个 Routine 中会获取到队列中的消息，拿去处理。
+（蛮复杂的，这里还是去直接看代码比较好）</li>
+</ul>
+</li>
+</ul>
+<h3 id="修改-controller">修改 Controller</h3>
+<p>接下来按照上面讲的那样，修改 <code>pkg/apis/databasecontroller/v1alpha1/types.go</code> 中的 <code>Spec</code> 和 <code>Status</code> 字段，<code>Spec</code> 中的字段是你想定义的 Database 的状态，然后 Controller 负责按照你定义的 <code>Spec</code> 去创建 Deployments 并更新 <code>Status</code>。</p>
+<p>首先需要把 <code>Foo</code> 改名成 <code>Database</code>，然后编辑 <code>Spec</code> 中的字段，例如数据库所使用的镜像名称及 Tag，<code>Replicas</code> 冗余数以及其他你觉得创建 Deployment 所需的自定义配置。在修改完 <code>Spec</code> 和 <code>Status</code> 后需要重新执行代码生成器。</p>
+<p>之后在项目根目录下编辑 <code>controller.go</code>，修改控制器创建 Deployment 的逻辑，把 <code>Foo</code> 对象修改为 <code>Database</code>，然后按照你定义的 <code>Spec</code>，编辑 <code>artifacs/example</code> 目录下的 <code>crd.yaml</code> 和 <code>example-database.yaml</code> 文件，这部分咱就不把详细的步骤写到这里了，你可以根据你的想法尝试编写你的 Controller，在这里遇到问题最好还是自行尝试动手解决。</p>
+<h2 id="其他">其他</h2>
+<p>后面还有好多关于 Controller 相关的知识点我也还没搞懂，就不写到博客里误导别人了。除了 <code>sample-controller</code> 这种框架的 Controller 之外，还有很多人使用其他的框架编写 Controller，因为很多时候我们更关注于实现业务逻辑，因此可以套用一些 Operator 模板，常用的有 <a href="https://sdk.operatorframework.io/">Operator SDK</a>，可以通过这个工具生成一份 Controller 模板，然后按照你想实现的功能去修改代码即可，还有很多其他 Operator 可供选择，比如 Rancher 的开发者们使用 <a href="https://github.com/rancher/wrangler">Wrangler</a> 编写 Controller，基于 <code>Wrangler</code> 编写的 Rancher 使用的 Operator 有 <a href="https://github.com/rancher/eks-operator">eks-operator</a> 等一堆 Operator，感兴趣的话可以去看看。<code>Wrangler</code> 的 README 中写的这一段蛮有意思的：</p>
+<blockquote>
+<p>Most people writing controllers are a bit lost as they find that there is nothing in Kubernetes that is like <code>type Controller interface</code> where you can just do <code>NewController</code>. Instead a controller is really just a pattern of how you use the generated clientsets, informers, and listers combined with some custom event handlers and a workqueue.</p>
+</blockquote>
+<p>之后如果想把你编写的 Controller (Operator) 应用到生产环境，打包给更多的人使用，可以把编译好的 Operator 二进制文件放到容器镜像中，之后使用 <a href="https://helm.sh">Helm</a> 创建一个 &ldquo;应用程序 (Chart)&quot;，通过编写 <a href="https://helm.sh/docs/chart_best_practices/templates/">模板</a>，在安装 Helm Chart 时编辑 <code>values.yaml</code> 中定义的字段来自定义 CRD 的参数。Helm 的模板本质上是 Go Template 模板渲染引擎，所以用起来都是很简单的（确信）。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>使用 Helm Chart 方式部署 Harbor</title>
+      <link>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</link>
+      <pubDate>Sun, 28 May 2023 16:49:45 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</guid>
+      <description>&lt;p&gt;打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。</p>
+<p>首先介绍一下 NAS 上的环境，咱的 Kubernetes 集群运行在几个 QEMU 虚拟机里，虚拟机里运行的是 ArchLinux，因为就是咱折腾着玩的所以使用的 k3s 搭建的轻量级的 kubernetes 集群，然后其中一个集群安装了 Rancher 作为 Local 集群。</p>
+<h2 id="环境准备">环境准备</h2>
+<ol>
+<li>
+<p>新建一个 Namespace，将 Harbor 的资源与其他资源隔离：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> kubectl create namespace harbor
+</span></span></code></pre></div></li>
+<li>
+<p>为了启用 HTTPS，提前创建一个 TLS 类型的 <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Secret</a>，存放证书:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> cat &gt; cert.pem &lt;&lt; EOF
+</span></span><span class="line"><span class="cl"><span class="go">-----BEGIN CERTIFICATE-----
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">-----END CERTIFICATE-----
+</span></span></span><span class="line"><span class="cl"><span class="go">EOF
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> cat &gt; cert.key &lt;&lt; EOF
+</span></span><span class="line"><span class="cl"><span class="go">-----BEGIN PRIVATE KEY-----
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">-----END PRIVATE KEY-----
+</span></span></span><span class="line"><span class="cl"><span class="go">EOF
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> kubectl -n harbor create secret tls harbor-tls <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="go">    --cert=cert.pem \
+</span></span></span><span class="line"><span class="cl"><span class="go">    --key=cert.key
+</span></span></span></code></pre></div></li>
+<li>
+<p>提前创建 PVC (<a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">PersistentVolumeClaim</a>)，咱这里先在 NAS 上新建了一个 NFS 服务器，之后创建了 NFS 类型的 PV (PersistentVolumes)，再基于这个 PV 创建的 PVC。</p>
+<p>ArchLinux 上搭建 NFS 服务器：<a href="https://wiki.archlinux.org/title/NFS">https://wiki.archlinux.org/title/NFS</a></p>
+<blockquote>
+<p>在配置 <code>exports</code> 时，需要配置上 <code>no_root_squash</code> 和 <code>no_subtree_check</code>，使挂载的目录及子目录具有写权限。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/exports - exports(5) - directories exported to NFS clients
+</span></span><span class="line"><span class="cl"># Use `exportfs -arv` to reload.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/var/nfs/harbor		10.0.0.0/8(rw,sync,no_root_squash,no_subtree_check)
+</span></span></code></pre></div></blockquote>
+</li>
+</ol>
+<h2 id="获取-helm-chart">获取 Helm Chart</h2>
+<p>Harbor 的 Helm Chart 可以在 <a href="https://github.com/goharbor/harbor-helm">GitHub</a> 获取，这里使用将 Chart 源码克隆到本地的方式安装，方便编辑 <code>values.yaml</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> git clone https://github.com/goharbor/harbor-helm.git <span class="o">&amp;&amp;</span> <span class="nb">cd</span> harbor-helm
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> git checkout v1.12.1
+</span></span></code></pre></div><blockquote>
+<p>写这篇博客时 Chart 的最新版本是 <code>v1.12.1</code> (Harbor OSS v2.8.1)。</p>
+</blockquote>
+<h3 id="编辑-valuesyaml">编辑 <code>values.yaml</code></h3>
+<p>Harbor 的配置都定义在了 <code>values.yaml</code> 文件中，根据需要进行修改。</p>
+<p>这里列举些常用的可以修改的选项：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">expose</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># expose type, 可以设置为 ingress, clusterIP, nodePort, nodeBalancer，区分大小写</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 默认为 ingress（如果不想使用 80/443 标准端口，可以设置为 nodePort，端口为高位 3000X）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">ingress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tls</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 是否启用 TLS (HTTPS)，建议启用</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># TLS Certificate 的来源，可以为 auto, secret 或 none</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 如果为 secret，需要在安装 Chart 之前先创建 TLS Secret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 1) auto: generate the tls certificate automatically</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 2) secret: read the tls certificate from the specified secret.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># The tls certificate can be generated manually or by cert manager</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 3) none: configure no tls certificate for the ingress. If the default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># tls certificate is configured in the ingress controller, choose this option</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">certSource</span><span class="p">:</span><span class="w"> </span><span class="l">secret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># The name of secret which contains keys named:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># &#34;tls.crt&#34; - the certificate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># &#34;tls.key&#34; - the private key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-tls&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Only needed when the &#34;expose.type&#34; is &#34;ingress&#34;.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">notarySecretName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-tls&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ingress</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Ingress Host，如果需要允许任意域名/IP 都能访问，将其设置为空字符串（不建议）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 这里填写的域名务必能解析到当前集群</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">core</span><span class="p">:</span><span class="w"> </span><span class="l">harbor.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">notary</span><span class="p">:</span><span class="w"> </span><span class="l">notary.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Harbor external URL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 与 Ingress Host 相对应，如果启用了 TLS，那就是 https://&lt;domain&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果没启用 TLS，那就是 http://&lt;domain&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果 expose type 为 nodePort，则填写 http(s)://&lt;IP_ADDRESS&gt;:3000X (端口号不能丢)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">externalURL</span><span class="p">:</span><span class="w"> </span><span class="l">https://harbor.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 持久卷配置，默认为 true，如果是测试环境可以设置为 enabled: false (重新安装 Chart 时仓库里所有的数据都会丢失，不建议！)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果需要启用持久卷，可以在安装 Chart 之前提前创建好 PVC，并配置 subPath</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">persistence</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">resourcePolicy</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;keep&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 填写已经创建好的 PVC</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 如果共用一个 PVC，需要设置子目录</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;registry&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">5Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">jobservice</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">jobLog</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;jobservice&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;database&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;redis&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">trivy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;trivy&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">5Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Admin 初始密码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">harborAdminPassword</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Harbor12345&#34;</span><span class="w">
+</span></span></span></code></pre></div><h3 id="安装-helm-chart">安装 Helm Chart</h3>
+<p>确保 Values 编辑无误后，就可以安装 Chart 了：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> helm --namespace harbor install harbor .
+</span></span></code></pre></div><p>如果安装后发现 Values 中有些配置需要修改，可以在修改完配置后以升级的方式使配置生效：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> helm --namespace harbor upgrade harbor .
+</span></span></code></pre></div><p>查看 Chart 的 Pods 运行状态：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> kubectl --namespace harbor get pods
+</span></span><span class="line"><span class="cl"><span class="go">NAME                                    READY   STATUS    RESTARTS      AGE
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-core-7b75785b64-9vzkx            1/1     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-database-0                       1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-jobservice-6f4d59bd95-25q44      1/1     Running   2 (65m ago)   65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-notary-server-584698b475-lnt99   1/1     Running   1 (60m ago)   65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-notary-signer-77685b6f94-pfngc   1/1     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-portal-6fb6465fd6-hm4cg          1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-redis-0                          1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-registry-5bbccf79fb-7hcm9        2/2     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-trivy-0                          1/1     Running   0             77m
+</span></span></span></code></pre></div><h2 id="其他">其他</h2>
+<p>安装完成后，就可以完美使用 Harbor Registry 了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> docker login harbor.example.com
+</span></span><span class="line"><span class="cl"><span class="go">Username: admin
+</span></span></span><span class="line"><span class="cl"><span class="go">Password:
+</span></span></span><span class="line"><span class="cl"><span class="go">WARNING! Your password will be stored unencrypted in /home/user/.docker/config.json.
+</span></span></span><span class="line"><span class="cl"><span class="go">Configure a credential helper to remove this warning. See
+</span></span></span><span class="line"><span class="cl"><span class="go">https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Login Succeeded
+</span></span></span></code></pre></div><p>从 DockerHub 中 Mirror 一些镜像到 Harbor 中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo copy --all docker://archlinux:latest docker://harbor.example.com/library/archlinux:latest
+</span></span><span class="line"><span class="cl"><span class="go">Getting image list signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying 1 of 1 images in list
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying image sha256:076c0233d1996165721320957be9a037a760574d6334281354b07b3b3c9440b1 (1/1)
+</span></span></span><span class="line"><span class="cl"><span class="go">Getting image source signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying blob f0e04a7b4686 done
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying blob 352736306209 done
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying config cc4866169d done
+</span></span></span><span class="line"><span class="cl"><span class="go">Writing manifest to image destination
+</span></span></span><span class="line"><span class="cl"><span class="go">Storing signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Writing manifest list to image destination
+</span></span></span><span class="line"><span class="cl"><span class="go">Storing list signatures
+</span></span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>容器镜像 Manifest 相关内容整理</title>
+      <link>https://blog.starry-s.moe/posts/2023/container-manifest/</link>
+      <pubDate>Sun, 21 May 2023 01:50:27 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/container-manifest/</guid>
+      <description>&lt;p&gt;最近总在弄些容器镜像相关的东西，于是分享一些咱自己总结的有关容器镜像 Manifest 格式、常用工具以及代码相关的芝士。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>最近总在弄些容器镜像相关的东西，于是分享一些咱自己总结的有关容器镜像 Manifest 格式、常用工具以及代码相关的芝士。</p>
+<meting-js server="netease" type="song" id="590414" theme="#233333"></meting-js>
+<h2 id="skopeo">skopeo</h2>
+<p><a href="https://github.com/containers/skopeo">skopeo</a> 是一个肥肠好用的容器镜像的辅助工具，常用到的功能有镜像拷贝 (<code>skopeo copy</code>)、镜像 Manifest 查询 (<code>skopeo inspect</code>)等……</p>
+<p><code>skopeo</code> 仅支持 Linux 和 macOS 系统。</p>
+<h3 id="安装-skopeo">安装 skopeo</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># ArchLinux</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S skopeo
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># macOS</span>
+</span></span><span class="line"><span class="cl">brew install skopeo
+</span></span></code></pre></div><p>除此之外还可以使用 <code>skopeo</code> 的容器镜像：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> docker run docker://quay.io/skopeo/stable:latest copy --help
+</span></span></code></pre></div><blockquote>
+<p><code>skopeo</code> 由 Go 编写，但它启用了 <code>cgo</code>，编译的二进制文件需要动态链接第三方依赖，所以不同的系统编译的 skopeo 二进制文件并不一定互相通用，如果你的发行版的官方源没有提供 <code>skopeo</code> 软件包的话，只能手动安装 Go 和 <code>skopeo</code> 的一些依赖，然后 <a href="https://github.com/containers/skopeo/blob/main/install.md#building-from-source">自行编译 skopeo 二进制文件</a>。</p>
+</blockquote>
+<h3 id="skopeo-copy">skopeo copy</h3>
+<p><code>copy</code> 可以灵活的拷贝容器镜像，它可以将容器镜像从 Registry Server 之间拷贝，还可以将镜像从 Registry Server 拷贝到本地的文件夹中，或者像 <code>docker pull</code> 那样拷贝到 Docker Daemon 中。</p>
+<p>在执行 <code>skopeo copy</code> 时还可以用 <code>--format</code> 参数指定拷贝过去的容器镜像的格式，用参数 <code>--dest-compress-format</code> 可以指定压缩格式。</p>
+<p>将容器镜像从第三方 DockerHub Registry Server 拷贝到自建的 Private Registry Server：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo copy docker://docker.io/library/nginx:latest docker://private.registry.io/library/nginx:latest --all
+</span></span></code></pre></div><p>将镜像从 DockerHub Registry Server 拷贝到本地文件夹中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> mkdir -p nginx
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> skopeo copy docker://docker.io/library/nginx:latest dir:./nginx
+</span></span></code></pre></div><p>将镜像从本地文件夹中拷贝到 Docker Daemon 中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo copy dir:./nginx docker-daemon:nginx:latest
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> docker images
+</span></span><span class="line"><span class="cl"><span class="go">REPOSITORY  TAG       IMAGE ID       CREATED        SIZE
+</span></span></span><span class="line"><span class="cl"><span class="go">nginx       latest    448a08f1d2f9   13 days ago    142MB
+</span></span></span></code></pre></div><h3 id="skopeo-inspect">skopeo inspect</h3>
+<p><code>skopeo inspect</code> 查看容器镜像的信息，例如镜像的 Manifest、Config。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo inspect docker://docker.io/library/nginx:latest
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> skopeo inspect docker://docker.io/library/nginx:latest --raw
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> skopeo inspect docker://docker.io/library/nginx:latest --raw --config
+</span></span></code></pre></div><p><code>skopeo inspect</code> 不加任何参数时，查询的是容器镜像相关的信息，输出的内容包括镜像 Digest、该镜像其他的所有 Tag 等一系列信息。</p>
+<p>在添加 <code>--raw</code> 参数时，输出的是该镜像的 Manifest 原始信息，因为是 RAW，所以输出的 Json 可能格式不是很友好，通常与 <code>jq</code> 一起使用。</p>
+<p>添加 <code>--raw</code> 和 <code>--config</code> 参数后，输出的是该镜像的 Config 的原始信息，Config 中包括容器运行时的一些配置项等信息。</p>
+<h2 id="manifest">Manifest</h2>
+<p>Docker 文档 <a href="https://docs.docker.com/registry/spec/manifest-v2-1/">Registry image manifests</a> 中介绍了几种常见的 Docker 镜像的 Manifest 格式。</p>
+<hr>
+<p>可以通过 <a href="https://github.com/containers/skopeo">skopeo</a> 工具，从 Docker Hub 上挑一个容器镜像 (例如 <code>nginx:latest</code>)，查看这个镜像的 Manifest。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://nginx:latest --raw | jq
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;manifests&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:3f01b0094e21f7d55b9eb7179d01c49fdf9c3e1e3419d315b81a9e0bae1b6a90&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;platform&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;architecture&#34;</span><span class="p">:</span> <span class="s2">&#34;amd64&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;os&#34;</span><span class="p">:</span> <span class="s2">&#34;linux&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1570</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:bc4cb92540db42f21dd806c4451f33b623a9b6441c882e8554325f3a3702da76&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;platform&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;architecture&#34;</span><span class="p">:</span> <span class="s2">&#34;arm&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;os&#34;</span><span class="p">:</span> <span class="s2">&#34;linux&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;variant&#34;</span><span class="p">:</span> <span class="s2">&#34;v5&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">},</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1570</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="err">......</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.list.v2+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这里输出的 json object 的 <code>schemaVersion</code> 为 2，<code>mediaType</code> 为 <code>application/vnd.docker.distribution.manifest.list.v2+json</code>。</p>
+<h3 id="schemaversion--mediatype">schemaVersion &amp; mediaType</h3>
+<p>容器镜像的 Manifest 有很多种不同的格式，先列举一下常见的 Docker 镜像的 Manifest 格式：</p>
+<ol>
+<li>
+<p><code>schemaVersion: 1</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.v1+json&quot;</code></p>
+<p>旧版本的 Docker 使用这种 Manifest 格式，现已被弃用，有些旧的容器镜像依旧是这种格式的 Manifest。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://mysql:5.5.40 --raw | jq
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;library/mysql&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;tag&#34;</span><span class="p">:</span> <span class="s2">&#34;5.5.40&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;architecture&#34;</span><span class="p">:</span> <span class="s2">&#34;amd64&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;fsLayers&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;blobSum&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="err">......</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;history&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="err">......</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;signatures&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="err">......</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>(输出太长了所以我把不关键的内容省略掉了……)</p>
+<p>这里用 <code>docker.io/library/mysql:5.5.40</code> 这个镜像举例，实际这个镜像的 Manifest 格式为 <code>schemaVersion: 1</code>，<code>mediaType: &quot;application/vnd.docker.distribution.manifest.v1+prettyjws&quot;</code>，因为包含了签名信息。</p>
+</li>
+<li>
+<p><code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.v2+json&quot;</code></p>
+<p>这个是现在常见的 Docker 镜像的 Manifest 格式。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://hxstarrys/nginx:1.22-amd64 --raw | jq
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&#34;config&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.container.image.v1+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">7898</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:0f8498f13f3adef3f3c8b52cdf069ecc880b081159be6349163d144e8aa5fb29&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&#34;layers&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.image.rootfs.diff.tar.gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">31411405</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:f1f26f5702560b7e591bef5c4d840f76a232bf13fd5aefc4e22077a1ae4440c7&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.image.rootfs.diff.tar.gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">25573496</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:fd03b214f77493ccb73705ac5417f16c7625a7ea7ea997e939c9241a3296763b&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="err">......</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这个格式的 Manifest 包含了镜像的 Config 的信息以及 Layer 的格式和 Digest 信息。</p>
+</li>
+<li>
+<p><code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;</code></p>
+<p>这个格式的 Manifest List 包含一个 <code>manifests</code> 列表：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://docker.io/library/nginx:1.22 --raw | jq
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.list.v2+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&#34;manifests&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1570</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;platform&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;architecture&#34;</span><span class="p">:</span> <span class="s2">&#34;amd64&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;os&#34;</span><span class="p">:</span> <span class="s2">&#34;linux&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:cf4ffe24f08a167176c84f2779c9fc35c2f7ce417b411978e384cbe63525b420&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1570</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;platform&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;architecture&#34;</span><span class="p">:</span> <span class="s2">&#34;arm64&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;os&#34;</span><span class="p">:</span> <span class="s2">&#34;linux&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>例如在 x86_64 (amd64) 架构的 Linux 主机上拉取 TAG <code>docker.io/library/nginx:1.22</code> 时，会根据此 Manifest List，拉取 Digest 为 <code>sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b</code> 的镜像。在 aarch64 (arm64v8) 架构的 Linux 主机上拉取此 TAG 时，会根据 Manifest List，拉取 Digest 为 <code>sha256:cf4ffe24f08a167176c84f2779c9fc35c2f7ce417b411978e384cbe63525b420</code> 的镜像，在其他 OS 的主机上无法拉取这个 TAG 对应的镜像 (例如在 arm32v7 的 Linux 主机上拉取会失败)。</p>
+<p><code>manifests</code> 列表中，每个 <code>digest</code> 字段存储的是这个镜像的 Manifest 内容的 sha256 校验和。</p>
+<p>可以用 <code>skopeo inspect</code> 查看一下这个 digest 的镜像的 Manifest 内容，其格式为
+<code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.v2+json&quot;</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://nginx@sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b --raw | jq
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;config&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.container.image.v1+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">7898</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:0f8498f13f3adef3f3c8b52cdf069ecc880b081159be6349163d144e8aa5fb29&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;layers&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.image.rootfs.diff.tar.gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">31411405</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:f1f26f5702560b7e591bef5c4d840f76a232bf13fd5aefc4e22077a1ae4440c7&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.image.rootfs.diff.tar.gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">25573496</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:fd03b214f77493ccb73705ac5417f16c7625a7ea7ea997e939c9241a3296763b&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.image.rootfs.diff.tar.gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">626</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:ef2fc869b944b87eaf25f4c92953dc69736d5d05aa09f66f54b0eea598e13c9c&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.image.rootfs.diff.tar.gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">958</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:ac713a9ef2cca7a82e27f0277e4e3d25c64d1cf31e4acd798562d5532742f5ef&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.image.rootfs.diff.tar.gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">773</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:fd071922d543e072b21cb41a513634657049d632fe48cfed240be2369f998403&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.image.rootfs.diff.tar.gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1405</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:2a9f38700bb5a0462e326fe3541b45f24a677ac3cd386c4922d48da5fbb6f0a8&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>镜像的 Digest 实际上是这个镜像的 Manifest 内容的 sha256sum 校验和：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo inspect --raw docker://nginx@sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b
+</span></span><span class="line"><span class="cl"><span class="go">{
+</span></span></span><span class="line"><span class="cl"><span class="go">    &#34;schemaVersion&#34;: 2,
+</span></span></span><span class="line"><span class="cl"><span class="go">    &#34;mediaType&#34;: &#34;application/vnd.docker.distribution.manifest.v2+json&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="go">    &#34;config&#34;: {
+</span></span></span><span class="line"><span class="cl"><span class="go">        &#34;mediaType&#34;: &#34;application/vnd.docker.container.image.v1+json&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="go">        &#34;size&#34;: 7898,
+</span></span></span><span class="line"><span class="cl"><span class="go">        &#34;digest&#34;: &#34;sha256:0f8498f13f3adef3f3c8b52cdf069ecc880b081159be6349163d144e8aa5fb29&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">    },
+</span></span></span><span class="line"><span class="cl"><span class="go">    ......
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> skopeo inspect --raw docker://nginx@sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b <span class="p">|</span> sha256sum
+</span></span><span class="line"><span class="cl"><span class="go">9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b  -
+</span></span></span></code></pre></div><p>同理，Config 的 Digest 为镜像的 Config 内容的 sha256sum 校验和：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo inspect --raw --config docker://nginx@sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b <span class="p">|</span> sha256sum
+</span></span><span class="line"><span class="cl"><span class="go">0f8498f13f3adef3f3c8b52cdf069ecc880b081159be6349163d144e8aa5fb29  -
+</span></span></span></code></pre></div></li>
+</ol>
+<hr>
+<p>除了上面的几种 Docker 镜像的 Manifest 格式外，还有 <a href="https://github.com/opencontainers/image-spec/blob/main/manifest.md">OCI 容器镜像</a> 这种格式的 Manifest:</p>
+<ol>
+<li><code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.oci.image.manifest.v1+json&quot;</code>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://quay.io/skopeo/stable@sha256:9da6763a4d35592a6279e851738472d9cdaa8ff5a5da3c50b560f065d22c2bff --raw | jq
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.manifest.v1+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;config&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.config.v1+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:6acf3c9f5dd48704618fa7ec2b95968a45c9e7809926a1f90f383bea4e9b3ede&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">3032</span>
+</span></span><span class="line"><span class="cl">    <span class="p">},</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;layers&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.layer.v1.tar+gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:529411ad578ab92819185dd8ef493eaa1eecc4f62b2ed2199db99ae23e6bf4cd&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">73881106</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.layer.v1.tar+gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:eeaa0b0d534352a9398996bcff9dc1184a78d310c22800aa6de07a6e2b1f8864&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">54520878</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.layer.v1.tar+gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:5ebf46cd2e6b356313b1dce504191fefce45df90dd8b5df7fe6b8cdd0fd06667&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1849</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.layer.v1.tar+gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:d4779f97b4911cd73b8bbe8b96c6759b6f5c210928020e0c351294e7136aeb94&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">4061</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.layer.v1.tar+gzip&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:f2e09c14b28b7453b48d13aace7cef657580e3b1cfdc0be8cfb9e685862a068f&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">228</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">],</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;annotations&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;org.opencontainers.image.base.digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:7acf70fa27721ef08357823d79324a19d7e9b0d34873c93f33a1b654d784e3c4&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;org.opencontainers.image.base.name&#34;</span><span class="p">:</span> <span class="s2">&#34;registry.fedoraproject.org/fedora:latest&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></li>
+<li><code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.oci.image.index.v1+json&quot;</code>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://quay.io/skopeo/stable:latest --raw | jq
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.index.v1+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;manifests&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.manifest.v1+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:3f678eca3035c64243c70598efeb4f60ef06a07b156444e21feed9488d47944b&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1239</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;platform&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;architecture&#34;</span><span class="p">:</span> <span class="s2">&#34;arm64&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;os&#34;</span><span class="p">:</span> <span class="s2">&#34;linux&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">},</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.manifest.v1+json&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:72464a265722c05436b5f46b9247929a882e73462f33ac1c000f4a34094fc90c&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;size&#34;</span><span class="p">:</span> <span class="mi">1239</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;platform&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;architecture&#34;</span><span class="p">:</span> <span class="s2">&#34;amd64&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;os&#34;</span><span class="p">:</span> <span class="s2">&#34;linux&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></li>
+</ol>
+<h2 id="library">Library</h2>
+<p><a href="https://github.com/containers">containers</a> 和 <a href="https://github.com/opencontainers">opencontainers</a> Org 提供了许多容器镜像相关的 Go Library，例如：</p>
+<ul>
+<li><a href="https://github.com/containers/image">containers/image</a></li>
+<li><a href="https://github.com/containers/common">containers/common</a></li>
+<li><a href="https://github.com/opencontainers/image-spec">opencontainers/image-spec</a></li>
+</ul>
+<p>Docker Manifest 格式的定义位于代码：<a href="https://github.com/containers/image/blob/main/manifest/manifest.go">containers/image/v5/manifest</a></p>
+<p>OCI 容器镜像的 Manifest 格式定义位于代码：<a href="https://github.com/opencontainers/image-spec/blob/main/specs-go/v1/mediatype.go">opencontainers/image-spec/specs-go/v1</a></p>
+<p><code>skopeo inspect</code> 的代码位于 <a href="https://github.com/containers/skopeo/blob/main/cmd/skopeo/inspect.go">containers/skopeo/cmd/skopeo/inspect.go</a>，<code>skopeo</code> 用了 <a href="https://github.com/spf13/cobra">cobra</a> 框架来处理用户的命令行参数（这里悄悄安利一下 <code>cobra</code> 框架真的很好用，尤其是当你的程序有许多的子命令，每个子命令需要处理的参数还都不一样的情况），执行查询镜像 Manifest 的代码都在 <code>run</code> 函数里面。</p>
+<hr>
+<p>下面是咱写的一个栗子，使用上述的 Library 模拟一下 <code>skopeo inspect</code> 查看容器镜像 Manifest 的功能，其实查看容器镜像 Manifest 的代码实现还是蛮简单的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">example</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;context&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;encoding/json&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;testing&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/containers/image/v5/transports/alltransports&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/containers/image/v5/types&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">Test_Inspect</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// reference name format: docker://&lt;image&gt;:&lt;tag&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">refName</span> <span class="o">:=</span> <span class="s">&#34;docker://docker.io/library/nginx:latest&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ref</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">alltransports</span><span class="p">.</span><span class="nf">ParseImageName</span><span class="p">(</span><span class="nx">refName</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;ParseImageName: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">sysCtx</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">types</span><span class="p">.</span><span class="nx">SystemContext</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">DockerAuthConfig</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">types</span><span class="p">.</span><span class="nx">DockerAuthConfig</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Username</span><span class="p">:</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="c1">// docker username (optional)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">Password</span><span class="p">:</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="c1">// docker password (optional)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// set to true if server is HTTP or using insecure certificate
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">OCIInsecureSkipTLSVerify</span><span class="p">:</span>    <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">DockerInsecureSkipTLSVerify</span><span class="p">:</span> <span class="nx">types</span><span class="p">.</span><span class="nf">NewOptionalBool</span><span class="p">(</span><span class="kc">false</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">source</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ref</span><span class="p">.</span><span class="nf">NewImageSource</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">sysCtx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;NewImageSource: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">data</span><span class="p">,</span> <span class="nx">mime</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">source</span><span class="p">.</span><span class="nf">GetManifest</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="kc">nil</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;GetManifest: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Manifest mediaType: %v\n&#34;</span><span class="p">,</span> <span class="nx">mime</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Manifest RAW data: \n%v\n&#34;</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// reformat output
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="kd">var</span> <span class="nx">obj</span> <span class="nx">any</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">obj</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;Unmarshal: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">MarshalIndent</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;  &#34;</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;MarshalIndent: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;===================================\n&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Manifest data: \n%v\n&#34;</span><span class="p">,</span> <span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><hr>
+<p>接下来，是构建 Manifest List 索引的一个简单栗子，假设你分别向 Registry Server 上传了 <code>&lt;namespace&gt;/example:v1.0.0-amd64</code> 和 <code>&lt;namespace&gt;/example:v1.0.0-arm64</code> 两个不同架构的容器镜像，你希望用户在 AMD64 架构的主机上拉取 <code>&lt;namespace&gt;/example:v1.0.0</code> 的 TAG 时，自动拉取 <code>&lt;namespace&gt;/example:v1.0.0-amd64</code> 这个镜像，而在 ARM64 架构的主机上拉取时，自动拉取 <code>&lt;namespace&gt;/example:v1.0.0-arm64</code> 这个镜像。</p>
+<blockquote>
+<p>这里说的 Manifest List 实际是 <code>schemaVersion 2</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;</code></p>
+<p>基本上你可以使用任何的 Registry Server，但 Harbor V1 除外，因为 Harbor V1 不支持 Manifest List。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nx">example</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;context&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;crypto/sha256&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;encoding/json&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;fmt&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;testing&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/containers/image/v5/manifest&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/containers/image/v5/transports/alltransports&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/containers/image/v5/types&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="s">&#34;github.com/opencontainers/go-digest&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">sha256sum</span><span class="p">(</span><span class="nx">data</span> <span class="p">[]</span><span class="kt">byte</span><span class="p">)</span> <span class="kt">string</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">sum</span> <span class="o">:=</span> <span class="nx">sha256</span><span class="p">.</span><span class="nf">Sum256</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%x&#34;</span><span class="p">,</span> <span class="nx">sum</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">getManifest</span><span class="p">(</span><span class="nx">refName</span> <span class="kt">string</span><span class="p">,</span> <span class="nx">ctx</span> <span class="o">*</span><span class="nx">types</span><span class="p">.</span><span class="nx">SystemContext</span><span class="p">)</span> <span class="p">([]</span><span class="kt">byte</span><span class="p">,</span> <span class="kt">string</span><span class="p">,</span> <span class="kt">error</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// reference name format: docker://&lt;image&gt;:&lt;tag&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">ref</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">alltransports</span><span class="p">.</span><span class="nf">ParseImageName</span><span class="p">(</span><span class="nx">refName</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;ParseImageName: %w&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">source</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ref</span><span class="p">.</span><span class="nf">NewImageSource</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">ctx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="kc">nil</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;NewImageSource: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">source</span><span class="p">.</span><span class="nf">GetManifest</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="kc">nil</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">Test_BuildManifest</span><span class="p">(</span><span class="nx">t</span> <span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// reference name format: docker://&lt;image&gt;:&lt;tag&gt;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">refName</span> <span class="o">:=</span> <span class="s">&#34;docker://&lt;REGISTRY_URL:PORT&gt;/&lt;NAMESPACE&gt;/example:v1.0.0&#34;</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">ref</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">alltransports</span><span class="p">.</span><span class="nf">ParseImageName</span><span class="p">(</span><span class="nx">refName</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;ParseImageName: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">sysCtx</span> <span class="o">:=</span> <span class="o">&amp;</span><span class="nx">types</span><span class="p">.</span><span class="nx">SystemContext</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">DockerAuthConfig</span><span class="p">:</span> <span class="o">&amp;</span><span class="nx">types</span><span class="p">.</span><span class="nx">DockerAuthConfig</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Username</span><span class="p">:</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="c1">// registry username (required)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>			<span class="nx">Password</span><span class="p">:</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="c1">// registry password (required)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">		<span class="c1">// set to true if server is HTTP or using insecure certificate
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>		<span class="nx">OCIInsecureSkipTLSVerify</span><span class="p">:</span>    <span class="kc">false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">DockerInsecureSkipTLSVerify</span><span class="p">:</span> <span class="nx">types</span><span class="p">.</span><span class="nf">NewOptionalBool</span><span class="p">(</span><span class="kc">false</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">manifestList</span> <span class="o">:=</span> <span class="nx">manifest</span><span class="p">.</span><span class="nx">Schema2List</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">SchemaVersion</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">MediaType</span><span class="p">:</span>     <span class="nx">manifest</span><span class="p">.</span><span class="nx">DockerV2ListMediaType</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Manifests</span><span class="p">:</span>     <span class="p">[]</span><span class="nx">manifest</span><span class="p">.</span><span class="nx">Schema2ManifestDescriptor</span><span class="p">{},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// add amd64 data
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">data</span><span class="p">,</span> <span class="nx">mime</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nf">getManifest</span><span class="p">(</span><span class="s">&#34;docker://&lt;REGISTRY_URL:PORT&gt;/&lt;NAMESPACE&gt;/example:v1.0.0-amd64&#34;</span><span class="p">,</span> <span class="nx">sysCtx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;getManifest: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">manifestList</span><span class="p">.</span><span class="nx">Manifests</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">manifestList</span><span class="p">.</span><span class="nx">Manifests</span><span class="p">,</span> <span class="nx">manifest</span><span class="p">.</span><span class="nx">Schema2ManifestDescriptor</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Schema2Descriptor</span><span class="p">:</span> <span class="nx">manifest</span><span class="p">.</span><span class="nx">Schema2Descriptor</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">MediaType</span><span class="p">:</span> <span class="nx">mime</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Size</span><span class="p">:</span>      <span class="nb">int64</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">data</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Digest</span><span class="p">:</span>    <span class="nx">digest</span><span class="p">.</span><span class="nf">Digest</span><span class="p">(</span><span class="nf">sha256sum</span><span class="p">(</span><span class="nx">data</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Platform</span><span class="p">:</span> <span class="nx">manifest</span><span class="p">.</span><span class="nx">Schema2PlatformSpec</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Architecture</span><span class="p">:</span> <span class="s">&#34;amd64&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">OS</span><span class="p">:</span>           <span class="s">&#34;linux&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">OSVersion</span><span class="p">:</span>    <span class="s">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Variant</span><span class="p">:</span>      <span class="s">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="c1">// add arm64 data
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">data</span><span class="p">,</span> <span class="nx">mime</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nf">getManifest</span><span class="p">(</span><span class="s">&#34;docker://&lt;REGISTRY_URL:PORT&gt;/&lt;NAMESPACE&gt;/example:v1.0.0-arm64&#34;</span><span class="p">,</span> <span class="nx">sysCtx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;getManifest: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">manifestList</span><span class="p">.</span><span class="nx">Manifests</span> <span class="p">=</span> <span class="nb">append</span><span class="p">(</span><span class="nx">manifestList</span><span class="p">.</span><span class="nx">Manifests</span><span class="p">,</span> <span class="nx">manifest</span><span class="p">.</span><span class="nx">Schema2ManifestDescriptor</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Schema2Descriptor</span><span class="p">:</span> <span class="nx">manifest</span><span class="p">.</span><span class="nx">Schema2Descriptor</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">MediaType</span><span class="p">:</span> <span class="nx">mime</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Size</span><span class="p">:</span>      <span class="nb">int64</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nx">data</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Digest</span><span class="p">:</span>    <span class="nx">digest</span><span class="p">.</span><span class="nf">Digest</span><span class="p">(</span><span class="nf">sha256sum</span><span class="p">(</span><span class="nx">data</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">Platform</span><span class="p">:</span> <span class="nx">manifest</span><span class="p">.</span><span class="nx">Schema2PlatformSpec</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Architecture</span><span class="p">:</span> <span class="s">&#34;arm64&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">OS</span><span class="p">:</span>           <span class="s">&#34;linux&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">OSVersion</span><span class="p">:</span>    <span class="s">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">			<span class="nx">Variant</span><span class="p">:</span>      <span class="s">&#34;v8&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">		<span class="p">},</span>
+</span></span><span class="line"><span class="cl">	<span class="p">})</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="nx">dest</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ref</span><span class="p">.</span><span class="nf">NewImageDestination</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">sysCtx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;NewImageSource: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">data</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">MarshalIndent</span><span class="p">(</span><span class="nx">manifestList</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">,</span> <span class="s">&#34;  &#34;</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;MarshalIndent: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">dest</span><span class="p">.</span><span class="nf">PutManifest</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span> <span class="nx">data</span><span class="p">,</span> <span class="kc">nil</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;PutManifest: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>构建 Manifest 的栗子中，用到了一部分 Manifest 的代码，用来获取 amd64 架构的镜像和 arm64 架构镜像的 Manifest 文本长度，并计算 Digest。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>“关于我逛了一趟漫展然后换了新的相机和镜头这件事”</title>
+      <link>https://blog.starry-s.moe/posts/2023/canon-eos-r7/</link>
+      <pubDate>Fri, 24 Feb 2023 22:50:26 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/canon-eos-r7/</guid>
+      <description>&lt;p&gt;年初逛了一趟漫展之后突然想换新的相机了，因为对手里的 EOS 800D 成像不是很满意，暗光的高感表现很差，ISO 800 的时候 RAW 格式稍微拉一下阴影就会出现许多噪点，所以打算换个更专业点的相机，开拓些新的领域。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>年初逛了一趟漫展之后突然想换新的相机了，因为对手里的 EOS 800D 成像不是很满意，暗光的高感表现很差，ISO 800 的时候 RAW 格式稍微拉一下阴影就会出现许多噪点，所以打算换个更专业点的相机，开拓些新的领域。</p>
+<hr>
+<p>预算方面我把相机和镜头控制在了 1W 出头，尽管这个价位能买到前几年的全画幅微单，但是综合考虑了一阵子后还是入手了佳能去年新出的 APS-C 画幅的 R7，用转接环可以搭配我已有的 EF/EF-S 镜头，能稍微节省一点镜头的开销，主要是我还挺喜欢手里的适马 17-50 这个镜头的。</p>
+<p>因为 RF 卡口的镜头价格太贵了，所以入手相机之后搜了一些评价不错的 EF-S 镜头，于是就买了广角镜头适马 18-35，所以最终还是超预算了。</p>
+<p>相机到了之后试着到处溜达拍了一些照片，用着记忆里很久以前用诺基亚自学摄影时的那点知识拍了些照片，挑几张自认为觉得还行的照片放在这里。</p>
+<p><img loading="lazy" src="images/1.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/2.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/3.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/4.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/6.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/7.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/5.jpg" alt="" />
+
+</p>
+<p>第一张是在中街用适马 17-50 拍的，后面那几张是在买了适马 18-35 之后去辽宁省博物馆拍的，最后一张是笨蛋公主的 Q 版手办，也是用适马 18-35 拍的，这几张我就稍微调了颜色，没有其他后期，很久没练习拍照了，这几张图就看看就行。</p>
+<p><del>拿巨沉的人像广角镜头去拍实物特写，唉我真的是不知道咋想的……</del></p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>入手一台家用级 APC UPS</title>
+      <link>https://blog.starry-s.moe/posts/2023/apc-ups/</link>
+      <pubDate>Sun, 08 Jan 2023 11:05:02 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/apc-ups/</guid>
+      <description>&lt;p&gt;为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。</p>
+<blockquote>
+<p>参烤链接: <a href="https://wiki.archlinux.org/title/APC_UPS">APC UPS - ArchWiki</a></p>
+</blockquote>
+<hr>
+<p>UPS 到手后花了半个多小时读使用说明书，然后第一件事是把 UPS 的断电报警蜂鸣器关掉，省得我不在公寓的时候停电了 UPS 叫个没完吵到邻居。</p>
+<p>之后在装 UPS 之前先把我电脑支架背面一团电线重新整理了一遍，现在是台式机、显示器、NAS、光猫、路由器、无线 AP 都放在一起了，他们的电源线、网线、数据线、显示器线都团在了一起，整理起来炒鸡麻烦。</p>
+<p>先把漏油器、光猫和 NAS 的电源都插 UPS 上，然后接好 UPS 的 USB 数据线到 NAS 上。</p>
+<h2 id="安装-apcupsd">安装 apcupsd</h2>
+<p>安装 <code>apcupsd</code>，然后 <code>systemctl enable --now apcupsd.service</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo apcaccess status
+</span></span><span class="line"><span class="cl"><span class="go">APC      : 001,036,0869
+</span></span></span><span class="line"><span class="cl"><span class="go">DATE     : 2023-01-08 11:09:23 +0800
+</span></span></span><span class="line"><span class="cl"><span class="go">HOSTNAME : ApertureNAS
+</span></span></span><span class="line"><span class="cl"><span class="go">VERSION  : 3.14.14 (31 May 2016) unknown
+</span></span></span><span class="line"><span class="cl"><span class="go">UPSNAME  : ApertureNAS
+</span></span></span><span class="line"><span class="cl"><span class="go">CABLE    : USB Cable
+</span></span></span><span class="line"><span class="cl"><span class="go">DRIVER   : USB UPS Driver
+</span></span></span><span class="line"><span class="cl"><span class="go">UPSMODE  : Stand Alone
+</span></span></span><span class="line"><span class="cl"><span class="go">STARTTIME: 2023-01-02 23:57:44 +0800
+</span></span></span><span class="line"><span class="cl"><span class="go">MODEL    : Back-UPS BK650M2-CH
+</span></span></span><span class="line"><span class="cl"><span class="go">STATUS   : ONLINE
+</span></span></span><span class="line"><span class="cl"><span class="go">......
+</span></span></span></code></pre></div><p>先把 NAS 里所有的应用都停掉，之后编辑 <code>/etc/apcupsd/apcupsd.conf</code>，把 <code>TIMEOUT</code> 改为 <code>1</code>，然后给 UPS 断电，这时 NAS 会自动关机。</p>
+<blockquote>
+<p>UPS 重新连接电源后，NAS 可能会自动开机，我的 NAS 是这样，但不确定所有 NAS 都这样。</p>
+</blockquote>
+<h2 id="配置自动休眠">配置自动休眠</h2>
+<p>按照 Wiki 配置停电后自动休眠 (Hibernate / 休眠到硬盘)。</p>
+<blockquote>
+<p>在此之前，需要创建 swap 分区 (或 swap file)，然后配置休眠需要的内核参数并重构 <code>initramfs</code>。</p>
+</blockquote>
+<p>以 root 用户创建 <code>/usr/local/bin/hibernate</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1"># Hibernate the system - designed to be called via symlink from /etc/apcupsd</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># directory in case of apcupsd initiating a shutdown/reboot.  Can also be used</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># interactively or from any script to cause a hibernate.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以在这里加一些在休眠之前执行的操作，例如让 bot 发个邮件提醒停电了之类的</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Wall message</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 广播消息</span>
+</span></span><span class="line"><span class="cl">wall -n System will be hibernate soon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sleep <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Do the hibernate</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行休眠</span>
+</span></span><span class="line"><span class="cl">/usr/bin/systemctl hibernate
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># At this point system should be hibernated - when it comes back, we resume this script here</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 现在，系统应当已经休眠了，当系统恢复运行的时候，脚本会继续从这里执行</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以在这里加一些在系统恢复之后的操作，例如让 bot 发个邮件提醒电力恢复了啥的</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># On resume, tell controlling script (/etc/apcupsd/apccontrol) NOT to continue with default action (i.e. shutdown).</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">99</span>
+</span></span></code></pre></div><p>别忘了赋予可执行权限。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> chmod +x /usr/local/bin/hibernate
+</span></span></code></pre></div><p>创建软链接把脚本链接到 <code>/etc/apcupsd</code> 目录下面。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> ln -s /usr/local/bin/hibernate /etc/apcupsd/doshutdown
+</span></span></code></pre></div><p>此时给 UPS 断电后，NAS 会自动休眠，等一两分钟 NAS 会完成休眠，但 UPS 仍处于运行状态没有关机，长时间停电的话，UPS 的电量会耗尽。</p>
+<p>UPS 接回电源后，NAS 会从休眠中恢复。</p>
+<h3 id="配置休眠后关闭-ups-电源">配置休眠后关闭 UPS 电源</h3>
+<p>创建 <code>/usr/lib/systemd/system-sleep/ups-kill</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nv">$2</span> in
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># In the event the computer is hibernating.</span>
+</span></span><span class="line"><span class="cl">  hibernate<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nv">$1</span> in
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="c1"># Going into a hibernate state.</span>
+</span></span><span class="line"><span class="cl">       pre<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># See if this is a powerfail situation.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/apcupsd/powerfail <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;ACPUPSD will now power off the UPS&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           /etc/apcupsd/apccontrol killpower
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;Please ensure that the UPS has powered off before rebooting&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;Otherwise, the UPS may cut the power during the reboot!!!&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">       <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="c1"># Coming out of a hibernate state.</span>
+</span></span><span class="line"><span class="cl">       post<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># If there are remnants from a powerfail situation, remove them.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/apcupsd/powerfail <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           rm /etc/apcupsd/powerfail
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># This may also exist, need to remove it.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/nologin <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           rm /etc/nologin
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	 <span class="c1"># Restart the daemon; otherwise it may be unresponsive in a</span>
+</span></span><span class="line"><span class="cl">         <span class="c1"># second powerfailure situation.</span>
+</span></span><span class="line"><span class="cl">	 systemctl restart apcupsd
+</span></span><span class="line"><span class="cl">       <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">esac</span>
+</span></span><span class="line"><span class="cl">  <span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="k">esac</span>
+</span></span></code></pre></div><p>赋予可执行权限：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> chmod +x /usr/lib/systemd/system-sleep/ups-kill
+</span></span></code></pre></div><p>接下来给 UPS 断电，NAS 会自动休眠，等 NAS 休眠后再过几分钟 UPS 也会关机。</p>
+<p>UPS 关机后，给 UPS 接上电源，这时 UPS 会自动开机，然后 NAS 也会从休眠中恢复。</p>
+<blockquote>
+<p>不要在 UPS 还没关机的时候给 UPS 重新接回电源，会导致 UPS 关机后 NAS 刚从休眠中恢复就被强制断电。</p>
+</blockquote>
+<h2 id="其他">其他</h2>
+<p>折腾 UPS 的时候顺手给 NAS 换了个散热器升级了一下内存。AMD 原装散热器有亿点点吵所以换成了咱之前买的 ITX 散热器。</p>
+<figure>
+    <img loading="lazy" src="images/1.jpg"/> 
+</figure>
+
+<p>用咱写的 telebot 查看一下空载时的 CPU 温度才不到 30 度。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">CPU: +28.2°C
+</span></span><span class="line"><span class="cl">Uptime: 0.15 Hour
+</span></span><span class="line"><span class="cl">TotalRAM: 46.45G
+</span></span><span class="line"><span class="cl">FreeRAM: 42.66G
+</span></span><span class="line"><span class="cl">AvailableRAM: 43.91G
+</span></span><span class="line"><span class="cl">TotalSwap: 46.00G
+</span></span><span class="line"><span class="cl">FreeSwap: 46.00G
+</span></span></code></pre></div><p>运行一个虚拟机一个 MineCraft 服务器，CPU 温度不到 40，所以很安静。</p>
+<p>但是 UPS 它有噪音，晚上睡觉的时候能听见 UPS 它嗡嗡响，比 AMD 散热器的风扇动静还大，这个实在是无解，算了就先这样吧。</p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

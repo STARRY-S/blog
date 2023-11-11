@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Harbor on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/harbor/</link>
+    <description>Recent content in Harbor on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sun, 28 May 2023 16:49:45 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/harbor/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 Helm Chart 方式部署 Harbor</title>
+      <link>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</link>
+      <pubDate>Sun, 28 May 2023 16:49:45 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</guid>
+      <description>&lt;p&gt;打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。</p>
+<p>首先介绍一下 NAS 上的环境，咱的 Kubernetes 集群运行在几个 QEMU 虚拟机里，虚拟机里运行的是 ArchLinux，因为就是咱折腾着玩的所以使用的 k3s 搭建的轻量级的 kubernetes 集群，然后其中一个集群安装了 Rancher 作为 Local 集群。</p>
+<h2 id="环境准备">环境准备</h2>
+<ol>
+<li>
+<p>新建一个 Namespace，将 Harbor 的资源与其他资源隔离：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> kubectl create namespace harbor
+</span></span></code></pre></div></li>
+<li>
+<p>为了启用 HTTPS，提前创建一个 TLS 类型的 <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Secret</a>，存放证书:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> cat &gt; cert.pem &lt;&lt; EOF
+</span></span><span class="line"><span class="cl"><span class="go">-----BEGIN CERTIFICATE-----
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">-----END CERTIFICATE-----
+</span></span></span><span class="line"><span class="cl"><span class="go">EOF
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> cat &gt; cert.key &lt;&lt; EOF
+</span></span><span class="line"><span class="cl"><span class="go">-----BEGIN PRIVATE KEY-----
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">-----END PRIVATE KEY-----
+</span></span></span><span class="line"><span class="cl"><span class="go">EOF
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> kubectl -n harbor create secret tls harbor-tls <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="go">    --cert=cert.pem \
+</span></span></span><span class="line"><span class="cl"><span class="go">    --key=cert.key
+</span></span></span></code></pre></div></li>
+<li>
+<p>提前创建 PVC (<a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">PersistentVolumeClaim</a>)，咱这里先在 NAS 上新建了一个 NFS 服务器，之后创建了 NFS 类型的 PV (PersistentVolumes)，再基于这个 PV 创建的 PVC。</p>
+<p>ArchLinux 上搭建 NFS 服务器：<a href="https://wiki.archlinux.org/title/NFS">https://wiki.archlinux.org/title/NFS</a></p>
+<blockquote>
+<p>在配置 <code>exports</code> 时，需要配置上 <code>no_root_squash</code> 和 <code>no_subtree_check</code>，使挂载的目录及子目录具有写权限。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/exports - exports(5) - directories exported to NFS clients
+</span></span><span class="line"><span class="cl"># Use `exportfs -arv` to reload.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/var/nfs/harbor		10.0.0.0/8(rw,sync,no_root_squash,no_subtree_check)
+</span></span></code></pre></div></blockquote>
+</li>
+</ol>
+<h2 id="获取-helm-chart">获取 Helm Chart</h2>
+<p>Harbor 的 Helm Chart 可以在 <a href="https://github.com/goharbor/harbor-helm">GitHub</a> 获取，这里使用将 Chart 源码克隆到本地的方式安装，方便编辑 <code>values.yaml</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> git clone https://github.com/goharbor/harbor-helm.git <span class="o">&amp;&amp;</span> <span class="nb">cd</span> harbor-helm
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> git checkout v1.12.1
+</span></span></code></pre></div><blockquote>
+<p>写这篇博客时 Chart 的最新版本是 <code>v1.12.1</code> (Harbor OSS v2.8.1)。</p>
+</blockquote>
+<h3 id="编辑-valuesyaml">编辑 <code>values.yaml</code></h3>
+<p>Harbor 的配置都定义在了 <code>values.yaml</code> 文件中，根据需要进行修改。</p>
+<p>这里列举些常用的可以修改的选项：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">expose</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># expose type, 可以设置为 ingress, clusterIP, nodePort, nodeBalancer，区分大小写</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 默认为 ingress（如果不想使用 80/443 标准端口，可以设置为 nodePort，端口为高位 3000X）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">ingress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tls</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 是否启用 TLS (HTTPS)，建议启用</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># TLS Certificate 的来源，可以为 auto, secret 或 none</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 如果为 secret，需要在安装 Chart 之前先创建 TLS Secret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 1) auto: generate the tls certificate automatically</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 2) secret: read the tls certificate from the specified secret.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># The tls certificate can be generated manually or by cert manager</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 3) none: configure no tls certificate for the ingress. If the default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># tls certificate is configured in the ingress controller, choose this option</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">certSource</span><span class="p">:</span><span class="w"> </span><span class="l">secret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># The name of secret which contains keys named:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># &#34;tls.crt&#34; - the certificate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># &#34;tls.key&#34; - the private key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-tls&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Only needed when the &#34;expose.type&#34; is &#34;ingress&#34;.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">notarySecretName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-tls&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ingress</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Ingress Host，如果需要允许任意域名/IP 都能访问，将其设置为空字符串（不建议）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 这里填写的域名务必能解析到当前集群</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">core</span><span class="p">:</span><span class="w"> </span><span class="l">harbor.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">notary</span><span class="p">:</span><span class="w"> </span><span class="l">notary.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Harbor external URL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 与 Ingress Host 相对应，如果启用了 TLS，那就是 https://&lt;domain&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果没启用 TLS，那就是 http://&lt;domain&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果 expose type 为 nodePort，则填写 http(s)://&lt;IP_ADDRESS&gt;:3000X (端口号不能丢)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">externalURL</span><span class="p">:</span><span class="w"> </span><span class="l">https://harbor.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 持久卷配置，默认为 true，如果是测试环境可以设置为 enabled: false (重新安装 Chart 时仓库里所有的数据都会丢失，不建议！)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果需要启用持久卷，可以在安装 Chart 之前提前创建好 PVC，并配置 subPath</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">persistence</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">resourcePolicy</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;keep&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 填写已经创建好的 PVC</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 如果共用一个 PVC，需要设置子目录</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;registry&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">5Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">jobservice</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">jobLog</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;jobservice&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;database&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;redis&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">trivy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;trivy&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">5Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Admin 初始密码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">harborAdminPassword</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Harbor12345&#34;</span><span class="w">
+</span></span></span></code></pre></div><h3 id="安装-helm-chart">安装 Helm Chart</h3>
+<p>确保 Values 编辑无误后，就可以安装 Chart 了：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> helm --namespace harbor install harbor .
+</span></span></code></pre></div><p>如果安装后发现 Values 中有些配置需要修改，可以在修改完配置后以升级的方式使配置生效：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> helm --namespace harbor upgrade harbor .
+</span></span></code></pre></div><p>查看 Chart 的 Pods 运行状态：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> kubectl --namespace harbor get pods
+</span></span><span class="line"><span class="cl"><span class="go">NAME                                    READY   STATUS    RESTARTS      AGE
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-core-7b75785b64-9vzkx            1/1     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-database-0                       1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-jobservice-6f4d59bd95-25q44      1/1     Running   2 (65m ago)   65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-notary-server-584698b475-lnt99   1/1     Running   1 (60m ago)   65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-notary-signer-77685b6f94-pfngc   1/1     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-portal-6fb6465fd6-hm4cg          1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-redis-0                          1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-registry-5bbccf79fb-7hcm9        2/2     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-trivy-0                          1/1     Running   0             77m
+</span></span></span></code></pre></div><h2 id="其他">其他</h2>
+<p>安装完成后，就可以完美使用 Harbor Registry 了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> docker login harbor.example.com
+</span></span><span class="line"><span class="cl"><span class="go">Username: admin
+</span></span></span><span class="line"><span class="cl"><span class="go">Password:
+</span></span></span><span class="line"><span class="cl"><span class="go">WARNING! Your password will be stored unencrypted in /home/user/.docker/config.json.
+</span></span></span><span class="line"><span class="cl"><span class="go">Configure a credential helper to remove this warning. See
+</span></span></span><span class="line"><span class="cl"><span class="go">https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Login Succeeded
+</span></span></span></code></pre></div><p>从 DockerHub 中 Mirror 一些镜像到 Harbor 中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo copy --all docker://archlinux:latest docker://harbor.example.com/library/archlinux:latest
+</span></span><span class="line"><span class="cl"><span class="go">Getting image list signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying 1 of 1 images in list
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying image sha256:076c0233d1996165721320957be9a037a760574d6334281354b07b3b3c9440b1 (1/1)
+</span></span></span><span class="line"><span class="cl"><span class="go">Getting image source signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying blob f0e04a7b4686 done
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying blob 352736306209 done
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying config cc4866169d done
+</span></span></span><span class="line"><span class="cl"><span class="go">Writing manifest to image destination
+</span></span></span><span class="line"><span class="cl"><span class="go">Storing signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Writing manifest list to image destination
+</span></span></span><span class="line"><span class="cl"><span class="go">Storing list signatures
+</span></span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

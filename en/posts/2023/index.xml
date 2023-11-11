@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>2023 on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/en/posts/2023/</link>
+    <description>Recent content in 2023 on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/en/posts/2023/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

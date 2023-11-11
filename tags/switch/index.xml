@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>switch on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/switch/</link>
+    <description>Recent content in switch on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sun, 16 Oct 2022 15:48:46 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/switch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>yuzu - Switch 虚拟机</title>
+      <link>https://blog.starry-s.moe/posts/2022/switch-emulator/</link>
+      <pubDate>Sun, 16 Oct 2022 15:48:46 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/switch-emulator/</guid>
+      <description>&lt;p&gt;一直想玩的游戏没有官方汉化，Switch 的游戏文件没破解的话是没办法装汉化插件的，尽管咱有 Switch OLED 港版主机，但是破解有被封的可能而且过程过于麻烦，破解后就不能联网了，所以咱在买了正版游戏但是看不懂日语后无奈之下选择了虚拟机，正好水一篇博客。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>一直想玩的游戏没有官方汉化，Switch 的游戏文件没破解的话是没办法装汉化插件的，尽管咱有 Switch OLED 港版主机，但是破解有被封的可能而且过程过于麻烦，破解后就不能联网了，所以咱在买了正版游戏但是看不懂日语后无奈之下选择了虚拟机，正好水一篇博客。</p>
+<meting-js server="netease" type="song" id="590443" theme="#233333"></meting-js>
+<p>目前有两个虚拟机可选，一个是 由 C# 编写的 <a href="https://github.com/Ryujinx/Ryujinx">Ryujinx</a>，另一个是由 C++ 编写的 <a href="https://github.com/yuzu-emu/yuzu">yuzu</a>，这俩都是开源软件而且都能在 Linux 上运行，咱选的是后者。</p>
+<hr>
+<p>yuzu 提供的教程需要短接器和一张TF卡以及 switch 本体，从 switch 中获取 <code>prod.keys</code> 和 <code>title.keys</code> （非必须），喜欢折腾的可以买个短接器慢慢鼓捣，教程链接：<a href="https://yuzu-emu.org/help/quickstart/">https://yuzu-emu.org/help/quickstart/</a>。如果懒得折腾的话从网上找个现成的 key 文件也能用。</p>
+<p>Arch Linux 可以从 archlinuxcn 源或者 AUR 中获取。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S yuzu-git
+</span></span></code></pre></div><p>第一次启动时会提示缺少 keys，可先忽略，选择左上角 <code>File-&gt;Open yuzu Folder</code>，新建一个 <code>keys</code> 文件夹，将 <code>prod.keys</code> 复制进去后重启软件。</p>
+<p>yuzu 可以在不手动安装系统的情况下运行游戏，所以添加了游戏所在的文件夹就能玩了。</p>
+<p><img loading="lazy" src="images/1.png" alt="" />
+
+</p>
+<p>然后就是在设置里面改一下手柄的按键布局，因为用习惯了 Xbox 手柄，所以咱把 A 和 B 位置对调了一下。</p>
+<p><img loading="lazy" src="images/2.png" alt="" />
+
+</p>
+<hr>
+<p>后续：</p>
+<p>Yuzu 2023-05-21 之后的版本对宝可梦做了些优化导致玩月姬时文字花屏乱码，玩月姬的话不要下载 2023-05-21 (1440) 之后的版本。</p>
+<p>然后 Arch Linux 最近滚完系统后遇到了 yuzu 的 Qt 启动失败报错：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
+</span></span><span class="line"><span class="cl">qt.qpa.plugin: Could not find the Qt platform plugin &#34;wayland&#34; in &#34;&#34;
+</span></span><span class="line"><span class="cl">This application failed to start because no Qt platform plugin could be initialized. Reinstalling the application may fix this problem.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Available platform plugins are: xcb.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">zsh: IOT instruction (core dumped)  yuzu
+</span></span></code></pre></div><p>查了一阵子找到的解决办法是设置 <code>QT_PLUGIN_PATH=/usr/lib/qt/plugins</code> 环境变量，覆盖掉 yuzu 安装包自带的 Qt 插件而是改用系统的。</p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

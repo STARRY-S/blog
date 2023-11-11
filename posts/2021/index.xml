@@ -1,0 +1,1691 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>2021 on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/posts/2021/</link>
+    <description>Recent content in 2021 on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Fri, 01 Jan 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/2021/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用树莓派搭建一个NAS</title>
+      <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
+      <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
+      <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
+<meting-js server="netease" type="song" id="750905" theme="#233333"></meting-js>
+<blockquote>
+<p>这歌太魔性了哈哈哈哈哈……</p>
+</blockquote>
+<h2 id="准备工作">准备工作</h2>
+<ul>
+<li>树莓派以及所需的电源（废话）</li>
+<li>16G以上的高速内存卡用来写系统镜像</li>
+<li>硬盘（可以选择买移动硬盘或者直接买硬盘盒和机械硬盘自己组装）</li>
+<li>网络设备：路由器、网线</li>
+<li>（非必须）键盘、显示器、连接线等</li>
+</ul>
+<p>树莓派我使用的是高一时买的树莓派3B（满满的回忆），硬盘是上半年为了存照片而买的西数2T移动硬盘，因为暂时闲置所以拿来一起组个云盘玩。</p>
+<p>内存卡需要质量好的不容易坏而且读写比较快的卡。</p>
+<h2 id="装系统">装系统</h2>
+<p>系统咱安装的是<a href="https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3">ArchLinux ARM</a>，安装教程直接看官方文档即可。</p>
+<p>一开始咱为了发挥树莓派3B的64位CPU的性能，我下载了64位的系统镜像，但是在配置无线连接的时候（可能是）驱动问题卡死，因为急着睡觉所以重新格式化内存卡后被迫安装32位的系统。</p>
+<p>安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。</p>
+<p>在格式化<code>root</code>分区时一开始想尝试一下树莓派上跑<code>btrfs</code>，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了<code>ext4</code>，<del>不然我一晚上不用睡觉了</del>。</p>
+<p>在分区时除了<code>boot</code>和<code>root</code>之外，我额外分了2G的<code>swap</code>分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（<del>这话咋读着这么别扭呢</del>）</p>
+<p>因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。</p>
+<p>把移动硬盘接到树莓派后<code>lsblk</code>查看一下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。</p>
+<p>如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅<a href="https://wiki.archlinux.org/title/fdisk">Wiki (fdisk)</a>，因为往博客上写的话太难理解了别人肯定看不懂。</p>
+<p>最后咱把2T移动硬盘格式化成这个样子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># fdisk -l /dev/sda
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device          Start        End    Sectors  Size Type
+</span></span><span class="line"><span class="cl">/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+</span></span><span class="line"><span class="cl">/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+</span></span></code></pre></div><p>其中的1T打算格式化为<code>btrfs</code>给Samba用，其余的800G打算格式化为<code>NTFS</code>留着给Windows当个移动硬盘。</p>
+<p>创建分区时别忘了更改分区类型，给Linux用的就是<code>Linux filesystem</code>，给Windows用的就是<code>Microsoft basic data</code>，
+不然机械硬盘连接到Windows系统中将不显示分区，或者就是一直提醒你：该分区不可用，然后让你格式化，到时候一不小心点错了可是会丢数据的。</p>
+<p>安装<code>btrfs-progs</code>和<code>ntfs-3g</code>，之后格式化硬盘（NTFS还是建议到Windows系统中格式化）。</p>
+<p>格式化btrfs的时候加个<code>-L</code>参数设置分区的标签，这样方便在fstab中设置开机自动挂载。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ lsblk                                # 一定要看清楚自己格式化的分区名字
+</span></span><span class="line"><span class="cl">$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+</span></span></code></pre></div><p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区和移动硬盘。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+</span></span><span class="line"><span class="cl">/dev/mmcblk0p1  /boot   vfat    defaults        0       0
+</span></span><span class="line"><span class="cl">LABEL=swap      none    swap    defaults        0       0
+</span></span><span class="line"><span class="cl">LABEL=samba     /samba  btrfs   defaults        0       0
+</span></span></code></pre></div><p>重启系统后如果正常的话，分区会被自动挂载。</p>
+<h2 id="配置网络">配置网络</h2>
+<blockquote>
+<p>配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。</p>
+<p>除非你能保证你执行的每个命令都肥肠正确。</p>
+</blockquote>
+<h3 id="无线网络">无线网络</h3>
+<p>因为我电脑离路由器肥肠远，所以为了方便我还要给树莓派配置无线网络。首先照着<a href="https://wiki.archlinux.org/title/Netctl">Wiki上的netctl页面</a>安装了<code>wifi-menu</code>所需要用的<code>dialog</code>，然后就用<code>wifi-menu</code>连接wifi了。不过为了方便以后连接，我需要给他设置静态IP：</p>
+<p>首先使用你比较喜欢的文本编辑器打开<code>wifi-menu</code>自动生成的配置文件，并修改成以下的样子</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl.d/wlan0-YourWifiName
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Description=&#39;Automatically generated profile by wifi-menu&#39;
+</span></span><span class="line"><span class="cl">Interface=wlan0
+</span></span><span class="line"><span class="cl">Connection=wireless
+</span></span><span class="line"><span class="cl">Security=wpa
+</span></span><span class="line"><span class="cl">ESSID=Your Wifi Name
+</span></span><span class="line"><span class="cl">IP=static
+</span></span><span class="line"><span class="cl">Address=(&#39;192.168.xxx.xxx/24&#39;)
+</span></span><span class="line"><span class="cl">Gateway=&#39;192.168.xxx.1&#39;
+</span></span><span class="line"><span class="cl">DNS=&#39;8.8.8.8&#39;
+</span></span><span class="line"><span class="cl">Key=YOUR WIFI PASSWORD
+</span></span></code></pre></div><p>其中修改<code>Address</code>为你想设置的CIDR地址、<code>Gateway</code>为默认网关、以及<code>DNS</code>。</p>
+<p>最后修改<code>Key</code>为Wifi密码（明文），如果需要加密的话可以去wiki上找相应方法。</p>
+<p>之后<code>sudo netctl enable wlan0-YourWifiName</code>设置好开机自动连接即可。</p>
+<p>这时候聪明的小伙伴会想到：我想使用网线联网并配置静态IP，该怎么办呢？</p>
+<h3 id="配置有线网络">配置有线网络</h3>
+<p>默认情况下，有线接口<code>eth0</code>使用<code>systemd-network</code>配置了<code>DHCP</code>，所以我们不需要改<code>netctl</code>的配置文件，只编辑<code>/etc/systemd/network/eth0.network</code>这个配置文件改成静态IP地址就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=eth0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">Address=192.168.xxx.xxx/24
+</span></span><span class="line"><span class="cl">Gateway=192.168.xxx.1
+</span></span><span class="line"><span class="cl">DNS=8.8.8.8
+</span></span></code></pre></div><p>重启系统后，使用<code>ip addr</code>检查设备的IP地址是否正确。</p>
+<h3 id="配置防火墙">配置防火墙</h3>
+<p>首先安装<code>ufw</code>。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫<strong>Uncomplicated Filewall</strong>，所以咱先用ufw配置防火墙）</p>
+<p>食用方法请参见<a href="https://wiki.archlinux.org/title/Uncomplicated_Firewall">Wiki页面</a>。</p>
+<p>因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Create or Edit /etc/ufw/applications.d/samba, add following content:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Samba]
+</span></span><span class="line"><span class="cl">title=LanManager-like file and printer server for Unix
+</span></span><span class="line"><span class="cl">description=Samba
+</span></span><span class="line"><span class="cl">ports=137,138/udp|139,445/tcp
+</span></span></code></pre></div><p>之后root账户执行<code>ufw app update Samba</code>加载配置文件，然后<code>ufw allow Samba</code>允许Samba的端口。</p>
+<p>如果你的树莓派上还装有其他服务（比如http，https等），别忘了<code>ufw allow PORT</code>开放端口，尤其是别忘了开SSH端口。</p>
+<p>最后<code>ufw status</code>查看防火墙状态信息，<code>ufw enable</code>开启防火墙。</p>
+<h2 id="samba">Samba</h2>
+<p>配合<a href="https://wiki.archlinux.org/title/Samba">Arch Wiki</a>食用。</p>
+<p>首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo groupadd -r sambausers          # 新建用户组
+</span></span><span class="line"><span class="cl">$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+</span></span><span class="line"><span class="cl">$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+</span></span><span class="line"><span class="cl">$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+</span></span><span class="line"><span class="cl">$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+</span></span><span class="line"><span class="cl">$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+</span></span></code></pre></div><p>（咱写的很详细了吧</p>
+<h3 id="配置服务器">配置服务器</h3>
+<p>安装好<code>samba</code>安装包后，需要手动去<code>/etc/samba/</code>创建<code>smb.conf</code>配置文件，可以到<a href="https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD">Samba git repository</a>中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/samba/smb.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[global]
+</span></span><span class="line"><span class="cl"># 修改工作组的名字
+</span></span><span class="line"><span class="cl">workgroup = MYGROUP
+</span></span><span class="line"><span class="cl"># 服务器描述
+</span></span><span class="line"><span class="cl">server string = Raspberry pi Samba Server
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 在文件末尾添加共享文件夹目录及相关配置
+</span></span><span class="line"><span class="cl">[sambashare]
+</span></span><span class="line"><span class="cl">comment = Sample share file.
+</span></span><span class="line"><span class="cl">path = /path/to/your/samba/folder
+</span></span><span class="line"><span class="cl">writable = yes
+</span></span><span class="line"><span class="cl">browsable = yes
+</span></span><span class="line"><span class="cl">create mask = 0755
+</span></span><span class="line"><span class="cl">directory mask = 0755
+</span></span><span class="line"><span class="cl">read only = no
+</span></span><span class="line"><span class="cl">guest ok = no  # 允许访客随意登录
+</span></span></code></pre></div><p>配置好文件后，启动<code>smb.service</code>和<code>nmb.service</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now smb.service
+</span></span><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now nmb.service
+</span></span></code></pre></div><h3 id="访问服务器">访问服务器</h3>
+<p>咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接<code>smb://192.168.xxx.xxx</code>，
+输入用户组、用户名和密码登录就可以访问共享文件夹。</p>
+<p>Windows系统中，首先需要到 控制面板-&gt;程序-&gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
+打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
+<h2 id="frp内网穿透">Frp内网穿透</h2>
+<blockquote>
+<p>配合<a href="https://gofrp.org/docs/">frp文档</a>食用更佳</p>
+</blockquote>
+<p>首先在frp的<a href="https://github.com/fatedier/frp/releases">GitHub Release</a>页面下载安装包。</p>
+<p>如果是树莓派用的话就下载<code>arm</code>版本的安装包即可。Arch Linux可以在ArchLinux CN源或AUR中安装<code>frpc</code>和<code>frps</code>作为客户端和服务端。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 树莓派上下载编译好的文件</span>
+</span></span><span class="line"><span class="cl">$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl"><span class="c1"># 解压</span>
+</span></span><span class="line"><span class="cl">$ tar -zxvf ./frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> frp_0.37.1_linux_arm/
+</span></span><span class="line"><span class="cl"><span class="c1"># 编辑配置文件</span>
+</span></span><span class="line"><span class="cl">$ vim ./frpc.ini
+</span></span><span class="line"><span class="cl">$ ./frpc -c ./frpc.ini
+</span></span></code></pre></div><p>客户端配置文件的格式可参考如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">server_addr = server ip
+</span></span><span class="line"><span class="cl">server_port = 6000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[samba]
+</span></span><span class="line"><span class="cl">type = tcp
+</span></span><span class="line"><span class="cl">local_ip = 127.0.0.1
+</span></span><span class="line"><span class="cl">local_port = 445
+</span></span><span class="line"><span class="cl">remote_port = 6003
+</span></span></code></pre></div><p>其中端口号和<code>token</code>按需要自行更改，Samba服务的<code>tcp</code>端口号为<code>445</code>。</p>
+<p>服务端配置文件格式如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">bind_port = 6000
+</span></span></code></pre></div><p>为了安全，别忘了配置<a href="https://gofrp.org/docs/reference/server-configures/#%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81">权限验证</a>，同时别忘了修改服务器的防火墙设置。</p>
+<h2 id="others">Others</h2>
+<p>所以到此为止，咱的Samba服务器就搭建好了。</p>
+<p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>我们来组装一台电脑吧</title>
+      <link>https://blog.starry-s.moe/posts/2021/build-desktop/</link>
+      <pubDate>Mon, 13 Sep 2021 23:20:29 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/build-desktop/</guid>
+      <description>&lt;p&gt;很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。</p>
+<blockquote>
+<p>因包含插图，为了浏览体验我只对图片进行了适量压缩，</p>
+<p>网络不好的用户可能需要多花一些时间加载。</p>
+</blockquote>
+<meting-js server="netease" type="song" id="22689960" theme="#233333"></meting-js>
+<hr>
+<h2 id="配置清单">配置清单</h2>
+<blockquote>
+<p>一边翻着某东的购物车一边写</p>
+</blockquote>
+<ul>
+<li>CPU + 主板: AMD Ryzen 5 5600X、华硕TFU GAMING B550M-PLUS (WI-FI) 共2477元</li>
+<li>显卡: 撼讯 RX6600XT 红魔 3599元（之前的是实际买了技嘉 GeForce GT 730D3 529元)</li>
+<li>内存: 英睿达 美光 DDR4 3200MHz 8Gx4 864元</li>
+<li>固态硬盘: 西部数据 SN750 SE 1TB 929元 + 英睿达 美光 MX500 2TB 1299元</li>
+<li>机箱: 先马 鲁班1 199元</li>
+<li>电源: 长城 金牌电源 V7-700W 475元</li>
+<li>CPU散热: 利民AK120 PLUS 169元</li>
+<li>机箱散热: 利民 TL-R12 三个12CM风扇 119元 + 先马冰洞 风扇套装 3个12cm风扇49元</li>
+<li>显示器：优派 VX2480-HD-PRO-3 165HZ 1143元</li>
+<li>其他: 扎带5.5元 理线带 9.9元 追风者CMBO灯带 400mm两条 90元</li>
+</ul>
+<p>因为我之前用笔记本时已经有一个 ikbc c87 红轴机械键盘和 罗技 G304 无线鼠标 以及之前弄拓展屏时买了 戴尔 U2419HS 显示器，所以这些配件我就不再列入装机清单里面了。</p>
+<p>排除显卡的话，整体配置全下来大概花了6.6K左右，有些配件是买完以后京东又降价了于是申请了价格保护退了一些回来。<s>显卡打算以后等价格恢复正常后再买。所以现在买的是英伟达730D，尽管是亮机卡但是我还是决定多花一点预算去自营店买一张靠谱的全新卡，这样就算以后我换显卡了，这张旧的730还可以拿去给亲朋好友的上古时代老电脑“升级”一下。</s></p>
+<p>后续在旗舰店买了RX6600XT红魔，这卡可以说是AMD入门级显卡的旗舰款了。除此之外还买了一个高刷1080P显示器，然后买了3个不带灯光的纯白静音风扇和两条ARGB灯带用来装饰。所以整体算下来整机开销大约在12K左右。</p>
+<p>主板觉得华硕重炮手B550M就已经蛮符合我自己的需求了，在B站上看了一下B550的评测发现华硕的重炮手要比微星和技嘉的迫击炮强一些（也贵了好几百元），所以决定多花些预算上一张性能强一点的主板，为后续的升级留一些空间（不过我觉得就这配置已经很够用了没啥好升级的了</p>
+<p>因为AMD R7 5800X太贵了有点超预算，所以决定买的R5 5600X，除了核心数少了一些（跑编译少几个线程）之外，性能对于现在的日常使用来说已经很足够了。肯定比我笔记本上的R7 4800H强许多。</p>
+<p>因为自己打算在电脑装Linux + Windows双系统，所以实际上我给电脑装了2条NVME固态（SN750 SE 1T + 降速的SN550 1T），然后还配了2T的英睿达MX500，以后可能根据需要还会买几个机械硬盘存数据用。</p>
+<p>因为CPU散热不带灯光，尽管我不喜欢RGB那种太花里胡哨的效果，但是还是得买几个有光亮的机箱风扇，<s>因为预算有限而且不装显卡暂时对散热要求不高，所以我只买了比较便宜的风扇，不然机箱黑咕隆咚的太不好看了，以后有需要的话再修改。</s></p>
+<p>后来咱又买了两条ARGB的灯带，然后花了一段时间把它安装到机箱里面，咱并不喜欢RGB，不过我还是希望机箱能有些观赏性的灯光。</p>
+<p>在B站找了几个电源测评介绍的视频看了一下，就买了长城的700W金牌电源，价格比较便宜不是一元一瓦，<s>目前来讲我不装显卡就日常待机的话整体功率都不会超100W，主要是电费太贵了。</s>
+不过现在来看RX6600XT的功耗最高也就150W，（应该给这显卡贴个一级能效标识），所以电脑就算满载使用最高也就不到500W的功耗，日常使用的话显卡功耗只有20-30W，超级节能！</p>
+<p>从网上挑了很久的机箱发现实在没有比较便宜又顺眼的，一开始想买白色机箱来着，后来发现白色机箱要么就是奇葩风道要么就是超预算，所以最终决定买先马鲁班1黑色机箱，尺寸够大对散热和主板显卡长度几乎没有限制，不用买配件时总计算空间大小了。</p>
+<p>配置是周五定下来就从京东上买的，因为基本上都是自营，周六当天就全收到货了。所以周六+周日两天一顿折腾就把电脑装好。一开始还比较担心会不会安错，哪里出问题需要返工这类的情况，实际上装机十分顺利。除了理线花了一些时间以外其他都基本上是一次装齐直接点亮装系统，其实第一次装好机插电源后按开机键怎么也点不亮，当时吓够呛然后拔掉开机跳线检查是不是接线有问题。后来才发现是自己脑残电源开关开反了主板没通电肯定点不亮。</p>
+<blockquote>
+<p>防呆不防傻， 那么你能帮帮我吗？（逃</p>
+</blockquote>
+<hr>
+<h2 id="装机">装机</h2>
+<p>我装机时为了防止装错顺序返工，于是去B站搜了一个教程：【<a href="https://www.bilibili.com/video/BV1jE411e7hw">BV1jE411e7hw</a>】，照着这个顺序安装基本不会出错，而且比较常见的问题视频上都有提到，比如萌新不是十分熟悉的内存插槽优先级以及比较难弄的前面板跳线。</p>
+<blockquote>
+<p>以下图片除了背部理线的那张图是用手机(iPhone XS)在弱光环境拍摄的，其余都是用相机(佳能EOS 800D + 适马17-50)拍摄，设备不是很好，技术有限，使用RawTherapee进行适量的裁剪调色</p>
+</blockquote>
+<p><img loading="lazy" src="images/IMG_6800.jpg" alt="主板" />
+<p style="margin-bottom: -0.8em;" class="image-title">主板</p>
+</p>
+<p><img loading="lazy" src="images/IMG_6802.jpg" alt="AMD R5 5600X" />
+<p style="margin-bottom: -0.8em;" class="image-title">AMD R5 5600X</p>
+</p>
+<p><img loading="lazy" src="images/IMG_6804.jpg" alt="内存" />
+<p style="margin-bottom: -0.8em;" class="image-title">内存</p>
+</p>
+<p><img loading="lazy" src="images/IMG_6809.jpg" alt="散热模具" />
+<p style="margin-bottom: -0.8em;" class="image-title">散热模具</p>
+</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6812.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">涂抹硅脂</p>
+</p>
+<p>因为散热器赠的利民TF7硅脂比较干，所以我直接点9个点然后就扣散热器了。觉得没必要像网上有人那样戴手套把硅质抹匀抹平，也不用特别在意硅脂会不会留气泡，总觉得这些不会对散热有太大影响。</p>
+<p>毕竟用一年左右就得拆下来换新硅脂，到时候只要硅脂别太干粘住直接把CPU连根拔起就行。</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6814.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">散热器底部</p>
+</p>
+<p>特地拍了一张照片以确认我把散热器底下的膜撕掉了。</p>
+<p><img loading="lazy" src="images/IMG_6816.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">安装散热器</p>
+</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6821.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">固态硬盘</p>
+</p>
+<p><img loading="lazy" src="images/IMG_6822.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">亮机卡</p>
+</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6825.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">装好的效果</p>
+</p>
+<p><img loading="lazy" src="images/photo_2021-09-14_00-34-22.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">理线后的效果</p>
+</p>
+<p>背面理线花了好几个小时把不同种类形状的线绑了起来，最顶上的风扇RGB灯光线实在没有空间收纳于是只好捆成一坨放在那。</p>
+<h2 id="最终成果展示">最终成果展示</h2>
+<p><img loading="lazy" src="images/IMG_6831.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">最终成果演示</p>
+</p>
+<p>装好Windows，安装华硕主板的软件，把风扇的灯调成了橙色长亮的模式。一开始调成浅蓝色觉得色温太低了有点冷，所以改成了暖色调。</p>
+<p><img loading="lazy" src="images/IMG_6839.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">暖色</p>
+</p>
+<p>给机箱内部拍一张特写，现在正在考虑要不要买一个手办放进去。</p>
+<p><img loading="lazy" src="images/IMG_6847.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">少女梦幻粉</p>
+</p>
+<p>后来买了新显卡和ARGB灯条后，把4根内存插满，设置好显卡的神光同步，把机箱颜色调成了“少女梦幻粉”。</p>
+<p>（相机的夜景效果不太好，所以看起来有些晃眼而且丑，实际上这颜色还是很好看的）</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6841.jpg" alt="Arch Linux" />
+<p style="margin-bottom: -0.8em;" class="image-title">Arch Linux</p>
+</p>
+<p>装好Arch Linux后的最终效果。</p>
+<p>最终我决定还是把机箱放在桌子上好一些，这样不但能透过玻璃“欣赏”内部构造，还不用担心底部电源的风扇“吸尘器”吸进去很多灰尘。</p>
+<p>机箱内部风道我也是采用的网上最推荐的风道方式，底部和右边为进风口，顶部和左边为出风口。因为现在没有显卡发热量并不大所以我只安装了左边的一个风扇和顶部的两个风扇。</p>
+<p>以后可能再买个手办和灯放到电源仓的上边，再搞点装饰。</p>
+<h2 id="为什么买了rx6600xt">为什么买了RX6600XT</h2>
+<p>其实咱一开始是想买RTX3060Ti的，但是因为老黄溢价实在太高（NVIDIA f**k you），狗东双十一耍猴，所以去ytb看了一下评测发现这A卡可以通吃1080P全部的游戏（实际上2K很多游戏也全都能玩），而且价格比3060便宜许多，然后一想3060Ti的确有些性能过剩，而且N卡的Linux驱动真的很拉跨（尽管最近一阵子更新了很多东西但是真的就是不想再折腾N卡驱动了）。</p>
+<p>然后就是，如果真的玩fps游戏的话，有谁会真的开极高画质上2K144呢。咱玩守望除了把材质调最高之外其他都是最低，3A大作的话咱也就玩过尼尔和底特律，而且咱不玩赛博朋克2077，而且咱主要还是Linux用户。所以真的没必要花首发价2倍的钱去买一个所谓的能在2K分辨率下全高画质流畅运行游戏的显卡。更值得吐槽的是，现在网上一搜显卡评测，给人的感觉就是游戏不开极高画质就好像不能玩了一样，还有很多人还拿A卡开光追后的帧数和N卡作比较，说实话我本人对光追真没什么好感，我玩的这些游戏里没有支持光追的，而且就算玩支持光追的游戏，开光追也看不出多大差距来。</p>
+<p>网上有很多评测视频说这显卡显存位宽只有128比特，只支持PCIE4.0x8，核心面积小啊，丐中丐不值三千块钱这个价之类的一大堆缺点，不过这卡实际体验并没有网上传的那么不堪。它实际的游戏效果还是很好的，所以真没必要非拿硬件参数说事，缺点有是有，但影响并不大。</p>
+<p>实际上手体验后，这显卡日常待机时风扇转都不转，温度只有40-50度，功耗在20-30W之间肥肠节能。Linux里面卸载掉NVIDIA一大堆驱动后，安装<code>amdgpu</code>驱动直接就能用，没遇到过任何问题。</p>
+<p>（要不是因为刚需，谁会在这个时间点上买显卡&hellip;</p>
+<h2 id="游戏体验">游戏体验</h2>
+<p>守望先锋高画质（我不开极高画质），训练靶场或者进比赛帧数400fps直接跑满，打团时帧数大约下降到320-350之间。（正常人是不会在打团时盯着屏幕左上角看帧数变化的）</p>
+<p>Minecraft Java Edition 1.16.4 + Optifine（咱加了这么多定语是因为Minecraft有很多版本，而且还有很多用来改善画质或性能的Mod）：</p>
+<p>不知是MC的优化不好还是遇到了CPU瓶颈还是显卡驱动的问题，玩MC时帧数平时会有250帧，但是一到红石机器多的地方或者全物品分类机这类的地方，帧数就掉到了140帧以内，虽然帧数并不高（实际上也不低了），但是已经很流畅了，只不过对生电玩家不太友好。</p>
+<p>值得一提的是，这显卡在玩MC时功耗也只有30瓦左右，而且大多数时间风扇都不转，真的太环保了（</p>
+<h2 id="arch-linux">Arch Linux</h2>
+<p>整个安装Linux的过程十分顺利，不像笔记本那样经常遇到许多奇奇怪怪的问题。加上走的独显直连没有麻烦的双显卡混合交火，基本上是装好自己需要的软件后开机就直接用了。</p>
+<p>之前联想R7000P那个笔记本还经常无法调节屏幕亮度，TTY下面的警报“滴”声大得吓人，以前还遇到过nvidia+amdgpu+gnome进wayland就黑屏的问题（现在nvidia升470已经修复了）。</p>
+<p>曾经用的那个惠普更是因为英伟达显卡驱动和惠普奇葩的硬件在linux5.0内核之前经常出现黑屏死机这些问题，而且不开启独显的话就没办法连双显示器。</p>
+<p>所以还是台式机最香，觉得硬盘不够用了我就可以买块新硬盘扯根线扩容，主板上有4个内存插槽够我插很多根内存。CPU也都是可拆卸的只要主板支持我还可以继续升级，而且我可以选择没有集成显卡的CPU，显示器直连独显不用被那些驱动问题弄得头疼。</p>
+<h2 id="others">Others</h2>
+<p>其实最初我是想把装机的过程录下来拍成VLOG的，但是租的房子空间有限加上不想露脸，我一说话还会紧张不会组织语言，而且我没带三脚架，所以为了节省体力我只是拍几张照片放到博客上。</p>
+<p><del>尽管现在这个电脑显卡很差不能打大型游戏，但是他的强悍的CPU性能已经足够我干很多事情了。</del> 一开始想测试一下CPU性能于是下载了Linux内核，用默认生成的<code>config</code>，<code>make -j12</code>编译。然后找个工具(<code>lm_sensors</code>)查看一下CPU温度。当我还没配好配置文件时突然发现内核他编译好了。</p>
+<p>然而除了写代码之外我暂时还没想好什么其他的使用这个电脑的方法。因为有点舍不得电费加上没有公网IP所以我也不打算把它当服务器用。</p>
+<blockquote>
+<p>可能有人会更关心我在北京实习的相关事情，其实我并不是不想写在博客里面，而是想等过几个月有了一个比较完整的实习体验后再写，因为最近每天都很忙而且心情变化很复杂，毕竟自己一个人离开学校到北京。所以我不想把某一刻的心情写在博客上当作我这一阵子的整体体验，现在还不是做总结的时候（心情好的话，也许我会写在今年年终总结上吧）。</p>
+</blockquote>
+<hr>
+<h2 id="后续">后续</h2>
+<p>2022-02-26补充:</p>
+<p>咱给这个电脑换了新的机箱，考虑了一下如果把换新机箱的内容添加到这里的话，会对原有的我组装电脑的内容产生影响，所以我新开了一篇博客，感兴趣的可以去看：<a href="/posts/sama-quzao/">电脑换壳——先马趣造</a>。</p>
+<p>以后组装电脑相关的博客，都会在标签 <a href="/tags/%E5%8F%B0%E5%BC%8F%E6%9C%BA/">台式机</a> 里面找到。</p>
+<br>
+<p><strong>STARRY-S</strong></p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>NieR:Automata 游戏记录</title>
+      <link>https://blog.starry-s.moe/posts/2021/nier_automata/</link>
+      <pubDate>Sun, 15 Aug 2021 00:23:55 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/nier_automata/</guid>
+      <description>&lt;p&gt;这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。&lt;/p&gt;
+&lt;p&gt;尽管游戏玩了3遍，但是不敢保证说我把尼尔前前后后的每个细节都弄清楚，不过还是打算把我遇到的一些有意思的地方记录到博客中。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。</p>
+<p>尽管游戏玩了3遍，但是不敢保证说我把尼尔前前后后的每个细节都弄清楚，不过还是打算把我遇到的一些有意思的地方记录到博客中。</p>
+<meting-js server="netease" type="song" id="22689961" theme="#233333"></meting-js>
+<hr>
+<p><img loading="lazy" src="images/NieR_Automata_20210115172747.jpg" alt="&amp;ldquo;遊樂園廢墟&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">遊樂園廢墟</p>
+</p>
+<blockquote>
+<p>其实我今年4月份就把游戏就打完了，但是我硬是拖了这么久才把游玩记录写到博客上。</p>
+</blockquote>
+<hr>
+<p><img loading="lazy" src="images/NieR_Automata_20210115175404.jpg" alt="&amp;ldquo;记忆&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">记忆</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210115180846.jpg" alt="&amp;ldquo;八音盒&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">八音盒</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116183544.jpg" alt="&amp;ldquo;游乐园的月之泪&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">游乐园的月之泪</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116183651.jpg" alt="&amp;ldquo;充满“干劲”的机器人&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">充满“干劲”的机器人</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116183741.jpg" alt="&amp;ldquo;游乐园&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">游乐园</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116184004.jpg" alt="&amp;ldquo;机器人版 罗密欧与朱丽叶&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">机器人版 罗密欧与朱丽叶</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116184223.jpg" alt="&amp;ldquo;描述人类残暴性的作品&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">描述人类残暴性的作品</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210117155407.jpg" alt="&amp;ldquo;摸头&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">摸头</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210117163441.jpg" alt="&amp;ldquo;NieR:AutoFishing&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">NieR:AutoFishing</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210119163908.jpg" alt="&amp;ldquo;Lunar Tear&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Lunar Tear</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210119165209.jpg" alt="&amp;ldquo;4s&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">4s</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210124120504.jpg" alt="&amp;ldquo;A2&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">A2</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210124143553.jpg" alt="&amp;ldquo;艾米尔的家&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">艾米尔的家</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210124182334.jpg" alt="&amp;ldquo;森林国王&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">森林国王</p>
+</p>
+<!-- ![](images/NieR_Automata_20210129002557.jpg) -->
+<p><img loading="lazy" src="images/NieR_Automata_20210129010129.jpg" alt="&amp;ldquo;沉没都市&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">沉没都市</p>
+</p>
+<!-- ![](images/NieR_Automata_20210204010638.jpg) -->
+<!-- ![](images/NieR_Automata_20210204012723.jpg) -->
+<p><img loading="lazy" src="images/NieR_Automata_20210204015704.jpg" alt="&amp;ldquo;艾米尔的决意&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">艾米尔的决意</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210206020307.jpg" alt="&amp;ldquo;9s 陪寝&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">9s 陪寝</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210214211911.jpg" alt="&amp;ldquo;任务&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">任务</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210214212838.jpg" alt="&amp;ldquo;创造不是那么简单的事了&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">创造不是那么简单的事了</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210219203841.jpg" alt="&amp;ldquo;记好啦&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">记好啦</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210219204035.jpg" alt="&amp;ldquo;最轻松的！&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">最轻松的！</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210219210754.jpg" alt="&amp;ldquo;第6次格式化&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">第6次格式化</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210219210830.jpg" alt="&amp;ldquo;女人真恐怖&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">女人真恐怖</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210220234528.jpg" alt="&amp;ldquo;Morning!&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Morning!</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210222233545.jpg" alt="&amp;ldquo;Meow&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Meow</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210223000109.jpg" alt="&amp;ldquo;4s&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">4s</p>
+</p>
+<!-- ![](images/NieR_Automata_20210309155216.jpg) -->
+<p><img loading="lazy" src="images/NieR_Automata_20210309155202.jpg" alt="&amp;ldquo;Hacking A2&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Hacking A2</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210309204622.jpg" alt="&amp;ldquo;Emil&amp;rsquo;s Memory&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Emil&#39;s Memory</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210309211227.jpg" alt="&amp;ldquo;Share Happiness!&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Share Happiness!</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210309220354.jpg" alt="&amp;ldquo;Emil&amp;rsquo;s Home&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Emil&#39;s Home</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210310140442.jpg" alt="&amp;quot;《没中》&amp;quot;" />
+<p style="margin-bottom: -0.8em;" class="image-title">《没中》</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210310141143.jpg" alt="&amp;ldquo;孩子们的核心&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">孩子们的核心</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210314205859.jpg" alt="&amp;ldquo;晚安，好梦！&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">晚安，好梦！</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210314211653.jpg" alt="&amp;ldquo;Brother&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Brother</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210320213830.jpg" alt="&amp;ldquo;利落地杀掉我&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">利落地杀掉我</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210320225429.jpg" alt="&amp;ldquo;柏拉图&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">柏拉图</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321090429.jpg" alt="&amp;ldquo;柏拉图的回忆&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">柏拉图的回忆</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321095116.jpg" alt="&amp;ldquo;谢谢你愿意听我说话&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">谢谢你愿意听我说话</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321104439.jpg" alt="&amp;ldquo;deb[U]nked&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">deb[U]nked</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321115643.jpg" alt="&amp;ldquo;好一个逃离现场&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">好一个逃离现场</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321131750.jpg" alt="&amp;quot;[E]nd&amp;quot;" />
+<p style="margin-bottom: -0.8em;" class="image-title">[E]nd</p>
+</p>
+<hr>
+<p><img loading="lazy" src="images/NieR_Automata_20210220231427.jpg" alt="&amp;ldquo;NieR:Automata&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">NieR:Automata</p>
+</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《空之境界》摘抄</title>
+      <link>https://blog.starry-s.moe/posts/2021/karanokyokai/</link>
+      <pubDate>Sat, 03 Jul 2021 21:01:37 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/karanokyokai/</guid>
+      <description>&lt;p&gt;很久以前就打算二刷空境原著了，由于种种原因进展一直比较缓慢。&lt;/p&gt;
+&lt;p&gt;最终在 Kindle (&lt;del&gt;泡面盖&lt;/del&gt;) 上阅读时标记了一些不错的菌言菌语，整理到博客上。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>很久以前就打算二刷空境原著了，由于种种原因进展一直比较缓慢。</p>
+<p>最终在 Kindle (<del>泡面盖</del>) 上阅读时标记了一些不错的菌言菌语，整理到博客上。</p>
+<meting-js server="netease" type="song" id="1322356611" theme="#233333"></meting-js>
+<hr>
+<h2 id="俯瞰风景">俯瞰风景</h2>
+<ul>
+<li>
+<p>飞行这个名词，与坠落这个名词是相连结的。但越是迷恋天空的人，越会欠缺这样的认知，结果死了之后也只能持续朝云端飞行，不会往地面坠落下来，等于是朝着天空坠落。</p>
+</li>
+<li>
+<p>视野并不是眼球看到的景象，而是大脑处理过的景象。我们的视野受到我们的常识保护着，不认为自身的高度叫高，甚至觉得是种常识，没有高这个概念存在。反过来说，凡是人类，都活在俯瞰的视野中。</p>
+</li>
+<li>
+<p>人是活在箱中的生物，也只能在箱中生活。</p>
+</li>
+<li>
+<p>在这短暂存在的密室里，现在无论外界发生什么事都与式没有关联，也无法产生关联。这份实际感受，微微沁入她本应空虚的心。</p>
+</li>
+<li>
+<p>——如果自身的视野就是世界的一切，此刻世界的确正在沉睡。</p>
+</li>
+<li>
+<p>如果城市是深海，夜空就是纯粹的黑暗。在那片黑暗上，星辰就像散落的宝石那般闪闪发光。月亮是洞穴，一个凿穿夜空这张黑色图画纸的巨大洞穴。</p>
+</li>
+<li>
+<p>月亮其实不是反射太阳的镜子，只是在窥视这一侧的景色——在两仪家，式曾听人这么说过。</p>
+</li>
+<li>
+<p>一头宛如以一根根丝线梳就的黑发顺滑无比，只要风势一大，黑发迎风飞舞的模样就散发出无比幽玄之美。</p>
+</li>
+<li>
+<p>刀刃有六寸长，与其说是刀更像是一柄只由白刃构成的凶器。</p>
+</li>
+<li>
+<p>因为天空没有尽头。我认为如果能无拘无束的漫游、能自由飞往任何地方，就可以找到我不讨厌的世界。</p>
+</li>
+<li>
+<p>所谓的 ‘逃’ 有两种，漫无目的的逃以及带有目的的逃。一般将前者称为 ‘漂浮’，后者称为 ‘飞行’。</p>
+</li>
+<li>
+<p>我们并不是根据背负的罪来选择道路，而是先选择道路再背负起自己的罪孽。</p>
+</li>
+<li>
+<p>虽然根本不值得一提，我终究认为自己最后还是应该死于从俯瞰坠落。</p>
+</li>
+<li>
+<p>无论当事人下了什么决定，自杀还是会被视为自杀来处理。</p>
+</li>
+</ul>
+<hr>
+<h2 id="杀人考察前">杀人考察（前）</h2>
+<ul>
+<li>
+<p>人要无知一点比较好，黑桐。人在小时候只看得到自己，根本不会察觉别人的恶意。就算是污秽也好，当被爱的感觉转化成经验，人才能够以善意去对待他人——因为人只能展现本身已具有的情感。</p>
+</li>
+<li>
+<p>你要当心点，黑桐同学。不详的预感，会招来不详的现实</p>
+</li>
+</ul>
+<hr>
+<h2 id="痛觉残留">痛觉残留</h2>
+<ul>
+<li>
+<p>无法适应社会的人非常多，他们的存在本身却从一开始就无法适应这个社会。他们不应该存在，不，是无法存在。</p>
+</li>
+<li>
+<p>这让她很高兴。因为活下去，就等于痛苦下去。</p>
+</li>
+<li>
+<p>被排除在境界之外的人，也会被彻底剥夺其存在意义。所以，那只不过是肉块罢了。</p>
+</li>
+<li>
+<p>对于想不通的事，不要强迫自己接受比较好。</p>
+</li>
+<li>
+<p>因为缺乏感觉的人一样拥有身体，也能够移动自如，我们就认为他们除了没有感觉之外没什么不同。但这是错误的。没有感觉，就代表什么都接收不到喔，黑桐。</p>
+</li>
+<li>
+<p>黑桐没能赶上是吗？接下来，就看暴风雨是先抵达，还是先被制造出来。式一个人去，有可能反被打败啊，两仪。</p>
+</li>
+<li>
+<p>痛觉可是种好东西，有错的终究是伤口，不可以搞错先后顺序。我们需要痛觉，无论多么痛苦都一样。</p>
+</li>
+<li>
+<p>“没有什么伤是无法痊愈的。不会痊愈的伤口不叫伤口，叫作死亡。”</p>
+</li>
+</ul>
+<hr>
+<h2 id="伽蓝之洞">伽蓝之洞</h2>
+<ul>
+<li>
+<p>如果眼睛看得见，我大概正看着他应付的笑容。</p>
+</li>
+<li>
+<p>“你的嗜好还真奇怪。”</p>
+<p>“我好高兴。真让人惊讶，没想到橙子小姐也有跟普通人一样的温情和道义精神！”</p>
+</li>
+<li>
+<p>“没错，你无法过着正常生活。要烦恼也该有个限度，两仪式，你该认清现实了。你原本就是属于我们这边的人吧？ 所以——别再梦想什么普通（幸福）的生活了。”</p>
+</li>
+<li>
+<p>这女的——真是专挑我逃避的问题刺人痛楚。</p>
+</li>
+<li>
+<p>正因为失去的事物永不复返，我决定不再后悔。</p>
+</li>
+</ul>
+<hr>
+<h2 id="矛盾螺旋">矛盾螺旋</h2>
+<ul>
+<li>
+<p>所谓的变成大人，就是明智地将幻想取代。</p>
+<p>自以为早熟的愚昧，让我骄傲地接受了这个事实。</p>
+</li>
+<li>
+<p>追求社会上理所当然的生活就得遭受打击。只要接受我的人生注定如此，就不会觉得自己不幸。这和小时候一样。我以聪明代替幻想，决定一个人活下去。</p>
+</li>
+<li>
+<p>我明明热爱奔跑，奔跑明明曾是我的救赎，到头来我却发现那不过是发生了一些不幸后便可以抛弃的东西，不仅愕然。</p>
+</li>
+<li>
+<p>只要一堕落，人是否就会变得这么婆婆妈妈的？我不禁傻眼。</p>
+</li>
+<li>
+<p>这家伙以前曾说心是看不见的。因此，她绝不会对别人吐露肉眼看不见的烦恼。</p>
+</li>
+<li>
+<p>所以——为了不再做梦，我只不过是在被杀前抢先宰了对方。</p>
+</li>
+<li>
+<p>忍耐明明是你的优点，结果你却选择了痛苦的那条路。第一次见面的时候，胭条巴正要抹杀胭条巴。失去未来，变成空壳的你，也跟现在一样想死是吗？</p>
+</li>
+<li>
+<p>“重点明明在于学到什么，这个国家却本末倒置。只要有真材实料根本不需要什么证据，大家却为了得到资格去学习，而不是透过学习的成果取得资格。一个只剩下用来证明‘我学到这么多！’的资格，不就像契约书一样。”</p>
+</li>
+<li>
+<p>或许，她就是将如暗处鲜花般优美的日本幽灵，与外国童话中的妖精融合而成的结晶。</p>
+</li>
+<li>
+<p>“和他们结识，算是我在伦敦时唯一的疏忽吧。”</p>
+</li>
+<li>
+<p>灵长已经变得太复杂，是过度追求万能，替生命附加种种能力导致的结果。</p>
+</li>
+<li>
+<p>朦胧不定的东西会召唤朦胧不定的言语。事情明明这么简单，方才的平稳气息却已散去，让人难以呼吸。</p>
+</li>
+<li>
+<p>那是因为无论拥有怎样优秀的肉体、素质，对于一个人来说只能把一件事情做到极致。去到高处的话可以，然而除此以外的山便无法去攀登了。</p>
+</li>
+<li>
+<p>“你这是什么表情。让那系统崩坏掉的人就是你吧。所谓的精神异常者呢，由于自以为自己的异常是梦境所以才没有破绽。式过去也是这样的。但是却不由得注意到了名为黑桐干也的人。于是对两仪式的存在方式察觉到了异常。”</p>
+</li>
+<li>
+<p>“哦，离题了。说着与两仪有关的话就没有注意到，似乎是被什么逼迫着一般。不知不觉就说多了。说不定黑桐你明天就死掉了呢。”</p>
+<p>“&hellip;&hellip;不敢当。我会小心车子的。”</p>
+</li>
+<li>
+<p>也就是指男性之中的女性部分和女性之中的男性部分。从男性的语气来推断出是阳性，这结论未免下得太早了。无论是谁都会拥有偏向异性的思考模式。男扮女装的怪癖是最为典型的。现在的式毫无疑问是阴性的式。男性的语气，是她为了死掉的织而在无意识下进行的代偿行为。至少，是希望你还能够记得织的事情也说不定。呼呼呼，这不是很可爱吗？</p>
+<p>“&hellip;”</p>
+</li>
+<li>
+<p>由于没有任何一点小的异常，所以也就注意不到大的异常。</p>
+</li>
+<li>
+<p>“要打开了。这可是阔别半年的自己的家呦，胭条。”</p>
+<p>两仪很开心似的说着。</p>
+</li>
+<li>
+<p>若不在人们身上使用相同的仪式死亡，给你的献祭便不完全。如果死亡之后再次复活的螺旋不完全。没有达到相互交缠且相克的条件，便无法将其联系起来。于是我便准备了他们的尸体作为阴，他们平常的生活作为阳。</p>
+</li>
+<li>
+<p>死者与生者无法兼容。在满是矛盾的这个世界中，个体是没有共通这层意义的。</p>
+</li>
+<li>
+<p>第一次脱离了死的困境，但那只不过是为了迎接第二次、第三次的死所注定的方法。这种有限的死的方式。</p>
+</li>
+<li>
+<p>“&hellip;&hellip;推了煞车坏掉的人一把，这种做法是不对的。”</p>
+</li>
+<li>
+<p>为了消除现象而引起的现象，最终会变成将自己向绝境逼迫的行为。但是果然，即使留下最初的现象不管，也会演变成被逼迫至绝境的情形。无论怎样努力，现象这个词的含义是不会消失的。</p>
+</li>
+<li>
+<p>由于事物总是连带有许多阻碍，所以并不存在完美的事物。</p>
+</li>
+<li>
+<p>橙子小姐的言辞一针见血。</p>
+</li>
+<li>
+<p>不过到了近代这种称呼就不再使用了。文明发达了，人们变得很容易就能够将自身灭绝。</p>
+</li>
+<li>
+<p>“学问和年龄无关，柯尼勒斯，虽然你外表看起来很年轻，但你总是只注意外表，所以内在才会追不上啊。”</p>
+</li>
+<li>
+<p>人类的个体若是完成，生存的意义就会消失。但各种人类却只为了生存下去的欲望而无意识地拒绝它，所有的人类在以人类身份思考时，变成比动物还要不如。明明为了完成而生存，却为了生存而拒绝完成。</p>
+</li>
+<li>
+<p>让一个人了解事物，与其教他，不如让他自己体验来得快。</p>
+</li>
+<li>
+<p>生命的证据不是如何去追求快乐，因为生命的意义，就是要去体会痛苦。</p>
+</li>
+<li>
+<p>——风停了，信号也已响起。</p>
+<p>来吧 ——该开始认真地奔跑了——</p>
+</li>
+<li>
+<p>我虽然讨厌别人的同情，但我知道拒绝别人同情的代价，最后报应会发生在自己身上。</p>
+</li>
+<li>
+<p>然后，男人的手伸了过来。</p>
+<p>“一个人站不起来的话，我就助你一臂之力吧。”</p>
+</li>
+<li>
+<p>男人“嗯”的一声，毫不做作地笑了。</p>
+<p>“我也认为你应该会这么说的。”</p>
+<p>那是一股不可思议、连我也想回报的笑容。</p>
+</li>
+<li>
+<p>“你就拿着吧，因为这以后得由你来守护才行。”</p>
+<p>我努力露出灿烂的笑容，但不知道是不是顺利笑了出来。</p>
+</li>
+<li>
+<p>“&hellip;&hellip;我也一样，希望有人来帮我，一直希望有人来帮我，但是，我却不知道该把自己从哪里解放出来&hellip;&hellip;而结果也不该知道的，因为根本没有可以帮助我的方法。不管意义如何替换，只有一开始的现象无法消除。”</p>
+</li>
+<li>
+<p>他回头看了一眼，那个被蒸汽和水声包围的地下室非常安静。那是连自己死了都不知道，到今天也还继续梦见日常之轮的脑髓灵魂安置所。</p>
+</li>
+<li>
+<p>但那也是不可能的，扭曲的轮回不会在同一个地方转动，若死者不能亲自结束身为死者的存在，日常生活永远不会到来。</p>
+</li>
+<li>
+<p>&hellip;&hellip;我失败了。不该和这些怪物扯上关系啊！</p>
+<p>&hellip;&hellip;那就是，红大衣魔术师最后的思考。</p>
+</li>
+<li>
+<p>从走廊看出去的夜景很安静、很寂寞，公寓周围只存有旁边那栋形状相同的公寓，公寓之间铺着柏油道路，还有绿色的庭院。那光景，与其说是夜景，还不如说是被绿意包围的墓碑。</p>
+</li>
+<li>
+<p>“为什么回来。”</p>
+<p>魔术师用沉重的声音问着。</p>
+<p>巴无力回答，只是一直看着荒耶。他没有回答的余力，若不是全力集中精神，他连正面看着魔术师也作不到。</p>
+</li>
+<li>
+<p>你的意志只不过是由幻想产生，由幻想所活化的东西而已。在这个世界死亡的胭条巴，已经只能在这里生活了。</p>
+</li>
+<li>
+<p>事情就是因为有尽头，所以才能观测到无限这件事。</p>
+</li>
+</ul>
+<hr>
+<h2 id="忘却录音">忘却录音</h2>
+<ul>
+<li>
+<p>在确认自己的记忆时，不可以依靠他人的记忆。毕竟只有名为回忆的自我天平，才能决定过去&hellip;&hellip;</p>
+</li>
+<li>
+<p>所谓的忘记，其实是记忆劣化。回忆是一种不会消失、只会逐渐褪色的废弃物。你不觉得很可惜吗？人们竟然让属于永恒的事物生锈。亲手让身为永恒的事物化为烟尘。</p>
+</li>
+<li>
+<p>污秽由污秽自己解决是最好的作法，因为不管是什么人，想要清除污秽，就一定会受到污秽沾染，这是一个不详的循环，我们称之为 ‘诅咒’。</p>
+</li>
+<li>
+<p>所谓的天才，到最后只是把自己当成对手。</p>
+</li>
+<li>
+<p>妖精很难控制，操纵者常常在不知不觉间，从实现他们自己的愿望变成实现妖精的愿望。鲜花你听清楚了，要注意——使用自己以外的东西所制造出来的使魔，别走到操纵者反被操纵的下场</p>
+</li>
+<li>
+<p>我的能力只能从别人已经走过的道路来获得信息，但你却可以看到接下来的路通往哪里呢&hellip;&hellip;</p>
+</li>
+<li>
+<p>人之所以选择忘却记忆，绝不是因为那些记忆没有必要，而是因为记住那些事很危险。</p>
+</li>
+<li>
+<p>我们刻意忘却过去犯下的种种过错。忘却那些如果记得就会让自己崩溃的记忆。我们靠着这么做——才能守护自己现在是健康而无辜的幻象。</p>
+</li>
+<li>
+<p>“物质是用来消费及磨耗的事物，这个名为地球的世界逐渐走向崩坏也是自然的道理，因为在最后走向死亡是最正确的存在方式，所以谁也不会去解决这个问题。对我们来说，真正的世界只存在于各自的脑髓中而已。”</p>
+</li>
+</ul>
+<hr>
+<h2 id="杀人考察后">杀人考察（后）</h2>
+<ul>
+<li>
+<p>本能在表层意识具现化成人格时，将会驱逐所有理性，会凌驾我这个名为白纯里绪的人格。</p>
+</li>
+<li>
+<p>向对方抱有的情感，超出自己的容许量的时候吧，自己能承受的感情量是一定的，有些人容量很大，也有人容量很小，不论是爱情或者是憎恨，当那种感情超过自己所能容纳的量，那么超出的部分会转变为痛苦，如此一来，便不能忍受对方的存在。</p>
+</li>
+<li>
+<p>为了到最后让自己死去，所以我们只有杀一次人的权利。</p>
+</li>
+<li>
+<p>人一辈子只能承受一人份的人生价值，为了原谅无法走到尽头的人生，所以大家才会用尊重的态度看待死亡，因为生命等价，即使是自己的生命，也不是自己所拥有的东西。</p>
+</li>
+<li>
+<p>光是孕育意识的大脑，无法产生人格。虽然只有脑部也可以活下去，但我们必须先拥有肉体才能产生自我意识。有了肉体之后，和肉体一起培养，就有了现在的人格。喜爱自己肉体的人，应该属于社交型人格，而厌恶自己肉体的人，则属于内向型人格。虽然光有意识也可以培养出人格，但那样的人格是无法认识自己的，一般来说，心灵就会长成特别的东西。那样的话，已经不能称之为人格，和计算机没有什么不同。如果有谁只是一个大脑，那个人就必须创造出一个 ‘只有脑的自己’ 的人格。必须舍弃肉体这个大我，而保存意识这个小我。</p>
+</li>
+<li>
+<p>“不是有了知性才有肉体。”</p>
+<p>“而是，有了肉体之后，知性才得以诞生。”</p>
+</li>
+<li>
+<p>说到底，人类只不过是在自己这个空壳中做着梦而已。明明是那么地显而易见的。</p>
+</li>
+<li>
+<p>大部分的人并不是出于自己的愿望要过那样的生活。想要成为特别的存在却无法实现，这种形式才是真正的平凡人生。</p>
+</li>
+</ul>
+<hr>
+<h2 id="未来福音">未来福音</h2>
+<ul>
+<li>
+<p>她擅长的并非预测未来，而是教人如何避免遭遇到不幸。</p>
+</li>
+<li>
+<p>那是一种希望，希望对方相信她说的话。也是一种绝望，绝望于对方不可能相信。</p>
+</li>
+<li>
+<p>所谓的现实，即为数值尚未确定的公式。公式的数值会不断变动，不用说是求出答案，人们连要求出什么都不知道。然而——一旦这个数值确定下来，答案便再也不会改变。</p>
+</li>
+<li>
+<p>这一切都是醒着的，但没有什么活着的样子。没有任何例外。</p>
+</li>
+<li>
+<p>“就是因为知道得太清楚，才会看不见吗——橙子说得对极了。炸弹魔，你有没有听到？既然你的眼睛什么都没看见，不如废了算了。”</p>
+</li>
+<li>
+<p>“未来并没有不同。‘未来’这种东西，一开始便不存在。不存在的东西，当然没有办法控制。”</p>
+</li>
+<li>
+<p>她依然是老样子，即使自己遇到不幸，也没有显露出来，仍旧表现得潇洒又懒惰，完全就是时下高中女生会有的样子。</p>
+</li>
+<li>
+<p>“没错。那顶多算是憧憬。你就像个看到偶像，拼命叫个不停的幸福小粉丝。所谓的恋爱啊，应该要更轰轰烈烈、更不堪回首、更捉摸不定，如同不是抵达终点，便是发生意外的云霄飞车。总之啊，谈恋爱不可能留下什么美好回忆&hellip;&hellip;”</p>
+</li>
+<li>
+<p>“我漂亮地踩到地雷。”</p>
+</li>
+<li>
+<p>既然我可以用未来视取巧，相对地当然要承担一些代价。</p>
+</li>
+<li>
+<p>不论谁看见她，都会期待她未来的发展，另一方面，又暗暗希望她永远维持现在的样子</p>
+</li>
+<li>
+<p>在这个时代，幸福的未来相当罕见。</p>
+</li>
+<li>
+<p>既然看得见未来，当然也会了解过去。</p>
+</li>
+<li>
+<p>这十年——不，说得更正确，是十二年来，我始终像故事中模仿人类的机器人，融入这个城市的生活罢了。</p>
+</li>
+<li>
+<p>我遇见难得的朋友，之后又失去他。尽管试着承续他的衣钵，却每天被唯一的读者批评。</p>
+</li>
+<li>
+<p>尽管我也为此付出代价，往后的人生满是失败。但我至少还留有什么。</p>
+</li>
+<li>
+<p>“你很快会从这个世界上消失。你的前途一片漆黑，未来完全没有任何希望。你不会留下任何东西，也没有获救的可能&hellip;&hellip;但是，太不可思议了，尽管如此，你的梦想将继续活下去。”</p>
+</li>
+</ul>
+<hr>
+<meting-js server="netease" type="song" id="590515" theme="#233333"></meting-js>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Learn OpenGL</title>
+      <link>https://blog.starry-s.moe/posts/2021/learn_opengl/</link>
+      <pubDate>Mon, 10 May 2021 21:33:10 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/learn_opengl/</guid>
+      <description>&lt;p&gt;其实咱很久很久以前就开始看&lt;a href=&#34;https://learnopengl-cn.github.io/&#34;&gt;LearnOpenGL CN&lt;/a&gt;这个网站了&amp;hellip;&amp;hellip;&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>其实咱很久很久以前就开始看<a href="https://learnopengl-cn.github.io/">LearnOpenGL CN</a>这个网站了&hellip;&hellip;</p>
+<meting-js server="netease" type="song" id="1322354976" theme="#233333"></meting-js>
+<hr>
+<h2 id="前言">前言</h2>
+<p>首先需要明白什么是核心模式，什么是立即渲染模式，立即渲染模式的代码中都包含<code>glBegin()</code>和<code>glEnd()</code>，绘图的部分都是在这两个函数之间，比如画一个点就是<code>glVertex2f(x, y)</code>，这种方式画图确实很简单，用户只要提供坐标和颜色就好了，不用知道GPU干了什么，而缺点是性能低，有很多限制，所以新版本的OpenGL为了给开发者提供更多的可操作空间而逐渐废弃了立即渲染改用核心模式。</p>
+<p>核心模式提供了很多强大的功能，可以管线编程，代码量增加了很多，所以对初学者不太友好。</p>
+<p>LearnOpenGL CN上面的代码基于C++，而OpenGL是用C编写的，教程上的代码除了矩阵运算部分可以使用C++的运算符重载而使代码编写起来变得更简单一些外，其他部分基本没啥区别，而且教程为了便于教学使用的也是面向过程式编程，没有将各个功能封装到一个类里面，所以咱这篇教程用C编写。</p>
+<p>要记住C就是C，C++就是C++，C不是C++的子集，只能说C++兼容部分C的代码，不要把C和C++混用，不要因为C++支持面向对象使得一些功能看起来简单很易于使用就轻易迈入C++的坑。</p>
+<h2 id="准备工作">准备工作</h2>
+<p>有关OpenGL的介绍以及安装GLFW、GLAD以及编译所需的CMake的部分可以直接看<a href="https://learnopengl-cn.github.io/01%20Getting%20started/02%20Creating%20a%20window/">教程</a>，咱尽可能把教程上没有提到的或者是刚开始学OpenGL很难理解的部分记录下来。</p>
+<p>大体上就是安装<code>glfw</code>，Arch Linux使用包管理器<code>sudo pacman -S glfw-x11</code> (如果你使用的是wayland，那么安装<code>glfw-wayland</code>)，然后把下载的<code>glad/glad.h</code>复制到<code>/usr/include</code>下，把<code>glad.c</code>复制到工程文件夹的代码目录下。</p>
+<p>为使用CMake生成Makefile，编写<code>CMakeLists.txt</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.0</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;Learn OpenGL&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="s">LANGUAGES</span> <span class="s">C</span>
+</span></span><span class="line"><span class="cl">    <span class="s">VERSION</span> <span class="s">0.1.0</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">C_FLAGS</span> <span class="s2">&#34;-Wall -lm -ldl -std=c11&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_FLAGS</span> <span class="o">${</span><span class="nv">C_FLAGS</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">OpenGL_GL_PREFERENCE</span> <span class="s">LEGACY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">glfw3</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">OpenGL</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">OPENGL_INCLUDE_DIR</span><span class="o">}</span> <span class="s">src</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">aux_source_directory</span><span class="p">(</span><span class="s2">&#34;src&#34;</span> <span class="s">GLSRC</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">GLSRC</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">OPENGL_gl_LIBRARY</span><span class="o">}</span> <span class="s">glfw</span><span class="p">)</span><span class="err">
+</span></span></span></code></pre></div><p>完成上述步骤后，确保工程文件夹的结构如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">├── build/
+</span></span><span class="line"><span class="cl">├── CMakeLists.txt
+</span></span><span class="line"><span class="cl">└── src/
+</span></span><span class="line"><span class="cl">    ├── glad.c
+</span></span><span class="line"><span class="cl">    └── main.c
+</span></span></code></pre></div><h2 id="创建窗口">创建窗口</h2>
+<p>编辑<code>main.c</code>，加入所需的头文件</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="c1">// glad.h要加在glfw3.h之前
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;glad/glad.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;GLFW/glfw3.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span></code></pre></div><p>在main函数中初始化OpenGL并创建窗口</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glfwInit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* 使用OpenGL版本为3.3 */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_CONTEXT_VERSION_MAJOR</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_CONTEXT_VERSION_MINOR</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* 使用核心模式 */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_OPENGL_PROFILE</span><span class="p">,</span> <span class="n">GLFW_OPENGL_CORE_PROFILE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#ifdef __APPLE__
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="nf">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_OPENGL_FORWARD_COMPAT</span><span class="p">,</span> <span class="n">GL_TRUE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* 创建窗口 */</span>
+</span></span><span class="line"><span class="cl">        <span class="n">GLFWwindow</span> <span class="o">*</span><span class="n">window</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">                    <span class="nf">glfwCreateWindow</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="s">&#34;Hello World&#34;</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">window</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;Failed to create window.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">glfwTerminate</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glfwMakeContextCurrent</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* 初始化glad */</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">gladLoadGLLoader</span><span class="p">((</span><span class="n">GLADloadproc</span><span class="p">)</span> <span class="n">glfwGetProcAddress</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;Failed to initialize GLAD</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">glfwTerminate</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* prepare render */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* main loop */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nf">glfwTerminate</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>创建窗口的代码比较容易理解，到这里可以尝试编译一下代码检查有没有遇到什么问题，如果编译失败了可以尝试检查GLFW是否安装正确，代码哪里出现了什么问题。</p>
+<p>编译代码并运行生成的程序：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd build
+</span></span><span class="line"><span class="cl">cmake .. &amp;&amp; make -j8
+</span></span><span class="line"><span class="cl">./main
+</span></span></code></pre></div><p>如果一切正常的话，可以看到窗口一闪而过就消失了，因为到目前为止我们只创建了一个窗口，创建完成后就结束了程序，所以窗口会瞬间消失。</p>
+<hr>
+<h2 id="准备绘图">准备绘图</h2>
+<p>在绘制形状之前，我们需要一些准备工作比如设定视口、回调函数，创建顶点缓冲区等操作，然后在大循环中进行渲染绘制。</p>
+<h3 id="视口">视口</h3>
+<p>首先要告诉OpenGL咱的窗口尺寸是多少，以便OpenGL根据窗口大小显示数据和坐标。</p>
+<p>在<code>/* prepare render */</code>处添加代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="nf">glViewport</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">);</span>
+</span></span></code></pre></div><p>首先需要知道你传给OpenGL的坐标都是<code>-1.0</code>到<code>1.0</code>之间的数，OpenGL再将其转换成屏幕上的像素点坐标，这个过程由GPU运算所得，所以你得告诉OpenGL你的屏幕尺寸，<code>glViewport</code>的前两个参数为<code>0, 0</code>指的是窗口左下角的位置，这个值咱目前不需要修改。</p>
+<h3 id="回调函数">回调函数</h3>
+<p>我们需要一个窗口被更改的回调函数，这样当窗口尺寸发生变化时，程序可以调用这个函数调整视口。</p>
+<p>我们还需要一个<a href="https://www.glfw.org/docs/3.3/input_guide.html#input_key">按键回调函数</a>，当用户按下键盘上的某个按键后会调用这个回调函数处理按键操作。</p>
+<p>编写函数<code>framebuffer_size_callback</code>用来处理窗口尺寸更改:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">framebuffer_size_callback</span><span class="p">(</span><span class="n">GLFWwindow</span><span class="o">*</span> <span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">width</span><span class="p">,</span> <span class="kt">int</span> <span class="n">height</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glViewport</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这样当你拖拽窗口进行缩放时，窗口里的图像也会跟着窗口尺寸改变而进行缩放。</p>
+<p>编写<code>key_callback</code>函数处理用户按键操作：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">key_callback</span><span class="p">(</span><span class="n">GLFWwindow</span> <span class="o">*</span><span class="n">window</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key</span><span class="p">,</span> <span class="kt">int</span> <span class="n">s</span><span class="p">,</span> <span class="kt">int</span> <span class="n">action</span><span class="p">,</span> <span class="kt">int</span> <span class="n">m</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="n">GLFW_KEY_ESCAPE</span> <span class="o">&amp;&amp;</span> <span class="n">action</span> <span class="o">==</span> <span class="n">GLFW_PRESS</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">glfwSetWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">GL_TRUE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">key</span> <span class="o">==</span> <span class="n">GLFW_KEY_Q</span> <span class="o">&amp;&amp;</span> <span class="n">action</span> <span class="o">==</span> <span class="n">GLFW_PRESS</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">glfwSetWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">GL_TRUE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>当用户按下<code>ESC</code>或<code>Q</code>键时，可以结束OpenGL窗口的运行。</p>
+<p>然后我们需要注册这两个回调函数，在<code>/* prepare render */</code>处添加下面的代码:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="nf">glfwSetFramebufferSizeCallback</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">framebuffer_size_callback</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glfwSetKeyCallback</span><span class="p">(</span><span class="n">window</span><span class="p">,</span> <span class="n">key_callback</span><span class="p">);</span>
+</span></span></code></pre></div><h3 id="大循环">大循环</h3>
+<p>在大循环中，每循环一次代表绘制一帧画面。这里利用了双缓冲将绘制的图形放到缓存中，然后将缓存中的图形刷新到显示器上。(因为OpenGL绘图操作是逐行绘制的，如果不先将图形存到缓存中而直接显示在显示器上的话，在画面快速变动时你很可能会遇到画面撕裂，垂直不同步)</p>
+<p>大循环部分的代码长这个样子:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="nf">glfwWindowShouldClose</span><span class="p">(</span><span class="n">window</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="cm">/* 清空背景色为深灰色 */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glClearColor</span><span class="p">(</span><span class="mf">0.1f</span><span class="p">,</span> <span class="mf">0.1f</span><span class="p">,</span> <span class="mf">0.1f</span><span class="p">,</span> <span class="mf">1.0f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glClear</span><span class="p">(</span><span class="n">GL_COLOR_BUFFER_BIT</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* draw something */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="cm">/* swap buffer */</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glfwSwapBuffers</span><span class="p">(</span><span class="n">window</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">glfwPollEvents</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>每次循环的开始需要使用<code>glClear</code>清空屏幕，这样就不会看到上一次渲染的结果。</p>
+<p>这里我们使用<code>glClearColor</code>设定清空屏幕的颜色为接近纯黑色的灰色。</p>
+<p>大循环每循环一次，OpenGL就渲染了一帧画面并显示在显示器上，所以你可以计算一秒钟循环的次数而估算游戏的帧率。</p>
+<blockquote>
+<p>因为我们使用了双缓冲，所以这时游戏的帧数被限制为等于显示的刷新帧数，
+比如显示器刷新率为144帧，游戏的帧率就被锁为144，如果想解除这个限制需要改为单缓冲。</p>
+</blockquote>
+<hr>
+<p>到此为止，我们已经创建了一个游戏引擎，但是这个引擎还什么都没有做。</p>
+<p>尝试编译代码，可以看到一个黑色（深灰）的窗口，按<code>ESC</code>或<code>Q</code>即可结束运行。</p>
+<p><img loading="lazy" src="images/create_window.png" alt="Window" />
+<p style="margin-bottom: -0.8em;" class="image-title">创建窗口</p>
+</p>
+<p>如果你遇到什么问题，可以<a href="learn-code-1/main.c">对照一下代码</a>是否有问题。</p>
+<hr>
+<h2 id="三角形">三角形</h2>
+<p>画三角形的过程很简单，首先要确定三角形的三个顶点坐标，然后告诉GPU这三个点坐标就可以了 :)</p>
+<blockquote>
+<p>如果你看不懂顶点着色器、几何着色器、片段着色器、光栅化这些难懂的知识点，那么你不必急于弄懂这个过程，等把图形绘制出来后再回来看这部分的内容。</p>
+</blockquote>
+<h3 id="标准化设备坐标">标准化设备坐标</h3>
+<p>因为OpenGL的坐标为都是-1.0f到1.0f之间的数（我们先不考虑视口变换这些复杂的情形）</p>
+<p>x, y, z的坐标为-1.0f到1.0f的坐标称作标准化设备坐标，坐标原点在窗口的正中央且在窗口的表面上，往右为x正方向，往上为y正方向，往屏幕里面为z正方向（这里是左手系）。</p>
+<p>有关标准化设备坐标的介绍请看<a href="https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/#_2">这里</a>。</p>
+<p>所以我们先声明三角形的顶点和颜色值到一个一维数组里面（用一维数组是因为顶点坐标值在内存的分布都是连续的，这样方便给GPU传坐标）。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">float</span> <span class="n">vertices</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="mf">0.5f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// 左下角
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// red
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">0.5f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// 右下角
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// green
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">0.5f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// y轴正上方
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span>      <span class="c1">// blue
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span></code></pre></div><h3 id="顶点缓冲">顶点缓冲</h3>
+<p>首先我们需要创建一个顶点缓冲对象，用来存我们的顶点信息，这个对象叫“Vertex Buffer Object”（VBO），之后创建一个顶点数组对象“Vertex Array Object”（VAO），用来存我们创建的VBO。</p>
+<p>为便于理解，你可以把VBO当作为开辟了一块GPU上的显存(Buffer)，用来存顶点和颜色信息，然后VAO是一个包含多个VBO的数组(Array)。</p>
+<p>绘图时可以把VBO中存的大量顶点信息发送给GPU，因为用CPU给显卡发顶点坐标的速度慢而且没办法一次发送大量的顶点坐标，所以我们把顶点坐标存到显存中，绘图时直接访问显存即可。</p>
+<p>生成一个VBO和一个VAO的代码为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="c1">// VAO和VBO的ID都是非负整型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">GLuint</span> <span class="n">VBO</span><span class="p">,</span> <span class="n">VAO</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 生成一个VAO和一个VBO
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">VAO</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">VBO</span><span class="p">);</span>
+</span></span></code></pre></div><p>我们刚刚创建好了一个缓存对象，我们现在需要告诉这个缓存的数据空间大小以及数据（顶点坐标）。</p>
+<p>首先我们绑定刚创建的VAO，然后绑定VBO</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="nf">glBindVertexArray</span><span class="p">(</span><span class="n">VAO</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glBindBuffer</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="n">VBO</span><span class="p">);</span>
+</span></span></code></pre></div><p>之后给VBO传递数组信息</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="nf">glBufferData</span><span class="p">(</span><span class="n">GL_ARRAY_BUFFER</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">vertices</span><span class="p">),</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">GL_STATIC_DRAW</span><span class="p">);</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>第一个参数是目标缓冲的类型，我们刚刚把VBO绑定到<code>GL_ARRAY_BUFFER</code>上了</p>
+</li>
+<li>
+<p>第二个参数是顶点信息所占的空间大小，单位是字节。三角形一共3个顶点，每个顶点有3个坐标值和3个颜色值，</p>
+<p>所以大小是<code>6 * 3 * sizeof(float)</code>，不过我们可以直接用<code>sizeof(vertices)</code>知道整个数组的大小。</p>
+</li>
+<li>
+<p>第三个参数是数组的地址</p>
+</li>
+<li>
+<p>第四个参数告诉GL我们的顶点数据几乎不会改变，所以是<code>GL_STATIC_DRAW</code>。</p>
+<p>如果数据会被改变很多次，则为<code>GL_DYNAMIC_DRAW</code></p>
+<p>如果数据每次绘制都会更改，则改为<code>GL_STREAM_DRAW</code></p>
+</li>
+</ul>
+<p>然后我们告诉CPU我们给VBO传递的数组都是什么：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="nf">glVertexAttribPointer</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glVertexAttribPointer</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">GL_FLOAT</span><span class="p">,</span> <span class="n">GL_FALSE</span><span class="p">,</span> <span class="mi">6</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">),</span> <span class="p">(</span><span class="kt">void</span><span class="o">*</span><span class="p">)</span> <span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">float</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glEnableVertexAttribArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glEnableVertexAttribArray</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>第一个参数为位置，告诉这个数据传递到顶点着色器的哪个位置上</p>
+</li>
+<li>
+<p>第二个参数为大小，我们定义的那个数组一个顶点有3个坐标，所以是3</p>
+</li>
+<li>
+<p>第三个参数为数据类型，这里是float。</p>
+</li>
+<li>
+<p>第四个参数为false，暂时不用管他</p>
+</li>
+<li>
+<p>第五个参数为步长，一个顶点有三个坐标和三个颜色值，所以每传一个顶点，就走<code>6 * sizeof(float)</code>的长度。</p>
+</li>
+<li>
+<p>第六个参数为偏移量，因为我们定义的数组中前三个数字代表顶点坐标，后三个数字代表颜色，所以传递顶点坐标时，偏移量为0，传递颜色时偏移量为<code>3 * sizeof(float)</code>。</p>
+</li>
+</ul>
+<p><img loading="lazy" src="https://learnopengl-cn.github.io/img/01/05/vertex_attribute_pointer_interleaved.png" alt="VBO中内存数据" />
+<p style="margin-bottom: -0.8em;" class="image-title">VBO中内存数据</p>
+</p>
+<p>之后使用<code>glEnableVertexAttribArray</code>告诉OpenGL启用顶点着色器上这个位置的数据。</p>
+<p>最后使用完VAO后要记得将其解绑：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="nf">glBindVertexArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span></code></pre></div><h3 id="着色器">着色器</h3>
+<p>我们需要写两个着色器程序，分别为顶点着色器和片段着色器。</p>
+<blockquote>
+<p>开头说的核心模式可编程管线就是指我们可以写着色器程序，手动指定管线都进行什么操作。</p>
+</blockquote>
+<h4 id="顶点着色器">顶点着色器</h4>
+<p>因为OpenGL使用的是标准化设备坐标而不是屏幕上的像素点为坐标，所以GPU需要把标准化设备坐标转换为屏幕上的像素点，这个过程由顶点着色器实现。</p>
+<p>而顶点着色器不知道咱们三角形的每个顶点的坐标是多少，所以咱们得往着色器中传我们刚才创建的VBO里面存储的坐标。</p>
+<p>着色器程序使用GLSL编写，其代码和C很像</p>
+<p>在代码文件夹中新建一个<code>vertex.glsl</code>，编写以下代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="cp">#version 330 core</span>
+</span></span><span class="line"><span class="cl"><span class="n">layout</span> <span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mo">0</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">aPos</span><span class="p">;</span>     <span class="c1">// 传入坐标</span>
+</span></span><span class="line"><span class="cl"><span class="n">layout</span> <span class="p">(</span><span class="n">location</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="k">in</span> <span class="k">vec3</span> <span class="n">aColor</span><span class="p">;</span>   <span class="c1">// 传入颜色</span>
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec3</span> <span class="n">color</span><span class="p">;</span>     <span class="c1">// 向片段着色器发送颜色</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gl_Position</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">(</span><span class="n">aPos</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">color</span> <span class="o">=</span> <span class="n">aColor</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>第一行代表我们使用OpenGL 3.3 核心模式</p>
+</li>
+<li>
+<p>第二行声明了一个类型为<code>vec3</code>（三维坐标）的变量，该变量的位置为<code>0</code>，需要人为的通过这个位置给他传值，这个变量代表顶点的坐标</p>
+</li>
+<li>
+<p>第三行声明的<code>aColor</code>用来代表颜色，顶点着色器不需要处理颜色，所以我们接收到颜色值后不需要处理，直接传出去即可。</p>
+</li>
+<li>
+<p>main函数中<code>gl_Position</code>代表这个顶点的位置坐标，我们把CPU传给顶点着色器的<code>vec3</code>转换为<code>vec4</code>。</p>
+</li>
+</ul>
+<h4 id="片段着色器">片段着色器</h4>
+<p>顶点着色器处理完顶点后，由片段着色器计算每个像素点的颜色，所以如果我们想给三角形上色的话，也是在这个环节进行。</p>
+<p>在代码文件夹中新建一个<code>fragment.glsl</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-glsl" data-lang="glsl"><span class="line"><span class="cl"><span class="cp">#version 330 core</span>
+</span></span><span class="line"><span class="cl"><span class="k">in</span> <span class="k">vec3</span> <span class="n">color</span><span class="p">;</span>    <span class="c1">// 接收顶点着色器发送的颜色</span>
+</span></span><span class="line"><span class="cl"><span class="k">out</span> <span class="k">vec4</span> <span class="n">FragColor</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">void</span> <span class="n">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">FragColor</span> <span class="o">=</span> <span class="k">vec4</span><span class="p">(</span><span class="n">color</span><span class="p">,</span> <span class="mf">1.0</span><span class="n">f</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ul>
+<li>
+<p>第一行同顶点着色器，代表OpenGL版本为3.3 核心模式</p>
+</li>
+<li>
+<p>第二行表示接收顶点着色器发送的颜色数据到变量<code>color</code></p>
+</li>
+<li>
+<p>第三行声明了一个类型为<code>vec4</code>(4维坐标)的变量，表示向外传递变量<code>FragColor</code>（该像素点的颜色值）</p>
+</li>
+<li>
+<p>main函数中设定变量<code>FragColor</code>的值等于<code>color</code>，用来指颜色。</p>
+<p>最后一个值恒为1.0f，我们暂时不需要修改它。</p>
+</li>
+</ul>
+<h3 id="编译着色器">编译着色器</h3>
+<p>因为我们只是写了着色器程序的代码，需要让GPU将其编译。</p>
+<p>编译着色器的部分对应的LearnOpenGL CN教程<a href="https://learnopengl-cn.github.io/01%20Getting%20started/04%20Hello%20Triangle/#_4">在这里</a>，本篇不打算重复讲编译着色器部分的代码。</p>
+<p>我们可以把编译着色器的代码封装到几个函数里面，这样可以减少main函数中重复代码的数量。</p>
+<p>有关这部分的代码我推荐使用<a href="https://sh.alynx.one/posts/Learn-OpenGL-1/#%E7%9D%80%E8%89%B2%E5%99%A8%EF%BC%88Shader%EF%BC%89">这篇文章</a>中讲述的方式从文件中读取glsl代码并将其编译。</p>
+<p>最后在main函数的准备阶段处的最下面，插入以下代码，编译你的着色器程序：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="n">GLuint</span> <span class="n">shaderProgram</span> <span class="o">=</span> <span class="nf">load_program</span><span class="p">(</span><span class="s">&#34;vertex.glsl&#34;</span><span class="p">,</span> <span class="s">&#34;fragment.glsl&#34;</span><span class="p">);</span>
+</span></span></code></pre></div><h3 id="我们期待的三角形">我们期待的三角形</h3>
+<p>经过了前面的一番准备，我们创建了缓冲对象存顶点的坐标和颜色信息，之后编写了着色器程序处理顶点坐标和颜色。</p>
+<p>现在我们终于可以在大循环中画三角形了。</p>
+<p>在大循环的<code>/* draw something */</code>下面添加如下代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="nf">glUseProgram</span><span class="p">(</span><span class="n">shaderProgram</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glBindVertexArray</span><span class="p">(</span><span class="n">VAO</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glDrawArrays</span><span class="p">(</span><span class="n">GL_TRIANGLES</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">glBindVertexArray</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span></code></pre></div><p>这串代码表示我们首先使用刚编译好的着色器程序，之后绑定VAO，绘制一个三角形，最后解绑。</p>
+<hr>
+<p>至此我们的工程文件夹结构修改如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">├── build/
+</span></span><span class="line"><span class="cl">├── CMakeLists.txt
+</span></span><span class="line"><span class="cl">└── src/
+</span></span><span class="line"><span class="cl">    ├── fragment.glsl
+</span></span><span class="line"><span class="cl">    ├── glad.c
+</span></span><span class="line"><span class="cl">    ├── main.c
+</span></span><span class="line"><span class="cl">    ├── shader.c
+</span></span><span class="line"><span class="cl">    ├── shader.h
+</span></span><span class="line"><span class="cl">    └── vertex.glsl
+</span></span></code></pre></div><p>因为我们编写了<code>vertex.glsl</code>和<code>fragment.glsl</code>，需要修改<code>CMakeLists.txt</code>，使得编译时将代码文件夹下的着色器文件复制到<code>build</code>文件夹下。</p>
+<p>在<code>CMakeLists.txt</code>的<code>find_package</code>下面添加如下代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">configure_file(src/vertex.glsl vertex.glsl COPYONLY)
+</span></span><span class="line"><span class="cl">configure_file(src/fragment.glsl fragment.glsl COPYONLY)
+</span></span></code></pre></div><p>编译后运行程序，可以看到一个五颜六色的三角形，它的左下角为红色，右下角为绿色，顶点为蓝色。</p>
+<p><img loading="lazy" src="images/draw_triangle.png" alt="三角形" />
+<p style="margin-bottom: -0.8em;" class="image-title">三角形</p>
+</p>
+<p>如果你遇到了问题，或者哪里不太明白，可以看咱写好的代码：</p>
+<ul>
+<li>
+<p><a href="learn-code-2/main.c">main.c</a></p>
+</li>
+<li>
+<p><a href="learn-code-2/shader.h">shader.h</a></p>
+</li>
+<li>
+<p><a href="learn-code-2/shader.c">shader.c</a></p>
+</li>
+<li>
+<p><a href="learn-code-2/vertex.glsl">vertex.glsl</a></p>
+</li>
+<li>
+<p><a href="learn-code-2/fragment.glsl">fragment.glsl</a></p>
+</li>
+<li>
+<p><a href="learn-code-2/CMakeLists.txt">CMakeLists.txt</a></p>
+</li>
+</ul>
+<hr>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>联想R7000P安装Arch Linux的常见问题</title>
+      <link>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</link>
+      <pubDate>Mon, 22 Mar 2021 19:51:32 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</guid>
+      <description>&lt;p&gt;旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。&lt;/p&gt;
+&lt;p&gt;所以隔了这么久我终于更新博客了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&hellip;</p>
+<p>于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。</p>
+<p>所以隔了这么久我终于更新博客了。</p>
+<blockquote>
+<p>本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。</p>
+</blockquote>
+<hr>
+<h2 id="安装arch-linux">安装Arch Linux</h2>
+<p>到手后就把之前买的西数SN750 1T固态换到了新电脑上，顺便格式化重装了个系统。</p>
+<p>双M2插槽配上1T + 500G NVME，美汁汁。</p>
+<p>于是直接给Linux分了150G root，16G SWAP，500G HOME（有点奢侈）， 然后还分了100G用来存steam游戏，剩下的全扔给Windows。</p>
+<p>装Linux过程中只遇到了终端的警报声有些大这个问题（插耳机时声音依旧从扬声器输出），别的问题都没遇到。</p>
+<p>之前的电脑总是遇到奇葩问题，用旧版本Linux内核关机或者<code>lspci</code>时会卡死，显卡驱动装不好会导致开机死机，声卡驱动一直有问题听歌时音量大一点就爆音，HDMI接口直连的NVIDIA显卡所以显卡驱动没配置好独显不工作时没办法外接显示器(后来才知道type c接口有DP视频输出)。</p>
+<p>新电脑买来装完系统后就遇到了一点小问题网上搜一下就解决了。</p>
+<h3 id="屏幕亮度不能调节">屏幕亮度不能调节</h3>
+<p><del>开个浏览器能把眼睛晃瞎</del></p>
+<p>网上查了一下只有在bios设置为独显直连时解决亮度不能调节的方法，在混合显卡模式下，存在<a href="https://bugzilla.opensuse.org/show_bug.cgi?id=1180749">AMD显卡亮度用16位值表示而不是8位值表示</a>的这个BUG (Feature?)所以没办法调节亮度。</p>
+<p>所以<code>cat /sys/class/backlight/amdgpu_bl0/actual_brightness</code>得到的是一个大于255的数。</p>
+<p>确保内核和显卡驱动都是最新的情况下，编辑内核参数<code>amdgpu.backlight=0</code>和<code>acpi_backlight=vendor</code>，可以解决混合模式下AMD显卡不能调节亮度这个问题。</p>
+<p>如果你经常切换混合模式和显卡直连模式的话：</p>
+<p>安装显卡驱动<code>xf86-video-amdgpu</code>和<code>nvidia</code>以及按需要安装nvidia的其他组件。</p>
+<p>复制<code>/usr/share/X11/xorg.conf.d/10-nvidia-drm-outputclass.conf</code>到<code>/etc/X11/xorg.conf.d/</code></p>
+<p>编辑<code>/etc/X11/xorg.conf.d/10-nvidia-drm-outputclass.conf</code>在<code>EndSection</code>前添加一行参数允许nvidia驱动调节亮度。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Option &#34;RegistryDwords&#34; &#34;EnableBrightnessControl=1&#34;
+</span></span></code></pre></div><p>之后编辑<code>/etc/modprobe.d/blacklist.conf</code>禁用闭源驱动<code>nouveau</code>和<code>ideapad_laptop</code>，让显卡驱动调节亮度。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/modprobe.d/blacklist.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">blacklist nouveau
+</span></span><span class="line"><span class="cl">blacklist ideapad_laptop
+</span></span></code></pre></div><p>编辑内核参数添加<code>acpi_backlight=vendor</code>和<code>amdgpu.backlight=0</code>。</p>
+<p>以systemd-boot为例:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /boot/loader/entries/arch.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">options acpi_backlight=vendor
+</span></span><span class="line"><span class="cl">options amdgpu.backlight=0
+</span></span></code></pre></div><p>最后重启电脑就能调亮度了。</p>
+<h3 id="gdm不自启动">GDM不自启动</h3>
+<p>开机时GDM不会自动显示出来而是得手动切TTY2再切回TTY1才能显示。</p>
+<p>查Wiki得知是因为GDM在显卡驱动被加载之前就启动了。</p>
+<p><a href="https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_(e)GPU_is_present">参照Wiki</a>，设置<a href="https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start">KMS早启动</a>。</p>
+<p>编辑<code>/etc/mkinitcpio.conf</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/mkinitcpio.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm amdgpu radeon)
+</span></span></code></pre></div><p>如果你只使用独显直连模式的话可以去掉<code>amdgpu</code>和<code>radeon</code>。</p>
+<p>然后<code>sudo mkinitcpio -p linux</code>重新生成内核镜像，之后重启。</p>
+<p>这么做会使Wayland在开机时被禁用，所以在混合模式使用AMD显卡开机时无法使用Wayland，<a href="https://wiki.archlinux.org/index.php/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default">参见Wiki</a>。</p>
+<p>将<code>/usr/lib/udev/rules.d/61-gdm.rules</code>复制到<code>/etc/udev/rules.d/</code>，并编辑<code>61-gdm.rules</code>将下面这一行注释掉：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">DRIVER==&#34;nvidia&#34;, RUN+=&#34;/usr/lib/gdm-disable-wayland&#34;
+</span></span></code></pre></div><p>之后重启电脑再开机<code>echo $XDG_SESSION_TYPE</code>就可以检查现在使用的是<code>wayland</code>了。</p>
+<h3 id="optimus-manager">Optimus Manager</h3>
+<p>因为独显功耗太高了，使用独显直连模式在浏览网页写文档这类的轻度工作时电池待机只能2小时，用混合模式的话能待机4.5小时，外加上我也不打那些对性能要求很高的游戏，
+所以日常使用时就在Bios里设置显卡为混合模式。</p>
+<p>然后在Linux系统里安装<code>optimus-manager</code>，修改配置为：使用电池开机时关掉NVIDIA显卡，只让AMD集显工作；有外接电源时则使用“hybrid”混合模式，如果需要玩游戏的话用<a href="https://wiki.archlinux.org/index.php/PRIME#PRIME_render_offload">nvidia-prime</a>让独显运行游戏。</p>
+<p>Optimus Manager的配置方法和之前我<a href="/posts/2021/archlinux-pavilion-gaming-laptop/">之前配置旧电脑时</a>讲的基本一样，唯一区别就是这电脑是AMD，旧电脑是Intel。</p>
+<p>所以编辑配置文件修改了这些地方：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/optimus-manager/optimus-manager.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 设置开机自动切换显卡模式
+</span></span><span class="line"><span class="cl">startup_mode=auto
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 使用电池时关掉独立显卡降低功耗
+</span></span><span class="line"><span class="cl">startup_auto_battery_mode=integrated
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 使用外接电源时为混合模式
+</span></span><span class="line"><span class="cl">startup_auto_extpower_mode=hybrid
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[amd]
+</span></span><span class="line"><span class="cl"># 因为安装的xf86-video-amdgpu, 所以修改驱动改为amdgpu
+</span></span><span class="line"><span class="cl">driver=amdgpu
+</span></span></code></pre></div><p>安装好<code>nvidia-prime</code>后在混合显卡模式（hybrid）下，使用<code>prime-run</code>让独显运行游戏。</p>
+<p>如果想让Steam以独显运行游戏，修改启动参数为<code>prime-run %command%</code>。</p>
+<h2 id="windows">Windows</h2>
+<p>在Windows系统下显卡独连时字体渲染有些蹦，设置了ClearType之后还是没啥改善。</p>
+<p>主要是Visual Studio 2019的字体渲染真的瞎眼，最后装了Text Sharp插件换了Jet Brains字体才看起来正常了一些。</p>
+<p>最后在NVIDIA控制面板全局设置里把平滑处理全关了，字体的锯齿才消失。</p>
+<p>貌似是因为NVIDIA把文本编辑器当游戏渲染了。</p>
+<hr>
+<h2 id="others">Others</h2>
+<ul>
+<li>
+<p>在Linux系统里会遇到按Fn+Esc键时FnLock的灯没有亮这个问题，不过不影响FnLock的正常使用，所以就忽视了。</p>
+</li>
+<li>
+<p>如果要用诱骗线充电的话，用optimus-manager把独显关掉（用<code>nvidia-smi</code>得知独显在不使用的情况下仍有5W的功耗），然后装一个CPU功率调节的软件，例如<code>cpupower-gui</code><sup>AUR</sup>，设置为节电模式，实测用小米65W GaN充电器给电脑充电，轻度使用没有卡顿掉电的情况。</p>
+</li>
+<li>
+<p>因为之前趁着狗东打折加上买显示器送的100E卡，只花了两百多买了一个紫米20移动电源（<del>板砖</del>），25000毫安且支持100WPD充电。按照上面讲的方法在电池满电的情况下一边轻度使用电脑一边充电，充电宝能用4小时左右，然后笔记本的电池还能续航4至5小时。（实在是因为原装充电器它太沉了）</p>
+</li>
+<li>
+<p>目前来看觉得这电脑还是蛮香的，AMD的CPU性能很强而且比intel版的Y7000P便宜一千块钱。尽管现在已经有二线厂商做AMD 5800系的笔记本了但是4800H的性能依旧够用，RTX3060显卡就当它是空气吧就算发售也是残血而且抢不到。</p>
+</li>
+<li>
+<p>然后就是电脑没有雷电3接口，只有一个支持USB3.2 Gen1的type c接口且支持DP1.2视频输出，不过USB接口倒是挺多的，电脑用到现在没有遇到啥AMD CPU引起的兼容性问题。</p>
+</li>
+</ul>
+<hr>
+<p><img loading="lazy" src="images/1.jpg" alt="GNOME 40" />
+<p style="margin-bottom: -0.8em;" class="image-title">GNOME 40</p>
+</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>小米路由器3G之使用TTL串口刷机救砖</title>
+      <link>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</link>
+      <pubDate>Fri, 22 Jan 2021 22:10:01 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</guid>
+      <description>&lt;p&gt;本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。&lt;/p&gt;
+&lt;p&gt;然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。&lt;/p&gt;
+&lt;p&gt;之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。&lt;/p&gt;
+&lt;p&gt;(在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意&amp;hellip;)&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。</p>
+<p>然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。</p>
+<p>之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。</p>
+<p>(在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意&hellip;)</p>
+<meting-js server="netease" type="song" id="409931672" theme="#233333"></meting-js>
+<h2 id="砖了">砖了</h2>
+<h2 id="拆机">拆机</h2>
+<p><img loading="lazy" src="images/1.jpg" alt="&amp;ldquo;路由器主板&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Are You OK?</p>
+</p>
+<blockquote>
+<p>北方冬季气候干燥，拆机时记得放静电，找根铁丝把自己连地线上 (找个金属外壳是接地的电器和自己连上也行)。</p>
+</blockquote>
+<p>拆开路由器外壳，卸下主板，顺手拆掉了散热片（屏蔽罩）。</p>
+<p>串口在图片上主板的左侧，旁边有标记，从上到下依次是<code>TX</code>、<code>GND</code>、<code>RX</code>、<code>1</code>。需要注意的是主板上的<code>TX</code>要接到usb串口的<code>RX</code>，主板上的<code>RX</code>要接到usb串口的<code>TX</code>，<code>GND</code>连<code>GND</code>，VCC不用连。为了防止接错线，小米还十分贴心的标注了每个接口对应的连接线的颜色。</p>
+<p><img loading="lazy" src="images/2.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">I&#39;m very OK!</p>
+</p>
+<p>找出家里吃灰好几年差点被我扔掉的电烙铁，刮刀头刮了半天电烙铁才上锡，把新买的杜邦线母线焊到主板上，和ttl串口线相连。</p>
+<p>(电烙铁太破了根本焊不上锡，焊得很丑，emmm)</p>
+<p>实际上可以买个4PIN单排针焊上去，把串口接到排针上就可以，我直接把电线焊到上面以后用起来会很麻烦。</p>
+<h2 id="刷机">刷机</h2>
+<blockquote>
+<p>以下部分基于Arch Linux，其他系统的操作方式可能不一样（例如Windows可能需要超级终端访问串口，再想办法开一个tftp服务器）
+刷机的原理: 通过ttl串口线连接路由器的主板，让路由器访问电脑上的tftp服务器，刷第三方Boot Loader。</p>
+</blockquote>
+<ol>
+<li>首先电脑上装一个tftp服务器。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo pacman -S tftp-hpa
+</span></span><span class="line"><span class="cl">$ sudo systemctl start tftpd.service
+</span></span></code></pre></div><p>tftp的默认目录为<code>/srv/tftp</code>。</p>
+<p>这里使用HackPascal制作的Breed（第三方Boot Loader），<a href="https://breed.hackpascal.net/">下载链接</a>，把下载好的Breed重命名为<code>breed.bin</code>，复制到tftp的默认目录。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ cd /srv/tftp
+</span></span><span class="line"><span class="cl">$ sudo cp ~/Downloads/breed-mt7620-xiaomi-r3g.bin breed.bin
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>路由器插网线连电脑，设置静态ip地址192.168.1.3/24，将串口和电脑连接，先不给路由器通电，通常情况下usb串口的设备名称为<code>/dev/ttyUSB0</code>，如果不确定的话可以<code>dmesg</code>查一下。</p>
+</li>
+<li>
+<p>使用<code>screen</code>连接串口，波特率为115200。</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo pacman -S screen
+</span></span><span class="line"><span class="cl">$ sudo screen /dev/ttyUSB0 115200
+</span></span></code></pre></div><p>路由器通电，终端上会显示路由器启动的信息，等几秒后在选择启动项的时候按9，通过TFTP加载Boot Loader。</p>
+<blockquote>
+<p>如果串口在连接到电脑的情况下主板通电时没有响应，那就断开usb串口先给主板通电后再连接串口。
+(我语文不好别骂我)
+如果路由器没有变砖可以正常启动（蓝灯长亮），在正常开机过程中不能选择启动项。此时可以尝试在路由器开机后长按reset按钮7s以上直到主板重启，便可以选择启动项。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Please choose the operation:
+</span></span><span class="line"><span class="cl"> 1: Load system code to SDRAM via TFTP.
+</span></span><span class="line"><span class="cl"> 2: Load system code then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl"> 3: Boot system code via Flash (default).
+</span></span><span class="line"><span class="cl"> 4: Entr boot command line interface.
+</span></span><span class="line"><span class="cl"> 7: Load Boot Loader code then write to Flash via Serial.
+</span></span><span class="line"><span class="cl"> 9: Load Boot Loader code then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You choosed 9
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">9: System Load Boot Loader then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl">Warning!! Erase Boot Loader in Flash then burn new one. Are you sure?(Y/N)y
+</span></span></code></pre></div><p>之后设置路由器主机地址（192.168.1.1）和TFTP服务器地址(192.168.1.3)以及文件名称(breed.bin)。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Please Input new ones /or Ctrl-C to discard
+</span></span><span class="line"><span class="cl">          Input device IP (192.168.31.1) ==:192.168.1.1
+</span></span><span class="line"><span class="cl">          Input server IP (192.168.31.3) ==:192.168.1.3
+</span></span><span class="line"><span class="cl">          Input Uboot filename (uboot.bin) ==:breed.bin
+</span></span></code></pre></div><p>按回车后开始刷机，过几秒钟后路由器会自动重启，第三方Boot Loader刷写完成。</p>
+<p>路由器断电，长按reset键的同时通电开机，灯闪烁后打开浏览器输入网址<code>http://192.168.1.1</code>便可访问breed后台。</p>
+<h2 id="done">Done</h2>
+<p>第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照<a href="/posts/2019/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95">小米路由器3G折腾之刷OpenWrt记录</a>这篇文章刷OpenWrt。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">BusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash)
+</span></span><span class="line"><span class="cl">Enter &#39;help&#39; for a list of built-in commands.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> -----------------------------------------------------
+</span></span><span class="line"><span class="cl">       Welcome to XiaoQiang!
+</span></span><span class="line"><span class="cl"> -----------------------------------------------------
+</span></span><span class="line"><span class="cl">  $$$$$$\  $$$$$$$\  $$$$$$$$\      $$\      $$\        $$$$$$\  $$\   $$\
+</span></span><span class="line"><span class="cl"> $$  __$$\ $$  __$$\ $$  _____|     $$ |     $$ |      $$  __$$\ $$ | $$  |
+</span></span><span class="line"><span class="cl"> $$ /  $$ |$$ |  $$ |$$ |           $$ |     $$ |      $$ /  $$ |$$ |$$  /
+</span></span><span class="line"><span class="cl"> $$$$$$$$ |$$$$$$$  |$$$$$\         $$ |     $$ |      $$ |  $$ |$$$$$  /
+</span></span><span class="line"><span class="cl"> $$  __$$ |$$  __$$&lt; $$  __|        $$ |     $$ |      $$ |  $$ |$$  $$&lt;
+</span></span><span class="line"><span class="cl"> $$ |  $$ |$$ |  $$ |$$ |           $$ |     $$ |      $$ |  $$ |$$ |\$$\
+</span></span><span class="line"><span class="cl"> $$ |  $$ |$$ |  $$ |$$$$$$$$\       $$$$$$$$$  |       $$$$$$  |$$ | \$$\
+</span></span><span class="line"><span class="cl"> \__|  \__|\__|  \__|\________|      \_________/        \______/ \__|  \__|
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@XiaoQiang:~#
+</span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>解决笔记本外接HIDPI显示器的缩放问题</title>
+      <link>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</link>
+      <pubDate>Sat, 09 Jan 2021 22:12:54 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</guid>
+      <description>&lt;p&gt;前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经&lt;a href=&#34;https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/&#34;&gt;配置好了optimus-manager&lt;/a&gt;，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。&lt;/p&gt;
+&lt;p&gt;然后一看4K屏上的字小得瞎眼。&lt;/p&gt;
+&lt;p&gt;如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经<a href="/posts/2021/archlinux-pavilion-gaming-laptop/">配置好了optimus-manager</a>，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。</p>
+<p>然后一看4K屏上的字小得瞎眼。</p>
+<p>如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。</p>
+<h2 id="解决方法">解决方法</h2>
+<p>首先按照<a href="https://wiki.archlinux.org/index.php/HiDPI">Wiki</a>设置GNOME的HIDPI:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ gsettings set org.gnome.settings-daemon.plugins.xsettings overrides &#34;[{&#39;Gdk/WindowScalingFactor&#39;, &lt;2&gt;}]&#34;
+</span></span><span class="line"><span class="cl">$ gsettings set org.gnome.desktop.interface scaling-factor 2
+</span></span></code></pre></div><p>在显示设置里将缩放调到200%后，界面被放大了2倍，在4K屏上的字倒是不瞎眼了。</p>
+<p>但是因为笔记本是15寸1080P，所以笔记本上显示的字大得离谱。</p>
+<p>解决方法是使用xrandr调整笔记本电脑的屏幕缩放，笔记本的分辨率为1920x1080，使用xrandr将画面的分辨率放大2倍，也就是调整为3840x2160，然后显示在分辨率为1920x1080的显示器上。</p>
+<p>首先使用<code>xrandr</code>查看每个显示器所对应的设备名称和分辨率。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ xrandr | grep &#34;$extern connected&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  HDMI-0 connected primary 3840x2160+0+0 (normal left inverted right x axis y axis) 597mm x 336mm
+</span></span><span class="line"><span class="cl">  eDP-1-1 connected 1920x1080+0+2160 (normal left inverted right x axis y axis) 344mm x 193mm
+</span></span></code></pre></div><p>这里HDMI-0是外接的4K显示器，分辨率为3840x2160，位置为(0, 0)。</p>
+<p>eDP-1-1是笔记本的显示器，分辨率1920x1080，位置为(0, 2160)，在4K显示器的左下方。</p>
+<p>参见<a href="https://wiki.archlinux.org/index.php/HiDPI#Multiple_displays">Wiki设置双显示器部分</a>，用xrandr将笔记本的显示器缩放2倍，分辨率变为 [1920 * 2]x[1080 * 2]=3840x2160，位置还是在4K显示器的正下方。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ xrandr --output eDP-1-1 --scale 2.0x2.0 --panning 3840x2160+0+2160 --output HDMI-0 --auto
+</span></span></code></pre></div><p>因为不需要修改4K显示器的分辨率，所以HDMI-0设置为auto。</p>
+<p>这样笔记本上的画面也显示正常了。</p>
+<p>但是用过一阵子会发现笔记本显示器上的字比4K显示器上的字小很多，看起来不方便，所以把缩放倍数改为1.6（我是从1.5-2.0之间一点点试的，才找到最适合自己的缩放倍数），这样解决了字体大小的问题，不过笔记本画面还是会有模糊（能接受）。</p>
+<blockquote>
+<p>[1920 * 1.6]x[1080 * 1.6]=3072x1728</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ xrandr --output eDP-1-1 --scale 1.6x1.6 --panning 3072x1728+0+2160 --output HDMI-0 --auto
+</span></span></code></pre></div><p>用到现在GNOME的缩放还算是完美，除了玩Minecraft用的HMCL启动器（Java程序）没有被放大之外~~（貌似缺配置，要是配置好了我再补充）~~，Steam界面缩放正常，饥荒、Dota2也都没问题。</p>
+<blockquote>
+<p>Java8不支持Hidpi缩放，如果想让HMCL支持缩放需要需要安装Java9以上的版本，所以还是算了，又不是不能用。
+网易云音乐缩放方法参考<a href="https://ntzyz.io/post/fix-cloud-music-linux-client-hidpi-issue">这篇博客</a>。
+qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
+</blockquote>
+<h2 id="others">Others</h2>
+<ul>
+<li>
+<p>仅限GNOME，因为我只用GNOME所以不知道其他DE开HIDPI的效果是什么样。</p>
+</li>
+<li>
+<p>听说Wayland支持不同显示器设置不同的缩放倍数，但是我笔记本的HDMI是独显输出，自带屏幕为集显输出，想启用独显输出画面除了用大黄蜂之外只能Nvidia Optimus，然而Optimus不支持Wayland（F**K NVIDIA），
+于是我现在都不知道用Wayland上双显示器的效果是什么样子，只好改用xorg和optimus-manager切换显卡，再用xrandr调显示器的缩放倍数。</p>
+<p>或者买一根type-c转DP的线连显示器，我电脑的type-c支持DP1.2，可以输出4K60fps，而且走集显输出。</p>
+</li>
+<li>
+<p>xrandr的指令是我自己试了很多遍试出来的，在我电脑上能用，期间遇到一堆问题(BadMatch)，没想好什么解决方法，所以在别的电脑上可能需要一些修改。</p>
+</li>
+<li>
+<p>如果你正考虑为你的笔记本购买一台新显示器而且你是Linux用户，你的笔记本又是双显卡，不知道HDMI是独显输出还是集显输出的话，建议你买一台和笔记本电脑的分辨率相同的显示器(或者2K)，这样能省去很多麻烦。</p>
+</li>
+<li>
+<p>用了几个月后经常遇到显示器通过HDMI连接到电脑但是没有视频输出的情况，所以现在改用的是type-c转DP的连接线，走集成显卡输出，就没有遇到过这个问题。</p>
+</li>
+</ul>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>惠普光影精灵4在Arch Linux下使用Optimus Manager配置双显卡</title>
+      <link>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</link>
+      <pubDate>Sun, 19 Jul 2020 15:29:57 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</guid>
+      <description>&lt;p&gt;自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, &lt;del&gt;尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下&lt;/del&gt;（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, <del>尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下</del>（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。</p>
+<hr>
+<h2 id="先描述一下踩坑经过">先描述一下踩坑经过</h2>
+<blockquote>
+<p>本段略微有些废话, 可以跳过</p>
+</blockquote>
+<p>记得在刚买来这台笔记本（2018年夏）, Linux内核还没升到5.0的时候, 使用live CD装系统时会遇到<code>lspci</code>卡死, 关机的时候会卡死的问题, 查系统日记都是一堆ACPI的报错。当时网上查了一下大概是内核和驱动一些bug, 没找到解决办法, Google到论坛的帖子说是在关机/重启发生卡死时只能直接长按电源关机就（找不到搜的回答了）</p>
+<p>装完系统后安装显卡驱动时想通过Bumblebee + bbswitch切换双显卡, 于是装了Gnome然后照着wiki配置完Bumblebee和bbswitch后重启电脑直接死机。</p>
+<p>经过多次重装系统的折磨后, 发现只装Bumblebee不装bbswitch不<code>systemctl enable bumblebeed.service</code>时, 能正常开机, 然后之前遇到的两个问题也莫名其妙就好了, 即系统重启关机不会卡死, <code>lspci</code>也正常了（迷）</p>
+<p>之后, 在不装bbswitch的情况下, 启动<code>bumblebeed.service</code>再用<code>optirun</code>和<code>primusrun</code>这种方式用独显运行程序都没有问题。</p>
+<p>当时因为电脑不装Bumblebee的话就没法正常关机, 于是就一直用着Bumblebee切换双显卡, 玩游戏性能比Windows下差一点, 别的都没啥问题。</p>
+<p>今年年初买了一块拓展屏想搞双显示器, 本来显示器应该插上HDMI直接就能用的, 但是因为这电脑的HDMI走的独显输出, Bumblebee不能直接用, wiki上教的创建个intel的虚拟输出啥的方法有试过但是没成功, 于是又Google了一下后卸了Bumblebee改用<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Use_NVIDIA_graphics_only">NVIDIA Optimus 只使用独显</a>的方式, 这样双显示器倒是能用了, 但是如果笔记本只用电池没连着拓展屏的时候还跑着独显这也太费电了。</p>
+<p>所以最后找到了能切换显卡的<a href="https://github.com/Askannz/optimus-manager">Optimus Manager</a>。</p>
+<blockquote>
+<p>查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。</p>
+</blockquote>
+<h2 id="安装过程">安装过程</h2>
+<p>照着<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus">Wiki</a>和Optimus Manager的<a href="https://github.com/Askannz/optimus-manager#optimus-manager">README</a>。首先安装好显卡驱动相关的软件, 如果有Bumblebee的话使用<code>systemctl disable bumblebeed</code>停用。</p>
+<p>首先清除（记得备份）<code>/etc/X11/xorg.conf.d/</code>下的配置文件, 并删掉（记得备份）<code>/etc/X11/xorg.conf</code>（如果有的话）, 因为Optimus Manager会自动生成配置文件存放到<code>/etc/X11/xorg.conf.d/</code>里面, 所以建议安装前把显示配置相关的文件都清除掉。</p>
+<p>使用Arch Linux CN源或者通过AUR Helper安装<code>optimus-manager</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># Arch Linux CN
+</span></span><span class="line"><span class="cl">$ sudo pacman -S optimus-manager
+</span></span><span class="line"><span class="cl"># AUR
+</span></span><span class="line"><span class="cl">$ yay -S optimus-manager
+</span></span></code></pre></div><p>因为我用的Gnome, 参照<a href="https://github.com/Askannz/optimus-manager#important--gnome-and-gdm-users">README中说的</a>卸载掉<code>gdm</code>并安装<code>gdm-prime</code><sup>AUR</sup>。（国内下载源代码的速度极慢建议挂梯子, 或者挂梯子克隆<a href="https://gitlab.gnome.org/GNOME/gdm">GDM的代码</a>到<code>~/.cache/yay/gdm-prime/gdm</code>下。）</p>
+<p>修改<code>/etc/gdm/custom.conf</code>, 移除<code>WaylandEnable=false</code>一行前面的<code>#</code>禁用Wayland而使用X。</p>
+<h3 id="修改配置文件">修改配置文件</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
+</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
+<p>之后根据需求来修改开机自动选择显卡：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">startup_mode=auto
+</span></span><span class="line"><span class="cl">startup_auto_battery_mode=intel
+</span></span><span class="line"><span class="cl">startup_auto_extpower_mode=nvidia
+</span></span></code></pre></div><p>这里我设置的是用电池时使用集成显卡, 用电源时使用独显。</p>
+<p>最后贴一下全部的配置文件, 除了上述的几处修改以外其他均为默认值, 仅供参考。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">optimus</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">parameter</span> <span class="nx">defines</span> <span class="nx">the</span> <span class="nx">method</span> <span class="nx">used</span> <span class="nx">to</span> <span class="nx">power</span> <span class="k">switch</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span><span class="p">.</span> <span class="nx">See</span> <span class="nx">the</span> <span class="nx">documentation</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="k">for</span> <span class="nx">a</span> <span class="nx">complete</span> <span class="nx">description</span> <span class="nx">of</span> <span class="nx">what</span> <span class="nx">each</span> <span class="nx">value</span> <span class="nx">does</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">nouveau</span> <span class="p">:</span> <span class="nx">load</span> <span class="nx">the</span> <span class="nx">nouveau</span> <span class="nx">module</span> <span class="nx">on</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">bbswitch</span> <span class="p">:</span> <span class="nx">power</span> <span class="nx">off</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">using</span> <span class="nx">the</span> <span class="nx">bbswitch</span> <span class="nf">module</span> <span class="p">(</span><span class="nx">requires</span> <span class="nx">the</span> <span class="nx">bbswitch</span> <span class="nx">dependency</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">acpi_call</span> <span class="p">:</span> <span class="nx">try</span> <span class="nx">various</span> <span class="nx">ACPI</span> <span class="nx">method</span> <span class="nx">calls</span> <span class="nx">to</span> <span class="nx">power</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">on</span> <span class="nx">and</span> <span class="nf">off</span> <span class="p">(</span><span class="nx">requires</span> <span class="nx">the</span> <span class="nx">acpi_call</span> <span class="nx">dependency</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">custom</span><span class="p">:</span> <span class="nx">use</span> <span class="nx">custom</span> <span class="nx">scripts</span> <span class="nx">at</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span><span class="o">/</span><span class="nx">nvidia</span><span class="o">-</span><span class="nx">enable</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">and</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span><span class="o">/</span><span class="nx">nvidia</span><span class="o">-</span><span class="nx">disable</span><span class="p">.</span><span class="nx">sh</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">none</span> <span class="p">:</span> <span class="nx">do</span> <span class="nx">not</span> <span class="nx">use</span> <span class="nx">an</span> <span class="nx">external</span> <span class="nx">module</span> <span class="k">for</span> <span class="nx">power</span> <span class="nx">management</span><span class="p">.</span> <span class="nx">For</span> <span class="nx">some</span> <span class="nx">laptop</span> <span class="nx">models</span> <span class="nx">it</span><span class="err">&#39;</span><span class="nx">s</span> <span class="nx">preferable</span> <span class="nx">to</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>          <span class="nx">use</span> <span class="nx">this</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">combination</span> <span class="nx">with</span> <span class="nf">pci_power_control</span> <span class="p">(</span><span class="nx">see</span> <span class="nx">below</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">switching</span><span class="p">=</span><span class="nx">none</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Enable</span> <span class="nx">PCI</span> <span class="nx">power</span> <span class="nx">management</span> <span class="nx">in</span> <span class="nx">Intel</span> <span class="nx">mode</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">option</span> <span class="nx">is</span> <span class="nx">incompatible</span> <span class="nx">with</span> <span class="nx">acpi_call</span> <span class="nx">and</span> <span class="nx">bbswitch</span><span class="p">,</span> <span class="nx">so</span> <span class="nx">it</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">ignored</span> <span class="nx">in</span> <span class="nx">those</span> <span class="nx">cases</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_power_control</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Remove</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span> <span class="nx">from</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">bus</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">May</span> <span class="nx">prevent</span> <span class="nx">crashes</span> <span class="nx">caused</span> <span class="nx">by</span> <span class="nx">power</span> <span class="nx">switching</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Ignored</span> <span class="k">if</span> <span class="nx">switching</span><span class="p">=</span><span class="nx">nouveau</span> <span class="nx">or</span> <span class="nx">switching</span><span class="p">=</span><span class="nx">bbswitch</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_remove</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Reset</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span> <span class="nx">at</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">level</span> <span class="nx">before</span> <span class="nx">reloading</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">module</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Ensures</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">is</span> <span class="nx">in</span> <span class="nx">a</span> <span class="nx">fresh</span> <span class="nx">state</span> <span class="nx">before</span> <span class="nx">reloading</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">module</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">May</span> <span class="nx">fix</span> <span class="nx">some</span> <span class="nx">switching</span> <span class="nx">issues</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">no</span> <span class="p">:</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">perform</span> <span class="nx">any</span> <span class="nx">reset</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">function_level</span> <span class="p">:</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="nx">light</span> <span class="s">&#34;function-level&#34;</span> <span class="nx">reset</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">hot_reset</span> <span class="p">:</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="s">&#34;hot reset&#34;</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">bridge</span><span class="p">.</span> <span class="nx">ATTENTION</span> <span class="p">:</span> <span class="nx">this</span> <span class="nx">method</span> <span class="nx">messes</span> <span class="nx">with</span> <span class="nx">the</span> <span class="nx">hardware</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>         <span class="nx">directly</span><span class="p">,</span> <span class="nx">please</span> <span class="nx">read</span> <span class="nx">the</span> <span class="nx">online</span> <span class="nx">documentation</span> <span class="nx">of</span> <span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span> <span class="nx">before</span> <span class="nx">using</span> <span class="nx">it</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>         <span class="nx">Also</span><span class="p">,</span> <span class="nx">it</span> <span class="nx">will</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="nx">PCI</span> <span class="nx">remove</span> <span class="nx">even</span> <span class="k">if</span> <span class="nx">pci_remove</span><span class="p">=</span><span class="nx">no</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_reset</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Automatically</span> <span class="nx">log</span> <span class="nx">out</span> <span class="nx">the</span> <span class="nx">current</span> <span class="nx">desktop</span> <span class="nx">session</span> <span class="nx">when</span> <span class="nx">switching</span> <span class="nx">GPUs</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">feature</span> <span class="nx">is</span> <span class="nx">currently</span> <span class="nx">supported</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">DE</span><span class="o">/</span><span class="nx">WM</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">KDE</span> <span class="nx">Plasma</span><span class="p">,</span> <span class="nx">GNOME</span><span class="p">,</span> <span class="nx">XFCE</span><span class="p">,</span> <span class="nx">LXDE</span><span class="p">,</span> <span class="nx">Deepin</span><span class="p">,</span> <span class="nx">i3</span><span class="p">,</span> <span class="nx">Openbox</span><span class="p">,</span> <span class="nx">AwesomeWM</span><span class="p">,</span> <span class="nx">bspwm</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">If</span> <span class="nx">this</span> <span class="nx">option</span> <span class="nx">is</span> <span class="nx">disabled</span> <span class="nx">or</span> <span class="nx">you</span> <span class="nx">use</span> <span class="nx">a</span> <span class="nx">different</span> <span class="nx">desktop</span> <span class="nx">environment</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">switching</span> <span class="nx">only</span> <span class="nx">becomes</span> <span class="nx">effective</span> <span class="nx">at</span> <span class="nx">the</span> <span class="nx">next</span> <span class="nx">graphical</span> <span class="nx">session</span> <span class="nx">login</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">auto_logout</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">at</span> <span class="nx">computer</span> <span class="nx">startup</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span><span class="p">,</span> <span class="nx">auto</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="s">&#34;auto&#34;</span> <span class="nx">is</span> <span class="nx">a</span> <span class="nx">special</span> <span class="nx">mode</span> <span class="nx">that</span> <span class="nx">auto</span><span class="o">-</span><span class="nx">detects</span> <span class="k">if</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">battery</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">and</span> <span class="nx">selects</span> <span class="nx">a</span> <span class="nx">proper</span> <span class="nx">GPU</span> <span class="nx">mode</span><span class="p">.</span> <span class="nx">See</span> <span class="nx">the</span> <span class="nx">other</span> <span class="nx">options</span> <span class="nx">below</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="k">select</span> <span class="nx">when</span> <span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span> <span class="nx">and</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">battery</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_auto_battery_mode</span><span class="p">=</span><span class="nx">intel</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="k">select</span> <span class="nx">when</span> <span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span> <span class="nx">and</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">external</span> <span class="nx">power</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_auto_extpower_mode</span><span class="p">=</span><span class="nx">nvidia</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">intel</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Driver</span> <span class="nx">to</span> <span class="nx">use</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">Intel</span> <span class="nx">GPU</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">modesetting</span><span class="p">,</span> <span class="nx">intel</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">To</span> <span class="nx">use</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">,</span> <span class="nx">you</span> <span class="nx">need</span> <span class="nx">to</span> <span class="nx">install</span> <span class="nx">the</span> <span class="kn">package</span> <span class="s">&#34;xf86-video-intel&#34;</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">driver</span><span class="p">=</span><span class="nx">modesetting</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Acceleration</span> <span class="nf">method</span> <span class="p">(</span><span class="nx">corresponds</span> <span class="nx">to</span> <span class="nx">AccelMethod</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Only</span> <span class="nx">applies</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">sna</span><span class="p">,</span> <span class="nx">xna</span><span class="p">,</span> <span class="nx">uxa</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">no</span> <span class="nx">option</span> <span class="nx">specified</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">accel</span><span class="p">=</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Enable</span> <span class="nx">TearFree</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Only</span> <span class="nx">applies</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">yes</span><span class="p">,</span> <span class="nx">no</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">no</span> <span class="nx">option</span> <span class="nx">specified</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">tearfree</span><span class="p">=</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">DRI</span> <span class="nx">version</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl"><span class="nx">DRI</span><span class="p">=</span><span class="mi">3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">modesetting</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">nouveau</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Does</span> <span class="nx">not</span> <span class="nx">affect</span> <span class="nx">modesetting</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">Intel</span> <span class="nx">GPU</span> <span class="nx">driver</span> <span class="p">!</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">option</span> <span class="nx">only</span> <span class="nx">matters</span> <span class="k">if</span> <span class="nx">you</span> <span class="nx">use</span> <span class="nx">nouveau</span> <span class="nx">as</span> <span class="nx">the</span> <span class="nx">switching</span> <span class="nx">backend</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">modeset</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">nvidia</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">modesetting</span><span class="p">.</span> <span class="nx">Required</span> <span class="k">for</span> <span class="nx">PRIME</span> <span class="nf">Synchronization</span> <span class="p">(</span><span class="nx">which</span> <span class="nx">prevents</span> <span class="nx">tearing</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">modeset</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">the</span> <span class="nx">NVreg_UsePageAttributeTable</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Recommended</span><span class="p">,</span> <span class="nx">can</span> <span class="nx">cause</span> <span class="nx">poor</span> <span class="nx">CPU</span> <span class="nx">performance</span> <span class="nx">otherwise</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">PAT</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">DPI</span> <span class="nx">value</span><span class="p">.</span> <span class="nx">This</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">set</span> <span class="nx">using</span> <span class="nx">the</span> <span class="nx">Xsetup</span> <span class="nx">script</span> <span class="nx">passed</span> <span class="nx">to</span> <span class="nx">your</span> <span class="nx">login</span> <span class="nx">manager</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">It</span> <span class="nx">will</span> <span class="nx">run</span> <span class="nx">the</span> <span class="nx">command</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">xrandr</span> <span class="o">--</span><span class="nx">dpi</span> <span class="p">&lt;</span><span class="nx">DPI</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">the</span> <span class="nx">above</span> <span class="nx">command</span> <span class="nx">will</span> <span class="nx">not</span> <span class="nx">be</span> <span class="nx">run</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">DPI</span><span class="p">=</span><span class="mi">96</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">If</span> <span class="nx">you</span><span class="err">&#39;</span><span class="nx">re</span> <span class="nx">running</span> <span class="nx">an</span> <span class="nx">updated</span> <span class="nx">version</span> <span class="nx">of</span> <span class="nx">xorg</span><span class="o">-</span><span class="nf">server</span> <span class="p">(</span><span class="nx">let</span><span class="err">&#39;</span><span class="nx">s</span> <span class="nx">say</span> <span class="nx">to</span> <span class="nx">get</span> <span class="nx">PRIME</span> <span class="nx">Render</span> <span class="nx">offload</span> <span class="nx">enabled</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">driver</span> <span class="nx">may</span> <span class="nx">not</span> <span class="nx">load</span> <span class="nx">because</span> <span class="nx">of</span> <span class="nx">an</span> <span class="nx">ABI</span> <span class="nx">version</span> <span class="nx">mismatch</span><span class="p">.</span> <span class="nx">Setting</span> <span class="nx">this</span> <span class="nx">flag</span> <span class="nx">to</span> <span class="s">&#34;yes&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">will</span> <span class="nx">allow</span> <span class="nx">the</span> <span class="nx">loading</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ignore_abi</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Set</span> <span class="nx">to</span> <span class="nx">yes</span> <span class="k">if</span> <span class="nx">you</span> <span class="nx">want</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span> <span class="nx">with</span> <span class="nx">external</span> <span class="nx">Nvidia</span> <span class="nf">GPUs</span> <span class="p">(</span><span class="nx">experimental</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">allow_external_gpus</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Comma</span><span class="o">-</span><span class="nx">separated</span> <span class="nx">list</span> <span class="nx">of</span> <span class="nx">Nvidia</span><span class="o">-</span><span class="nx">specific</span> <span class="nx">options</span> <span class="nx">to</span> <span class="nx">apply</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Available</span> <span class="nx">options</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">overclocking</span> <span class="p">:</span> <span class="nx">enable</span> <span class="nx">CoolBits</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">,</span> <span class="nx">which</span> <span class="nx">unlocks</span> <span class="nx">clocking</span> <span class="nx">options</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>   <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">control</span> <span class="nx">panel</span><span class="p">.</span> <span class="nx">Note</span><span class="p">:</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">work</span> <span class="nx">in</span> <span class="nx">hybrid</span> <span class="nx">mode</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">triple_buffer</span> <span class="p">:</span> <span class="nx">enable</span> <span class="nx">triple</span> <span class="nx">buffering</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">options</span><span class="p">=</span><span class="nx">overclocking</span>
+</span></span></code></pre></div><h2 id="食用方法">食用方法</h2>
+<p><code>optimus-manager --switch nvidia</code>切换到独显（nvidia）</p>
+<p><code>optimus-manager --switch intel</code>切换到集显（intel）</p>
+<p>安装<code>mesa-demos</code>后, 使用<code>glxinfo | grep &quot;OpenGL renderer&quot;</code>查看当前正使用的显卡</p>
+<p>其他用法参见<a href="https://github.com/Askannz/optimus-manager#usage">Usage</a>。</p>
+<p>注意：</p>
+<ul>
+<li>
+<p>切换显卡的过程中会自动注销登录, 所以记得<strong>保存并关掉电脑正在运行的程序</strong>。</p>
+</li>
+<li>
+<p>你可以在配置文件中修改<code>auto_logout=false</code>禁止自动注销以手动注销切换显卡。</p>
+</li>
+</ul>
+<h2 id="others">Others</h2>
+<ul>
+<li>
+<p>之所以不推荐使用<code>bbswitch</code>是因为容易遇到<strong>ACPI锁死</strong>的问题, <a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_(lspci_hangs)">参考Wiki</a>, 需要添加<a href="https://wiki.archlinux.org/index.php/Kernel_parameters">内核参数</a><code>acpi_osi=! acpi_osi=&quot;Windows 2009&quot;</code>或<code>acpi_osi=&quot;!Windows 2015&quot;</code>启动, 如果你遇到了锁死可以通过开机时在<a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader">启动加载器界面</a>编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。</p>
+</li>
+<li>
+<p>如果用不了<code>lspci</code>, 电脑没法正常关机的话, 是nouveau的问题, 可添加内核参数<code>modprobe.blacklist=nouveau</code>禁用。</p>
+</li>
+<li>
+<p>因为前几天改配置文件时又踩了一遍锁死的坑, 于是用最新的(2020.07.01)live CD救砖时, 惊喜的发现在live环境下<code>lspci</code>和关机都不会卡死了, 貌似是新版内核修复了这个bug</p>
+</li>
+<li>
+<p>在切换显卡自动注销后, gdm界面有时不会自动加载出来而是一直黑屏, 这时需要手动切换到tty2再切回tty1才能加载出来。</p>
+</li>
+<li>
+<p>如果显示器支持<a href="https://en.wikipedia.org/wiki/Display_Data_Channel#DDC.2FCI">DDC/DI</a>，可以参考<a href="https://wiki.archlinux.org/index.php/Backlight#External_monitors">Wiki</a>使用命令调节显示器亮度。</p>
+</li>
+<li>
+<p>(本条与配置显卡无关) 因为电脑用的intel网卡, 如果遇到蓝牙耳机无法连接的情况, 安装<code>pulseaudio</code>和<code>pulseaudio-modues-bt</code>等耳机需要的蓝牙组件, 照着Wiki上的<a href="https://wiki.archlinux.org/index.php/Wireless_network_configuration#Bluetooth_coexistence">禁用Bluetooth coexistence</a>解决此问题。</p>
+</li>
+</ul>
+<hr>
+<p><img loading="lazy" src="images/1.png" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">neofetch</p>
+</p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

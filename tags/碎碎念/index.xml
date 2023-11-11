@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>碎碎念 on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</link>
+    <description>Recent content in 碎碎念 on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sun, 08 Jan 2023 11:05:02 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>入手一台家用级 APC UPS</title>
+      <link>https://blog.starry-s.moe/posts/2023/apc-ups/</link>
+      <pubDate>Sun, 08 Jan 2023 11:05:02 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/apc-ups/</guid>
+      <description>&lt;p&gt;为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。</p>
+<blockquote>
+<p>参烤链接: <a href="https://wiki.archlinux.org/title/APC_UPS">APC UPS - ArchWiki</a></p>
+</blockquote>
+<hr>
+<p>UPS 到手后花了半个多小时读使用说明书，然后第一件事是把 UPS 的断电报警蜂鸣器关掉，省得我不在公寓的时候停电了 UPS 叫个没完吵到邻居。</p>
+<p>之后在装 UPS 之前先把我电脑支架背面一团电线重新整理了一遍，现在是台式机、显示器、NAS、光猫、路由器、无线 AP 都放在一起了，他们的电源线、网线、数据线、显示器线都团在了一起，整理起来炒鸡麻烦。</p>
+<p>先把漏油器、光猫和 NAS 的电源都插 UPS 上，然后接好 UPS 的 USB 数据线到 NAS 上。</p>
+<h2 id="安装-apcupsd">安装 apcupsd</h2>
+<p>安装 <code>apcupsd</code>，然后 <code>systemctl enable --now apcupsd.service</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo apcaccess status
+</span></span><span class="line"><span class="cl"><span class="go">APC      : 001,036,0869
+</span></span></span><span class="line"><span class="cl"><span class="go">DATE     : 2023-01-08 11:09:23 +0800
+</span></span></span><span class="line"><span class="cl"><span class="go">HOSTNAME : ApertureNAS
+</span></span></span><span class="line"><span class="cl"><span class="go">VERSION  : 3.14.14 (31 May 2016) unknown
+</span></span></span><span class="line"><span class="cl"><span class="go">UPSNAME  : ApertureNAS
+</span></span></span><span class="line"><span class="cl"><span class="go">CABLE    : USB Cable
+</span></span></span><span class="line"><span class="cl"><span class="go">DRIVER   : USB UPS Driver
+</span></span></span><span class="line"><span class="cl"><span class="go">UPSMODE  : Stand Alone
+</span></span></span><span class="line"><span class="cl"><span class="go">STARTTIME: 2023-01-02 23:57:44 +0800
+</span></span></span><span class="line"><span class="cl"><span class="go">MODEL    : Back-UPS BK650M2-CH
+</span></span></span><span class="line"><span class="cl"><span class="go">STATUS   : ONLINE
+</span></span></span><span class="line"><span class="cl"><span class="go">......
+</span></span></span></code></pre></div><p>先把 NAS 里所有的应用都停掉，之后编辑 <code>/etc/apcupsd/apcupsd.conf</code>，把 <code>TIMEOUT</code> 改为 <code>1</code>，然后给 UPS 断电，这时 NAS 会自动关机。</p>
+<blockquote>
+<p>UPS 重新连接电源后，NAS 可能会自动开机，我的 NAS 是这样，但不确定所有 NAS 都这样。</p>
+</blockquote>
+<h2 id="配置自动休眠">配置自动休眠</h2>
+<p>按照 Wiki 配置停电后自动休眠 (Hibernate / 休眠到硬盘)。</p>
+<blockquote>
+<p>在此之前，需要创建 swap 分区 (或 swap file)，然后配置休眠需要的内核参数并重构 <code>initramfs</code>。</p>
+</blockquote>
+<p>以 root 用户创建 <code>/usr/local/bin/hibernate</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1"># Hibernate the system - designed to be called via symlink from /etc/apcupsd</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># directory in case of apcupsd initiating a shutdown/reboot.  Can also be used</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># interactively or from any script to cause a hibernate.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以在这里加一些在休眠之前执行的操作，例如让 bot 发个邮件提醒停电了之类的</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Wall message</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 广播消息</span>
+</span></span><span class="line"><span class="cl">wall -n System will be hibernate soon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sleep <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Do the hibernate</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行休眠</span>
+</span></span><span class="line"><span class="cl">/usr/bin/systemctl hibernate
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># At this point system should be hibernated - when it comes back, we resume this script here</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 现在，系统应当已经休眠了，当系统恢复运行的时候，脚本会继续从这里执行</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以在这里加一些在系统恢复之后的操作，例如让 bot 发个邮件提醒电力恢复了啥的</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># On resume, tell controlling script (/etc/apcupsd/apccontrol) NOT to continue with default action (i.e. shutdown).</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">99</span>
+</span></span></code></pre></div><p>别忘了赋予可执行权限。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> chmod +x /usr/local/bin/hibernate
+</span></span></code></pre></div><p>创建软链接把脚本链接到 <code>/etc/apcupsd</code> 目录下面。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> ln -s /usr/local/bin/hibernate /etc/apcupsd/doshutdown
+</span></span></code></pre></div><p>此时给 UPS 断电后，NAS 会自动休眠，等一两分钟 NAS 会完成休眠，但 UPS 仍处于运行状态没有关机，长时间停电的话，UPS 的电量会耗尽。</p>
+<p>UPS 接回电源后，NAS 会从休眠中恢复。</p>
+<h3 id="配置休眠后关闭-ups-电源">配置休眠后关闭 UPS 电源</h3>
+<p>创建 <code>/usr/lib/systemd/system-sleep/ups-kill</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nv">$2</span> in
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># In the event the computer is hibernating.</span>
+</span></span><span class="line"><span class="cl">  hibernate<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nv">$1</span> in
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="c1"># Going into a hibernate state.</span>
+</span></span><span class="line"><span class="cl">       pre<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># See if this is a powerfail situation.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/apcupsd/powerfail <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;ACPUPSD will now power off the UPS&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           /etc/apcupsd/apccontrol killpower
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;Please ensure that the UPS has powered off before rebooting&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;Otherwise, the UPS may cut the power during the reboot!!!&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">       <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="c1"># Coming out of a hibernate state.</span>
+</span></span><span class="line"><span class="cl">       post<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># If there are remnants from a powerfail situation, remove them.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/apcupsd/powerfail <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           rm /etc/apcupsd/powerfail
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># This may also exist, need to remove it.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/nologin <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           rm /etc/nologin
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	 <span class="c1"># Restart the daemon; otherwise it may be unresponsive in a</span>
+</span></span><span class="line"><span class="cl">         <span class="c1"># second powerfailure situation.</span>
+</span></span><span class="line"><span class="cl">	 systemctl restart apcupsd
+</span></span><span class="line"><span class="cl">       <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">esac</span>
+</span></span><span class="line"><span class="cl">  <span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="k">esac</span>
+</span></span></code></pre></div><p>赋予可执行权限：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> chmod +x /usr/lib/systemd/system-sleep/ups-kill
+</span></span></code></pre></div><p>接下来给 UPS 断电，NAS 会自动休眠，等 NAS 休眠后再过几分钟 UPS 也会关机。</p>
+<p>UPS 关机后，给 UPS 接上电源，这时 UPS 会自动开机，然后 NAS 也会从休眠中恢复。</p>
+<blockquote>
+<p>不要在 UPS 还没关机的时候给 UPS 重新接回电源，会导致 UPS 关机后 NAS 刚从休眠中恢复就被强制断电。</p>
+</blockquote>
+<h2 id="其他">其他</h2>
+<p>折腾 UPS 的时候顺手给 NAS 换了个散热器升级了一下内存。AMD 原装散热器有亿点点吵所以换成了咱之前买的 ITX 散热器。</p>
+<figure>
+    <img loading="lazy" src="images/1.jpg"/> 
+</figure>
+
+<p>用咱写的 telebot 查看一下空载时的 CPU 温度才不到 30 度。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">CPU: +28.2°C
+</span></span><span class="line"><span class="cl">Uptime: 0.15 Hour
+</span></span><span class="line"><span class="cl">TotalRAM: 46.45G
+</span></span><span class="line"><span class="cl">FreeRAM: 42.66G
+</span></span><span class="line"><span class="cl">AvailableRAM: 43.91G
+</span></span><span class="line"><span class="cl">TotalSwap: 46.00G
+</span></span><span class="line"><span class="cl">FreeSwap: 46.00G
+</span></span></code></pre></div><p>运行一个虚拟机一个 MineCraft 服务器，CPU 温度不到 40，所以很安静。</p>
+<p>但是 UPS 它有噪音，晚上睡觉的时候能听见 UPS 它嗡嗡响，比 AMD 散热器的风扇动静还大，这个实在是无解，算了就先这样吧。</p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

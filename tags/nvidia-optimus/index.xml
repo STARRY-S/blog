@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>NVIDIA Optimus on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/nvidia-optimus/</link>
+    <description>Recent content in NVIDIA Optimus on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sun, 19 Jul 2020 15:29:57 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/nvidia-optimus/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>惠普光影精灵4在Arch Linux下使用Optimus Manager配置双显卡</title>
+      <link>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</link>
+      <pubDate>Sun, 19 Jul 2020 15:29:57 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</guid>
+      <description>&lt;p&gt;自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, &lt;del&gt;尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下&lt;/del&gt;（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, <del>尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下</del>（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。</p>
+<hr>
+<h2 id="先描述一下踩坑经过">先描述一下踩坑经过</h2>
+<blockquote>
+<p>本段略微有些废话, 可以跳过</p>
+</blockquote>
+<p>记得在刚买来这台笔记本（2018年夏）, Linux内核还没升到5.0的时候, 使用live CD装系统时会遇到<code>lspci</code>卡死, 关机的时候会卡死的问题, 查系统日记都是一堆ACPI的报错。当时网上查了一下大概是内核和驱动一些bug, 没找到解决办法, Google到论坛的帖子说是在关机/重启发生卡死时只能直接长按电源关机就（找不到搜的回答了）</p>
+<p>装完系统后安装显卡驱动时想通过Bumblebee + bbswitch切换双显卡, 于是装了Gnome然后照着wiki配置完Bumblebee和bbswitch后重启电脑直接死机。</p>
+<p>经过多次重装系统的折磨后, 发现只装Bumblebee不装bbswitch不<code>systemctl enable bumblebeed.service</code>时, 能正常开机, 然后之前遇到的两个问题也莫名其妙就好了, 即系统重启关机不会卡死, <code>lspci</code>也正常了（迷）</p>
+<p>之后, 在不装bbswitch的情况下, 启动<code>bumblebeed.service</code>再用<code>optirun</code>和<code>primusrun</code>这种方式用独显运行程序都没有问题。</p>
+<p>当时因为电脑不装Bumblebee的话就没法正常关机, 于是就一直用着Bumblebee切换双显卡, 玩游戏性能比Windows下差一点, 别的都没啥问题。</p>
+<p>今年年初买了一块拓展屏想搞双显示器, 本来显示器应该插上HDMI直接就能用的, 但是因为这电脑的HDMI走的独显输出, Bumblebee不能直接用, wiki上教的创建个intel的虚拟输出啥的方法有试过但是没成功, 于是又Google了一下后卸了Bumblebee改用<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Use_NVIDIA_graphics_only">NVIDIA Optimus 只使用独显</a>的方式, 这样双显示器倒是能用了, 但是如果笔记本只用电池没连着拓展屏的时候还跑着独显这也太费电了。</p>
+<p>所以最后找到了能切换显卡的<a href="https://github.com/Askannz/optimus-manager">Optimus Manager</a>。</p>
+<blockquote>
+<p>查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。</p>
+</blockquote>
+<h2 id="安装过程">安装过程</h2>
+<p>照着<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus">Wiki</a>和Optimus Manager的<a href="https://github.com/Askannz/optimus-manager#optimus-manager">README</a>。首先安装好显卡驱动相关的软件, 如果有Bumblebee的话使用<code>systemctl disable bumblebeed</code>停用。</p>
+<p>首先清除（记得备份）<code>/etc/X11/xorg.conf.d/</code>下的配置文件, 并删掉（记得备份）<code>/etc/X11/xorg.conf</code>（如果有的话）, 因为Optimus Manager会自动生成配置文件存放到<code>/etc/X11/xorg.conf.d/</code>里面, 所以建议安装前把显示配置相关的文件都清除掉。</p>
+<p>使用Arch Linux CN源或者通过AUR Helper安装<code>optimus-manager</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># Arch Linux CN
+</span></span><span class="line"><span class="cl">$ sudo pacman -S optimus-manager
+</span></span><span class="line"><span class="cl"># AUR
+</span></span><span class="line"><span class="cl">$ yay -S optimus-manager
+</span></span></code></pre></div><p>因为我用的Gnome, 参照<a href="https://github.com/Askannz/optimus-manager#important--gnome-and-gdm-users">README中说的</a>卸载掉<code>gdm</code>并安装<code>gdm-prime</code><sup>AUR</sup>。（国内下载源代码的速度极慢建议挂梯子, 或者挂梯子克隆<a href="https://gitlab.gnome.org/GNOME/gdm">GDM的代码</a>到<code>~/.cache/yay/gdm-prime/gdm</code>下。）</p>
+<p>修改<code>/etc/gdm/custom.conf</code>, 移除<code>WaylandEnable=false</code>一行前面的<code>#</code>禁用Wayland而使用X。</p>
+<h3 id="修改配置文件">修改配置文件</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
+</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
+<p>之后根据需求来修改开机自动选择显卡：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">startup_mode=auto
+</span></span><span class="line"><span class="cl">startup_auto_battery_mode=intel
+</span></span><span class="line"><span class="cl">startup_auto_extpower_mode=nvidia
+</span></span></code></pre></div><p>这里我设置的是用电池时使用集成显卡, 用电源时使用独显。</p>
+<p>最后贴一下全部的配置文件, 除了上述的几处修改以外其他均为默认值, 仅供参考。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">optimus</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">parameter</span> <span class="nx">defines</span> <span class="nx">the</span> <span class="nx">method</span> <span class="nx">used</span> <span class="nx">to</span> <span class="nx">power</span> <span class="k">switch</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span><span class="p">.</span> <span class="nx">See</span> <span class="nx">the</span> <span class="nx">documentation</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="k">for</span> <span class="nx">a</span> <span class="nx">complete</span> <span class="nx">description</span> <span class="nx">of</span> <span class="nx">what</span> <span class="nx">each</span> <span class="nx">value</span> <span class="nx">does</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">nouveau</span> <span class="p">:</span> <span class="nx">load</span> <span class="nx">the</span> <span class="nx">nouveau</span> <span class="nx">module</span> <span class="nx">on</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">bbswitch</span> <span class="p">:</span> <span class="nx">power</span> <span class="nx">off</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">using</span> <span class="nx">the</span> <span class="nx">bbswitch</span> <span class="nf">module</span> <span class="p">(</span><span class="nx">requires</span> <span class="nx">the</span> <span class="nx">bbswitch</span> <span class="nx">dependency</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">acpi_call</span> <span class="p">:</span> <span class="nx">try</span> <span class="nx">various</span> <span class="nx">ACPI</span> <span class="nx">method</span> <span class="nx">calls</span> <span class="nx">to</span> <span class="nx">power</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">on</span> <span class="nx">and</span> <span class="nf">off</span> <span class="p">(</span><span class="nx">requires</span> <span class="nx">the</span> <span class="nx">acpi_call</span> <span class="nx">dependency</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">custom</span><span class="p">:</span> <span class="nx">use</span> <span class="nx">custom</span> <span class="nx">scripts</span> <span class="nx">at</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span><span class="o">/</span><span class="nx">nvidia</span><span class="o">-</span><span class="nx">enable</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">and</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span><span class="o">/</span><span class="nx">nvidia</span><span class="o">-</span><span class="nx">disable</span><span class="p">.</span><span class="nx">sh</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">none</span> <span class="p">:</span> <span class="nx">do</span> <span class="nx">not</span> <span class="nx">use</span> <span class="nx">an</span> <span class="nx">external</span> <span class="nx">module</span> <span class="k">for</span> <span class="nx">power</span> <span class="nx">management</span><span class="p">.</span> <span class="nx">For</span> <span class="nx">some</span> <span class="nx">laptop</span> <span class="nx">models</span> <span class="nx">it</span><span class="err">&#39;</span><span class="nx">s</span> <span class="nx">preferable</span> <span class="nx">to</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>          <span class="nx">use</span> <span class="nx">this</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">combination</span> <span class="nx">with</span> <span class="nf">pci_power_control</span> <span class="p">(</span><span class="nx">see</span> <span class="nx">below</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">switching</span><span class="p">=</span><span class="nx">none</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Enable</span> <span class="nx">PCI</span> <span class="nx">power</span> <span class="nx">management</span> <span class="nx">in</span> <span class="nx">Intel</span> <span class="nx">mode</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">option</span> <span class="nx">is</span> <span class="nx">incompatible</span> <span class="nx">with</span> <span class="nx">acpi_call</span> <span class="nx">and</span> <span class="nx">bbswitch</span><span class="p">,</span> <span class="nx">so</span> <span class="nx">it</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">ignored</span> <span class="nx">in</span> <span class="nx">those</span> <span class="nx">cases</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_power_control</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Remove</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span> <span class="nx">from</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">bus</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">May</span> <span class="nx">prevent</span> <span class="nx">crashes</span> <span class="nx">caused</span> <span class="nx">by</span> <span class="nx">power</span> <span class="nx">switching</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Ignored</span> <span class="k">if</span> <span class="nx">switching</span><span class="p">=</span><span class="nx">nouveau</span> <span class="nx">or</span> <span class="nx">switching</span><span class="p">=</span><span class="nx">bbswitch</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_remove</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Reset</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span> <span class="nx">at</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">level</span> <span class="nx">before</span> <span class="nx">reloading</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">module</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Ensures</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">is</span> <span class="nx">in</span> <span class="nx">a</span> <span class="nx">fresh</span> <span class="nx">state</span> <span class="nx">before</span> <span class="nx">reloading</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">module</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">May</span> <span class="nx">fix</span> <span class="nx">some</span> <span class="nx">switching</span> <span class="nx">issues</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">no</span> <span class="p">:</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">perform</span> <span class="nx">any</span> <span class="nx">reset</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">function_level</span> <span class="p">:</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="nx">light</span> <span class="s">&#34;function-level&#34;</span> <span class="nx">reset</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">hot_reset</span> <span class="p">:</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="s">&#34;hot reset&#34;</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">bridge</span><span class="p">.</span> <span class="nx">ATTENTION</span> <span class="p">:</span> <span class="nx">this</span> <span class="nx">method</span> <span class="nx">messes</span> <span class="nx">with</span> <span class="nx">the</span> <span class="nx">hardware</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>         <span class="nx">directly</span><span class="p">,</span> <span class="nx">please</span> <span class="nx">read</span> <span class="nx">the</span> <span class="nx">online</span> <span class="nx">documentation</span> <span class="nx">of</span> <span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span> <span class="nx">before</span> <span class="nx">using</span> <span class="nx">it</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>         <span class="nx">Also</span><span class="p">,</span> <span class="nx">it</span> <span class="nx">will</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="nx">PCI</span> <span class="nx">remove</span> <span class="nx">even</span> <span class="k">if</span> <span class="nx">pci_remove</span><span class="p">=</span><span class="nx">no</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_reset</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Automatically</span> <span class="nx">log</span> <span class="nx">out</span> <span class="nx">the</span> <span class="nx">current</span> <span class="nx">desktop</span> <span class="nx">session</span> <span class="nx">when</span> <span class="nx">switching</span> <span class="nx">GPUs</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">feature</span> <span class="nx">is</span> <span class="nx">currently</span> <span class="nx">supported</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">DE</span><span class="o">/</span><span class="nx">WM</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">KDE</span> <span class="nx">Plasma</span><span class="p">,</span> <span class="nx">GNOME</span><span class="p">,</span> <span class="nx">XFCE</span><span class="p">,</span> <span class="nx">LXDE</span><span class="p">,</span> <span class="nx">Deepin</span><span class="p">,</span> <span class="nx">i3</span><span class="p">,</span> <span class="nx">Openbox</span><span class="p">,</span> <span class="nx">AwesomeWM</span><span class="p">,</span> <span class="nx">bspwm</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">If</span> <span class="nx">this</span> <span class="nx">option</span> <span class="nx">is</span> <span class="nx">disabled</span> <span class="nx">or</span> <span class="nx">you</span> <span class="nx">use</span> <span class="nx">a</span> <span class="nx">different</span> <span class="nx">desktop</span> <span class="nx">environment</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">switching</span> <span class="nx">only</span> <span class="nx">becomes</span> <span class="nx">effective</span> <span class="nx">at</span> <span class="nx">the</span> <span class="nx">next</span> <span class="nx">graphical</span> <span class="nx">session</span> <span class="nx">login</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">auto_logout</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">at</span> <span class="nx">computer</span> <span class="nx">startup</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span><span class="p">,</span> <span class="nx">auto</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="s">&#34;auto&#34;</span> <span class="nx">is</span> <span class="nx">a</span> <span class="nx">special</span> <span class="nx">mode</span> <span class="nx">that</span> <span class="nx">auto</span><span class="o">-</span><span class="nx">detects</span> <span class="k">if</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">battery</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">and</span> <span class="nx">selects</span> <span class="nx">a</span> <span class="nx">proper</span> <span class="nx">GPU</span> <span class="nx">mode</span><span class="p">.</span> <span class="nx">See</span> <span class="nx">the</span> <span class="nx">other</span> <span class="nx">options</span> <span class="nx">below</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="k">select</span> <span class="nx">when</span> <span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span> <span class="nx">and</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">battery</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_auto_battery_mode</span><span class="p">=</span><span class="nx">intel</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="k">select</span> <span class="nx">when</span> <span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span> <span class="nx">and</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">external</span> <span class="nx">power</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_auto_extpower_mode</span><span class="p">=</span><span class="nx">nvidia</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">intel</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Driver</span> <span class="nx">to</span> <span class="nx">use</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">Intel</span> <span class="nx">GPU</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">modesetting</span><span class="p">,</span> <span class="nx">intel</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">To</span> <span class="nx">use</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">,</span> <span class="nx">you</span> <span class="nx">need</span> <span class="nx">to</span> <span class="nx">install</span> <span class="nx">the</span> <span class="kn">package</span> <span class="s">&#34;xf86-video-intel&#34;</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">driver</span><span class="p">=</span><span class="nx">modesetting</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Acceleration</span> <span class="nf">method</span> <span class="p">(</span><span class="nx">corresponds</span> <span class="nx">to</span> <span class="nx">AccelMethod</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Only</span> <span class="nx">applies</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">sna</span><span class="p">,</span> <span class="nx">xna</span><span class="p">,</span> <span class="nx">uxa</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">no</span> <span class="nx">option</span> <span class="nx">specified</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">accel</span><span class="p">=</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Enable</span> <span class="nx">TearFree</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Only</span> <span class="nx">applies</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">yes</span><span class="p">,</span> <span class="nx">no</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">no</span> <span class="nx">option</span> <span class="nx">specified</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">tearfree</span><span class="p">=</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">DRI</span> <span class="nx">version</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl"><span class="nx">DRI</span><span class="p">=</span><span class="mi">3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">modesetting</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">nouveau</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Does</span> <span class="nx">not</span> <span class="nx">affect</span> <span class="nx">modesetting</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">Intel</span> <span class="nx">GPU</span> <span class="nx">driver</span> <span class="p">!</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">option</span> <span class="nx">only</span> <span class="nx">matters</span> <span class="k">if</span> <span class="nx">you</span> <span class="nx">use</span> <span class="nx">nouveau</span> <span class="nx">as</span> <span class="nx">the</span> <span class="nx">switching</span> <span class="nx">backend</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">modeset</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">nvidia</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">modesetting</span><span class="p">.</span> <span class="nx">Required</span> <span class="k">for</span> <span class="nx">PRIME</span> <span class="nf">Synchronization</span> <span class="p">(</span><span class="nx">which</span> <span class="nx">prevents</span> <span class="nx">tearing</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">modeset</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">the</span> <span class="nx">NVreg_UsePageAttributeTable</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Recommended</span><span class="p">,</span> <span class="nx">can</span> <span class="nx">cause</span> <span class="nx">poor</span> <span class="nx">CPU</span> <span class="nx">performance</span> <span class="nx">otherwise</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">PAT</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">DPI</span> <span class="nx">value</span><span class="p">.</span> <span class="nx">This</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">set</span> <span class="nx">using</span> <span class="nx">the</span> <span class="nx">Xsetup</span> <span class="nx">script</span> <span class="nx">passed</span> <span class="nx">to</span> <span class="nx">your</span> <span class="nx">login</span> <span class="nx">manager</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">It</span> <span class="nx">will</span> <span class="nx">run</span> <span class="nx">the</span> <span class="nx">command</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">xrandr</span> <span class="o">--</span><span class="nx">dpi</span> <span class="p">&lt;</span><span class="nx">DPI</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">the</span> <span class="nx">above</span> <span class="nx">command</span> <span class="nx">will</span> <span class="nx">not</span> <span class="nx">be</span> <span class="nx">run</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">DPI</span><span class="p">=</span><span class="mi">96</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">If</span> <span class="nx">you</span><span class="err">&#39;</span><span class="nx">re</span> <span class="nx">running</span> <span class="nx">an</span> <span class="nx">updated</span> <span class="nx">version</span> <span class="nx">of</span> <span class="nx">xorg</span><span class="o">-</span><span class="nf">server</span> <span class="p">(</span><span class="nx">let</span><span class="err">&#39;</span><span class="nx">s</span> <span class="nx">say</span> <span class="nx">to</span> <span class="nx">get</span> <span class="nx">PRIME</span> <span class="nx">Render</span> <span class="nx">offload</span> <span class="nx">enabled</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">driver</span> <span class="nx">may</span> <span class="nx">not</span> <span class="nx">load</span> <span class="nx">because</span> <span class="nx">of</span> <span class="nx">an</span> <span class="nx">ABI</span> <span class="nx">version</span> <span class="nx">mismatch</span><span class="p">.</span> <span class="nx">Setting</span> <span class="nx">this</span> <span class="nx">flag</span> <span class="nx">to</span> <span class="s">&#34;yes&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">will</span> <span class="nx">allow</span> <span class="nx">the</span> <span class="nx">loading</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ignore_abi</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Set</span> <span class="nx">to</span> <span class="nx">yes</span> <span class="k">if</span> <span class="nx">you</span> <span class="nx">want</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span> <span class="nx">with</span> <span class="nx">external</span> <span class="nx">Nvidia</span> <span class="nf">GPUs</span> <span class="p">(</span><span class="nx">experimental</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">allow_external_gpus</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Comma</span><span class="o">-</span><span class="nx">separated</span> <span class="nx">list</span> <span class="nx">of</span> <span class="nx">Nvidia</span><span class="o">-</span><span class="nx">specific</span> <span class="nx">options</span> <span class="nx">to</span> <span class="nx">apply</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Available</span> <span class="nx">options</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">overclocking</span> <span class="p">:</span> <span class="nx">enable</span> <span class="nx">CoolBits</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">,</span> <span class="nx">which</span> <span class="nx">unlocks</span> <span class="nx">clocking</span> <span class="nx">options</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>   <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">control</span> <span class="nx">panel</span><span class="p">.</span> <span class="nx">Note</span><span class="p">:</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">work</span> <span class="nx">in</span> <span class="nx">hybrid</span> <span class="nx">mode</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">triple_buffer</span> <span class="p">:</span> <span class="nx">enable</span> <span class="nx">triple</span> <span class="nx">buffering</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">options</span><span class="p">=</span><span class="nx">overclocking</span>
+</span></span></code></pre></div><h2 id="食用方法">食用方法</h2>
+<p><code>optimus-manager --switch nvidia</code>切换到独显（nvidia）</p>
+<p><code>optimus-manager --switch intel</code>切换到集显（intel）</p>
+<p>安装<code>mesa-demos</code>后, 使用<code>glxinfo | grep &quot;OpenGL renderer&quot;</code>查看当前正使用的显卡</p>
+<p>其他用法参见<a href="https://github.com/Askannz/optimus-manager#usage">Usage</a>。</p>
+<p>注意：</p>
+<ul>
+<li>
+<p>切换显卡的过程中会自动注销登录, 所以记得<strong>保存并关掉电脑正在运行的程序</strong>。</p>
+</li>
+<li>
+<p>你可以在配置文件中修改<code>auto_logout=false</code>禁止自动注销以手动注销切换显卡。</p>
+</li>
+</ul>
+<h2 id="others">Others</h2>
+<ul>
+<li>
+<p>之所以不推荐使用<code>bbswitch</code>是因为容易遇到<strong>ACPI锁死</strong>的问题, <a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_(lspci_hangs)">参考Wiki</a>, 需要添加<a href="https://wiki.archlinux.org/index.php/Kernel_parameters">内核参数</a><code>acpi_osi=! acpi_osi=&quot;Windows 2009&quot;</code>或<code>acpi_osi=&quot;!Windows 2015&quot;</code>启动, 如果你遇到了锁死可以通过开机时在<a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader">启动加载器界面</a>编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。</p>
+</li>
+<li>
+<p>如果用不了<code>lspci</code>, 电脑没法正常关机的话, 是nouveau的问题, 可添加内核参数<code>modprobe.blacklist=nouveau</code>禁用。</p>
+</li>
+<li>
+<p>因为前几天改配置文件时又踩了一遍锁死的坑, 于是用最新的(2020.07.01)live CD救砖时, 惊喜的发现在live环境下<code>lspci</code>和关机都不会卡死了, 貌似是新版内核修复了这个bug</p>
+</li>
+<li>
+<p>在切换显卡自动注销后, gdm界面有时不会自动加载出来而是一直黑屏, 这时需要手动切换到tty2再切回tty1才能加载出来。</p>
+</li>
+<li>
+<p>如果显示器支持<a href="https://en.wikipedia.org/wiki/Display_Data_Channel#DDC.2FCI">DDC/DI</a>，可以参考<a href="https://wiki.archlinux.org/index.php/Backlight#External_monitors">Wiki</a>使用命令调节显示器亮度。</p>
+</li>
+<li>
+<p>(本条与配置显卡无关) 因为电脑用的intel网卡, 如果遇到蓝牙耳机无法连接的情况, 安装<code>pulseaudio</code>和<code>pulseaudio-modues-bt</code>等耳机需要的蓝牙组件, 照着Wiki上的<a href="https://wiki.archlinux.org/index.php/Wireless_network_configuration#Bluetooth_coexistence">禁用Bluetooth coexistence</a>解决此问题。</p>
+</li>
+</ul>
+<hr>
+<p><img loading="lazy" src="images/1.png" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">neofetch</p>
+</p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

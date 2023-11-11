@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>RSS on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/rss/</link>
+    <description>Recent content in RSS on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Tue, 01 Mar 2022 22:24:17 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/rss/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>自建RSS服务器：Miniflux</title>
+      <link>https://blog.starry-s.moe/posts/2022/miniflux-build/</link>
+      <pubDate>Tue, 01 Mar 2022 22:24:17 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/miniflux-build/</guid>
+      <description>&lt;p&gt;之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。&lt;/p&gt;
+&lt;p&gt;最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。&lt;/p&gt;
+&lt;p&gt;思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。</p>
+<p>最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。</p>
+<p>思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。</p>
+<hr>
+<h2 id="准备">准备</h2>
+<p>Miniflux官方文档（EN）：<a href="https://miniflux.app/docs/index.html">https://miniflux.app/docs/index.html</a></p>
+<h2 id="安装">安装</h2>
+<p>此部分配合官方文档食用：<a href="https://miniflux.app/docs/installation.html">https://miniflux.app/docs/installation.html</a></p>
+<h3 id="配置数据库">配置数据库：</h3>
+<p>首先需要安装postgresql数据库。安装方法因发行版而异，网上一搜就有。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Switch to the postgres user
+</span></span><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create a database user for miniflux
+</span></span><span class="line"><span class="cl">$ createuser -P miniflux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create a database for miniflux that belongs to our user
+</span></span><span class="line"><span class="cl">$ createdb -O miniflux miniflux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create the extension hstore as superuser
+</span></span><span class="line"><span class="cl">$ psql miniflux -c &#39;create extension hstore&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Change postgres password
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; \password
+</span></span></code></pre></div><h3 id="安装miniflux">安装Miniflux：</h3>
+<p>不同的发行版使用方法不一样，咱的这台服务器为Ubuntu，所以参照<a href="https://miniflux.app/docs/howto.html#apt-repo">这里的教程</a>配置APT源，安装Miniflux。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -s https://apt.miniflux.app/KEY.gpg | sudo apt-key add -
+</span></span><span class="line"><span class="cl">echo &#34;deb https://apt.miniflux.app/ /&#34; | sudo tee /etc/apt/sources.list.d/miniflux.list &gt; /dev/null
+</span></span><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install miniflux
+</span></span></code></pre></div><h2 id="配置miniflux">配置Miniflux</h2>
+<p>默认配置文件为：<code>/etc/miniflux.conf</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># See https://miniflux.app/docs/configuration.html
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">LISTEN_ADDR=0.0.0.0:8080
+</span></span><span class="line"><span class="cl">LOG_DATE_TIME=yes
+</span></span><span class="line"><span class="cl">DATABASE_URL=user=postgres password=&lt;YOURPASSWORD&gt; dbname=miniflux sslmode=disable
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Run SQL migrations automatically
+</span></span><span class="line"><span class="cl"># RUN_MIGRATIONS=1
+</span></span></code></pre></div><p>之后线将刚刚创建的数据库用户<code>miniflux</code>设置为超级用户。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; ALTER USER miniflux WITH SUPERUSER;
+</span></span></code></pre></div><p>使用以下指令创建数据库表，并创建用户：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ miniflux -c /etc/miniflux.conf -migrate
+</span></span><span class="line"><span class="cl">$ miniflux -c /etc/miniflux.conf -create-admin
+</span></span></code></pre></div><p>之后将<code>miniflux</code>切换回普通用户。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; ALTER USER miniflux WITH NOSUPERUSER;
+</span></span></code></pre></div><p>最后重新启动<code>miniflux</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo systemctl restart miniflux
+</span></span></code></pre></div><h2 id="配置ssl可选">配置SSL（可选）</h2>
+<p>使用nginx转发流量，可以将服务器套在Cloudflare下面。</p>
+<p>编辑nginx的服务器配置文件，创建一个端口为443的服务器，并指定SSL key的位置：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">server {
+</span></span><span class="line"><span class="cl">	listen 443 ssl default_server;
+</span></span><span class="line"><span class="cl">	listen [::]:443 ssl default_server;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	server_name miniflux;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	ssl_certificate /path/to/server.crt;
+</span></span><span class="line"><span class="cl">	ssl_certificate_key /path/to/server.key;
+</span></span><span class="line"><span class="cl">	ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	location / {
+</span></span><span class="line"><span class="cl">    		proxy_pass  http://127.0.0.1:8080;
+</span></span><span class="line"><span class="cl">	}
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>之后执行<code>sudo systemctl restart nginx</code>，访问服务器地址即可。</p>
+<h2 id="others">Others</h2>
+<p>Miniflux支持Fever和Google Reader等第三方服务，参考<a href="https://miniflux.app/docs/services.html">官方文档</a>，可以在服务器的设置-&gt;集成页面中配置，之后在别的设备中安装客户端，可以阅读订阅的文章，比网页版好用一些。</p>
+<p><strong>STARRY-S</strong></p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

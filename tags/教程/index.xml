@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>教程 on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/%E6%95%99%E7%A8%8B/</link>
+    <description>Recent content in 教程 on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Tue, 01 Mar 2022 22:24:17 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>自建RSS服务器：Miniflux</title>
+      <link>https://blog.starry-s.moe/posts/2022/miniflux-build/</link>
+      <pubDate>Tue, 01 Mar 2022 22:24:17 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/miniflux-build/</guid>
+      <description>&lt;p&gt;之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。&lt;/p&gt;
+&lt;p&gt;最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。&lt;/p&gt;
+&lt;p&gt;思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。</p>
+<p>最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
+而且还能绕开推荐算法，只看自己想看的内容，这点还是蛮重要的。</p>
+<p>思考了几天发现我确实需要一个RSS订阅服务器后，于是决定这次把搭建过程记录下来，省得以后又忘了。</p>
+<hr>
+<h2 id="准备">准备</h2>
+<p>Miniflux官方文档（EN）：<a href="https://miniflux.app/docs/index.html">https://miniflux.app/docs/index.html</a></p>
+<h2 id="安装">安装</h2>
+<p>此部分配合官方文档食用：<a href="https://miniflux.app/docs/installation.html">https://miniflux.app/docs/installation.html</a></p>
+<h3 id="配置数据库">配置数据库：</h3>
+<p>首先需要安装postgresql数据库。安装方法因发行版而异，网上一搜就有。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Switch to the postgres user
+</span></span><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create a database user for miniflux
+</span></span><span class="line"><span class="cl">$ createuser -P miniflux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create a database for miniflux that belongs to our user
+</span></span><span class="line"><span class="cl">$ createdb -O miniflux miniflux
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Create the extension hstore as superuser
+</span></span><span class="line"><span class="cl">$ psql miniflux -c &#39;create extension hstore&#39;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Change postgres password
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; \password
+</span></span></code></pre></div><h3 id="安装miniflux">安装Miniflux：</h3>
+<p>不同的发行版使用方法不一样，咱的这台服务器为Ubuntu，所以参照<a href="https://miniflux.app/docs/howto.html#apt-repo">这里的教程</a>配置APT源，安装Miniflux。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">curl -s https://apt.miniflux.app/KEY.gpg | sudo apt-key add -
+</span></span><span class="line"><span class="cl">echo &#34;deb https://apt.miniflux.app/ /&#34; | sudo tee /etc/apt/sources.list.d/miniflux.list &gt; /dev/null
+</span></span><span class="line"><span class="cl">apt update
+</span></span><span class="line"><span class="cl">apt install miniflux
+</span></span></code></pre></div><h2 id="配置miniflux">配置Miniflux</h2>
+<p>默认配置文件为：<code>/etc/miniflux.conf</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># See https://miniflux.app/docs/configuration.html
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">LISTEN_ADDR=0.0.0.0:8080
+</span></span><span class="line"><span class="cl">LOG_DATE_TIME=yes
+</span></span><span class="line"><span class="cl">DATABASE_URL=user=postgres password=&lt;YOURPASSWORD&gt; dbname=miniflux sslmode=disable
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Run SQL migrations automatically
+</span></span><span class="line"><span class="cl"># RUN_MIGRATIONS=1
+</span></span></code></pre></div><p>之后线将刚刚创建的数据库用户<code>miniflux</code>设置为超级用户。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; ALTER USER miniflux WITH SUPERUSER;
+</span></span></code></pre></div><p>使用以下指令创建数据库表，并创建用户：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ miniflux -c /etc/miniflux.conf -migrate
+</span></span><span class="line"><span class="cl">$ miniflux -c /etc/miniflux.conf -create-admin
+</span></span></code></pre></div><p>之后将<code>miniflux</code>切换回普通用户。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo su - postgres
+</span></span><span class="line"><span class="cl">$ psql
+</span></span><span class="line"><span class="cl">&gt; ALTER USER miniflux WITH NOSUPERUSER;
+</span></span></code></pre></div><p>最后重新启动<code>miniflux</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo systemctl restart miniflux
+</span></span></code></pre></div><h2 id="配置ssl可选">配置SSL（可选）</h2>
+<p>使用nginx转发流量，可以将服务器套在Cloudflare下面。</p>
+<p>编辑nginx的服务器配置文件，创建一个端口为443的服务器，并指定SSL key的位置：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">server {
+</span></span><span class="line"><span class="cl">	listen 443 ssl default_server;
+</span></span><span class="line"><span class="cl">	listen [::]:443 ssl default_server;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	server_name miniflux;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	ssl_certificate /path/to/server.crt;
+</span></span><span class="line"><span class="cl">	ssl_certificate_key /path/to/server.key;
+</span></span><span class="line"><span class="cl">	ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	location / {
+</span></span><span class="line"><span class="cl">    		proxy_pass  http://127.0.0.1:8080;
+</span></span><span class="line"><span class="cl">	}
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></div><p>之后执行<code>sudo systemctl restart nginx</code>，访问服务器地址即可。</p>
+<h2 id="others">Others</h2>
+<p>Miniflux支持Fever和Google Reader等第三方服务，参考<a href="https://miniflux.app/docs/services.html">官方文档</a>，可以在服务器的设置-&gt;集成页面中配置，之后在别的设备中安装客户端，可以阅读订阅的文章，比网页版好用一些。</p>
+<p><strong>STARRY-S</strong></p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>小米路由器3G之使用TTL串口刷机救砖</title>
+      <link>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</link>
+      <pubDate>Fri, 22 Jan 2021 22:10:01 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</guid>
+      <description>&lt;p&gt;本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。&lt;/p&gt;
+&lt;p&gt;然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。&lt;/p&gt;
+&lt;p&gt;之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。&lt;/p&gt;
+&lt;p&gt;(在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意&amp;hellip;)&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。</p>
+<p>然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。</p>
+<p>之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。</p>
+<p>(在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意&hellip;)</p>
+<meting-js server="netease" type="song" id="409931672" theme="#233333"></meting-js>
+<h2 id="砖了">砖了</h2>
+<h2 id="拆机">拆机</h2>
+<p><img loading="lazy" src="images/1.jpg" alt="&amp;ldquo;路由器主板&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Are You OK?</p>
+</p>
+<blockquote>
+<p>北方冬季气候干燥，拆机时记得放静电，找根铁丝把自己连地线上 (找个金属外壳是接地的电器和自己连上也行)。</p>
+</blockquote>
+<p>拆开路由器外壳，卸下主板，顺手拆掉了散热片（屏蔽罩）。</p>
+<p>串口在图片上主板的左侧，旁边有标记，从上到下依次是<code>TX</code>、<code>GND</code>、<code>RX</code>、<code>1</code>。需要注意的是主板上的<code>TX</code>要接到usb串口的<code>RX</code>，主板上的<code>RX</code>要接到usb串口的<code>TX</code>，<code>GND</code>连<code>GND</code>，VCC不用连。为了防止接错线，小米还十分贴心的标注了每个接口对应的连接线的颜色。</p>
+<p><img loading="lazy" src="images/2.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">I&#39;m very OK!</p>
+</p>
+<p>找出家里吃灰好几年差点被我扔掉的电烙铁，刮刀头刮了半天电烙铁才上锡，把新买的杜邦线母线焊到主板上，和ttl串口线相连。</p>
+<p>(电烙铁太破了根本焊不上锡，焊得很丑，emmm)</p>
+<p>实际上可以买个4PIN单排针焊上去，把串口接到排针上就可以，我直接把电线焊到上面以后用起来会很麻烦。</p>
+<h2 id="刷机">刷机</h2>
+<blockquote>
+<p>以下部分基于Arch Linux，其他系统的操作方式可能不一样（例如Windows可能需要超级终端访问串口，再想办法开一个tftp服务器）
+刷机的原理: 通过ttl串口线连接路由器的主板，让路由器访问电脑上的tftp服务器，刷第三方Boot Loader。</p>
+</blockquote>
+<ol>
+<li>首先电脑上装一个tftp服务器。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo pacman -S tftp-hpa
+</span></span><span class="line"><span class="cl">$ sudo systemctl start tftpd.service
+</span></span></code></pre></div><p>tftp的默认目录为<code>/srv/tftp</code>。</p>
+<p>这里使用HackPascal制作的Breed（第三方Boot Loader），<a href="https://breed.hackpascal.net/">下载链接</a>，把下载好的Breed重命名为<code>breed.bin</code>，复制到tftp的默认目录。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ cd /srv/tftp
+</span></span><span class="line"><span class="cl">$ sudo cp ~/Downloads/breed-mt7620-xiaomi-r3g.bin breed.bin
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>路由器插网线连电脑，设置静态ip地址192.168.1.3/24，将串口和电脑连接，先不给路由器通电，通常情况下usb串口的设备名称为<code>/dev/ttyUSB0</code>，如果不确定的话可以<code>dmesg</code>查一下。</p>
+</li>
+<li>
+<p>使用<code>screen</code>连接串口，波特率为115200。</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo pacman -S screen
+</span></span><span class="line"><span class="cl">$ sudo screen /dev/ttyUSB0 115200
+</span></span></code></pre></div><p>路由器通电，终端上会显示路由器启动的信息，等几秒后在选择启动项的时候按9，通过TFTP加载Boot Loader。</p>
+<blockquote>
+<p>如果串口在连接到电脑的情况下主板通电时没有响应，那就断开usb串口先给主板通电后再连接串口。
+(我语文不好别骂我)
+如果路由器没有变砖可以正常启动（蓝灯长亮），在正常开机过程中不能选择启动项。此时可以尝试在路由器开机后长按reset按钮7s以上直到主板重启，便可以选择启动项。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Please choose the operation:
+</span></span><span class="line"><span class="cl"> 1: Load system code to SDRAM via TFTP.
+</span></span><span class="line"><span class="cl"> 2: Load system code then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl"> 3: Boot system code via Flash (default).
+</span></span><span class="line"><span class="cl"> 4: Entr boot command line interface.
+</span></span><span class="line"><span class="cl"> 7: Load Boot Loader code then write to Flash via Serial.
+</span></span><span class="line"><span class="cl"> 9: Load Boot Loader code then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">You choosed 9
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">9: System Load Boot Loader then write to Flash via TFTP.
+</span></span><span class="line"><span class="cl">Warning!! Erase Boot Loader in Flash then burn new one. Are you sure?(Y/N)y
+</span></span></code></pre></div><p>之后设置路由器主机地址（192.168.1.1）和TFTP服务器地址(192.168.1.3)以及文件名称(breed.bin)。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Please Input new ones /or Ctrl-C to discard
+</span></span><span class="line"><span class="cl">          Input device IP (192.168.31.1) ==:192.168.1.1
+</span></span><span class="line"><span class="cl">          Input server IP (192.168.31.3) ==:192.168.1.3
+</span></span><span class="line"><span class="cl">          Input Uboot filename (uboot.bin) ==:breed.bin
+</span></span></code></pre></div><p>按回车后开始刷机，过几秒钟后路由器会自动重启，第三方Boot Loader刷写完成。</p>
+<p>路由器断电，长按reset键的同时通电开机，灯闪烁后打开浏览器输入网址<code>http://192.168.1.1</code>便可访问breed后台。</p>
+<h2 id="done">Done</h2>
+<p>第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照<a href="/posts/2019/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95">小米路由器3G折腾之刷OpenWrt记录</a>这篇文章刷OpenWrt。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">BusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash)
+</span></span><span class="line"><span class="cl">Enter &#39;help&#39; for a list of built-in commands.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> -----------------------------------------------------
+</span></span><span class="line"><span class="cl">       Welcome to XiaoQiang!
+</span></span><span class="line"><span class="cl"> -----------------------------------------------------
+</span></span><span class="line"><span class="cl">  $$$$$$\  $$$$$$$\  $$$$$$$$\      $$\      $$\        $$$$$$\  $$\   $$\
+</span></span><span class="line"><span class="cl"> $$  __$$\ $$  __$$\ $$  _____|     $$ |     $$ |      $$  __$$\ $$ | $$  |
+</span></span><span class="line"><span class="cl"> $$ /  $$ |$$ |  $$ |$$ |           $$ |     $$ |      $$ /  $$ |$$ |$$  /
+</span></span><span class="line"><span class="cl"> $$$$$$$$ |$$$$$$$  |$$$$$\         $$ |     $$ |      $$ |  $$ |$$$$$  /
+</span></span><span class="line"><span class="cl"> $$  __$$ |$$  __$$&lt; $$  __|        $$ |     $$ |      $$ |  $$ |$$  $$&lt;
+</span></span><span class="line"><span class="cl"> $$ |  $$ |$$ |  $$ |$$ |           $$ |     $$ |      $$ |  $$ |$$ |\$$\
+</span></span><span class="line"><span class="cl"> $$ |  $$ |$$ |  $$ |$$$$$$$$\       $$$$$$$$$  |       $$$$$$  |$$ | \$$\
+</span></span><span class="line"><span class="cl"> \__|  \__|\__|  \__|\________|      \_________/        \______/ \__|  \__|
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">root@XiaoQiang:~#
+</span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

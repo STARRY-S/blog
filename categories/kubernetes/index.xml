@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Kubernetes on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/categories/kubernetes/</link>
+    <description>Recent content in Kubernetes on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sat, 10 Jun 2023 02:33:58 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>当你刚开始尝试去写 Kubernetes Controller……</title>
+      <link>https://blog.starry-s.moe/posts/2023/kube-controller/</link>
+      <pubDate>Sat, 10 Jun 2023 02:33:58 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/kube-controller/</guid>
+      <description>&lt;p&gt;Controller 对初学着来说有那么亿点点抽象，虽然网络上能找到很多有关 Kubernetes Controller 的讲解，但是 Kubernetes 的学习过程往往是一个离散的而不是连续的过程。如果想弄懂 Controller 还是有蛮高门槛的，不要想着看完 Kubernetes 的文档，速成了 Kubernetes 的基本知识就去尝试写 Controller，这种操作就好比刚过完新手教程就去打高难副本，尽管能仿着 &lt;code&gt;sample-controller&lt;/code&gt; 写一个能“跑”的 Controller，但仅仅只能做到能“跑”的程度……&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;与标题有些不同，这篇博客主要讲的是萌新如何上手编写 Controller，如果你是 Kubernetes 初学者，希望这篇博客能帮助你建立编写 Controller 的学习曲线。&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+      <content:encoded><![CDATA[<p>Controller 对初学着来说有那么亿点点抽象，虽然网络上能找到很多有关 Kubernetes Controller 的讲解，但是 Kubernetes 的学习过程往往是一个离散的而不是连续的过程。如果想弄懂 Controller 还是有蛮高门槛的，不要想着看完 Kubernetes 的文档，速成了 Kubernetes 的基本知识就去尝试写 Controller，这种操作就好比刚过完新手教程就去打高难副本，尽管能仿着 <code>sample-controller</code> 写一个能“跑”的 Controller，但仅仅只能做到能“跑”的程度……</p>
+<blockquote>
+<p>与标题有些不同，这篇博客主要讲的是萌新如何上手编写 Controller，如果你是 Kubernetes 初学者，希望这篇博客能帮助你建立编写 Controller 的学习曲线。</p>
+</blockquote>
+<h2 id="前期准备">前期准备</h2>
+<p>对刚接触 Kubernetes 的萌新来讲，这个体系还是蛮复杂和抽象的，只靠读文档看教程自学可不是那么容易。光是怎么安装一个 Kubernetes 集群，在不同的教程里就有无数种方法了。传统的安装 Kubernetes 的方法过于硬核，现在几乎没人选择这种方式部署集群了。咱常用的比较简单的方式有 <a href="https://k3s.io">k3s</a>，光靠一个脚本就能在虚拟机上一键部署一个轻量级的集群，很适合萌新（前提是你没有必须用包管理器安装任何软件的强迫症），但是如果你想在国内的网络环境靠这个脚本安装 <code>k3s</code> 的话，需要一些参数配置国内源，这里不再赘述。除此之外还可以<a href="https://ranchermanager.docs.rancher.com/zh/pages-for-subheaders/rancher-on-a-single-node-with-docker">用 Docker 方式部署一个单节点 Rancher</a>，Rancher 的 Web 界面可以更好的帮助萌新去管理 Kubernetes 资源（当然你还可以选择敲 <code>kubectl</code> 指令的方式），还有很多教程会推荐你使用 <code>minikube</code>，当然你可以选择任何一种方式去部署你自己的集群，只要你觉得这种方法适合你，而且部署的集群版本不要太低即可。</p>
+<p>如果想编写 Controller，你得有一定的 Kubernetes 基础（废话），并且熟悉 Go 语言（废话 x 2）。在看完 Kubernetes 文档，熟悉了 k8s 的资源和如何使用 <code>kubectl</code> 操作他们后，先别急着上手写 Controller。首先你得熟悉 <a href="https://github.com/kubernetes/client-go">client-go</a>，<code>client-go</code> 的代码能在 GitHub (<a href="https://github.com/kubernetes/client-go">https://github.com/kubernetes/client-go</a>) 中下载到，但记住它的 Go Module 为 <code>k8s.io/client-go</code>，不在 <code>github.com</code>。</p>
+<p>首先了解一些常见的 Kuberntes API 类型，知道 Kubernetes 的资源对象是怎么在 <code>client-go</code> 中用 Go 语言表示的，并如何调用 API 去管理他们（而不是仅凭 <code>kubectl</code> 命令行客户端去管理他们），
+这里不单单有 <code>client-go</code> 这一个 Git 仓库，还有 <code>k8s.io/api</code>, <code>k8s.io/apimachinery</code> 等仓库，后面写 Controller 时会经常用到这些 API。认识一下 <code>TypeMeta</code> 和 <code>ObjectMeta</code> （代码位置在<a href="https://github.com/kubernetes/apimachinery/blob/master/pkg/apis/meta/v1/types.go">这里</a>），每个资源对象的 Go 结构中都包含这些数据（除此之外每个资源还有 <code>Spec</code>, <code>Status</code> 等），写代码时会经常用到 <code>json/yaml</code> 的 <code>Marshal/Unmarshal</code> 操作，熟悉到这个程度就可以了。</p>
+<p>然后是 Kubernetes 的自定义资源（Custom Resource, CR）这个概念，k8s 内置了一些 Resource 资源对象，例如 <code>pod</code>, <code>deployment</code>, <code>service</code>, <code>secret</code> 等，你可以用 <code>kubectl</code> 去 <code>get/describe/create/delete...</code> 这些资源，但如果你想往 k8s 中添加一些你自己的自定义资源，比如你想定义一个资源叫做 <code>database</code>，你用 <code>kubectl create database ...</code> 就能创建一个你自己想要的数据库，像 <code>create pod</code>, <code>create secret</code> 那样，然后还能对你的自定义资源对象进行 <code>describe/delete/update...</code> 等操作，就需要用到自定义资源（开发者更习惯叫他的简写 CR，以及自定义资源定义的简写 CRD）。Controller 就是用来管理这些 CRs 的。在开发 Controller 时我们需要定义 CR 中包含哪些数据，然后使用代码生成器生成资源的 <code>DeepCopy</code> 等方法，减少不必要的重复代码编写。</p>
+<blockquote>
+<p>可以不用把每个细节都尝试弄懂，把基本概念过一遍就行，学习 Kubernetes 的过程是一个离散的过程而不是连续的过程，当碰到哪个地方不明白卡住的时候直接跳过去看后面的内容就行啦~</p>
+</blockquote>
+<h2 id="什么是-controller">什么是 Controller</h2>
+<p>在上面介绍 CR 的定义时有解释 Controller 是用来管理 CR 的，比如我们执行 <code>kubectl create database ...</code> （实际是执行 <code>kubectl apply -f</code> 部署了一个 <code>Kind</code> 为 <code>database</code> 的 YAML，不能直接 <code>create database</code>，但这么说比较方便理解~）创建了一个 <code>database</code> 类型的资源，因为这个资源是我们自定义的，所以 Kubernetes 只是在 etcd 数据库中记录了：“我们创建了一个 <code>database</code> 资源，他的数据内容是什么什么……”，并没有进行创建数据库的操作！而 Controller 就是用来管理 Database 资源的生命周期的，比如我们 <code>create database</code> 之后，Controller 会发现我们新建了一个 Database 资源，然后会去创建一个 Database Deployment。当我们 <code>delete database</code> 时，Controller 会注意到我们删除了 Database，之后执行资源释放一系列操作。</p>
+<p>往简单了讲，Controller 干的事情就是对比资源当前实际的状态和我们设定的资源状态是否一致。比如这个资源定义的 <code>replicas</code> 为 2，但实际只有一个 Pod 在运行，Controller 就会再去创建一个 Pod 使其实际的 <code>replicas</code> 为 2。</p>
+<p>当然 Controller 实现起来比这复杂多了，可不是一个简单的 <code>for</code> 循环不断从 Kube API 中查询资源然后做对比这么简单，这用到了 Cache 缓存机制和 Informer 消息提醒机制，减少 Kube API 请求次数，读取内存中的状态缓存什么的，听不懂没关系，以后会懂的……</p>
+<h2 id="sample-controller">sample-controller</h2>
+<p><code>github.com/kubernetes/sample-controller</code> 项目是一个样例 Controller，所有的初学者都是靠这个项目学习 Controller 的，相当于是高难副本中最简单的了，可以把这个样例 Controller 改造为自己的 Controller，用来学习。</p>
+<p>本篇教程以编写 <code>database-controller</code> 为例，按照 <code>sample-controller</code> 的 Controller 框架编写一个数据库的 Controller，重点在于怎么上手写 Controller，不在数据库。</p>
+<p>将 <code>sample-controller</code> 代码克隆到本地 <code>$GOPATH</code> 目录下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> midir -p <span class="nv">$GOPATH</span>/src/github.com/&lt;USERNAME&gt;/ <span class="o">&amp;&amp;</span> <span class="nb">cd</span> <span class="nv">$GOPATH</span>/src/github.com/&lt;USERNAME&gt;/
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> git clone git@github.com:kubernetes/sample-controller.git <span class="o">&amp;&amp;</span> <span class="nb">cd</span> sample-controller
+</span></span></code></pre></div><h3 id="初始化-controller">初始化 Controller</h3>
+<p>按照 <code>sample-controller</code> 的 Controller 框架，将其修改为我们想要实现的 Controller。</p>
+<ul>
+<li>修改项目名称为 <code>database-controller</code>，修改 <code>git remote</code>。</li>
+<li>编辑 <code>go.mod</code> 修改 Module 名称，把代码的 <code>k8s.io/sample-controller</code> 改为 <code>github.com/&lt;USERNAME&gt;/database-controller</code>。</li>
+<li>编辑 <code>hack/boilerplate.go.txt</code> 中的版权信息。</li>
+<li>修改 <code>README</code>，<code>OWNERS</code>，<code>SECURITY_CONTACTS</code> 等信息。</li>
+<li>编辑执行<strong>代码生成器</strong>的脚本 <a href="https://github.com/kubernetes/sample-controller/blob/master/hack/update-codegen.sh">hack/update-codegen.sh</a>
+<ul>
+<li>编辑脚本中的代码生成器所在位置，脚本中原本写的是使用了 <code>go mod vendor</code> 将 Go 依赖都放到了项目的 <code>vendor</code> 目录下时生成器的位置，按实际情况进行修改（比如改成 <code>$GOPATH</code> 目录下）。</li>
+<li>编辑 <code>code-generator</code> 的参数，把 <code>k8s.io/sample-controller</code> 改成 <code>github.com/&lt;USERNAME&gt;/database-controller</code>, 并编辑 <code>--output-base</code> 的目录位置。</li>
+<li>执行代码生成器脚本，确保能正确生成代码。</li>
+</ul>
+</li>
+</ul>
+<p>之后修改 <code>pkg/apis/samplecontroller</code> 目录为 <code>pkg/apis/databasecontroller</code>，同时把 <code>samplecontroller</code> 包修改为 <code>databasecontroller</code>。</p>
+<ul>
+<li>把代码中所有使用了 <code>samplecontroller</code> 包的地方都改为 <code>databasecontroller</code>（被代码生成器生成的代码可以不用改，后面会重新生成代码）。</li>
+<li>修改 <code>pkg/apis/databasecontroller/register.go</code> 的 <code>GroupName</code> 为 <code>database.&lt;YOUR_DOMAIN&gt;</code>，例如 <code>database.example.io</code>。</li>
+<li>修改代码生成器的注释，把 <code>pkg/apis/databasecontroller/v1alpha1/doc.go</code> 的 <code>groupName</code> 修改为 <code>database.example.io</code>。</li>
+<li>重新执行代码生成器 <code>./hack/update-codegen.sh</code>。</li>
+</ul>
+<p>先简单熟悉一下修改后的项目的代码结构：</p>
+<ul>
+<li>
+<p><code>main.go</code> 中先构建了 Kubernetes 和 <code>database-controller</code> 的 <code>Client</code>，之后基于 <code>Client</code> 构建了 <code>SharedInformer</code>，最后创建并启动 Controller。</p>
+<p>简单来讲，<code>Informer</code> 在资源发生改动时，调用相应事件的处理函数，它可以对“增加”，“更新”，“删除”三种事件进行“监控”处理（一点也不简单，太抽象了）。然后 Informer 还充当了缓存的作用，查询资源状态时只需要查询 Informer 的缓存即可，不需要反复调用 Kube API，减少性能损耗。</p>
+</li>
+<li>
+<p><code>controller.go</code> 包含这些内容：</p>
+<ul>
+<li>构建 Controller 的 <code>NewController</code>、启动 Controller 的 <code>Run</code>，还有 Informer 在不同事件（Event）进行处理的函数……</li>
+<li>创建 Deployment 的函数，<code>sample-controller</code> 中的 CRD Kind 为 <code>foo</code>，这个 <code>foo</code> 创建的 Deployment 是一个 <code>nginx</code> Pod，有点抽象，后面要把 <code>foo</code> 改成咱们要实现的 <code>database</code>，原理实际都没变。</li>
+</ul>
+<p>Controller 结构体中包含了：</p>
+<ul>
+<li><code>kubernetes</code> 和代码生成器生成的 <code>database</code> 的 <code>clientSet</code>。</li>
+<li>Informer 的 Lister，用来从缓存中获取资源。</li>
+<li><code>workqueue</code>：Rate Limit 消息队列。
+Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取资源并处理。Informer 在接收到状态更新后，会把更新的状态入队列，然后另一个 Routine 中会获取到队列中的消息，拿去处理。
+（蛮复杂的，这里还是去直接看代码比较好）</li>
+</ul>
+</li>
+</ul>
+<h3 id="修改-controller">修改 Controller</h3>
+<p>接下来按照上面讲的那样，修改 <code>pkg/apis/databasecontroller/v1alpha1/types.go</code> 中的 <code>Spec</code> 和 <code>Status</code> 字段，<code>Spec</code> 中的字段是你想定义的 Database 的状态，然后 Controller 负责按照你定义的 <code>Spec</code> 去创建 Deployments 并更新 <code>Status</code>。</p>
+<p>首先需要把 <code>Foo</code> 改名成 <code>Database</code>，然后编辑 <code>Spec</code> 中的字段，例如数据库所使用的镜像名称及 Tag，<code>Replicas</code> 冗余数以及其他你觉得创建 Deployment 所需的自定义配置。在修改完 <code>Spec</code> 和 <code>Status</code> 后需要重新执行代码生成器。</p>
+<p>之后在项目根目录下编辑 <code>controller.go</code>，修改控制器创建 Deployment 的逻辑，把 <code>Foo</code> 对象修改为 <code>Database</code>，然后按照你定义的 <code>Spec</code>，编辑 <code>artifacs/example</code> 目录下的 <code>crd.yaml</code> 和 <code>example-database.yaml</code> 文件，这部分咱就不把详细的步骤写到这里了，你可以根据你的想法尝试编写你的 Controller，在这里遇到问题最好还是自行尝试动手解决。</p>
+<h2 id="其他">其他</h2>
+<p>后面还有好多关于 Controller 相关的知识点我也还没搞懂，就不写到博客里误导别人了。除了 <code>sample-controller</code> 这种框架的 Controller 之外，还有很多人使用其他的框架编写 Controller，因为很多时候我们更关注于实现业务逻辑，因此可以套用一些 Operator 模板，常用的有 <a href="https://sdk.operatorframework.io/">Operator SDK</a>，可以通过这个工具生成一份 Controller 模板，然后按照你想实现的功能去修改代码即可，还有很多其他 Operator 可供选择，比如 Rancher 的开发者们使用 <a href="https://github.com/rancher/wrangler">Wrangler</a> 编写 Controller，基于 <code>Wrangler</code> 编写的 Rancher 使用的 Operator 有 <a href="https://github.com/rancher/eks-operator">eks-operator</a> 等一堆 Operator，感兴趣的话可以去看看。<code>Wrangler</code> 的 README 中写的这一段蛮有意思的：</p>
+<blockquote>
+<p>Most people writing controllers are a bit lost as they find that there is nothing in Kubernetes that is like <code>type Controller interface</code> where you can just do <code>NewController</code>. Instead a controller is really just a pattern of how you use the generated clientsets, informers, and listers combined with some custom event handlers and a workqueue.</p>
+</blockquote>
+<p>之后如果想把你编写的 Controller (Operator) 应用到生产环境，打包给更多的人使用，可以把编译好的 Operator 二进制文件放到容器镜像中，之后使用 <a href="https://helm.sh">Helm</a> 创建一个 &ldquo;应用程序 (Chart)&quot;，通过编写 <a href="https://helm.sh/docs/chart_best_practices/templates/">模板</a>，在安装 Helm Chart 时编辑 <code>values.yaml</code> 中定义的字段来自定义 CRD 的参数。Helm 的模板本质上是 Go Template 模板渲染引擎，所以用起来都是很简单的（确信）。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>使用 Helm Chart 方式部署 Harbor</title>
+      <link>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</link>
+      <pubDate>Sun, 28 May 2023 16:49:45 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</guid>
+      <description>&lt;p&gt;打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。</p>
+<p>首先介绍一下 NAS 上的环境，咱的 Kubernetes 集群运行在几个 QEMU 虚拟机里，虚拟机里运行的是 ArchLinux，因为就是咱折腾着玩的所以使用的 k3s 搭建的轻量级的 kubernetes 集群，然后其中一个集群安装了 Rancher 作为 Local 集群。</p>
+<h2 id="环境准备">环境准备</h2>
+<ol>
+<li>
+<p>新建一个 Namespace，将 Harbor 的资源与其他资源隔离：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> kubectl create namespace harbor
+</span></span></code></pre></div></li>
+<li>
+<p>为了启用 HTTPS，提前创建一个 TLS 类型的 <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Secret</a>，存放证书:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> cat &gt; cert.pem &lt;&lt; EOF
+</span></span><span class="line"><span class="cl"><span class="go">-----BEGIN CERTIFICATE-----
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">-----END CERTIFICATE-----
+</span></span></span><span class="line"><span class="cl"><span class="go">EOF
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> cat &gt; cert.key &lt;&lt; EOF
+</span></span><span class="line"><span class="cl"><span class="go">-----BEGIN PRIVATE KEY-----
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">-----END PRIVATE KEY-----
+</span></span></span><span class="line"><span class="cl"><span class="go">EOF
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> kubectl -n harbor create secret tls harbor-tls <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span><span class="go">    --cert=cert.pem \
+</span></span></span><span class="line"><span class="cl"><span class="go">    --key=cert.key
+</span></span></span></code></pre></div></li>
+<li>
+<p>提前创建 PVC (<a href="https://kubernetes.io/docs/concepts/storage/persistent-volumes/">PersistentVolumeClaim</a>)，咱这里先在 NAS 上新建了一个 NFS 服务器，之后创建了 NFS 类型的 PV (PersistentVolumes)，再基于这个 PV 创建的 PVC。</p>
+<p>ArchLinux 上搭建 NFS 服务器：<a href="https://wiki.archlinux.org/title/NFS">https://wiki.archlinux.org/title/NFS</a></p>
+<blockquote>
+<p>在配置 <code>exports</code> 时，需要配置上 <code>no_root_squash</code> 和 <code>no_subtree_check</code>，使挂载的目录及子目录具有写权限。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/exports - exports(5) - directories exported to NFS clients
+</span></span><span class="line"><span class="cl"># Use `exportfs -arv` to reload.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/var/nfs/harbor		10.0.0.0/8(rw,sync,no_root_squash,no_subtree_check)
+</span></span></code></pre></div></blockquote>
+</li>
+</ol>
+<h2 id="获取-helm-chart">获取 Helm Chart</h2>
+<p>Harbor 的 Helm Chart 可以在 <a href="https://github.com/goharbor/harbor-helm">GitHub</a> 获取，这里使用将 Chart 源码克隆到本地的方式安装，方便编辑 <code>values.yaml</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> git clone https://github.com/goharbor/harbor-helm.git <span class="o">&amp;&amp;</span> <span class="nb">cd</span> harbor-helm
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> git checkout v1.12.1
+</span></span></code></pre></div><blockquote>
+<p>写这篇博客时 Chart 的最新版本是 <code>v1.12.1</code> (Harbor OSS v2.8.1)。</p>
+</blockquote>
+<h3 id="编辑-valuesyaml">编辑 <code>values.yaml</code></h3>
+<p>Harbor 的配置都定义在了 <code>values.yaml</code> 文件中，根据需要进行修改。</p>
+<p>这里列举些常用的可以修改的选项：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">expose</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># expose type, 可以设置为 ingress, clusterIP, nodePort, nodeBalancer，区分大小写</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 默认为 ingress（如果不想使用 80/443 标准端口，可以设置为 nodePort，端口为高位 3000X）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l">ingress</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">tls</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 是否启用 TLS (HTTPS)，建议启用</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># TLS Certificate 的来源，可以为 auto, secret 或 none</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 如果为 secret，需要在安装 Chart 之前先创建 TLS Secret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 1) auto: generate the tls certificate automatically</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 2) secret: read the tls certificate from the specified secret.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># The tls certificate can be generated manually or by cert manager</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># 3) none: configure no tls certificate for the ingress. If the default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># tls certificate is configured in the ingress controller, choose this option</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">certSource</span><span class="p">:</span><span class="w"> </span><span class="l">secret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">secret</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># The name of secret which contains keys named:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># &#34;tls.crt&#34; - the certificate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># &#34;tls.key&#34; - the private key</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">secretName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-tls&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Only needed when the &#34;expose.type&#34; is &#34;ingress&#34;.</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">notarySecretName</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-tls&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">ingress</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hosts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># Ingress Host，如果需要允许任意域名/IP 都能访问，将其设置为空字符串（不建议）</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 这里填写的域名务必能解析到当前集群</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">core</span><span class="p">:</span><span class="w"> </span><span class="l">harbor.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">notary</span><span class="p">:</span><span class="w"> </span><span class="l">notary.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Harbor external URL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 与 Ingress Host 相对应，如果启用了 TLS，那就是 https://&lt;domain&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果没启用 TLS，那就是 http://&lt;domain&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果 expose type 为 nodePort，则填写 http(s)://&lt;IP_ADDRESS&gt;:3000X (端口号不能丢)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">externalURL</span><span class="p">:</span><span class="w"> </span><span class="l">https://harbor.example.com</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 持久卷配置，默认为 true，如果是测试环境可以设置为 enabled: false (重新安装 Chart 时仓库里所有的数据都会丢失，不建议！)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 如果需要启用持久卷，可以在安装 Chart 之前提前创建好 PVC，并配置 subPath</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">persistence</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">resourcePolicy</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;keep&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">persistentVolumeClaim</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">registry</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 填写已经创建好的 PVC</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="c"># 如果共用一个 PVC，需要设置子目录</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;registry&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">5Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">jobservice</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">jobLog</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;jobservice&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">database</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;database&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">redis</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;redis&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">1Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">trivy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">existingClaim</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;harbor-pvc&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">subPath</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;trivy&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">accessMode</span><span class="p">:</span><span class="w"> </span><span class="l">ReadWriteOnce</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="l">5Gi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">annotations</span><span class="p">:</span><span class="w"> </span>{}<span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># Admin 初始密码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">harborAdminPassword</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;Harbor12345&#34;</span><span class="w">
+</span></span></span></code></pre></div><h3 id="安装-helm-chart">安装 Helm Chart</h3>
+<p>确保 Values 编辑无误后，就可以安装 Chart 了：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> helm --namespace harbor install harbor .
+</span></span></code></pre></div><p>如果安装后发现 Values 中有些配置需要修改，可以在修改完配置后以升级的方式使配置生效：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> helm --namespace harbor upgrade harbor .
+</span></span></code></pre></div><p>查看 Chart 的 Pods 运行状态：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> kubectl --namespace harbor get pods
+</span></span><span class="line"><span class="cl"><span class="go">NAME                                    READY   STATUS    RESTARTS      AGE
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-core-7b75785b64-9vzkx            1/1     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-database-0                       1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-jobservice-6f4d59bd95-25q44      1/1     Running   2 (65m ago)   65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-notary-server-584698b475-lnt99   1/1     Running   1 (60m ago)   65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-notary-signer-77685b6f94-pfngc   1/1     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-portal-6fb6465fd6-hm4cg          1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-redis-0                          1/1     Running   0             77m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-registry-5bbccf79fb-7hcm9        2/2     Running   0             65m
+</span></span></span><span class="line"><span class="cl"><span class="go">harbor-trivy-0                          1/1     Running   0             77m
+</span></span></span></code></pre></div><h2 id="其他">其他</h2>
+<p>安装完成后，就可以完美使用 Harbor Registry 了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> docker login harbor.example.com
+</span></span><span class="line"><span class="cl"><span class="go">Username: admin
+</span></span></span><span class="line"><span class="cl"><span class="go">Password:
+</span></span></span><span class="line"><span class="cl"><span class="go">WARNING! Your password will be stored unencrypted in /home/user/.docker/config.json.
+</span></span></span><span class="line"><span class="cl"><span class="go">Configure a credential helper to remove this warning. See
+</span></span></span><span class="line"><span class="cl"><span class="go">https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Login Succeeded
+</span></span></span></code></pre></div><p>从 DockerHub 中 Mirror 一些镜像到 Harbor 中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo copy --all docker://archlinux:latest docker://harbor.example.com/library/archlinux:latest
+</span></span><span class="line"><span class="cl"><span class="go">Getting image list signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying 1 of 1 images in list
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying image sha256:076c0233d1996165721320957be9a037a760574d6334281354b07b3b3c9440b1 (1/1)
+</span></span></span><span class="line"><span class="cl"><span class="go">Getting image source signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying blob f0e04a7b4686 done
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying blob 352736306209 done
+</span></span></span><span class="line"><span class="cl"><span class="go">Copying config cc4866169d done
+</span></span></span><span class="line"><span class="cl"><span class="go">Writing manifest to image destination
+</span></span></span><span class="line"><span class="cl"><span class="go">Storing signatures
+</span></span></span><span class="line"><span class="cl"><span class="go">Writing manifest list to image destination
+</span></span></span><span class="line"><span class="cl"><span class="go">Storing list signatures
+</span></span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

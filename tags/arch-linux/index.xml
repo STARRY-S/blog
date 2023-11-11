@@ -1,0 +1,1032 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Arch Linux on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/arch-linux/</link>
+    <description>Recent content in Arch Linux on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Sat, 12 Nov 2022 13:25:03 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>NAS 装机记录</title>
+      <link>https://blog.starry-s.moe/posts/2022/build-nas/</link>
+      <pubDate>Sat, 12 Nov 2022 13:25:03 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/build-nas/</guid>
+      <description>&lt;p&gt;差不多去年的这个时候尝试过用树莓派插移动硬盘的方式试探性的组装了一个 NAS，但实际上用了不到两天这个方案就被废弃掉了……&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>差不多去年的这个时候尝试过用树莓派插移动硬盘的方式试探性的组装了一个 NAS，但实际上用了不到两天这个方案就被废弃掉了……</p>
+<meting-js server="netease" type="song" id="22682819" theme="#233333"></meting-js>
+<h2 id="起因">起因</h2>
+<p>不用树莓派的原因是，它是 ARM 架构的微型“电脑”，Arch Linux 官方只支持 x86_64 架构的系统，Arch Linux ARM 准确来说实际上是个第三方的系统。
+然后树莓派的性能很差，只有一个板载网卡和 2.4G 无线网卡（我手里的是树莓派 3B），所以这玩意实际上更适合做嵌入式什么的，或者给初学者折腾入门 Linux 来用（但是看了眼现在树莓派的售价，我想应该不会有初学者买树莓派入门 Linux 了）。</p>
+<p>后来买了 NanoPi R4S 软路由，它内置了一个 RK3399 CPU，虽然也是 ARM 架构但是性能对于软路由来说很够用了，当时也是给它折腾了 Arch Linux ARM 系统还依次尝试了 <code>systemd-networkd</code> 和 <code>netctl</code> 给它的两个网口配置路由，但折腾归折腾，这种方式并不稳定，在日常使用过程中经常遇到重启路由器后上不去网的情况，还要手动 SSH 到路由器中再重启一次网络服务和防火墙才恢复。虽然手动改网络组件的配置文件的方式配置个路由器更底层些，这个过程也能更好的体会到路由器的一些原理，但是这种方案并不适合长期日常使用，我可不希望动不动家里路由器莫名其妙就断网了还要手动 SSH 到系统里查一堆日志后才能重连网络。</p>
+<p>之后我把手里的 R4S 卖掉了，因为 NanoPi 新发布了性价比更高且功耗更低的，拥有俩 2.5G LAN 网口，还有一个 M2 插槽和内置了 8G 闪存的 R5S。我给它安装了更适合路由器使用的基于 OpenWRT 构建的 FriendlyWRT 系统，这个系统内置了 Docker 和一些常用的应用（网络共享、Aria2、硬盘自动休眠之类的），在把光猫改桥接后，用它来做我的主路由器。然后把手里一块空闲的 2T 移动硬盘连接到路由器上，设置了 OpenWRT 的网络共享 (Samba) 服务后，实验性的当作我的 NAS 来使用。</p>
+<p>之所以是“实验性”的“NAS”，是因为我不确定 USB 连接移动硬盘的方式是否稳定，因为移动硬盘对供电有一定要求，我并不确定路由器的 USB 接口能否稳定的为硬盘供电，就算连接一块硬盘供电够用的话，我不确定连接两块以上的硬盘组磁盘阵列还能不能带得动，尽管这个问题能通过一根 USB 供电线来解决，但是我那半个巴掌大小的路由器上面既要插三根巨粗无比的 7 类网线，又要插硬盘和 USB 供电线，还要再占用一个插座插一个手机充电器给移动硬盘供电，这也太混乱了点，毕竟机械硬盘在读写过程中很怕震动，我在插拔网线或者插座上其他的电器时都避免不了的会对那块移动硬盘产生震动。</p>
+<p>然后路由器毕竟是路由器，你即要它负责整个家庭几十个网络设备的路由功能，又要跑 Samba 服务器，还要往里面装一些“上网插件”的话，对 CPU 的性能还是有一定要求的。因为我的路由器和电脑都有 2.5G 网口，所以我实际测试过当通过 Samba 拷贝文件的速度接近于 200MB/S 时，路由器的 CPU 4个核心就会全跑到 100%，然后拷贝就卡住了，时间久了文件就拷贝失败了（然后我不得不又设置了 QoS 把 2.5G 的网口限速成千兆网口）。</p>
+<p>所以最好的办法还是把 NAS 和路由器分开，路由器就用来做路由器该做的事情，NAS 就做 NAS 该做的事情。</p>
+<blockquote>
+<p>以上就是我组装 NAS 的整个心路历程，如果觉得上面这一大堆太磨叽的话，直接看下面就好了。</p>
+</blockquote>
+<hr>
+<h2 id="配置清单">配置清单</h2>
+<ul>
+<li>机箱：乔伯思 N1</li>
+<li>主板：映泰 B550T-SILVER ITX</li>
+<li>CPU：AMD R7 5700G</li>
+<li>内存：英睿达 8G 2666</li>
+<li>固态：闪迪 500G NVME</li>
+<li>硬盘：东芝 MG08ACA16TE * 1</li>
+<li>电源：Tt SFX钢影 450W</li>
+<li>其他：乐扩 4 口 2.5G PCIE 网卡</li>
+</ul>
+<p>系统盘是之前折腾软路由时剩下的一块 500G 的 NVME 固态，除此之外双十一的时候还买了一块东芝的 16T 企业盘。</p>
+<hr>
+<p>本来想把除硬盘外的整体预算控制在 2K 以内的，但实际上光主板 + CPU 就两千多了……</p>
+<p>在深水宝上有更便宜的 5600G + B450 ITX 套装，但是这种来路不明的主板和散片 CPU 尽管便宜了几百块钱但是我也不知道它的 CPU 有没有“锻炼”过，主板有没有换过啥零件，反正我是不敢买。所以挑了好久，决定提高了预算，在狗东买的全新的板 U 套装，选的这个带板载 2.5G 网卡的主板，毕竟我可不想贪小便宜吃大亏。</p>
+<p>散热器目前用的是 AMD 盒装 CPU 带的散热，听说这个散热器在拆的时候极有可能会把 CPU 连根拔起，但是我有一个闲置的利民的 itx 散热器放在老家了没拿过来，所以现在只好先用原装的过度一下。</p>
+<p>本来是没打算买机械硬盘的，想着先用移动硬盘连在 NAS 上先用一阵子的，不过双十一硬盘便宜了好多，信用卡分三期还能再减 50，所以就先买了一块，估计够我用很长时间的了。</p>
+<h2 id="装机">装机</h2>
+<p><img loading="lazy" src="images/001.jpg" alt="" />
+
+</p>
+<p>映泰的这块板子是不带无线网卡的，但送了一个 WIFI5 的无线网卡，需要手动安装上去，当时废了九牛二虎之力才接上了这两根 SMA 线……。</p>
+<p><img loading="lazy" src="images/002.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/003.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/004.jpg" alt="" />
+
+</p>
+<p>然后走线的过程其实还挺顺利的，插上主板 24PIN、CPU 8PIN 和 SATA 供电以及风扇、机箱前面板跳线和 USB、音频线之外就完事了，找一些空隙把这些线绑起来就好了，说实话走线的过程可比之前给先马趣造装机容易多了，毕竟少了两根显卡供电线和一堆风扇的电源线还有 RGB 灯的线……</p>
+<h2 id="装系统">装系统</h2>
+<p>NAS 的系统我采用的是 Arch Linux。首先，选一个 NAS 的系统肯定要优先考虑更适合做服务器的 Linux，其次 FreeNAS 这个系统是基于 FreeBSD/Unix 的，我就是单纯的不想用 BSD 所以就把它排除在方案外了（但是 NAS 里装一个虚拟机跑 FreeNAS 也不是不可以），至于网上总能听到的黑群晖我对这种盗版 + 闭源的系统很反感，所以想都不要想了。提到 Linux 的服务器发行版肯定有人更偏向于 Debian 以及 Debian 衍生的服务器系统以及红帽系列的被经常用在服务器的那些企业常用 Linux 系统，但是我只想用我熟悉的 Arch Linux。Arch Linux 的 Wiki 中有介绍过，Arch Linux 的思维是这个系统并不针对某类应用场景，而是让 Arch 的用户自己配置自己的系统来应用在哪些场景，所以理论上是可以把 Arch Linux 配置成一个适合应用在服务器上的系统，实际上也有 <code>vps2arch</code> 这个“黑魔法”脚本可以一键把 VPS 上已安装的其他 Linux 系统转成 Arch Linux。如果在这里你非要和我较真哪个 Linux 发行版好，哪个 Linux 发行版不好的话，我觉得这并不属于一个技术范围该讨论的问题而是一个哲学问题。</p>
+<p>安装教程在 Wiki 上就能找到，这里不再赘述，安装系统时需要装一些网络相关的软件，我配置网络使用的是 <code>netctl</code>，因为觉得 <code>systemd-networkd</code> 不怎么好用，我对 NetworkManager 不怎么熟悉所以就没装这个。然后配置无线连接时还需要用到 <code>wpa_supplicant</code>。</p>
+<h3 id="配置网络">配置网络</h3>
+<p>我的 NAS 上面一共有 5 个网口，其中一个网口为板载的 2.5G 网口，另外四个网口为 2.5G 的 PCIE 网口，我当初买这个 PCIE 网卡的时候想的是给它配置个桥接当交换机来用，这样只买一块网卡肯定比买个 4 口交换机便宜，因此装系统后配置网络这部分是重头戏，Arch Linux Wiki 上对配置桥接这部分只是简单介绍了几句就完事了，所以这部分我足足花了两个晚上才全部搞定。</p>
+<p>首先创建 <code>netctl</code> 的配置文件 <code>/etc/netctl/bridge-br0</code> (文件名可以随意修改)，新创建一个虚拟的桥接接口 <code>br0</code>，这个虚拟的桥接网口绑定了上述的5个网口。我打算将板载的网口 (<code>enp9s0</code>) 连接路由器，然后那 4 个 PCIE 网卡的接口 (<code>enp3s0</code> - <code>enp6s0</code>) 用来连接其他网络设备，所以要将 <code>br0</code> 的 MAC 地址设定为 <code>enp9s0</code> 的 MAC 地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> cat /etc/netctl/bridge-br0
+</span></span><span class="line"><span class="cl"><span class="go">Description=&#34;Example Bridge connection&#34;
+</span></span></span><span class="line"><span class="cl"><span class="go">Interface=br0       # 接口的名称
+</span></span></span><span class="line"><span class="cl"><span class="go">Connection=bridge   # 桥接模式
+</span></span></span><span class="line"><span class="cl"><span class="go">BindsToInterfaces=(enp9s0 enp6s0 enp5s0 enp4s0 enp3s0)  # 将 br0 绑到 5 个物理网口上
+</span></span></span><span class="line"><span class="cl"><span class="go">MACAddress=enp9s0   # 设定 br0 的 MAC 地址与 enp9s0 接口的 MAC 地址一致
+</span></span></span><span class="line"><span class="cl"><span class="go">IP=dhcp             # 以 DHCP 的方式为 br0 获取 IP 地址
+</span></span></span></code></pre></div><p>除此之外还要配置 <code>enp9s0</code> 接口的配置文件 <code>/etc/netctl/noip-enp9s0</code>，<strong>不要让这个接口自动获取 IP 地址</strong>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> cat /etc/netctl/noip-enp9s0
+</span></span><span class="line"><span class="cl"><span class="go">Description=&#39;Example configuration&#39;
+</span></span></span><span class="line"><span class="cl"><span class="go">Interface=enp9s0
+</span></span></span><span class="line"><span class="cl"><span class="go">Connection=ethernet
+</span></span></span><span class="line"><span class="cl"><span class="go">IP=no
+</span></span></span></code></pre></div><p>之后执行以下命令使以上两个配置文件生效。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> netctl <span class="nb">enable</span> bridge-br0
+</span></span><span class="line"><span class="cl"><span class="gp">#</span> netctl start bridge-br0
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">#</span> netctl <span class="nb">enable</span> noip-enp9s0
+</span></span><span class="line"><span class="cl"><span class="gp">#</span> netctl start noip-enp9s0
+</span></span></code></pre></div><p>顺利的话，执行 <code>ip addr</code> 可以看到新增加了一个 <code>br0</code> 网口 （不顺利的话就重启一下，再检查一下除了 <code>netctl</code> 之外是不是有别的配置网络的应用产生了干扰），然后原有的 5 个网口都绑定到了 <code>br0</code> 接口上了（接口的那一行出现了 <code>br0</code>）。</p>
+<p>然后 <code>enp9s0</code> 接口正常来讲是不应该从路由器上获取到 IP 地址的了，取而代之的是 <code>br0</code> 接口从路由器的 DHCP 服务器中获取了一个 IP 地址，然后 <code>br0</code> 接口的 MAC 地址和 <code>enp9s0</code> 接口的 MAC 地址都一致才对。</p>
+<p>以下是一个简单的栗子，在不考虑 IPv6 的情况 <code>ip a</code> 的输出是类似酱紫的：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ip addr
+</span></span><span class="line"><span class="cl"><span class="go">1: enp3s0: &lt;NO-CARRIER,BROADCAST,MULTICAST,PROMISC,UP&gt; mtu 1500 qdisc fq_codel master br0 state DOWN group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether ab:cd:ef:xx:xx:xx brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">2: enp4s0: &lt;NO-CARRIER,BROADCAST,MULTICAST,PROMISC,UP&gt; mtu 1500 qdisc fq_codel master br0 state DOWN group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether ab:cd:ef:xx:xx:xx brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">    这里 enp3s0 - enp6s0 这四个接口的情况基本一致所以在此省略
+</span></span></span><span class="line"><span class="cl"><span class="go">    ......
+</span></span></span><span class="line"><span class="cl"><span class="go">5: enp9s0: &lt;BROADCAST,MULTICAST,PROMISC,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel master br0 state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether f4:bb:22:xx:xx:xx brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">    ......
+</span></span></span><span class="line"><span class="cl"><span class="go">6: br0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether f4:bb:22:xx:xx:xx brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.10.10.233/24 brd 10.10.10.255 scope global dynamic noprefixroute br0
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft 1606601sec preferred_lft 1375801sec
+</span></span></span><span class="line"><span class="cl"><span class="go">    ......
+</span></span></span></code></pre></div><p>至此，NAS 是可以与路由器下的同一局域网内的其他设备互相访问的，然后检查下 <code>/etc/resolv.conf</code> 如果 DNS 配置正确了的话，也是可以访问到公网的，执行 <code>curl baidu.com</code> 是应该有返回的内容的。</p>
+<p>但是我们目前只配置了 NAS 自身的板载网口 (<code>enp9s0</code>) 与 <code>br0</code> 虚拟网口的桥接这部分，现在其他设备通过网线插到 PCIE 网卡的那4个接口是上不去网的。</p>
+<p>在计网课程中，老师曾反复强调路由器和交换机的区别，路由器是 OSI 七层模型中的网络层的设备，而交换机是第二层的数据链路层的设备，但光是这么讲的话，死记硬背是能记住这两个设备之间的区别，但这种知识实在过于抽象，很难真正的理解，况且这个“网络模型”是按照已有的网络设备给它拆分成不同的层的，而并不是先制定出了分层的标准然后让设备严格按照这个模型去制作的，所以现在市面上卖的网络设备并没有体现出所谓的分层，不同的网络层之间的界限实际上是很模糊的。在网上搜这方面资料的时候看到有人把路由器称作“3 层交换机”，而常说的那种交换机则称为“2 层交换机”。说实话我也没彻底的搞明白数据链路层和网络层以及路由器和交换机之间的具体区别，不过往简单了说，可以把路由器看成是一个根据 IP 地址在不同的网段之间分发数据的设备，而交换机是通过 MAC 地址，只在一个网段内分发数据的设备，市面上常见的售卖的“路由器”商品实际上是一个真正意义上的路由器 + 交换机 + DHCP服务器和其他组件的组合体，知道这些基本就够用了，再往详细了讲的话我也讲不明白了。</p>
+<p>然后修改 PCIE 网卡的 4 个接口 <code>enp3s0</code> - <code>enp6s0</code> 的 MAC 地址和板载网口 <code>enp9s0</code> 的 MAC 地址一致，这样5个网口和虚拟的 <code>br0</code> 网口都使用同一个 MAC 地址，就能实现交换机的功能了，至于为啥要把 5 个网口的 MAC 地址都设置一致这个别问我，我也不到为啥，如果这里有哪些知识点有误，可以评论告诉我。</p>
+<p>因为 <code>netctl</code> 好像不支持修改接口 MAC 地址的操作，所以这里还是要用到 <code>systemd-networkd</code> 在开机时自动修改网口的 MAC 地址，在 <code>/etc/systemd/network/</code> 中创建 <code>00-enp3s0.link</code> - <code>00-enp6s0.link</code> 这 4 个配置文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># cat /etc/systemd/network/00-enp3s0.link
+</span></span><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl"># 这个是网口原有的 MAC 地址
+</span></span><span class="line"><span class="cl">MACAddress=aa:bb:cc:dd:xx:xx
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Link]
+</span></span><span class="line"><span class="cl"># 这个是修改后的 MAC 地址
+</span></span><span class="line"><span class="cl">MACAddress=f4:bb:22:xx:xx:xx
+</span></span><span class="line"><span class="cl">NamePolicy=kernel database onboard slot path
+</span></span></code></pre></div><p>确保 <code>/etc/systemd/network/</code> 中没有其他的配置文件后，<code>systemctl enable --now systemd-networkd</code> 启动 <code>systemd-networkd</code>，在重启电脑后 5 个接口的 MAC 地址就都一致了。</p>
+<p>至此交换机这部分就配置完了。</p>
+<h3 id="配置-samba">配置 Samba</h3>
+<p>目前我还没有机械硬盘，只有一个移动硬盘通过 USB 连接到了 NAS 上，目前我使用的是 <code>hd-idle</code> 配置了硬盘的自动启停。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo hd-idle -a /dev/sda -i <span class="m">300</span>
+</span></span></code></pre></div><p>然后安装 <code>samba</code>，在 <code>/etc/samba/</code> 目录下创建 <code>smb.conf</code>，具体的过程请参照 <a href="https://wiki.archlinux.org/title/Samba">Wiki</a>。</p>
+<p>我把我的 16T 硬盘格式化成 <code>btrfs</code> 后挂载到了 <code>/samba/hdd_16t_1</code> 目录下面，然后对应的 Samba 配置文件为：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[HDD16T1]
+</span></span><span class="line"><span class="cl">  force user = root
+</span></span><span class="line"><span class="cl">  comment = HDD 16T 1
+</span></span><span class="line"><span class="cl">  path = /samba/hdd_16T_1
+</span></span><span class="line"><span class="cl">  valid users = samba
+</span></span><span class="line"><span class="cl">  public = no
+</span></span><span class="line"><span class="cl">  writable = yes
+</span></span><span class="line"><span class="cl">  browsable = yes
+</span></span><span class="line"><span class="cl">  printable = no
+</span></span><span class="line"><span class="cl">  create mask = 0644
+</span></span><span class="line"><span class="cl">  directory mask = 0755
+</span></span><span class="line"><span class="cl">  read only = no
+</span></span></code></pre></div><p>我打算只在内网访问我的 NAS，我还不打算把它暴露到公网上，所以目前不用太考虑安全的问题。</p>
+<p>然后我目前不考虑组 RAID，首先是因为没钱再买硬盘了，其次是 RAID 并不适合作为冗余备份使用，它没办法保证数据的绝对安全，所以如果我要存重要的数据的话，还是要往别的移动硬盘里也拷贝一份的，所以目前来看 RAID 我暂时用不上。</p>
+<p>东芝这块盘收货之后，我用 Samba 往里面烤了俩小时文件没遇到失败的情况，速度一直维持在 100MB/s 以上很稳定，至于噪音的话，白天是感觉不出来 NAS 的声音的，晚上因为配置了硬盘自动停转所以只要睡觉时不用它下载东西的话也是听不到声音的。</p>
+<h2 id="其他">其他</h2>
+<p>之所以买了 8 核 16 线程的 CPU 是因为我除了让它做 Samba 服务器之外还打算在上面跑一些别的服务啥的，目前除了 Samba 之外我在上面跑了 qemu KVM 虚拟机，然后在局域网搞了 Kubernetes 集群，因为公有云价格太贵了我自己租不起长时间的高性能 VPS，所以在本地起几个虚拟机装轻量级的集群用来学习 k8s 还是可以轻松实现的，不过我目前还没想好可以在集群里跑些什么东西。</p>
+<p>后续我打算把我的 MineCraft 单机生存的存档也放到 NAS 上面当服务器跑，这样就可以实现一些只有在服务器才能实现的操作了（比如挂个假人 24 小时挂机刷怪之类的）。</p>
+<p>以后有时间的话再写个 TeleBot 机器人啥的，用来远程监控 NAS 的状态。</p>
+<hr>
+<p><strong>STARRY-S</strong></p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>在Arch Linux上配置软路由</title>
+      <link>https://blog.starry-s.moe/posts/2022/archlinux-router/</link>
+      <pubDate>Wed, 08 Jun 2022 00:49:34 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/archlinux-router/</guid>
+      <description>&lt;p&gt;之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用&lt;code&gt;systemd-networkd&lt;/code&gt;配置了一个简易的软路由。不过&lt;code&gt;systemd-networkd&lt;/code&gt;不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为&lt;a href=&#34;https://blog.starry-s.moe/posts/2022/nanopi-r4s/&#34;&gt;R4S上手体验&lt;/a&gt;的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用<code>systemd-networkd</code>配置了一个简易的软路由。不过<code>systemd-networkd</code>不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为<a href="/posts/2022/nanopi-r4s/">R4S上手体验</a>的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。</p>
+<blockquote>
+<p>这里偷偷骂一下长城宽带没人反对吧</p>
+</blockquote>
+<h2 id="准备工作">准备工作</h2>
+<p>按照Arch Wiki的<a href="https://wiki.archlinux.org/title/Router#Connection_sharing">Router页面</a>，你的电脑需要符合安装Arch Linux的基础硬件要求，且至少具备俩物理网口。</p>
+<p>个人觉得软路由没必要非得刷*WRT或者其他路由器专用系统，也没必要搞个爱快群辉什么的系统，我只想给他装我喜欢的发行版，然后我自己配置我需要的服务，只要有两个以上的物理网口就可以配置路由功能，给他们配置DHCP和流量转发就完事了，这样搞出来的路由器更符合咱自己的需求，相对来讲也更灵活一些，不用受限于那些路由器/NAS定制的系统，而缺点则是比较折腾，有可能不稳定。</p>
+<p>安装系统的步骤咱跳过不讲了，Wiki上有的东西没必要在这里重复一遍。</p>
+<h2 id="配置ip地址">配置IP地址</h2>
+<p>首先，将你电脑的两个物理网口一个用作WAN口（连接广域网），一个用作LAN口（连接局域网），有需要的可以自行修改网口的名称（通常默认的网卡名字为<code>eth*</code>，或者<code>enp*s*</code>）。
+为了和Wiki同步，这里假设WAN口的名字为<code>extern0</code>，用来指连接到广域网的网口，LAN口的名字为<code>intern0</code>，代指连接到局域网的网口。</p>
+<p>本篇使用<code>netctl</code>配置网络，在修改配置文件之前，需要先停掉其他配置网络的服务。</p>
+<p>给LAN口配置一个静态IP地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl/intern0-profile
+</span></span><span class="line"><span class="cl"># Config file for intern0 (LAN)
+</span></span><span class="line"><span class="cl">Description=&#39;Private Interface. (LAN)&#39;
+</span></span><span class="line"><span class="cl">Interface=intern0
+</span></span><span class="line"><span class="cl">Connection=ethernet
+</span></span><span class="line"><span class="cl">IP=&#39;static&#39;
+</span></span><span class="line"><span class="cl">Address=(&#39;10.10.10.1/24&#39;)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">IP6=&#39;static&#39;
+</span></span><span class="line"><span class="cl">Address6=(&#39;fdaa:aaaa:bbbb::0001/64&#39;)
+</span></span><span class="line"><span class="cl">SkipNoCarrier=yes
+</span></span></code></pre></div><p>以上配置将为LAN口设定IPv4的地址为<code>10.10.10.1</code>，IPv6的地址为<code>fdaa:aaaa:bbbb::0001</code>。
+你可以给这个网口设定任意的局域网IP地址，通常为<code>10.*</code>，<code>172.*</code>，<code>192.168.*</code>这些网段的任意一个地址，
+IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**</code>开头的一般都是局域网的IP地址。</p>
+<p>之后给WAN口配置DHCP或PPPoE协议。</p>
+<blockquote>
+<p>配置DHCP的方式自行翻Wiki或者看example，这里不重复讲了。</p>
+</blockquote>
+<p>在配置PPPoE之前需要安装<code>ppp</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl/extern0-profile
+</span></span><span class="line"><span class="cl"># Config file for public interface (WAN)
+</span></span><span class="line"><span class="cl">Description=&#39;Public Interface. (WAN)&#39;
+</span></span><span class="line"><span class="cl">Interface=extern0
+</span></span><span class="line"><span class="cl">Connection=pppoe
+</span></span><span class="line"><span class="cl">User=&#39;username&#39;
+</span></span><span class="line"><span class="cl">Password=&#39;samplepasswd&#39;
+</span></span><span class="line"><span class="cl"># IP6=stateless
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Always keep a connection established
+</span></span><span class="line"><span class="cl">ConnectionMode=&#39;persist&#39;
+</span></span></code></pre></div><p>使用以下命令启动<code>netctl</code>的配置文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">netctl enable intern0-profile
+</span></span><span class="line"><span class="cl">netctl enable extern0-profile
+</span></span></code></pre></div><p>重启路由器，将WAN口与光猫的网口连接，使用<code>ip addr</code>查看网络设备的IP地址，顺利的话，可以看到一个名为<code>ppp0</code>的网口，并获取了一个运营商分给你的IP地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">1: intern0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000
+</span></span><span class="line"><span class="cl">    link/ether fa:97:da:d8:9d:8a brd ff:ff:ff:ff:ff:ff
+</span></span><span class="line"><span class="cl">    inet 10.10.10.1/24 brd 10.10.10.255 scope global intern0
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">    inet6 fdaa:aaaa:bbbb::1/64 scope global nodad
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">    inet6 fe80::f897:daff:fed8:9d8a/64 scope link
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">2: extern0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc mq state UP group default qlen 1000
+</span></span><span class="line"><span class="cl">    link/ether ca:1f:4a:9b:29:df brd ff:ff:ff:ff:ff:ff
+</span></span><span class="line"><span class="cl">    inet6 fe80::c81f:4aff:fe9b:29df/64 scope link
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">3: ppp0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu 1492 qdisc fq_codel state UNKNOWN group default qlen 3
+</span></span><span class="line"><span class="cl">    link/ppp
+</span></span><span class="line"><span class="cl">    inet 123.123.123.123 peer 123.123.123.1/32 scope global ppp0
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span><span class="line"><span class="cl">    inet6 240e:aaaa:bbbb:cccc:::eeee/64 scope global dynamic mngtmpaddr
+</span></span><span class="line"><span class="cl">       valid_lft 259132sec preferred_lft 172732sec
+</span></span><span class="line"><span class="cl">    inet6 fe80::aaaa:bbbb:cccc:dddd peer fe80::aaaa:bbbb:cccc:dddd/128 scope link
+</span></span><span class="line"><span class="cl">       valid_lft forever preferred_lft forever
+</span></span></code></pre></div><p>如果遇到了问题，可以使用<code>systemctl status netctl@extern0\\x2dprofile.service</code>查看一下错误信息。
+如果是认证失败的话，重启几次这个service说不定就好了。</p>
+<h2 id="配置dns和dhcp">配置DNS和DHCP</h2>
+<p>安装<code>dnsmasq</code>，编辑<code>/etc/dnsmasq.conf</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Setup listen address
+</span></span><span class="line"><span class="cl">listen-address=10.10.10.1,127.0.0.1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Do not read /etc/resolv.conf
+</span></span><span class="line"><span class="cl">no-resolv
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Use following dns servers
+</span></span><span class="line"><span class="cl">server=114.114.114.114
+</span></span><span class="line"><span class="cl">server=8.8.8.8
+</span></span><span class="line"><span class="cl">server=8.8.4.4
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Bind interface
+</span></span><span class="line"><span class="cl">interface=intern0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Setup domain
+</span></span><span class="line"><span class="cl">expand-hosts
+</span></span><span class="line"><span class="cl">domain=foo.bar
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Setup IPv4 DHCP
+</span></span><span class="line"><span class="cl">dhcp-range=10.10.10.100,10.10.10.255,255.255.255.0,12h
+</span></span><span class="line"><span class="cl"># Setup IPv6 DHCP
+</span></span><span class="line"><span class="cl">dhcp-range=fdaa:aaaa:bbbb::000a, fdaa:aaaa:bbbb::ffff, 64, 12h
+</span></span></code></pre></div><p>使用<code>systemctl enable --now dnsmasq.service</code>启动<code>dnsmasq</code>，
+之后重启路由器，使用网线连接将电脑连接到路由器的LAN口，顺利的话可以自动获取一个IP地址。</p>
+<p>如果没获取到IP地址的话，有可能是DHCP服务器的问题，先尝试在电脑上手动设置一个IP地址，之后尝试ping路由器的IP（<code>10.10.10.1</code>）。
+如果还是无法连接到路由器的话，就需要重新检查一下路由器的配置了。</p>
+<h2 id="网络共享">网络共享</h2>
+<p>首先<a href="https://wiki.archlinux.org/title/Internet_sharing#Enable_packet_forwarding">参照Wiki</a>，开启数据包转发的功能。</p>
+<p>之后安装<code>iptables</code>，配置ipv4和ipv6的流量伪装。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">iptables -A FORWARD -i intern0 -j ACCEPT
+</span></span><span class="line"><span class="cl">iptables -A FORWARD -o intern0 -j ACCEPT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">iptables -t nat -A POSTROUTING -o ppp0 -j MASQUERADE
+</span></span><span class="line"><span class="cl">iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+</span></span><span class="line"><span class="cl">iptables -A FORWARD -i intern0 -o ppp0 -j ACCEPT
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">iptables -t mangle -A FORWARD -o ppp0 -p tcp -m tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ip6tables -t nat -A POSTROUTING -o ppp0 -j MASQUERADE
+</span></span></code></pre></div><p>之后可使用<code>iptables-save -f /etc/iptables/iptables.rules</code>和
+<code>ip6tables-save -f /etc/iptables/ip6tables.rules</code>将ip桌子的规则保存下来。</p>
+<h2 id="done">Done</h2>
+<p>以上配置完成后，按理来说路由器就已经配置好了。</p>
+<p>调试的过程为首先在路由器上尝试ping一个广域网的域名或IP地址（<code>8.8.8.8</code>），之后将路由器与电脑用网线连接，
+电脑应当通过DHCP自动获取到一个随机的IP地址。
+之后在电脑上尝试打开一些理应能打开的网站，应该是能打开的。</p>
+<p>如果能电脑可以ping通一个广域网的IP，但是打不开网站的话，就检查一下路由器DNS配置，
+如果路由器上能ping通一个广域网的IP，但电脑连IP地址都ping不通，那就去检查一下ip桌子的流量伪装规则，检查一下网口名字有没有写对之类的。</p>
+<p>之后如果一切都调试成功的话，就可以把家里的无线路由器改成“有线中继”模式了，这样家里的无线路由器将只作为一个无线AP使用，路由的功能将全部由刚刚配置好的软路由实现。</p>
+<p>配置好“有线中继”模式后，电脑连接无线WIFI后获得的IP地址应当是软路由分配的IP地址，网段为刚刚咱们设置的<code>10.10.10.*</code>，
+而不再是<code>192.168.*</code>的IP地址了。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>NanoPi R4S上手 &amp; 安装Arch Linux ARM</title>
+      <link>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</link>
+      <pubDate>Fri, 13 May 2022 00:32:40 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</guid>
+      <description>&lt;p&gt;前两天下单了个Nano Pi R4S，4G内存的版本。通常情况下这玩意别人都把他当软路由用，但是今天咱收到货后想了一会拍大腿一寻思这玩意不就是个ARM架构的小电脑嘛~&lt;/p&gt;
+&lt;p&gt;所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>前两天下单了个Nano Pi R4S，4G内存的版本。通常情况下这玩意别人都把他当软路由用，但是今天咱收到货后想了一会拍大腿一寻思这玩意不就是个ARM架构的小电脑嘛~</p>
+<p>所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。</p>
+<meting-js server="netease" type="song" id="19563215" theme="#233333"></meting-js>
+<h2 id="开箱">开箱</h2>
+<p><img loading="lazy" src="images/nanopi_1.jpg" alt="&amp;ldquo;USB 3.0、SD卡插槽以及三脚架接口&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">USB 3.0、SD卡插槽以及三脚架接口</p>
+</p>
+<p><img loading="lazy" src="images/nanopi_2.jpg" alt="&amp;ldquo;供电接口和网口&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">供电接口和网口</p>
+</p>
+<p><img loading="lazy" src="images/nanopi_3.jpg" alt="&amp;ldquo;正面&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">正面</p>
+</p>
+<h2 id="拆解">拆解</h2>
+<p>咱收到货后第一件事就是找螺丝刀和塑料卡片把这漏油器拆开看看（</p>
+<p><img loading="lazy" src="images/nanopi_7.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">主板正面</p>
+</p>
+<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
+<h2 id="arch-linux-arm">Arch Linux ARM</h2>
+<p>在Arch Linux ARM (简称alarm) 官网上没找到对R4S的官方的支持，简单搜了一下armbian有对R4S的官方支持。</p>
+<p>因为用惯了<strong>滚动更新</strong>发行版，所以不想用*bian系统，而*WRT系统的软件包相对其他发行版而言更少一些，系统也相当于被魔改过，所以除了做漏油器之外几乎干不了别的，所以这是我想安装Arch Linux的理由。</p>
+<p>然后咱搜到了一篇给<a href="https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d">NanoPi R2S安装alarm的教程</a>，评论里有人提到了给R4S安装也是可以的。</p>
+<p>所以咱大致把这个教程翻译一下，再修改一些R2S和R4S在安装时的区别。</p>
+<p>以下内容需结合alarm的 <a href="https://archlinuxarm.org/platforms/armv8/generic">aarch64通用安装教程</a>食用，像更新pacman-key，ssh的密码之类的部分咱就不在这里重复了。</p>
+<h3 id="准备sd卡">准备SD卡</h3>
+<ol start="0">
+<li>
+<p>下载armbian的镜像，下载链接自行谷歌。</p>
+<blockquote>
+<p>通常下载好的文件是<code>xz</code>格式的压缩文件，需要使用<code>unxz</code>解压成<code>img</code>镜像。</p>
+</blockquote>
+</li>
+<li>
+<p>将armbian镜像的<code>bootloader</code>和<code>uboot</code>(32-32767区块的部分)用<code>dd</code>写到SD卡中：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Clean the sector before 32
+</span></span><span class="line"><span class="cl">dd if=/dev/zero of=/dev/sdX bs=1M count=32
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># Write uBoot and bootloader
+</span></span><span class="line"><span class="cl">dd if=Armbian_*.img of=/dev/sdX skip=31 seek=31 bs=512 count=32736
+</span></span></code></pre></div><blockquote>
+<p>其实可以直接用<code>dd</code>把armbian的整个镜像写到内存卡中然后插入R4S开机，第一次开机后他会自动重新给内存卡分区，然后只需把<code>/dev/sdX1</code>格式化成ext4就能安装alarm了。</p>
+</blockquote>
+</li>
+<li>
+<p>使用<code>fdisk</code>给内存卡分区并格式化文件系统</p>
+<p>创建分区时先按<code>o</code>创建个MBR分区表，然后按<code>n</code>添加分区。第一个分区的起始区块(sector)需要设置为32768，通常情况下分一个区就够用了，或者你可以像我这样分俩区，一个给swap，不过实际没啥必要。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Disk /dev/mmcblk1: 29.72 GiB, 31914983424 bytes, 62333952 sectors
+</span></span><span class="line"><span class="cl">Units: sectors of 1 * 512 = 512 bytes
+</span></span><span class="line"><span class="cl">Sector size (logical/physical): 512 bytes / 512 bytes
+</span></span><span class="line"><span class="cl">I/O size (minimum/optimal): 512 bytes / 512 bytes
+</span></span><span class="line"><span class="cl">Disklabel type: dos
+</span></span><span class="line"><span class="cl">Disk identifier: 0x33fc535e
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device         Boot    Start      End  Sectors  Size Id Type
+</span></span><span class="line"><span class="cl">/dev/mmcblk1p1         32768 53944319 53911552 25.7G 83 Linux
+</span></span><span class="line"><span class="cl">/dev/mmcblk1p2      53944320 62333951  8389632    4G 82 Linux swap / Solaris
+</span></span></code></pre></div><p>创建完分区后，把<code>root</code>分区<code>mkfs.ext4</code>格式化成ext4，swap分区用<code>mkswap</code>格式化。</p>
+</li>
+<li>
+<p>解压alarm系统文件到root分区中</p>
+</li>
+<li>
+<p>复制并替换armbian的<code>/boot</code>中的文件到新建分区的<code>/boot</code>文件夹中。</p>
+</li>
+<li>
+<p>编辑<code>/boot/armbianEnv.txt</code>，更新<code>rootdev</code>的UUID
+使用<code>blkid</code>或者<code>lsblk -o+UUID</code>可以查看UUID，注意是<strong>UUID</strong>不是PARTUUID。</p>
+</li>
+<li>
+<p>插电，开机 (<del>此处不会出现五安大电牛</del>)，网线连接R4S的WAN口到路由器的LAN口，第一次开机需要生成SSH Key所以时间会久一些，然后就可以ssh到R4S上去辣。</p>
+</li>
+</ol>
+<h3 id="内核">内核</h3>
+<p>上述的安装步骤使用的armbian的内核，可以正常开机，但是想用Arch Linux stock aarch64内核的话，得替换一下DTB文件。（DTB文件是啥我目前还不清楚，如果后续弄明白了再更新到博客上吧）</p>
+<ol>
+<li>
+<p>ssh到R4S中，安装<code>linux-aarch64</code>。</p>
+</li>
+<li>
+<p>修改使用的DTB文件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /boot
+</span></span><span class="line"><span class="cl">rm dtb
+</span></span><span class="line"><span class="cl">ln -sf dtbs dtb
+</span></span></code></pre></div><p>编辑<code>armbianEnv.txt</code>，在末尾添加一行<code>fdtfile=rockchip/rk3399-rockpro64.dtb</code>。</p>
+<blockquote>
+<p>在<code>/boot/dtb/rockchip</code>目录下是可以找到<code>rk3399-nanopi-r4s.dtb</code>文件的，但是目前用这个DTB的话会导致PCIE不能正常工作，导致LAN口无法使用。
+<code>dmesg</code>的输出为：</p>
+</blockquote>
+<blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-prolog" data-lang="prolog"><span class="line"><span class="cl"><span class="s">dmesg</span> <span class="p">|</span> <span class="s">grep</span> <span class="s">pci</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">0.538310</span><span class="p">]</span> <span class="s">ehci</span><span class="o">-</span><span class="nn">pci</span><span class="p">:</span> <span class="nv">EHCI</span> <span class="nv">PCI</span> <span class="s">platform</span> <span class="s">driver</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">0.559708</span><span class="p">]</span> <span class="s">ohci</span><span class="o">-</span><span class="nn">pci</span><span class="p">:</span> <span class="nv">OHCI</span> <span class="nv">PCI</span> <span class="s">platform</span> <span class="s">driver</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">2.999933</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span> <span class="s">host</span> <span class="s">bridge</span> <span class="o">/</span><span class="s">pcie@f8000000</span> <span class="nn">ranges</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">2.999974</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span>      <span class="nv">MEM</span> <span class="mh">0x00fa000000</span><span class="p">.</span><span class="mf">.0</span><span class="s">x00fbdfffff</span> <span class="s">-&gt;</span> <span class="mh">0x00fa000000</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">2.999987</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span>       <span class="nv">IO</span> <span class="mh">0x00fbe00000</span><span class="p">.</span><span class="mf">.0</span><span class="s">x00fbefffff</span> <span class="s">-&gt;</span> <span class="mh">0x00fbe00000</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.000410</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span> <span class="s">no</span> <span class="s">vpcie12v</span> <span class="s">regulator</span> <span class="s">found</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.500881</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span> <span class="nv">PCIe</span> <span class="s">link</span> <span class="s">training</span> <span class="s">gen1</span> <span class="s">timeout</span><span class="p">!</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.500944</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="nn">pcie</span><span class="p">:</span> <span class="s">probe</span> <span class="s">of</span> <span class="s">f8000000</span><span class="p">.</span><span class="s">pcie</span> <span class="s">failed</span> <span class="s">with</span> <span class="s">error</span> <span class="o">-</span><span class="mi">110</span>
+</span></span></code></pre></div><p>于是就先用rockpro64的DTB文件了。</p>
+</blockquote>
+</li>
+<li>
+<p>创建uBoot镜像和initramfs。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">pacman -S uboot-tools
+</span></span><span class="line"><span class="cl">mkimage -A arm64 -T ramdisk -n uInitrd -d /boot/initramfs-linux.img /boot/uInitrd-initramfs-linux.img
+</span></span><span class="line"><span class="cl">ln -sf /boot/uInitrd-initramfs-linux.img /boot/uInitrd
+</span></span></code></pre></div><p>创建个<code>pacman</code>的钩子，在以后更新<code>linux-aarch64</code>的时候自动的重新构建uboot和initramfs。</p>
+<p>在<code>mkdir -p /etc/pacman.d/hooks</code>目录下创建<code>/etc/pacman.d/hooks/initramfs.hook</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Trigger]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Operation</span> <span class="o">=</span> Install<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Operation</span> <span class="o">=</span> Upgrade<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Type</span> <span class="o">=</span> Package<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Target</span> <span class="o">=</span> linux-aarch64<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[Action]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Description</span> <span class="o">=</span> Generate uInitrd<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Exec</span> <span class="o">=</span> /usr/bin/mkimage -A arm64 -T ramdisk -n uInitrd -d /boot/initramfs-linux.img /boot/uInitrd-initramfs-linux.img<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">When</span> <span class="o">=</span> PostTransaction<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Depends</span> <span class="o">=</span> uboot-tools<span class="err">
+</span></span></span></code></pre></div></li>
+<li>
+<p>重启，<code>uname -a</code>输出的应该是新版本的内核了。</p>
+<p>有个细节，用armbian的DTB文件时，开机后SYS LED灯是闪烁的，但是换到rockpro60的DTB文件后只有PWR灯长亮，别的灯都不闪了。</p>
+</li>
+</ol>
+<h2 id="router">Router</h2>
+<p>虽然装的是Arch Linux ARM系统，但是这并不代表它不能作为一个路由器使用。</p>
+<p>系统默认用的是<code>systemd-networkd</code>管理网络，所以以下内容使用<code>systemd-networkd</code>配置路由器，暂时没遇到问题，如果不行的话我再换别的。</p>
+<blockquote>
+<p>参考: <a href="https://wiki.archlinux.org/title/Router">Router - ArchWiki</a></p>
+</blockquote>
+<h3 id="重命名网络接口">重命名网络接口</h3>
+<blockquote>
+<p>这一步并非必须，但是我有遇到重启系统后网口从<code>eth0</code>变成<code>eth1</code>的情况，所以还是给网口重命个名好一些。</p>
+</blockquote>
+<p>首先移除并备份<code>/etc/systemd/network</code>中原有的配置文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /etc/systemd/network
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># backup config files</span>
+</span></span><span class="line"><span class="cl">mv ./* /root/
+</span></span></code></pre></div><p>获取WAN口的mac地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /sys/class/net/eth0/address
+</span></span><span class="line"><span class="cl">12:34:56:78:90:ab
+</span></span></code></pre></div><p>创建<code>10-extern0.link</code>，重命名<code>eth0</code>到<code>extern0</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">MACAddress</span><span class="o">=</span>12:34:56:78:90:ab<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[Link]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Description</span><span class="o">=</span>WAN<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>extern0<span class="err">
+</span></span></span></code></pre></div><p>另一个网口(LAN)在开机时<code>systemd-networkd</code>会自动给他重命名为<code>enp1s0</code>。</p>
+<h3 id="wan口配置dhcp客户端">WAN口配置DHCP客户端</h3>
+<p>这里我是把R4S的WAN口接到另一台路由器的LAN上，所以配置的是DHCP客户端。如果你打算直接把路由器接光猫，而且你的猫设置了桥接，那么你可能需要配置PPPOE。</p>
+<p>创建<code>20-extern0.network</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>extern0<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[Network]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">DHCP</span><span class="o">=</span>yes<span class="err">
+</span></span></span></code></pre></div><h3 id="lan口配置静态ip和dhcp服务器">LAN口配置静态IP和DHCP服务器</h3>
+<p>给LAN口设置成另一个网络的静态IP地址，并配置DHCP服务器，给连接到LAN口的机器分配同一个网络下的其他IP地址。</p>
+<p>创建<code>20-enp1s0.network</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>enp1s0<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[Network]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Address</span><span class="o">=</span>10.0.0.1/24<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">DHCPServer</span><span class="o">=</span>true<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">IPMasquerade</span><span class="o">=</span>both<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="k">[DHCPServer]</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">PoolOffset</span><span class="o">=</span>100<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">PoolSize</span><span class="o">=</span>100<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">EmitDNS</span><span class="o">=</span>yes<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c1"># DNS=8.8.8.8</span><span class="err">
+</span></span></span></code></pre></div><p>我这个配置是给LAN口设置了静态IP地址<code>10.0.0.1</code>，掩码<code>255.255.255.0</code>，启用了DHCP服务器，
+设置了IPv4数据“伪装”(packets forwarded from the network interface will be appear as coming from the local host)。</p>
+<p>有关配置文件的参数可以使用<code>man systemd.network</code>查询。</p>
+<p>暂时还没搞懂怎么折腾IPv6，如果配置好IPv6的话我再补上……</p>
+<h2 id="后续">后续</h2>
+<p>之后咱装了JDK以及一堆我常用的小组件。为了测试性能，我把我以前备份的Minecraft服务器复制到R4S上跑了一下试试。我的服务器之前是在疼讯云学生主机上跑的(1核2G)，装了好多性能优化插件(lithium，phosphor，carpet&hellip;)，版本是1.16.4，抱着尝试的心态跑了一下这个服务器结果发现很流畅，一开始区块加载的时候CPU的6个核心全跑满，之后就恢复到正常水平了。刚才尝试了一下长时间的生成区块貌似没什么大的问题，只要别一直用鞘翅跑图就行，应该是内存够用了所以运行效果要好一些，不过单核性能来讲的话肯定还是X86吊打R4S的。</p>
+<p>毕竟这就是半个巴掌大小的机器，跑MC的时候CPU温度才不到50度，应该不需要主动散热，功耗才十多瓦……</p>
+<p><img loading="lazy" src="images/nanopi_performance.png" alt="&amp;ldquo;MineCraft Server Performance&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">MineCraft Server Performance</p>
+</p>
+<p><img loading="lazy" src="images/nanopi_neofetch.png" alt="&amp;ldquo;Arch Linux ARM&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Arch Linux ARM</p>
+</p>
+<h2 id="参烤链接">参烤链接</h2>
+<ul>
+<li><a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">NanoPi R4S</a></li>
+<li><a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">NanoPi R4S - FriendlyELEC WiKi</a></li>
+<li><a href="https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d">Installing Arch Linux AArch64 on the NanoPi R2S</a></li>
+<li><a href="https://archlinuxarm.org/platforms/armv8/generic">Generic AArch64 Installation | Arch Linux ARM</a></li>
+<li><a href="https://wiki.archlinux.org/title/Router">Router - ArchWiki</a></li>
+<li><a href="https://wiki.archlinux.org/title/Systemd-networkd">systemd-networkd - ArchWiki</a></li>
+<li><a href="https://man.archlinux.org/man/systemd.network.5">systemd.network(5) — Arch manual pages</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/392619184">在 NanoPi R2S 上安装 Archlinuxarm - 知乎</a></li>
+</ul>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>使用树莓派搭建一个NAS</title>
+      <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
+      <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
+      <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
+<meting-js server="netease" type="song" id="750905" theme="#233333"></meting-js>
+<blockquote>
+<p>这歌太魔性了哈哈哈哈哈……</p>
+</blockquote>
+<h2 id="准备工作">准备工作</h2>
+<ul>
+<li>树莓派以及所需的电源（废话）</li>
+<li>16G以上的高速内存卡用来写系统镜像</li>
+<li>硬盘（可以选择买移动硬盘或者直接买硬盘盒和机械硬盘自己组装）</li>
+<li>网络设备：路由器、网线</li>
+<li>（非必须）键盘、显示器、连接线等</li>
+</ul>
+<p>树莓派我使用的是高一时买的树莓派3B（满满的回忆），硬盘是上半年为了存照片而买的西数2T移动硬盘，因为暂时闲置所以拿来一起组个云盘玩。</p>
+<p>内存卡需要质量好的不容易坏而且读写比较快的卡。</p>
+<h2 id="装系统">装系统</h2>
+<p>系统咱安装的是<a href="https://archlinuxarm.org/platforms/armv8/broadcom/raspberry-pi-3">ArchLinux ARM</a>，安装教程直接看官方文档即可。</p>
+<p>一开始咱为了发挥树莓派3B的64位CPU的性能，我下载了64位的系统镜像，但是在配置无线连接的时候（可能是）驱动问题卡死，因为急着睡觉所以重新格式化内存卡后被迫安装32位的系统。</p>
+<p>安装教程咱就不重复写到博客里了，直接翻Wiki，尽管是纯英文的但是不难，都能看懂。咱就不打算在这翻译了。</p>
+<p>在格式化<code>root</code>分区时一开始想尝试一下树莓派上跑<code>btrfs</code>，但是开机时进了linux的救援(rescue)模式，懒得折腾还是老老实实换回了<code>ext4</code>，<del>不然我一晚上不用睡觉了</del>。</p>
+<p>在分区时除了<code>boot</code>和<code>root</code>之外，我额外分了2G的<code>swap</code>分区，树莓派1G内存有些小不过只是搭个人用的NAS的话实际上是不影响使用的。（<del>这话咋读着这么别扭呢</del>）</p>
+<p>因为咱要做NAS肯定得往树莓派上外接个硬盘之类的，树莓派3B只有USB 2.0 + 百兆网口，尽管速度很慢但是作为个人网盘来说不到10MB/S的速度还是比某些恶心网盘快很多的，在线看个1080P视频还是蛮轻松的，BD蓝光想想还是算了。</p>
+<p>把移动硬盘接到树莓派后<code>lsblk</code>查看一下分区表。因为咱这是块几乎全新的硬盘所以需要重新分区并格式化一下。</p>
+<p>如果你不熟悉在命令行上进行分区格式化的话，建议自行翻阅<a href="https://wiki.archlinux.org/title/fdisk">Wiki (fdisk)</a>，因为往博客上写的话太难理解了别人肯定看不懂。</p>
+<p>最后咱把2T移动硬盘格式化成这个样子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># fdisk -l /dev/sda
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Device          Start        End    Sectors  Size Type
+</span></span><span class="line"><span class="cl">/dev/sda1        2048 2147485695 2147483648    1T Linux filesystem
+</span></span><span class="line"><span class="cl">/dev/sda2  2147485696 3907029133 1759543438  839G Microsoft basic data
+</span></span></code></pre></div><p>其中的1T打算格式化为<code>btrfs</code>给Samba用，其余的800G打算格式化为<code>NTFS</code>留着给Windows当个移动硬盘。</p>
+<p>创建分区时别忘了更改分区类型，给Linux用的就是<code>Linux filesystem</code>，给Windows用的就是<code>Microsoft basic data</code>，
+不然机械硬盘连接到Windows系统中将不显示分区，或者就是一直提醒你：该分区不可用，然后让你格式化，到时候一不小心点错了可是会丢数据的。</p>
+<p>安装<code>btrfs-progs</code>和<code>ntfs-3g</code>，之后格式化硬盘（NTFS还是建议到Windows系统中格式化）。</p>
+<p>格式化btrfs的时候加个<code>-L</code>参数设置分区的标签，这样方便在fstab中设置开机自动挂载。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ lsblk                                # 一定要看清楚自己格式化的分区名字
+</span></span><span class="line"><span class="cl">$ sudo mkfs.btrfs /dev/sdaX -L samba   # -L 参数设置分区的标签
+</span></span></code></pre></div><p>最后改一下<code>/etc/fstab</code>让设备在开机时自动挂载交换分区和移动硬盘。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># &lt;file system&gt; &lt;dir&gt; &lt;type&gt; &lt;options&gt; &lt;dump&gt; &lt;pass&gt;
+</span></span><span class="line"><span class="cl">/dev/mmcblk0p1  /boot   vfat    defaults        0       0
+</span></span><span class="line"><span class="cl">LABEL=swap      none    swap    defaults        0       0
+</span></span><span class="line"><span class="cl">LABEL=samba     /samba  btrfs   defaults        0       0
+</span></span></code></pre></div><p>重启系统后如果正常的话，分区会被自动挂载。</p>
+<h2 id="配置网络">配置网络</h2>
+<blockquote>
+<p>配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。</p>
+<p>除非你能保证你执行的每个命令都肥肠正确。</p>
+</blockquote>
+<h3 id="无线网络">无线网络</h3>
+<p>因为我电脑离路由器肥肠远，所以为了方便我还要给树莓派配置无线网络。首先照着<a href="https://wiki.archlinux.org/title/Netctl">Wiki上的netctl页面</a>安装了<code>wifi-menu</code>所需要用的<code>dialog</code>，然后就用<code>wifi-menu</code>连接wifi了。不过为了方便以后连接，我需要给他设置静态IP：</p>
+<p>首先使用你比较喜欢的文本编辑器打开<code>wifi-menu</code>自动生成的配置文件，并修改成以下的样子</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl.d/wlan0-YourWifiName
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Description=&#39;Automatically generated profile by wifi-menu&#39;
+</span></span><span class="line"><span class="cl">Interface=wlan0
+</span></span><span class="line"><span class="cl">Connection=wireless
+</span></span><span class="line"><span class="cl">Security=wpa
+</span></span><span class="line"><span class="cl">ESSID=Your Wifi Name
+</span></span><span class="line"><span class="cl">IP=static
+</span></span><span class="line"><span class="cl">Address=(&#39;192.168.xxx.xxx/24&#39;)
+</span></span><span class="line"><span class="cl">Gateway=&#39;192.168.xxx.1&#39;
+</span></span><span class="line"><span class="cl">DNS=&#39;8.8.8.8&#39;
+</span></span><span class="line"><span class="cl">Key=YOUR WIFI PASSWORD
+</span></span></code></pre></div><p>其中修改<code>Address</code>为你想设置的CIDR地址、<code>Gateway</code>为默认网关、以及<code>DNS</code>。</p>
+<p>最后修改<code>Key</code>为Wifi密码（明文），如果需要加密的话可以去wiki上找相应方法。</p>
+<p>之后<code>sudo netctl enable wlan0-YourWifiName</code>设置好开机自动连接即可。</p>
+<p>这时候聪明的小伙伴会想到：我想使用网线联网并配置静态IP，该怎么办呢？</p>
+<h3 id="配置有线网络">配置有线网络</h3>
+<p>默认情况下，有线接口<code>eth0</code>使用<code>systemd-network</code>配置了<code>DHCP</code>，所以我们不需要改<code>netctl</code>的配置文件，只编辑<code>/etc/systemd/network/eth0.network</code>这个配置文件改成静态IP地址就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=eth0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">Address=192.168.xxx.xxx/24
+</span></span><span class="line"><span class="cl">Gateway=192.168.xxx.1
+</span></span><span class="line"><span class="cl">DNS=8.8.8.8
+</span></span></code></pre></div><p>重启系统后，使用<code>ip addr</code>检查设备的IP地址是否正确。</p>
+<h3 id="配置防火墙">配置防火墙</h3>
+<p>首先安装<code>ufw</code>。（因为对iptables不是十分熟悉，ufw比ip桌子好用一些，毕竟他叫<strong>Uncomplicated Filewall</strong>，所以咱先用ufw配置防火墙）</p>
+<p>食用方法请参见<a href="https://wiki.archlinux.org/title/Uncomplicated_Firewall">Wiki页面</a>。</p>
+<p>因为咱打算搭一个Samba服务器，所以别忘了配置防火墙允许Samba的端口，按照Arch Linux Wiki：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Create or Edit /etc/ufw/applications.d/samba, add following content:
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Samba]
+</span></span><span class="line"><span class="cl">title=LanManager-like file and printer server for Unix
+</span></span><span class="line"><span class="cl">description=Samba
+</span></span><span class="line"><span class="cl">ports=137,138/udp|139,445/tcp
+</span></span></code></pre></div><p>之后root账户执行<code>ufw app update Samba</code>加载配置文件，然后<code>ufw allow Samba</code>允许Samba的端口。</p>
+<p>如果你的树莓派上还装有其他服务（比如http，https等），别忘了<code>ufw allow PORT</code>开放端口，尤其是别忘了开SSH端口。</p>
+<p>最后<code>ufw status</code>查看防火墙状态信息，<code>ufw enable</code>开启防火墙。</p>
+<h2 id="samba">Samba</h2>
+<p>配合<a href="https://wiki.archlinux.org/title/Samba">Arch Wiki</a>食用。</p>
+<p>首先我们需要新建一个分组，然后在挂载的分区中新建一个文件夹作为Samba服务器的共享目录：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo groupadd -r sambausers          # 新建用户组
+</span></span><span class="line"><span class="cl">$ sudo usermod -aG sambausers username # 添加当前用户至分组中
+</span></span><span class="line"><span class="cl">$ sudo smbpasswd -a sambausers         # 设置Samba用户的密码
+</span></span><span class="line"><span class="cl">$ sudo mkdir /samba/sharefolder        # 新建文件夹用来存储共享的文件
+</span></span><span class="line"><span class="cl">$ sudo chown :username /samba/sharefolder   # 修改文件夹的所属分组
+</span></span><span class="line"><span class="cl">$ sudo chmod 0770 /samba/sharefolder   # 修改权限
+</span></span></code></pre></div><p>（咱写的很详细了吧</p>
+<h3 id="配置服务器">配置服务器</h3>
+<p>安装好<code>samba</code>安装包后，需要手动去<code>/etc/samba/</code>创建<code>smb.conf</code>配置文件，可以到<a href="https://git.samba.org/samba.git/?p=samba.git;a=blob_plain;f=examples/smb.conf.default;hb=HEAD">Samba git repository</a>中获取样例配置文件，咱只需要把它复制粘贴再简单修改一下就好了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/samba/smb.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[global]
+</span></span><span class="line"><span class="cl"># 修改工作组的名字
+</span></span><span class="line"><span class="cl">workgroup = MYGROUP
+</span></span><span class="line"><span class="cl"># 服务器描述
+</span></span><span class="line"><span class="cl">server string = Raspberry pi Samba Server
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 在文件末尾添加共享文件夹目录及相关配置
+</span></span><span class="line"><span class="cl">[sambashare]
+</span></span><span class="line"><span class="cl">comment = Sample share file.
+</span></span><span class="line"><span class="cl">path = /path/to/your/samba/folder
+</span></span><span class="line"><span class="cl">writable = yes
+</span></span><span class="line"><span class="cl">browsable = yes
+</span></span><span class="line"><span class="cl">create mask = 0755
+</span></span><span class="line"><span class="cl">directory mask = 0755
+</span></span><span class="line"><span class="cl">read only = no
+</span></span><span class="line"><span class="cl">guest ok = no  # 允许访客随意登录
+</span></span></code></pre></div><p>配置好文件后，启动<code>smb.service</code>和<code>nmb.service</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now smb.service
+</span></span><span class="line"><span class="cl">$ sudo systemctl <span class="nb">enable</span> --now nmb.service
+</span></span></code></pre></div><h3 id="访问服务器">访问服务器</h3>
+<p>咱GNOME用户直接打开文件管理器，选择左边的“+ Other Locations”，在底部输入服务器连接<code>smb://192.168.xxx.xxx</code>，
+输入用户组、用户名和密码登录就可以访问共享文件夹。</p>
+<p>Windows系统中，首先需要到 控制面板-&gt;程序-&gt;启用或关闭Windows功能 里面，选中 SMB1.0/CIFS文件共享直通，保存后等一会安装完，
+打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
+<h2 id="frp内网穿透">Frp内网穿透</h2>
+<blockquote>
+<p>配合<a href="https://gofrp.org/docs/">frp文档</a>食用更佳</p>
+</blockquote>
+<p>首先在frp的<a href="https://github.com/fatedier/frp/releases">GitHub Release</a>页面下载安装包。</p>
+<p>如果是树莓派用的话就下载<code>arm</code>版本的安装包即可。Arch Linux可以在ArchLinux CN源或AUR中安装<code>frpc</code>和<code>frps</code>作为客户端和服务端。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 树莓派上下载编译好的文件</span>
+</span></span><span class="line"><span class="cl">$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl"><span class="c1"># 解压</span>
+</span></span><span class="line"><span class="cl">$ tar -zxvf ./frp_0.37.1_linux_arm.tar.gz
+</span></span><span class="line"><span class="cl">$ <span class="nb">cd</span> frp_0.37.1_linux_arm/
+</span></span><span class="line"><span class="cl"><span class="c1"># 编辑配置文件</span>
+</span></span><span class="line"><span class="cl">$ vim ./frpc.ini
+</span></span><span class="line"><span class="cl">$ ./frpc -c ./frpc.ini
+</span></span></code></pre></div><p>客户端配置文件的格式可参考如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">server_addr = server ip
+</span></span><span class="line"><span class="cl">server_port = 6000
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[samba]
+</span></span><span class="line"><span class="cl">type = tcp
+</span></span><span class="line"><span class="cl">local_ip = 127.0.0.1
+</span></span><span class="line"><span class="cl">local_port = 445
+</span></span><span class="line"><span class="cl">remote_port = 6003
+</span></span></code></pre></div><p>其中端口号和<code>token</code>按需要自行更改，Samba服务的<code>tcp</code>端口号为<code>445</code>。</p>
+<p>服务端配置文件格式如下：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">bind_port = 6000
+</span></span></code></pre></div><p>为了安全，别忘了配置<a href="https://gofrp.org/docs/reference/server-configures/#%E6%9D%83%E9%99%90%E9%AA%8C%E8%AF%81">权限验证</a>，同时别忘了修改服务器的防火墙设置。</p>
+<h2 id="others">Others</h2>
+<p>所以到此为止，咱的Samba服务器就搭建好了。</p>
+<p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>联想R7000P安装Arch Linux的常见问题</title>
+      <link>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</link>
+      <pubDate>Mon, 22 Mar 2021 19:51:32 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</guid>
+      <description>&lt;p&gt;旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&amp;hellip;&lt;/p&gt;
+&lt;p&gt;于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。&lt;/p&gt;
+&lt;p&gt;所以隔了这么久我终于更新博客了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&hellip;</p>
+<p>于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。</p>
+<p>所以隔了这么久我终于更新博客了。</p>
+<blockquote>
+<p>本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。</p>
+</blockquote>
+<hr>
+<h2 id="安装arch-linux">安装Arch Linux</h2>
+<p>到手后就把之前买的西数SN750 1T固态换到了新电脑上，顺便格式化重装了个系统。</p>
+<p>双M2插槽配上1T + 500G NVME，美汁汁。</p>
+<p>于是直接给Linux分了150G root，16G SWAP，500G HOME（有点奢侈）， 然后还分了100G用来存steam游戏，剩下的全扔给Windows。</p>
+<p>装Linux过程中只遇到了终端的警报声有些大这个问题（插耳机时声音依旧从扬声器输出），别的问题都没遇到。</p>
+<p>之前的电脑总是遇到奇葩问题，用旧版本Linux内核关机或者<code>lspci</code>时会卡死，显卡驱动装不好会导致开机死机，声卡驱动一直有问题听歌时音量大一点就爆音，HDMI接口直连的NVIDIA显卡所以显卡驱动没配置好独显不工作时没办法外接显示器(后来才知道type c接口有DP视频输出)。</p>
+<p>新电脑买来装完系统后就遇到了一点小问题网上搜一下就解决了。</p>
+<h3 id="屏幕亮度不能调节">屏幕亮度不能调节</h3>
+<p><del>开个浏览器能把眼睛晃瞎</del></p>
+<p>网上查了一下只有在bios设置为独显直连时解决亮度不能调节的方法，在混合显卡模式下，存在<a href="https://bugzilla.opensuse.org/show_bug.cgi?id=1180749">AMD显卡亮度用16位值表示而不是8位值表示</a>的这个BUG (Feature?)所以没办法调节亮度。</p>
+<p>所以<code>cat /sys/class/backlight/amdgpu_bl0/actual_brightness</code>得到的是一个大于255的数。</p>
+<p>确保内核和显卡驱动都是最新的情况下，编辑内核参数<code>amdgpu.backlight=0</code>和<code>acpi_backlight=vendor</code>，可以解决混合模式下AMD显卡不能调节亮度这个问题。</p>
+<p>如果你经常切换混合模式和显卡直连模式的话：</p>
+<p>安装显卡驱动<code>xf86-video-amdgpu</code>和<code>nvidia</code>以及按需要安装nvidia的其他组件。</p>
+<p>复制<code>/usr/share/X11/xorg.conf.d/10-nvidia-drm-outputclass.conf</code>到<code>/etc/X11/xorg.conf.d/</code></p>
+<p>编辑<code>/etc/X11/xorg.conf.d/10-nvidia-drm-outputclass.conf</code>在<code>EndSection</code>前添加一行参数允许nvidia驱动调节亮度。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Option &#34;RegistryDwords&#34; &#34;EnableBrightnessControl=1&#34;
+</span></span></code></pre></div><p>之后编辑<code>/etc/modprobe.d/blacklist.conf</code>禁用闭源驱动<code>nouveau</code>和<code>ideapad_laptop</code>，让显卡驱动调节亮度。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/modprobe.d/blacklist.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">blacklist nouveau
+</span></span><span class="line"><span class="cl">blacklist ideapad_laptop
+</span></span></code></pre></div><p>编辑内核参数添加<code>acpi_backlight=vendor</code>和<code>amdgpu.backlight=0</code>。</p>
+<p>以systemd-boot为例:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /boot/loader/entries/arch.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">options acpi_backlight=vendor
+</span></span><span class="line"><span class="cl">options amdgpu.backlight=0
+</span></span></code></pre></div><p>最后重启电脑就能调亮度了。</p>
+<h3 id="gdm不自启动">GDM不自启动</h3>
+<p>开机时GDM不会自动显示出来而是得手动切TTY2再切回TTY1才能显示。</p>
+<p>查Wiki得知是因为GDM在显卡驱动被加载之前就启动了。</p>
+<p><a href="https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_(e)GPU_is_present">参照Wiki</a>，设置<a href="https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start">KMS早启动</a>。</p>
+<p>编辑<code>/etc/mkinitcpio.conf</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/mkinitcpio.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm amdgpu radeon)
+</span></span></code></pre></div><p>如果你只使用独显直连模式的话可以去掉<code>amdgpu</code>和<code>radeon</code>。</p>
+<p>然后<code>sudo mkinitcpio -p linux</code>重新生成内核镜像，之后重启。</p>
+<p>这么做会使Wayland在开机时被禁用，所以在混合模式使用AMD显卡开机时无法使用Wayland，<a href="https://wiki.archlinux.org/index.php/GDM#GDM_ignores_Wayland_and_uses_X.Org_by_default">参见Wiki</a>。</p>
+<p>将<code>/usr/lib/udev/rules.d/61-gdm.rules</code>复制到<code>/etc/udev/rules.d/</code>，并编辑<code>61-gdm.rules</code>将下面这一行注释掉：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">DRIVER==&#34;nvidia&#34;, RUN+=&#34;/usr/lib/gdm-disable-wayland&#34;
+</span></span></code></pre></div><p>之后重启电脑再开机<code>echo $XDG_SESSION_TYPE</code>就可以检查现在使用的是<code>wayland</code>了。</p>
+<h3 id="optimus-manager">Optimus Manager</h3>
+<p>因为独显功耗太高了，使用独显直连模式在浏览网页写文档这类的轻度工作时电池待机只能2小时，用混合模式的话能待机4.5小时，外加上我也不打那些对性能要求很高的游戏，
+所以日常使用时就在Bios里设置显卡为混合模式。</p>
+<p>然后在Linux系统里安装<code>optimus-manager</code>，修改配置为：使用电池开机时关掉NVIDIA显卡，只让AMD集显工作；有外接电源时则使用“hybrid”混合模式，如果需要玩游戏的话用<a href="https://wiki.archlinux.org/index.php/PRIME#PRIME_render_offload">nvidia-prime</a>让独显运行游戏。</p>
+<p>Optimus Manager的配置方法和之前我<a href="/posts/2021/archlinux-pavilion-gaming-laptop/">之前配置旧电脑时</a>讲的基本一样，唯一区别就是这电脑是AMD，旧电脑是Intel。</p>
+<p>所以编辑配置文件修改了这些地方：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/optimus-manager/optimus-manager.conf
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 设置开机自动切换显卡模式
+</span></span><span class="line"><span class="cl">startup_mode=auto
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 使用电池时关掉独立显卡降低功耗
+</span></span><span class="line"><span class="cl">startup_auto_battery_mode=integrated
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 使用外接电源时为混合模式
+</span></span><span class="line"><span class="cl">startup_auto_extpower_mode=hybrid
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[amd]
+</span></span><span class="line"><span class="cl"># 因为安装的xf86-video-amdgpu, 所以修改驱动改为amdgpu
+</span></span><span class="line"><span class="cl">driver=amdgpu
+</span></span></code></pre></div><p>安装好<code>nvidia-prime</code>后在混合显卡模式（hybrid）下，使用<code>prime-run</code>让独显运行游戏。</p>
+<p>如果想让Steam以独显运行游戏，修改启动参数为<code>prime-run %command%</code>。</p>
+<h2 id="windows">Windows</h2>
+<p>在Windows系统下显卡独连时字体渲染有些蹦，设置了ClearType之后还是没啥改善。</p>
+<p>主要是Visual Studio 2019的字体渲染真的瞎眼，最后装了Text Sharp插件换了Jet Brains字体才看起来正常了一些。</p>
+<p>最后在NVIDIA控制面板全局设置里把平滑处理全关了，字体的锯齿才消失。</p>
+<p>貌似是因为NVIDIA把文本编辑器当游戏渲染了。</p>
+<hr>
+<h2 id="others">Others</h2>
+<ul>
+<li>
+<p>在Linux系统里会遇到按Fn+Esc键时FnLock的灯没有亮这个问题，不过不影响FnLock的正常使用，所以就忽视了。</p>
+</li>
+<li>
+<p>如果要用诱骗线充电的话，用optimus-manager把独显关掉（用<code>nvidia-smi</code>得知独显在不使用的情况下仍有5W的功耗），然后装一个CPU功率调节的软件，例如<code>cpupower-gui</code><sup>AUR</sup>，设置为节电模式，实测用小米65W GaN充电器给电脑充电，轻度使用没有卡顿掉电的情况。</p>
+</li>
+<li>
+<p>因为之前趁着狗东打折加上买显示器送的100E卡，只花了两百多买了一个紫米20移动电源（<del>板砖</del>），25000毫安且支持100WPD充电。按照上面讲的方法在电池满电的情况下一边轻度使用电脑一边充电，充电宝能用4小时左右，然后笔记本的电池还能续航4至5小时。（实在是因为原装充电器它太沉了）</p>
+</li>
+<li>
+<p>目前来看觉得这电脑还是蛮香的，AMD的CPU性能很强而且比intel版的Y7000P便宜一千块钱。尽管现在已经有二线厂商做AMD 5800系的笔记本了但是4800H的性能依旧够用，RTX3060显卡就当它是空气吧就算发售也是残血而且抢不到。</p>
+</li>
+<li>
+<p>然后就是电脑没有雷电3接口，只有一个支持USB3.2 Gen1的type c接口且支持DP1.2视频输出，不过USB接口倒是挺多的，电脑用到现在没有遇到啥AMD CPU引起的兼容性问题。</p>
+</li>
+</ul>
+<hr>
+<p><img loading="lazy" src="images/1.jpg" alt="GNOME 40" />
+<p style="margin-bottom: -0.8em;" class="image-title">GNOME 40</p>
+</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>解决笔记本外接HIDPI显示器的缩放问题</title>
+      <link>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</link>
+      <pubDate>Sat, 09 Jan 2021 22:12:54 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</guid>
+      <description>&lt;p&gt;前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经&lt;a href=&#34;https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/&#34;&gt;配置好了optimus-manager&lt;/a&gt;，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。&lt;/p&gt;
+&lt;p&gt;然后一看4K屏上的字小得瞎眼。&lt;/p&gt;
+&lt;p&gt;如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经<a href="/posts/2021/archlinux-pavilion-gaming-laptop/">配置好了optimus-manager</a>，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。</p>
+<p>然后一看4K屏上的字小得瞎眼。</p>
+<p>如果设置分辨率为1080P，显示文字时会特别糊，根本没法看，效果还没有1080P显示器好。</p>
+<h2 id="解决方法">解决方法</h2>
+<p>首先按照<a href="https://wiki.archlinux.org/index.php/HiDPI">Wiki</a>设置GNOME的HIDPI:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ gsettings set org.gnome.settings-daemon.plugins.xsettings overrides &#34;[{&#39;Gdk/WindowScalingFactor&#39;, &lt;2&gt;}]&#34;
+</span></span><span class="line"><span class="cl">$ gsettings set org.gnome.desktop.interface scaling-factor 2
+</span></span></code></pre></div><p>在显示设置里将缩放调到200%后，界面被放大了2倍，在4K屏上的字倒是不瞎眼了。</p>
+<p>但是因为笔记本是15寸1080P，所以笔记本上显示的字大得离谱。</p>
+<p>解决方法是使用xrandr调整笔记本电脑的屏幕缩放，笔记本的分辨率为1920x1080，使用xrandr将画面的分辨率放大2倍，也就是调整为3840x2160，然后显示在分辨率为1920x1080的显示器上。</p>
+<p>首先使用<code>xrandr</code>查看每个显示器所对应的设备名称和分辨率。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ xrandr | grep &#34;$extern connected&#34;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  HDMI-0 connected primary 3840x2160+0+0 (normal left inverted right x axis y axis) 597mm x 336mm
+</span></span><span class="line"><span class="cl">  eDP-1-1 connected 1920x1080+0+2160 (normal left inverted right x axis y axis) 344mm x 193mm
+</span></span></code></pre></div><p>这里HDMI-0是外接的4K显示器，分辨率为3840x2160，位置为(0, 0)。</p>
+<p>eDP-1-1是笔记本的显示器，分辨率1920x1080，位置为(0, 2160)，在4K显示器的左下方。</p>
+<p>参见<a href="https://wiki.archlinux.org/index.php/HiDPI#Multiple_displays">Wiki设置双显示器部分</a>，用xrandr将笔记本的显示器缩放2倍，分辨率变为 [1920 * 2]x[1080 * 2]=3840x2160，位置还是在4K显示器的正下方。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ xrandr --output eDP-1-1 --scale 2.0x2.0 --panning 3840x2160+0+2160 --output HDMI-0 --auto
+</span></span></code></pre></div><p>因为不需要修改4K显示器的分辨率，所以HDMI-0设置为auto。</p>
+<p>这样笔记本上的画面也显示正常了。</p>
+<p>但是用过一阵子会发现笔记本显示器上的字比4K显示器上的字小很多，看起来不方便，所以把缩放倍数改为1.6（我是从1.5-2.0之间一点点试的，才找到最适合自己的缩放倍数），这样解决了字体大小的问题，不过笔记本画面还是会有模糊（能接受）。</p>
+<blockquote>
+<p>[1920 * 1.6]x[1080 * 1.6]=3072x1728</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ xrandr --output eDP-1-1 --scale 1.6x1.6 --panning 3072x1728+0+2160 --output HDMI-0 --auto
+</span></span></code></pre></div><p>用到现在GNOME的缩放还算是完美，除了玩Minecraft用的HMCL启动器（Java程序）没有被放大之外~~（貌似缺配置，要是配置好了我再补充）~~，Steam界面缩放正常，饥荒、Dota2也都没问题。</p>
+<blockquote>
+<p>Java8不支持Hidpi缩放，如果想让HMCL支持缩放需要需要安装Java9以上的版本，所以还是算了，又不是不能用。
+网易云音乐缩放方法参考<a href="https://ntzyz.io/post/fix-cloud-music-linux-client-hidpi-issue">这篇博客</a>。
+qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
+</blockquote>
+<h2 id="others">Others</h2>
+<ul>
+<li>
+<p>仅限GNOME，因为我只用GNOME所以不知道其他DE开HIDPI的效果是什么样。</p>
+</li>
+<li>
+<p>听说Wayland支持不同显示器设置不同的缩放倍数，但是我笔记本的HDMI是独显输出，自带屏幕为集显输出，想启用独显输出画面除了用大黄蜂之外只能Nvidia Optimus，然而Optimus不支持Wayland（F**K NVIDIA），
+于是我现在都不知道用Wayland上双显示器的效果是什么样子，只好改用xorg和optimus-manager切换显卡，再用xrandr调显示器的缩放倍数。</p>
+<p>或者买一根type-c转DP的线连显示器，我电脑的type-c支持DP1.2，可以输出4K60fps，而且走集显输出。</p>
+</li>
+<li>
+<p>xrandr的指令是我自己试了很多遍试出来的，在我电脑上能用，期间遇到一堆问题(BadMatch)，没想好什么解决方法，所以在别的电脑上可能需要一些修改。</p>
+</li>
+<li>
+<p>如果你正考虑为你的笔记本购买一台新显示器而且你是Linux用户，你的笔记本又是双显卡，不知道HDMI是独显输出还是集显输出的话，建议你买一台和笔记本电脑的分辨率相同的显示器(或者2K)，这样能省去很多麻烦。</p>
+</li>
+<li>
+<p>用了几个月后经常遇到显示器通过HDMI连接到电脑但是没有视频输出的情况，所以现在改用的是type-c转DP的连接线，走集成显卡输出，就没有遇到过这个问题。</p>
+</li>
+</ul>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>惠普光影精灵4在Arch Linux下使用Optimus Manager配置双显卡</title>
+      <link>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</link>
+      <pubDate>Sun, 19 Jul 2020 15:29:57 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</guid>
+      <description>&lt;p&gt;自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, &lt;del&gt;尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下&lt;/del&gt;（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, <del>尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下</del>（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。</p>
+<hr>
+<h2 id="先描述一下踩坑经过">先描述一下踩坑经过</h2>
+<blockquote>
+<p>本段略微有些废话, 可以跳过</p>
+</blockquote>
+<p>记得在刚买来这台笔记本（2018年夏）, Linux内核还没升到5.0的时候, 使用live CD装系统时会遇到<code>lspci</code>卡死, 关机的时候会卡死的问题, 查系统日记都是一堆ACPI的报错。当时网上查了一下大概是内核和驱动一些bug, 没找到解决办法, Google到论坛的帖子说是在关机/重启发生卡死时只能直接长按电源关机就（找不到搜的回答了）</p>
+<p>装完系统后安装显卡驱动时想通过Bumblebee + bbswitch切换双显卡, 于是装了Gnome然后照着wiki配置完Bumblebee和bbswitch后重启电脑直接死机。</p>
+<p>经过多次重装系统的折磨后, 发现只装Bumblebee不装bbswitch不<code>systemctl enable bumblebeed.service</code>时, 能正常开机, 然后之前遇到的两个问题也莫名其妙就好了, 即系统重启关机不会卡死, <code>lspci</code>也正常了（迷）</p>
+<p>之后, 在不装bbswitch的情况下, 启动<code>bumblebeed.service</code>再用<code>optirun</code>和<code>primusrun</code>这种方式用独显运行程序都没有问题。</p>
+<p>当时因为电脑不装Bumblebee的话就没法正常关机, 于是就一直用着Bumblebee切换双显卡, 玩游戏性能比Windows下差一点, 别的都没啥问题。</p>
+<p>今年年初买了一块拓展屏想搞双显示器, 本来显示器应该插上HDMI直接就能用的, 但是因为这电脑的HDMI走的独显输出, Bumblebee不能直接用, wiki上教的创建个intel的虚拟输出啥的方法有试过但是没成功, 于是又Google了一下后卸了Bumblebee改用<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Use_NVIDIA_graphics_only">NVIDIA Optimus 只使用独显</a>的方式, 这样双显示器倒是能用了, 但是如果笔记本只用电池没连着拓展屏的时候还跑着独显这也太费电了。</p>
+<p>所以最后找到了能切换显卡的<a href="https://github.com/Askannz/optimus-manager">Optimus Manager</a>。</p>
+<blockquote>
+<p>查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。</p>
+</blockquote>
+<h2 id="安装过程">安装过程</h2>
+<p>照着<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus">Wiki</a>和Optimus Manager的<a href="https://github.com/Askannz/optimus-manager#optimus-manager">README</a>。首先安装好显卡驱动相关的软件, 如果有Bumblebee的话使用<code>systemctl disable bumblebeed</code>停用。</p>
+<p>首先清除（记得备份）<code>/etc/X11/xorg.conf.d/</code>下的配置文件, 并删掉（记得备份）<code>/etc/X11/xorg.conf</code>（如果有的话）, 因为Optimus Manager会自动生成配置文件存放到<code>/etc/X11/xorg.conf.d/</code>里面, 所以建议安装前把显示配置相关的文件都清除掉。</p>
+<p>使用Arch Linux CN源或者通过AUR Helper安装<code>optimus-manager</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl"># Arch Linux CN
+</span></span><span class="line"><span class="cl">$ sudo pacman -S optimus-manager
+</span></span><span class="line"><span class="cl"># AUR
+</span></span><span class="line"><span class="cl">$ yay -S optimus-manager
+</span></span></code></pre></div><p>因为我用的Gnome, 参照<a href="https://github.com/Askannz/optimus-manager#important--gnome-and-gdm-users">README中说的</a>卸载掉<code>gdm</code>并安装<code>gdm-prime</code><sup>AUR</sup>。（国内下载源代码的速度极慢建议挂梯子, 或者挂梯子克隆<a href="https://gitlab.gnome.org/GNOME/gdm">GDM的代码</a>到<code>~/.cache/yay/gdm-prime/gdm</code>下。）</p>
+<p>修改<code>/etc/gdm/custom.conf</code>, 移除<code>WaylandEnable=false</code>一行前面的<code>#</code>禁用Wayland而使用X。</p>
+<h3 id="修改配置文件">修改配置文件</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
+</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
+<p>之后根据需求来修改开机自动选择显卡：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">startup_mode=auto
+</span></span><span class="line"><span class="cl">startup_auto_battery_mode=intel
+</span></span><span class="line"><span class="cl">startup_auto_extpower_mode=nvidia
+</span></span></code></pre></div><p>这里我设置的是用电池时使用集成显卡, 用电源时使用独显。</p>
+<p>最后贴一下全部的配置文件, 除了上述的几处修改以外其他均为默认值, 仅供参考。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="p">[</span><span class="nx">optimus</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">parameter</span> <span class="nx">defines</span> <span class="nx">the</span> <span class="nx">method</span> <span class="nx">used</span> <span class="nx">to</span> <span class="nx">power</span> <span class="k">switch</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span><span class="p">.</span> <span class="nx">See</span> <span class="nx">the</span> <span class="nx">documentation</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="k">for</span> <span class="nx">a</span> <span class="nx">complete</span> <span class="nx">description</span> <span class="nx">of</span> <span class="nx">what</span> <span class="nx">each</span> <span class="nx">value</span> <span class="nx">does</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">nouveau</span> <span class="p">:</span> <span class="nx">load</span> <span class="nx">the</span> <span class="nx">nouveau</span> <span class="nx">module</span> <span class="nx">on</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">bbswitch</span> <span class="p">:</span> <span class="nx">power</span> <span class="nx">off</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">using</span> <span class="nx">the</span> <span class="nx">bbswitch</span> <span class="nf">module</span> <span class="p">(</span><span class="nx">requires</span> <span class="nx">the</span> <span class="nx">bbswitch</span> <span class="nx">dependency</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">acpi_call</span> <span class="p">:</span> <span class="nx">try</span> <span class="nx">various</span> <span class="nx">ACPI</span> <span class="nx">method</span> <span class="nx">calls</span> <span class="nx">to</span> <span class="nx">power</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">on</span> <span class="nx">and</span> <span class="nf">off</span> <span class="p">(</span><span class="nx">requires</span> <span class="nx">the</span> <span class="nx">acpi_call</span> <span class="nx">dependency</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">custom</span><span class="p">:</span> <span class="nx">use</span> <span class="nx">custom</span> <span class="nx">scripts</span> <span class="nx">at</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span><span class="o">/</span><span class="nx">nvidia</span><span class="o">-</span><span class="nx">enable</span><span class="p">.</span><span class="nx">sh</span> <span class="nx">and</span> <span class="o">/</span><span class="nx">etc</span><span class="o">/</span><span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span><span class="o">/</span><span class="nx">nvidia</span><span class="o">-</span><span class="nx">disable</span><span class="p">.</span><span class="nx">sh</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">none</span> <span class="p">:</span> <span class="nx">do</span> <span class="nx">not</span> <span class="nx">use</span> <span class="nx">an</span> <span class="nx">external</span> <span class="nx">module</span> <span class="k">for</span> <span class="nx">power</span> <span class="nx">management</span><span class="p">.</span> <span class="nx">For</span> <span class="nx">some</span> <span class="nx">laptop</span> <span class="nx">models</span> <span class="nx">it</span><span class="err">&#39;</span><span class="nx">s</span> <span class="nx">preferable</span> <span class="nx">to</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>          <span class="nx">use</span> <span class="nx">this</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">combination</span> <span class="nx">with</span> <span class="nf">pci_power_control</span> <span class="p">(</span><span class="nx">see</span> <span class="nx">below</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">switching</span><span class="p">=</span><span class="nx">none</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Enable</span> <span class="nx">PCI</span> <span class="nx">power</span> <span class="nx">management</span> <span class="nx">in</span> <span class="nx">Intel</span> <span class="nx">mode</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">option</span> <span class="nx">is</span> <span class="nx">incompatible</span> <span class="nx">with</span> <span class="nx">acpi_call</span> <span class="nx">and</span> <span class="nx">bbswitch</span><span class="p">,</span> <span class="nx">so</span> <span class="nx">it</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">ignored</span> <span class="nx">in</span> <span class="nx">those</span> <span class="nx">cases</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_power_control</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Remove</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span> <span class="nx">from</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">bus</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">May</span> <span class="nx">prevent</span> <span class="nx">crashes</span> <span class="nx">caused</span> <span class="nx">by</span> <span class="nx">power</span> <span class="nx">switching</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Ignored</span> <span class="k">if</span> <span class="nx">switching</span><span class="p">=</span><span class="nx">nouveau</span> <span class="nx">or</span> <span class="nx">switching</span><span class="p">=</span><span class="nx">bbswitch</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_remove</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Reset</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">card</span> <span class="nx">at</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">level</span> <span class="nx">before</span> <span class="nx">reloading</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">module</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Ensures</span> <span class="nx">the</span> <span class="nx">card</span> <span class="nx">is</span> <span class="nx">in</span> <span class="nx">a</span> <span class="nx">fresh</span> <span class="nx">state</span> <span class="nx">before</span> <span class="nx">reloading</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">module</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">May</span> <span class="nx">fix</span> <span class="nx">some</span> <span class="nx">switching</span> <span class="nx">issues</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">no</span> <span class="p">:</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">perform</span> <span class="nx">any</span> <span class="nx">reset</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">function_level</span> <span class="p">:</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="nx">light</span> <span class="s">&#34;function-level&#34;</span> <span class="nx">reset</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">hot_reset</span> <span class="p">:</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="s">&#34;hot reset&#34;</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">PCI</span> <span class="nx">bridge</span><span class="p">.</span> <span class="nx">ATTENTION</span> <span class="p">:</span> <span class="nx">this</span> <span class="nx">method</span> <span class="nx">messes</span> <span class="nx">with</span> <span class="nx">the</span> <span class="nx">hardware</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>         <span class="nx">directly</span><span class="p">,</span> <span class="nx">please</span> <span class="nx">read</span> <span class="nx">the</span> <span class="nx">online</span> <span class="nx">documentation</span> <span class="nx">of</span> <span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span> <span class="nx">before</span> <span class="nx">using</span> <span class="nx">it</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>         <span class="nx">Also</span><span class="p">,</span> <span class="nx">it</span> <span class="nx">will</span> <span class="nx">perform</span> <span class="nx">a</span> <span class="nx">PCI</span> <span class="nx">remove</span> <span class="nx">even</span> <span class="k">if</span> <span class="nx">pci_remove</span><span class="p">=</span><span class="nx">no</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>
+</span></span><span class="line"><span class="cl"><span class="nx">pci_reset</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Automatically</span> <span class="nx">log</span> <span class="nx">out</span> <span class="nx">the</span> <span class="nx">current</span> <span class="nx">desktop</span> <span class="nx">session</span> <span class="nx">when</span> <span class="nx">switching</span> <span class="nx">GPUs</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">feature</span> <span class="nx">is</span> <span class="nx">currently</span> <span class="nx">supported</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">DE</span><span class="o">/</span><span class="nx">WM</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">KDE</span> <span class="nx">Plasma</span><span class="p">,</span> <span class="nx">GNOME</span><span class="p">,</span> <span class="nx">XFCE</span><span class="p">,</span> <span class="nx">LXDE</span><span class="p">,</span> <span class="nx">Deepin</span><span class="p">,</span> <span class="nx">i3</span><span class="p">,</span> <span class="nx">Openbox</span><span class="p">,</span> <span class="nx">AwesomeWM</span><span class="p">,</span> <span class="nx">bspwm</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">If</span> <span class="nx">this</span> <span class="nx">option</span> <span class="nx">is</span> <span class="nx">disabled</span> <span class="nx">or</span> <span class="nx">you</span> <span class="nx">use</span> <span class="nx">a</span> <span class="nx">different</span> <span class="nx">desktop</span> <span class="nx">environment</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">switching</span> <span class="nx">only</span> <span class="nx">becomes</span> <span class="nx">effective</span> <span class="nx">at</span> <span class="nx">the</span> <span class="nx">next</span> <span class="nx">graphical</span> <span class="nx">session</span> <span class="nx">login</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">auto_logout</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">at</span> <span class="nx">computer</span> <span class="nx">startup</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span><span class="p">,</span> <span class="nx">auto</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="s">&#34;auto&#34;</span> <span class="nx">is</span> <span class="nx">a</span> <span class="nx">special</span> <span class="nx">mode</span> <span class="nx">that</span> <span class="nx">auto</span><span class="o">-</span><span class="nx">detects</span> <span class="k">if</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">battery</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">and</span> <span class="nx">selects</span> <span class="nx">a</span> <span class="nx">proper</span> <span class="nx">GPU</span> <span class="nx">mode</span><span class="p">.</span> <span class="nx">See</span> <span class="nx">the</span> <span class="nx">other</span> <span class="nx">options</span> <span class="nx">below</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="k">select</span> <span class="nx">when</span> <span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span> <span class="nx">and</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">battery</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_auto_battery_mode</span><span class="p">=</span><span class="nx">intel</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">GPU</span> <span class="nx">mode</span> <span class="nx">to</span> <span class="k">select</span> <span class="nx">when</span> <span class="nx">startup_mode</span><span class="p">=</span><span class="nx">auto</span> <span class="nx">and</span> <span class="nx">the</span> <span class="nx">computer</span> <span class="nx">is</span> <span class="nx">running</span> <span class="nx">on</span> <span class="nx">external</span> <span class="nx">power</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span><span class="p">:</span> <span class="nx">nvidia</span><span class="p">,</span> <span class="nx">intel</span><span class="p">,</span> <span class="nx">hybrid</span>
+</span></span><span class="line"><span class="cl"><span class="nx">startup_auto_extpower_mode</span><span class="p">=</span><span class="nx">nvidia</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">intel</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Driver</span> <span class="nx">to</span> <span class="nx">use</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">Intel</span> <span class="nx">GPU</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">modesetting</span><span class="p">,</span> <span class="nx">intel</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">To</span> <span class="nx">use</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">,</span> <span class="nx">you</span> <span class="nx">need</span> <span class="nx">to</span> <span class="nx">install</span> <span class="nx">the</span> <span class="kn">package</span> <span class="s">&#34;xf86-video-intel&#34;</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">driver</span><span class="p">=</span><span class="nx">modesetting</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Acceleration</span> <span class="nf">method</span> <span class="p">(</span><span class="nx">corresponds</span> <span class="nx">to</span> <span class="nx">AccelMethod</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Only</span> <span class="nx">applies</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">sna</span><span class="p">,</span> <span class="nx">xna</span><span class="p">,</span> <span class="nx">uxa</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">no</span> <span class="nx">option</span> <span class="nx">specified</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">accel</span><span class="p">=</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Enable</span> <span class="nx">TearFree</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Only</span> <span class="nx">applies</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">intel</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="nx">yes</span><span class="p">,</span> <span class="nx">no</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">no</span> <span class="nx">option</span> <span class="nx">specified</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">tearfree</span><span class="p">=</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">DRI</span> <span class="nx">version</span><span class="p">.</span> <span class="nx">Possible</span> <span class="nx">values</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span>
+</span></span><span class="line"><span class="cl"><span class="nx">DRI</span><span class="p">=</span><span class="mi">3</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">modesetting</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">nouveau</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Does</span> <span class="nx">not</span> <span class="nx">affect</span> <span class="nx">modesetting</span> <span class="k">for</span> <span class="nx">the</span> <span class="nx">Intel</span> <span class="nx">GPU</span> <span class="nx">driver</span> <span class="p">!</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">This</span> <span class="nx">option</span> <span class="nx">only</span> <span class="nx">matters</span> <span class="k">if</span> <span class="nx">you</span> <span class="nx">use</span> <span class="nx">nouveau</span> <span class="nx">as</span> <span class="nx">the</span> <span class="nx">switching</span> <span class="nx">backend</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">modeset</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">nvidia</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">modesetting</span><span class="p">.</span> <span class="nx">Required</span> <span class="k">for</span> <span class="nx">PRIME</span> <span class="nf">Synchronization</span> <span class="p">(</span><span class="nx">which</span> <span class="nx">prevents</span> <span class="nx">tearing</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">modeset</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Whether</span> <span class="nx">or</span> <span class="nx">not</span> <span class="nx">to</span> <span class="nx">enable</span> <span class="nx">the</span> <span class="nx">NVreg_UsePageAttributeTable</span> <span class="nx">option</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Recommended</span><span class="p">,</span> <span class="nx">can</span> <span class="nx">cause</span> <span class="nx">poor</span> <span class="nx">CPU</span> <span class="nx">performance</span> <span class="nx">otherwise</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">PAT</span><span class="p">=</span><span class="nx">yes</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">DPI</span> <span class="nx">value</span><span class="p">.</span> <span class="nx">This</span> <span class="nx">will</span> <span class="nx">be</span> <span class="nx">set</span> <span class="nx">using</span> <span class="nx">the</span> <span class="nx">Xsetup</span> <span class="nx">script</span> <span class="nx">passed</span> <span class="nx">to</span> <span class="nx">your</span> <span class="nx">login</span> <span class="nx">manager</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">It</span> <span class="nx">will</span> <span class="nx">run</span> <span class="nx">the</span> <span class="nx">command</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">xrandr</span> <span class="o">--</span><span class="nx">dpi</span> <span class="p">&lt;</span><span class="nx">DPI</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Leave</span> <span class="nx">blank</span> <span class="k">for</span> <span class="nx">the</span> <span class="k">default</span> <span class="p">(</span><span class="nx">the</span> <span class="nx">above</span> <span class="nx">command</span> <span class="nx">will</span> <span class="nx">not</span> <span class="nx">be</span> <span class="nx">run</span><span class="p">).</span>
+</span></span><span class="line"><span class="cl"><span class="nx">DPI</span><span class="p">=</span><span class="mi">96</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">If</span> <span class="nx">you</span><span class="err">&#39;</span><span class="nx">re</span> <span class="nx">running</span> <span class="nx">an</span> <span class="nx">updated</span> <span class="nx">version</span> <span class="nx">of</span> <span class="nx">xorg</span><span class="o">-</span><span class="nf">server</span> <span class="p">(</span><span class="nx">let</span><span class="err">&#39;</span><span class="nx">s</span> <span class="nx">say</span> <span class="nx">to</span> <span class="nx">get</span> <span class="nx">PRIME</span> <span class="nx">Render</span> <span class="nx">offload</span> <span class="nx">enabled</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">driver</span> <span class="nx">may</span> <span class="nx">not</span> <span class="nx">load</span> <span class="nx">because</span> <span class="nx">of</span> <span class="nx">an</span> <span class="nx">ABI</span> <span class="nx">version</span> <span class="nx">mismatch</span><span class="p">.</span> <span class="nx">Setting</span> <span class="nx">this</span> <span class="nx">flag</span> <span class="nx">to</span> <span class="s">&#34;yes&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">will</span> <span class="nx">allow</span> <span class="nx">the</span> <span class="nx">loading</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">nvidia</span> <span class="nx">driver</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ignore_abi</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Set</span> <span class="nx">to</span> <span class="nx">yes</span> <span class="k">if</span> <span class="nx">you</span> <span class="nx">want</span> <span class="nx">to</span> <span class="nx">use</span> <span class="nx">optimus</span><span class="o">-</span><span class="nx">manager</span> <span class="nx">with</span> <span class="nx">external</span> <span class="nx">Nvidia</span> <span class="nf">GPUs</span> <span class="p">(</span><span class="nx">experimental</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nx">allow_external_gpus</span><span class="p">=</span><span class="nx">no</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Comma</span><span class="o">-</span><span class="nx">separated</span> <span class="nx">list</span> <span class="nx">of</span> <span class="nx">Nvidia</span><span class="o">-</span><span class="nx">specific</span> <span class="nx">options</span> <span class="nx">to</span> <span class="nx">apply</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="nx">Available</span> <span class="nx">options</span> <span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">overclocking</span> <span class="p">:</span> <span class="nx">enable</span> <span class="nx">CoolBits</span> <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Xorg</span> <span class="nx">configuration</span><span class="p">,</span> <span class="nx">which</span> <span class="nx">unlocks</span> <span class="nx">clocking</span> <span class="nx">options</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span>   <span class="nx">in</span> <span class="nx">the</span> <span class="nx">Nvidia</span> <span class="nx">control</span> <span class="nx">panel</span><span class="p">.</span> <span class="nx">Note</span><span class="p">:</span> <span class="nx">does</span> <span class="nx">not</span> <span class="nx">work</span> <span class="nx">in</span> <span class="nx">hybrid</span> <span class="nx">mode</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="err">#</span> <span class="o">-</span> <span class="nx">triple_buffer</span> <span class="p">:</span> <span class="nx">enable</span> <span class="nx">triple</span> <span class="nx">buffering</span><span class="p">.</span>
+</span></span><span class="line"><span class="cl"><span class="nx">options</span><span class="p">=</span><span class="nx">overclocking</span>
+</span></span></code></pre></div><h2 id="食用方法">食用方法</h2>
+<p><code>optimus-manager --switch nvidia</code>切换到独显（nvidia）</p>
+<p><code>optimus-manager --switch intel</code>切换到集显（intel）</p>
+<p>安装<code>mesa-demos</code>后, 使用<code>glxinfo | grep &quot;OpenGL renderer&quot;</code>查看当前正使用的显卡</p>
+<p>其他用法参见<a href="https://github.com/Askannz/optimus-manager#usage">Usage</a>。</p>
+<p>注意：</p>
+<ul>
+<li>
+<p>切换显卡的过程中会自动注销登录, 所以记得<strong>保存并关掉电脑正在运行的程序</strong>。</p>
+</li>
+<li>
+<p>你可以在配置文件中修改<code>auto_logout=false</code>禁止自动注销以手动注销切换显卡。</p>
+</li>
+</ul>
+<h2 id="others">Others</h2>
+<ul>
+<li>
+<p>之所以不推荐使用<code>bbswitch</code>是因为容易遇到<strong>ACPI锁死</strong>的问题, <a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_(lspci_hangs)">参考Wiki</a>, 需要添加<a href="https://wiki.archlinux.org/index.php/Kernel_parameters">内核参数</a><code>acpi_osi=! acpi_osi=&quot;Windows 2009&quot;</code>或<code>acpi_osi=&quot;!Windows 2015&quot;</code>启动, 如果你遇到了锁死可以通过开机时在<a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader">启动加载器界面</a>编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。</p>
+</li>
+<li>
+<p>如果用不了<code>lspci</code>, 电脑没法正常关机的话, 是nouveau的问题, 可添加内核参数<code>modprobe.blacklist=nouveau</code>禁用。</p>
+</li>
+<li>
+<p>因为前几天改配置文件时又踩了一遍锁死的坑, 于是用最新的(2020.07.01)live CD救砖时, 惊喜的发现在live环境下<code>lspci</code>和关机都不会卡死了, 貌似是新版内核修复了这个bug</p>
+</li>
+<li>
+<p>在切换显卡自动注销后, gdm界面有时不会自动加载出来而是一直黑屏, 这时需要手动切换到tty2再切回tty1才能加载出来。</p>
+</li>
+<li>
+<p>如果显示器支持<a href="https://en.wikipedia.org/wiki/Display_Data_Channel#DDC.2FCI">DDC/DI</a>，可以参考<a href="https://wiki.archlinux.org/index.php/Backlight#External_monitors">Wiki</a>使用命令调节显示器亮度。</p>
+</li>
+<li>
+<p>(本条与配置显卡无关) 因为电脑用的intel网卡, 如果遇到蓝牙耳机无法连接的情况, 安装<code>pulseaudio</code>和<code>pulseaudio-modues-bt</code>等耳机需要的蓝牙组件, 照着Wiki上的<a href="https://wiki.archlinux.org/index.php/Wireless_network_configuration#Bluetooth_coexistence">禁用Bluetooth coexistence</a>解决此问题。</p>
+</li>
+</ul>
+<hr>
+<p><img loading="lazy" src="images/1.png" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">neofetch</p>
+</p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

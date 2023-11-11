@@ -1,0 +1,1039 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>日常 on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</link>
+    <description>Recent content in 日常 on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Fri, 24 Feb 2023 22:50:26 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>“关于我逛了一趟漫展然后换了新的相机和镜头这件事”</title>
+      <link>https://blog.starry-s.moe/posts/2023/canon-eos-r7/</link>
+      <pubDate>Fri, 24 Feb 2023 22:50:26 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/canon-eos-r7/</guid>
+      <description>&lt;p&gt;年初逛了一趟漫展之后突然想换新的相机了，因为对手里的 EOS 800D 成像不是很满意，暗光的高感表现很差，ISO 800 的时候 RAW 格式稍微拉一下阴影就会出现许多噪点，所以打算换个更专业点的相机，开拓些新的领域。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>年初逛了一趟漫展之后突然想换新的相机了，因为对手里的 EOS 800D 成像不是很满意，暗光的高感表现很差，ISO 800 的时候 RAW 格式稍微拉一下阴影就会出现许多噪点，所以打算换个更专业点的相机，开拓些新的领域。</p>
+<hr>
+<p>预算方面我把相机和镜头控制在了 1W 出头，尽管这个价位能买到前几年的全画幅微单，但是综合考虑了一阵子后还是入手了佳能去年新出的 APS-C 画幅的 R7，用转接环可以搭配我已有的 EF/EF-S 镜头，能稍微节省一点镜头的开销，主要是我还挺喜欢手里的适马 17-50 这个镜头的。</p>
+<p>因为 RF 卡口的镜头价格太贵了，所以入手相机之后搜了一些评价不错的 EF-S 镜头，于是就买了广角镜头适马 18-35，所以最终还是超预算了。</p>
+<p>相机到了之后试着到处溜达拍了一些照片，用着记忆里很久以前用诺基亚自学摄影时的那点知识拍了些照片，挑几张自认为觉得还行的照片放在这里。</p>
+<p><img loading="lazy" src="images/1.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/2.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/3.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/4.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/6.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/7.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/5.jpg" alt="" />
+
+</p>
+<p>第一张是在中街用适马 17-50 拍的，后面那几张是在买了适马 18-35 之后去辽宁省博物馆拍的，最后一张是笨蛋公主的 Q 版手办，也是用适马 18-35 拍的，这几张我就稍微调了颜色，没有其他后期，很久没练习拍照了，这几张图就看看就行。</p>
+<p><del>拿巨沉的人像广角镜头去拍实物特写，唉我真的是不知道咋想的……</del></p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>入手一台家用级 APC UPS</title>
+      <link>https://blog.starry-s.moe/posts/2023/apc-ups/</link>
+      <pubDate>Sun, 08 Jan 2023 11:05:02 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/apc-ups/</guid>
+      <description>&lt;p&gt;为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。</p>
+<blockquote>
+<p>参烤链接: <a href="https://wiki.archlinux.org/title/APC_UPS">APC UPS - ArchWiki</a></p>
+</blockquote>
+<hr>
+<p>UPS 到手后花了半个多小时读使用说明书，然后第一件事是把 UPS 的断电报警蜂鸣器关掉，省得我不在公寓的时候停电了 UPS 叫个没完吵到邻居。</p>
+<p>之后在装 UPS 之前先把我电脑支架背面一团电线重新整理了一遍，现在是台式机、显示器、NAS、光猫、路由器、无线 AP 都放在一起了，他们的电源线、网线、数据线、显示器线都团在了一起，整理起来炒鸡麻烦。</p>
+<p>先把漏油器、光猫和 NAS 的电源都插 UPS 上，然后接好 UPS 的 USB 数据线到 NAS 上。</p>
+<h2 id="安装-apcupsd">安装 apcupsd</h2>
+<p>安装 <code>apcupsd</code>，然后 <code>systemctl enable --now apcupsd.service</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo apcaccess status
+</span></span><span class="line"><span class="cl"><span class="go">APC      : 001,036,0869
+</span></span></span><span class="line"><span class="cl"><span class="go">DATE     : 2023-01-08 11:09:23 +0800
+</span></span></span><span class="line"><span class="cl"><span class="go">HOSTNAME : ApertureNAS
+</span></span></span><span class="line"><span class="cl"><span class="go">VERSION  : 3.14.14 (31 May 2016) unknown
+</span></span></span><span class="line"><span class="cl"><span class="go">UPSNAME  : ApertureNAS
+</span></span></span><span class="line"><span class="cl"><span class="go">CABLE    : USB Cable
+</span></span></span><span class="line"><span class="cl"><span class="go">DRIVER   : USB UPS Driver
+</span></span></span><span class="line"><span class="cl"><span class="go">UPSMODE  : Stand Alone
+</span></span></span><span class="line"><span class="cl"><span class="go">STARTTIME: 2023-01-02 23:57:44 +0800
+</span></span></span><span class="line"><span class="cl"><span class="go">MODEL    : Back-UPS BK650M2-CH
+</span></span></span><span class="line"><span class="cl"><span class="go">STATUS   : ONLINE
+</span></span></span><span class="line"><span class="cl"><span class="go">......
+</span></span></span></code></pre></div><p>先把 NAS 里所有的应用都停掉，之后编辑 <code>/etc/apcupsd/apcupsd.conf</code>，把 <code>TIMEOUT</code> 改为 <code>1</code>，然后给 UPS 断电，这时 NAS 会自动关机。</p>
+<blockquote>
+<p>UPS 重新连接电源后，NAS 可能会自动开机，我的 NAS 是这样，但不确定所有 NAS 都这样。</p>
+</blockquote>
+<h2 id="配置自动休眠">配置自动休眠</h2>
+<p>按照 Wiki 配置停电后自动休眠 (Hibernate / 休眠到硬盘)。</p>
+<blockquote>
+<p>在此之前，需要创建 swap 分区 (或 swap file)，然后配置休眠需要的内核参数并重构 <code>initramfs</code>。</p>
+</blockquote>
+<p>以 root 用户创建 <code>/usr/local/bin/hibernate</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1"># Hibernate the system - designed to be called via symlink from /etc/apcupsd</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># directory in case of apcupsd initiating a shutdown/reboot.  Can also be used</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># interactively or from any script to cause a hibernate.</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以在这里加一些在休眠之前执行的操作，例如让 bot 发个邮件提醒停电了之类的</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Wall message</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 广播消息</span>
+</span></span><span class="line"><span class="cl">wall -n System will be hibernate soon
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">sleep <span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Do the hibernate</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 执行休眠</span>
+</span></span><span class="line"><span class="cl">/usr/bin/systemctl hibernate
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># At this point system should be hibernated - when it comes back, we resume this script here</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 现在，系统应当已经休眠了，当系统恢复运行的时候，脚本会继续从这里执行</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 可以在这里加一些在系统恢复之后的操作，例如让 bot 发个邮件提醒电力恢复了啥的</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># On resume, tell controlling script (/etc/apcupsd/apccontrol) NOT to continue with default action (i.e. shutdown).</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">99</span>
+</span></span></code></pre></div><p>别忘了赋予可执行权限。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> chmod +x /usr/local/bin/hibernate
+</span></span></code></pre></div><p>创建软链接把脚本链接到 <code>/etc/apcupsd</code> 目录下面。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> ln -s /usr/local/bin/hibernate /etc/apcupsd/doshutdown
+</span></span></code></pre></div><p>此时给 UPS 断电后，NAS 会自动休眠，等一两分钟 NAS 会完成休眠，但 UPS 仍处于运行状态没有关机，长时间停电的话，UPS 的电量会耗尽。</p>
+<p>UPS 接回电源后，NAS 会从休眠中恢复。</p>
+<h3 id="配置休眠后关闭-ups-电源">配置休眠后关闭 UPS 电源</h3>
+<p>创建 <code>/usr/lib/systemd/system-sleep/ups-kill</code>：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">case</span> <span class="nv">$2</span> in
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1"># In the event the computer is hibernating.</span>
+</span></span><span class="line"><span class="cl">  hibernate<span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nv">$1</span> in
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="c1"># Going into a hibernate state.</span>
+</span></span><span class="line"><span class="cl">       pre<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># See if this is a powerfail situation.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/apcupsd/powerfail <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;ACPUPSD will now power off the UPS&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           /etc/apcupsd/apccontrol killpower
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;Please ensure that the UPS has powered off before rebooting&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span> <span class="s2">&#34;Otherwise, the UPS may cut the power during the reboot!!!&#34;</span>
+</span></span><span class="line"><span class="cl">           <span class="nb">echo</span>
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">       <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">       <span class="c1"># Coming out of a hibernate state.</span>
+</span></span><span class="line"><span class="cl">       post<span class="o">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># If there are remnants from a powerfail situation, remove them.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/apcupsd/powerfail <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           rm /etc/apcupsd/powerfail
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1"># This may also exist, need to remove it.</span>
+</span></span><span class="line"><span class="cl">         <span class="k">if</span> <span class="o">[</span> -f /etc/nologin <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">           rm /etc/nologin
+</span></span><span class="line"><span class="cl">         <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	 <span class="c1"># Restart the daemon; otherwise it may be unresponsive in a</span>
+</span></span><span class="line"><span class="cl">         <span class="c1"># second powerfailure situation.</span>
+</span></span><span class="line"><span class="cl">	 systemctl restart apcupsd
+</span></span><span class="line"><span class="cl">       <span class="p">;;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">esac</span>
+</span></span><span class="line"><span class="cl">  <span class="p">;;</span>
+</span></span><span class="line"><span class="cl"><span class="k">esac</span>
+</span></span></code></pre></div><p>赋予可执行权限：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> chmod +x /usr/lib/systemd/system-sleep/ups-kill
+</span></span></code></pre></div><p>接下来给 UPS 断电，NAS 会自动休眠，等 NAS 休眠后再过几分钟 UPS 也会关机。</p>
+<p>UPS 关机后，给 UPS 接上电源，这时 UPS 会自动开机，然后 NAS 也会从休眠中恢复。</p>
+<blockquote>
+<p>不要在 UPS 还没关机的时候给 UPS 重新接回电源，会导致 UPS 关机后 NAS 刚从休眠中恢复就被强制断电。</p>
+</blockquote>
+<h2 id="其他">其他</h2>
+<p>折腾 UPS 的时候顺手给 NAS 换了个散热器升级了一下内存。AMD 原装散热器有亿点点吵所以换成了咱之前买的 ITX 散热器。</p>
+<figure>
+    <img loading="lazy" src="images/1.jpg"/> 
+</figure>
+
+<p>用咱写的 telebot 查看一下空载时的 CPU 温度才不到 30 度。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">CPU: +28.2°C
+</span></span><span class="line"><span class="cl">Uptime: 0.15 Hour
+</span></span><span class="line"><span class="cl">TotalRAM: 46.45G
+</span></span><span class="line"><span class="cl">FreeRAM: 42.66G
+</span></span><span class="line"><span class="cl">AvailableRAM: 43.91G
+</span></span><span class="line"><span class="cl">TotalSwap: 46.00G
+</span></span><span class="line"><span class="cl">FreeSwap: 46.00G
+</span></span></code></pre></div><p>运行一个虚拟机一个 MineCraft 服务器，CPU 温度不到 40，所以很安静。</p>
+<p>但是 UPS 它有噪音，晚上睡觉的时候能听见 UPS 它嗡嗡响，比 AMD 散热器的风扇动静还大，这个实在是无解，算了就先这样吧。</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>FinalFantasy VII Remake 游戏记录</title>
+      <link>https://blog.starry-s.moe/posts/2022/finalfantasy-vii/</link>
+      <pubDate>Sat, 20 Aug 2022 20:09:04 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/finalfantasy-vii/</guid>
+      <description>&lt;p&gt;前一阵子通关了最终幻想7重置版，放几张截图到这里水一期博客。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;严重剧透警告&lt;/strong&gt;：如不想被剧透请勿阅读本篇内容！&lt;/p&gt;
+&lt;/blockquote&gt;</description>
+      <content:encoded><![CDATA[<p>前一阵子通关了最终幻想7重置版，放几张截图到这里水一期博客。</p>
+<blockquote>
+<p><strong>严重剧透警告</strong>：如不想被剧透请勿阅读本篇内容！</p>
+</blockquote>
+<meting-js server="netease" type="song" id="1487507457" theme="#233333"></meting-js>
+<hr>
+<p><img loading="lazy" src="images/000.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">卖花的大姐姐</p>
+</p>
+<p><img loading="lazy" src="images/001.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">Tifa</p>
+</p>
+<p><img loading="lazy" src="images/002.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/003.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/004.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/005.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/006.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/007.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/008.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/009.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">Aerith 的千层套路</p>
+</p>
+<p><img loading="lazy" src="images/010.jpg" alt="" />
+
+</p>
+<hr>
+<meting-js server="netease" type="song" id="1487507471" theme="#233333"></meting-js>
+<p><img loading="lazy" src="images/011.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">Reunited</p>
+</p>
+<p><img loading="lazy" src="images/012.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">云片好帅</p>
+</p>
+<p><img loading="lazy" src="images/013.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/014.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/015.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">穿这么少的衣服，干的却是正经生意</p>
+</p>
+<hr>
+<meting-js server="netease" type="song" id="1487508995" theme="#233333"></meting-js>
+<p><img loading="lazy" src="images/016.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/017.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">可爱捏</p>
+</p>
+<p><img loading="lazy" src="images/018.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">爱丽丝老套路了</p>
+</p>
+<p><img loading="lazy" src="images/019.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">比我想得还要可爱捏</p>
+</p>
+<p><img loading="lazy" src="images/020.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/021.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/022.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/023.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/024.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/025.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/026.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/027.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/028.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/029.jpg" alt="" />
+
+</p>
+<hr>
+<meting-js server="netease" type="song" id="1818030780" theme="#233333"></meting-js>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>电脑换壳——先马趣造</title>
+      <link>https://blog.starry-s.moe/posts/2022/sama-quzao/</link>
+      <pubDate>Sat, 26 Feb 2022 23:07:52 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2022/sama-quzao/</guid>
+      <description>&lt;p&gt;年初的时候买了先马趣造这个机箱，买这个机箱的主要的原因是先马鲁班太大了，之前买先马鲁班的时候没有考虑到机箱便携性的问题，因为台式机压根就没啥便携性可言。&lt;/p&gt;
+&lt;p&gt;然额因为咱今年上半年要去北京，觉得台式机留在家里不用有些不忍心，所以某天在网上闲逛的时候看到了这款机箱。看了很多网上的评测视频后才决定入手。&lt;/p&gt;
+&lt;p&gt;现在距离刚入手这台机箱已经过去一个多月了，前一阵子一直在忙所以没时间更新博客，于是直到现在咱才把换机箱这件事更新到博客上。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>年初的时候买了先马趣造这个机箱，买这个机箱的主要的原因是先马鲁班太大了，之前买先马鲁班的时候没有考虑到机箱便携性的问题，因为台式机压根就没啥便携性可言。</p>
+<p>然额因为咱今年上半年要去北京，觉得台式机留在家里不用有些不忍心，所以某天在网上闲逛的时候看到了这款机箱。看了很多网上的评测视频后才决定入手。</p>
+<p>现在距离刚入手这台机箱已经过去一个多月了，前一阵子一直在忙所以没时间更新博客，于是直到现在咱才把换机箱这件事更新到博客上。</p>
+<meting-js server="netease" type="song" id="1444211740" theme="#233333"></meting-js>
+<h2 id="配置">配置</h2>
+<p>CPU、主板、显卡、电源、硬盘、CPU散热以及内存这些用的还是上一篇“<a href="/posts/2021/build-desktop/">我们来组装一台电脑吧</a>”里面讲的配置。</p>
+<p>除此之外咱买了一个直径8CM的小风扇(ARCTIC P8)，和一个超薄的1.5CM厚的风扇(ID-COOLING TF9125)。</p>
+<p>配置方面没有太大改动，因为不打算装侧玻璃板，所以咱这次没有装RGB灯条。</p>
+<h2 id="装机">装机</h2>
+<p><img loading="lazy" src="images/6.jpg" alt="&amp;ldquo;最终的样子&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">最终的样子</p>
+</p>
+<p>装机过程还是很顺利的，因为新机箱体积比较小，可供操作的空间有限，所以花了很长时间才装完。一开始还比较担心显卡太长会不会和右侧的ATX电源产生冲突，
+不过华硕B550重炮手的主板的PCIE4X16是在第二槽，第一槽是个PCIE1，所以装上显卡后没有影响到右侧全模组电源的电源线，
+但是显卡的底部空间很小，没办法塞下一个正常厚度的风扇了。</p>
+<hr>
+<p><img loading="lazy" src="images/2.jpg" alt="&amp;ldquo;底部风扇&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">机箱底部</p>
+</p>
+<p>后来咱买了一个1.5cm厚的超薄风扇帮助显卡散热，不过风扇的尺寸咱买小了，本来应该买12cm的风扇咱买了个9cm的，到手后发现把风扇斜过来也能勉强固定住，于是就不打算换了。</p>
+<hr>
+<p><img loading="lazy" src="images/3.jpg" alt="顶部" />
+<p style="margin-bottom: -0.8em;" class="image-title">顶部</p>
+</p>
+<p><img loading="lazy" src="images/5.jpg" alt="正面" />
+<p style="margin-bottom: -0.8em;" class="image-title">正面</p>
+</p>
+<p>机箱顶部用的是之前买的先马冰洞静音风扇，虽然不支持PWM调速但是很静音。然后因为右侧的空间被ATX电源占用了所以顶部只能装一个风扇。</p>
+<p>发热量大户实际上是显卡，CPU产生的热量很容易就能散开。所以所有风扇低速运行时，CPU和显卡的待机温度才比室温高十几度，只有玩游戏时CPU和显卡温度会高一些。</p>
+<p>把所有零件全部装上之后，就没有空间装机械硬盘了，不过还好我只有一块2.5寸固态硬盘，勉强塞在了前面板背面的硬盘位中。</p>
+<p>因为机箱空间有限，所以理线是个大难题，机箱几乎没有可理线的空间，所以我只好把一大团电线捆在一起。</p>
+<h2 id="最终效果">最终效果</h2>
+<p><img loading="lazy" src="images/7.jpg" alt="&amp;ldquo;最终效果&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">最终效果</p>
+</p>
+<p>白色机箱的确比黑色机箱好看很多，而且我反而觉得白色机箱更不容易脏一些，因为之前的黑色机箱手一摸就是油乎乎的大手印，但是这个白色机箱就没有。</p>
+<p>在网上看到有人在机箱前面贴苹果贴纸的，不过咱找了一下高中时买的Arch Linux贴纸，贴到了机箱顶部。</p>
+<p>趣造的机箱四面八方全是散热孔，所以就算咱把一个M-ATX机箱里面的所有东西全都塞到了这个小盒子里面，温度也并没有上升。要说影响的话，就是没有可以塞机械硬盘和摆手办的地方了（</p>
+<p>如果想塞机械硬盘的话，我得把我的ATX电源换成SFX电源。然后把CPU散热换成水冷或者下压式散热之类的，才能倒出空间装机械硬盘。不过咱买这个机箱目的就是为了能放到行李箱里面拉走，所以装机械硬盘的话容易在路上颠坏了。而固态就没这个担心。</p>
+<p>然后就是个人感觉先马趣造这机箱设计得还蛮不错的，机箱的所有地方都能拆，装机的时候可以先把机箱拆得只剩下一个铁架子，所以实际上装机没有增添太多难度。就是理线费劲了一些。全模组电源自带的模组线是真的硬。</p>
+<p>因为机箱小，去北京实习的时候咱买了个28寸的超大行李箱，于是这个行李箱在塞下这个机箱之后还能塞很多衣服。总之肯定是不会出现像上次那样坐高铁我一个人把机箱和显示器从北京扛回老家的情况了。</p>
+<p><strong>STARRY-S</strong></p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>我们来组装一台电脑吧</title>
+      <link>https://blog.starry-s.moe/posts/2021/build-desktop/</link>
+      <pubDate>Mon, 13 Sep 2021 23:20:29 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/build-desktop/</guid>
+      <description>&lt;p&gt;很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。</p>
+<blockquote>
+<p>因包含插图，为了浏览体验我只对图片进行了适量压缩，</p>
+<p>网络不好的用户可能需要多花一些时间加载。</p>
+</blockquote>
+<meting-js server="netease" type="song" id="22689960" theme="#233333"></meting-js>
+<hr>
+<h2 id="配置清单">配置清单</h2>
+<blockquote>
+<p>一边翻着某东的购物车一边写</p>
+</blockquote>
+<ul>
+<li>CPU + 主板: AMD Ryzen 5 5600X、华硕TFU GAMING B550M-PLUS (WI-FI) 共2477元</li>
+<li>显卡: 撼讯 RX6600XT 红魔 3599元（之前的是实际买了技嘉 GeForce GT 730D3 529元)</li>
+<li>内存: 英睿达 美光 DDR4 3200MHz 8Gx4 864元</li>
+<li>固态硬盘: 西部数据 SN750 SE 1TB 929元 + 英睿达 美光 MX500 2TB 1299元</li>
+<li>机箱: 先马 鲁班1 199元</li>
+<li>电源: 长城 金牌电源 V7-700W 475元</li>
+<li>CPU散热: 利民AK120 PLUS 169元</li>
+<li>机箱散热: 利民 TL-R12 三个12CM风扇 119元 + 先马冰洞 风扇套装 3个12cm风扇49元</li>
+<li>显示器：优派 VX2480-HD-PRO-3 165HZ 1143元</li>
+<li>其他: 扎带5.5元 理线带 9.9元 追风者CMBO灯带 400mm两条 90元</li>
+</ul>
+<p>因为我之前用笔记本时已经有一个 ikbc c87 红轴机械键盘和 罗技 G304 无线鼠标 以及之前弄拓展屏时买了 戴尔 U2419HS 显示器，所以这些配件我就不再列入装机清单里面了。</p>
+<p>排除显卡的话，整体配置全下来大概花了6.6K左右，有些配件是买完以后京东又降价了于是申请了价格保护退了一些回来。<s>显卡打算以后等价格恢复正常后再买。所以现在买的是英伟达730D，尽管是亮机卡但是我还是决定多花一点预算去自营店买一张靠谱的全新卡，这样就算以后我换显卡了，这张旧的730还可以拿去给亲朋好友的上古时代老电脑“升级”一下。</s></p>
+<p>后续在旗舰店买了RX6600XT红魔，这卡可以说是AMD入门级显卡的旗舰款了。除此之外还买了一个高刷1080P显示器，然后买了3个不带灯光的纯白静音风扇和两条ARGB灯带用来装饰。所以整体算下来整机开销大约在12K左右。</p>
+<p>主板觉得华硕重炮手B550M就已经蛮符合我自己的需求了，在B站上看了一下B550的评测发现华硕的重炮手要比微星和技嘉的迫击炮强一些（也贵了好几百元），所以决定多花些预算上一张性能强一点的主板，为后续的升级留一些空间（不过我觉得就这配置已经很够用了没啥好升级的了</p>
+<p>因为AMD R7 5800X太贵了有点超预算，所以决定买的R5 5600X，除了核心数少了一些（跑编译少几个线程）之外，性能对于现在的日常使用来说已经很足够了。肯定比我笔记本上的R7 4800H强许多。</p>
+<p>因为自己打算在电脑装Linux + Windows双系统，所以实际上我给电脑装了2条NVME固态（SN750 SE 1T + 降速的SN550 1T），然后还配了2T的英睿达MX500，以后可能根据需要还会买几个机械硬盘存数据用。</p>
+<p>因为CPU散热不带灯光，尽管我不喜欢RGB那种太花里胡哨的效果，但是还是得买几个有光亮的机箱风扇，<s>因为预算有限而且不装显卡暂时对散热要求不高，所以我只买了比较便宜的风扇，不然机箱黑咕隆咚的太不好看了，以后有需要的话再修改。</s></p>
+<p>后来咱又买了两条ARGB的灯带，然后花了一段时间把它安装到机箱里面，咱并不喜欢RGB，不过我还是希望机箱能有些观赏性的灯光。</p>
+<p>在B站找了几个电源测评介绍的视频看了一下，就买了长城的700W金牌电源，价格比较便宜不是一元一瓦，<s>目前来讲我不装显卡就日常待机的话整体功率都不会超100W，主要是电费太贵了。</s>
+不过现在来看RX6600XT的功耗最高也就150W，（应该给这显卡贴个一级能效标识），所以电脑就算满载使用最高也就不到500W的功耗，日常使用的话显卡功耗只有20-30W，超级节能！</p>
+<p>从网上挑了很久的机箱发现实在没有比较便宜又顺眼的，一开始想买白色机箱来着，后来发现白色机箱要么就是奇葩风道要么就是超预算，所以最终决定买先马鲁班1黑色机箱，尺寸够大对散热和主板显卡长度几乎没有限制，不用买配件时总计算空间大小了。</p>
+<p>配置是周五定下来就从京东上买的，因为基本上都是自营，周六当天就全收到货了。所以周六+周日两天一顿折腾就把电脑装好。一开始还比较担心会不会安错，哪里出问题需要返工这类的情况，实际上装机十分顺利。除了理线花了一些时间以外其他都基本上是一次装齐直接点亮装系统，其实第一次装好机插电源后按开机键怎么也点不亮，当时吓够呛然后拔掉开机跳线检查是不是接线有问题。后来才发现是自己脑残电源开关开反了主板没通电肯定点不亮。</p>
+<blockquote>
+<p>防呆不防傻， 那么你能帮帮我吗？（逃</p>
+</blockquote>
+<hr>
+<h2 id="装机">装机</h2>
+<p>我装机时为了防止装错顺序返工，于是去B站搜了一个教程：【<a href="https://www.bilibili.com/video/BV1jE411e7hw">BV1jE411e7hw</a>】，照着这个顺序安装基本不会出错，而且比较常见的问题视频上都有提到，比如萌新不是十分熟悉的内存插槽优先级以及比较难弄的前面板跳线。</p>
+<blockquote>
+<p>以下图片除了背部理线的那张图是用手机(iPhone XS)在弱光环境拍摄的，其余都是用相机(佳能EOS 800D + 适马17-50)拍摄，设备不是很好，技术有限，使用RawTherapee进行适量的裁剪调色</p>
+</blockquote>
+<p><img loading="lazy" src="images/IMG_6800.jpg" alt="主板" />
+<p style="margin-bottom: -0.8em;" class="image-title">主板</p>
+</p>
+<p><img loading="lazy" src="images/IMG_6802.jpg" alt="AMD R5 5600X" />
+<p style="margin-bottom: -0.8em;" class="image-title">AMD R5 5600X</p>
+</p>
+<p><img loading="lazy" src="images/IMG_6804.jpg" alt="内存" />
+<p style="margin-bottom: -0.8em;" class="image-title">内存</p>
+</p>
+<p><img loading="lazy" src="images/IMG_6809.jpg" alt="散热模具" />
+<p style="margin-bottom: -0.8em;" class="image-title">散热模具</p>
+</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6812.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">涂抹硅脂</p>
+</p>
+<p>因为散热器赠的利民TF7硅脂比较干，所以我直接点9个点然后就扣散热器了。觉得没必要像网上有人那样戴手套把硅质抹匀抹平，也不用特别在意硅脂会不会留气泡，总觉得这些不会对散热有太大影响。</p>
+<p>毕竟用一年左右就得拆下来换新硅脂，到时候只要硅脂别太干粘住直接把CPU连根拔起就行。</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6814.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">散热器底部</p>
+</p>
+<p>特地拍了一张照片以确认我把散热器底下的膜撕掉了。</p>
+<p><img loading="lazy" src="images/IMG_6816.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">安装散热器</p>
+</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6821.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">固态硬盘</p>
+</p>
+<p><img loading="lazy" src="images/IMG_6822.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">亮机卡</p>
+</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6825.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">装好的效果</p>
+</p>
+<p><img loading="lazy" src="images/photo_2021-09-14_00-34-22.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">理线后的效果</p>
+</p>
+<p>背面理线花了好几个小时把不同种类形状的线绑了起来，最顶上的风扇RGB灯光线实在没有空间收纳于是只好捆成一坨放在那。</p>
+<h2 id="最终成果展示">最终成果展示</h2>
+<p><img loading="lazy" src="images/IMG_6831.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">最终成果演示</p>
+</p>
+<p>装好Windows，安装华硕主板的软件，把风扇的灯调成了橙色长亮的模式。一开始调成浅蓝色觉得色温太低了有点冷，所以改成了暖色调。</p>
+<p><img loading="lazy" src="images/IMG_6839.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">暖色</p>
+</p>
+<p>给机箱内部拍一张特写，现在正在考虑要不要买一个手办放进去。</p>
+<p><img loading="lazy" src="images/IMG_6847.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">少女梦幻粉</p>
+</p>
+<p>后来买了新显卡和ARGB灯条后，把4根内存插满，设置好显卡的神光同步，把机箱颜色调成了“少女梦幻粉”。</p>
+<p>（相机的夜景效果不太好，所以看起来有些晃眼而且丑，实际上这颜色还是很好看的）</p>
+<hr>
+<p><img loading="lazy" src="images/IMG_6841.jpg" alt="Arch Linux" />
+<p style="margin-bottom: -0.8em;" class="image-title">Arch Linux</p>
+</p>
+<p>装好Arch Linux后的最终效果。</p>
+<p>最终我决定还是把机箱放在桌子上好一些，这样不但能透过玻璃“欣赏”内部构造，还不用担心底部电源的风扇“吸尘器”吸进去很多灰尘。</p>
+<p>机箱内部风道我也是采用的网上最推荐的风道方式，底部和右边为进风口，顶部和左边为出风口。因为现在没有显卡发热量并不大所以我只安装了左边的一个风扇和顶部的两个风扇。</p>
+<p>以后可能再买个手办和灯放到电源仓的上边，再搞点装饰。</p>
+<h2 id="为什么买了rx6600xt">为什么买了RX6600XT</h2>
+<p>其实咱一开始是想买RTX3060Ti的，但是因为老黄溢价实在太高（NVIDIA f**k you），狗东双十一耍猴，所以去ytb看了一下评测发现这A卡可以通吃1080P全部的游戏（实际上2K很多游戏也全都能玩），而且价格比3060便宜许多，然后一想3060Ti的确有些性能过剩，而且N卡的Linux驱动真的很拉跨（尽管最近一阵子更新了很多东西但是真的就是不想再折腾N卡驱动了）。</p>
+<p>然后就是，如果真的玩fps游戏的话，有谁会真的开极高画质上2K144呢。咱玩守望除了把材质调最高之外其他都是最低，3A大作的话咱也就玩过尼尔和底特律，而且咱不玩赛博朋克2077，而且咱主要还是Linux用户。所以真的没必要花首发价2倍的钱去买一个所谓的能在2K分辨率下全高画质流畅运行游戏的显卡。更值得吐槽的是，现在网上一搜显卡评测，给人的感觉就是游戏不开极高画质就好像不能玩了一样，还有很多人还拿A卡开光追后的帧数和N卡作比较，说实话我本人对光追真没什么好感，我玩的这些游戏里没有支持光追的，而且就算玩支持光追的游戏，开光追也看不出多大差距来。</p>
+<p>网上有很多评测视频说这显卡显存位宽只有128比特，只支持PCIE4.0x8，核心面积小啊，丐中丐不值三千块钱这个价之类的一大堆缺点，不过这卡实际体验并没有网上传的那么不堪。它实际的游戏效果还是很好的，所以真没必要非拿硬件参数说事，缺点有是有，但影响并不大。</p>
+<p>实际上手体验后，这显卡日常待机时风扇转都不转，温度只有40-50度，功耗在20-30W之间肥肠节能。Linux里面卸载掉NVIDIA一大堆驱动后，安装<code>amdgpu</code>驱动直接就能用，没遇到过任何问题。</p>
+<p>（要不是因为刚需，谁会在这个时间点上买显卡&hellip;</p>
+<h2 id="游戏体验">游戏体验</h2>
+<p>守望先锋高画质（我不开极高画质），训练靶场或者进比赛帧数400fps直接跑满，打团时帧数大约下降到320-350之间。（正常人是不会在打团时盯着屏幕左上角看帧数变化的）</p>
+<p>Minecraft Java Edition 1.16.4 + Optifine（咱加了这么多定语是因为Minecraft有很多版本，而且还有很多用来改善画质或性能的Mod）：</p>
+<p>不知是MC的优化不好还是遇到了CPU瓶颈还是显卡驱动的问题，玩MC时帧数平时会有250帧，但是一到红石机器多的地方或者全物品分类机这类的地方，帧数就掉到了140帧以内，虽然帧数并不高（实际上也不低了），但是已经很流畅了，只不过对生电玩家不太友好。</p>
+<p>值得一提的是，这显卡在玩MC时功耗也只有30瓦左右，而且大多数时间风扇都不转，真的太环保了（</p>
+<h2 id="arch-linux">Arch Linux</h2>
+<p>整个安装Linux的过程十分顺利，不像笔记本那样经常遇到许多奇奇怪怪的问题。加上走的独显直连没有麻烦的双显卡混合交火，基本上是装好自己需要的软件后开机就直接用了。</p>
+<p>之前联想R7000P那个笔记本还经常无法调节屏幕亮度，TTY下面的警报“滴”声大得吓人，以前还遇到过nvidia+amdgpu+gnome进wayland就黑屏的问题（现在nvidia升470已经修复了）。</p>
+<p>曾经用的那个惠普更是因为英伟达显卡驱动和惠普奇葩的硬件在linux5.0内核之前经常出现黑屏死机这些问题，而且不开启独显的话就没办法连双显示器。</p>
+<p>所以还是台式机最香，觉得硬盘不够用了我就可以买块新硬盘扯根线扩容，主板上有4个内存插槽够我插很多根内存。CPU也都是可拆卸的只要主板支持我还可以继续升级，而且我可以选择没有集成显卡的CPU，显示器直连独显不用被那些驱动问题弄得头疼。</p>
+<h2 id="others">Others</h2>
+<p>其实最初我是想把装机的过程录下来拍成VLOG的，但是租的房子空间有限加上不想露脸，我一说话还会紧张不会组织语言，而且我没带三脚架，所以为了节省体力我只是拍几张照片放到博客上。</p>
+<p><del>尽管现在这个电脑显卡很差不能打大型游戏，但是他的强悍的CPU性能已经足够我干很多事情了。</del> 一开始想测试一下CPU性能于是下载了Linux内核，用默认生成的<code>config</code>，<code>make -j12</code>编译。然后找个工具(<code>lm_sensors</code>)查看一下CPU温度。当我还没配好配置文件时突然发现内核他编译好了。</p>
+<p>然而除了写代码之外我暂时还没想好什么其他的使用这个电脑的方法。因为有点舍不得电费加上没有公网IP所以我也不打算把它当服务器用。</p>
+<blockquote>
+<p>可能有人会更关心我在北京实习的相关事情，其实我并不是不想写在博客里面，而是想等过几个月有了一个比较完整的实习体验后再写，因为最近每天都很忙而且心情变化很复杂，毕竟自己一个人离开学校到北京。所以我不想把某一刻的心情写在博客上当作我这一阵子的整体体验，现在还不是做总结的时候（心情好的话，也许我会写在今年年终总结上吧）。</p>
+</blockquote>
+<hr>
+<h2 id="后续">后续</h2>
+<p>2022-02-26补充:</p>
+<p>咱给这个电脑换了新的机箱，考虑了一下如果把换新机箱的内容添加到这里的话，会对原有的我组装电脑的内容产生影响，所以我新开了一篇博客，感兴趣的可以去看：<a href="/posts/sama-quzao/">电脑换壳——先马趣造</a>。</p>
+<p>以后组装电脑相关的博客，都会在标签 <a href="/tags/%E5%8F%B0%E5%BC%8F%E6%9C%BA/">台式机</a> 里面找到。</p>
+<br>
+<p><strong>STARRY-S</strong></p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>NieR:Automata 游戏记录</title>
+      <link>https://blog.starry-s.moe/posts/2021/nier_automata/</link>
+      <pubDate>Sun, 15 Aug 2021 00:23:55 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/nier_automata/</guid>
+      <description>&lt;p&gt;这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。&lt;/p&gt;
+&lt;p&gt;尽管游戏玩了3遍，但是不敢保证说我把尼尔前前后后的每个细节都弄清楚，不过还是打算把我遇到的一些有意思的地方记录到博客中。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。</p>
+<p>尽管游戏玩了3遍，但是不敢保证说我把尼尔前前后后的每个细节都弄清楚，不过还是打算把我遇到的一些有意思的地方记录到博客中。</p>
+<meting-js server="netease" type="song" id="22689961" theme="#233333"></meting-js>
+<hr>
+<p><img loading="lazy" src="images/NieR_Automata_20210115172747.jpg" alt="&amp;ldquo;遊樂園廢墟&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">遊樂園廢墟</p>
+</p>
+<blockquote>
+<p>其实我今年4月份就把游戏就打完了，但是我硬是拖了这么久才把游玩记录写到博客上。</p>
+</blockquote>
+<hr>
+<p><img loading="lazy" src="images/NieR_Automata_20210115175404.jpg" alt="&amp;ldquo;记忆&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">记忆</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210115180846.jpg" alt="&amp;ldquo;八音盒&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">八音盒</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116183544.jpg" alt="&amp;ldquo;游乐园的月之泪&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">游乐园的月之泪</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116183651.jpg" alt="&amp;ldquo;充满“干劲”的机器人&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">充满“干劲”的机器人</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116183741.jpg" alt="&amp;ldquo;游乐园&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">游乐园</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116184004.jpg" alt="&amp;ldquo;机器人版 罗密欧与朱丽叶&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">机器人版 罗密欧与朱丽叶</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210116184223.jpg" alt="&amp;ldquo;描述人类残暴性的作品&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">描述人类残暴性的作品</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210117155407.jpg" alt="&amp;ldquo;摸头&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">摸头</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210117163441.jpg" alt="&amp;ldquo;NieR:AutoFishing&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">NieR:AutoFishing</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210119163908.jpg" alt="&amp;ldquo;Lunar Tear&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Lunar Tear</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210119165209.jpg" alt="&amp;ldquo;4s&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">4s</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210124120504.jpg" alt="&amp;ldquo;A2&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">A2</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210124143553.jpg" alt="&amp;ldquo;艾米尔的家&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">艾米尔的家</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210124182334.jpg" alt="&amp;ldquo;森林国王&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">森林国王</p>
+</p>
+<!-- ![](images/NieR_Automata_20210129002557.jpg) -->
+<p><img loading="lazy" src="images/NieR_Automata_20210129010129.jpg" alt="&amp;ldquo;沉没都市&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">沉没都市</p>
+</p>
+<!-- ![](images/NieR_Automata_20210204010638.jpg) -->
+<!-- ![](images/NieR_Automata_20210204012723.jpg) -->
+<p><img loading="lazy" src="images/NieR_Automata_20210204015704.jpg" alt="&amp;ldquo;艾米尔的决意&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">艾米尔的决意</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210206020307.jpg" alt="&amp;ldquo;9s 陪寝&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">9s 陪寝</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210214211911.jpg" alt="&amp;ldquo;任务&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">任务</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210214212838.jpg" alt="&amp;ldquo;创造不是那么简单的事了&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">创造不是那么简单的事了</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210219203841.jpg" alt="&amp;ldquo;记好啦&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">记好啦</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210219204035.jpg" alt="&amp;ldquo;最轻松的！&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">最轻松的！</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210219210754.jpg" alt="&amp;ldquo;第6次格式化&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">第6次格式化</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210219210830.jpg" alt="&amp;ldquo;女人真恐怖&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">女人真恐怖</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210220234528.jpg" alt="&amp;ldquo;Morning!&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Morning!</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210222233545.jpg" alt="&amp;ldquo;Meow&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Meow</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210223000109.jpg" alt="&amp;ldquo;4s&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">4s</p>
+</p>
+<!-- ![](images/NieR_Automata_20210309155216.jpg) -->
+<p><img loading="lazy" src="images/NieR_Automata_20210309155202.jpg" alt="&amp;ldquo;Hacking A2&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Hacking A2</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210309204622.jpg" alt="&amp;ldquo;Emil&amp;rsquo;s Memory&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Emil&#39;s Memory</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210309211227.jpg" alt="&amp;ldquo;Share Happiness!&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Share Happiness!</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210309220354.jpg" alt="&amp;ldquo;Emil&amp;rsquo;s Home&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Emil&#39;s Home</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210310140442.jpg" alt="&amp;quot;《没中》&amp;quot;" />
+<p style="margin-bottom: -0.8em;" class="image-title">《没中》</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210310141143.jpg" alt="&amp;ldquo;孩子们的核心&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">孩子们的核心</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210314205859.jpg" alt="&amp;ldquo;晚安，好梦！&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">晚安，好梦！</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210314211653.jpg" alt="&amp;ldquo;Brother&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">Brother</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210320213830.jpg" alt="&amp;ldquo;利落地杀掉我&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">利落地杀掉我</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210320225429.jpg" alt="&amp;ldquo;柏拉图&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">柏拉图</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321090429.jpg" alt="&amp;ldquo;柏拉图的回忆&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">柏拉图的回忆</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321095116.jpg" alt="&amp;ldquo;谢谢你愿意听我说话&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">谢谢你愿意听我说话</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321104439.jpg" alt="&amp;ldquo;deb[U]nked&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">deb[U]nked</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321115643.jpg" alt="&amp;ldquo;好一个逃离现场&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">好一个逃离现场</p>
+</p>
+<p><img loading="lazy" src="images/NieR_Automata_20210321131750.jpg" alt="&amp;quot;[E]nd&amp;quot;" />
+<p style="margin-bottom: -0.8em;" class="image-title">[E]nd</p>
+</p>
+<hr>
+<p><img loading="lazy" src="images/NieR_Automata_20210220231427.jpg" alt="&amp;ldquo;NieR:Automata&amp;rdquo;" />
+<p style="margin-bottom: -0.8em;" class="image-title">NieR:Automata</p>
+</p>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>《空之境界》摘抄</title>
+      <link>https://blog.starry-s.moe/posts/2021/karanokyokai/</link>
+      <pubDate>Sat, 03 Jul 2021 21:01:37 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2021/karanokyokai/</guid>
+      <description>&lt;p&gt;很久以前就打算二刷空境原著了，由于种种原因进展一直比较缓慢。&lt;/p&gt;
+&lt;p&gt;最终在 Kindle (&lt;del&gt;泡面盖&lt;/del&gt;) 上阅读时标记了一些不错的菌言菌语，整理到博客上。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>很久以前就打算二刷空境原著了，由于种种原因进展一直比较缓慢。</p>
+<p>最终在 Kindle (<del>泡面盖</del>) 上阅读时标记了一些不错的菌言菌语，整理到博客上。</p>
+<meting-js server="netease" type="song" id="1322356611" theme="#233333"></meting-js>
+<hr>
+<h2 id="俯瞰风景">俯瞰风景</h2>
+<ul>
+<li>
+<p>飞行这个名词，与坠落这个名词是相连结的。但越是迷恋天空的人，越会欠缺这样的认知，结果死了之后也只能持续朝云端飞行，不会往地面坠落下来，等于是朝着天空坠落。</p>
+</li>
+<li>
+<p>视野并不是眼球看到的景象，而是大脑处理过的景象。我们的视野受到我们的常识保护着，不认为自身的高度叫高，甚至觉得是种常识，没有高这个概念存在。反过来说，凡是人类，都活在俯瞰的视野中。</p>
+</li>
+<li>
+<p>人是活在箱中的生物，也只能在箱中生活。</p>
+</li>
+<li>
+<p>在这短暂存在的密室里，现在无论外界发生什么事都与式没有关联，也无法产生关联。这份实际感受，微微沁入她本应空虚的心。</p>
+</li>
+<li>
+<p>——如果自身的视野就是世界的一切，此刻世界的确正在沉睡。</p>
+</li>
+<li>
+<p>如果城市是深海，夜空就是纯粹的黑暗。在那片黑暗上，星辰就像散落的宝石那般闪闪发光。月亮是洞穴，一个凿穿夜空这张黑色图画纸的巨大洞穴。</p>
+</li>
+<li>
+<p>月亮其实不是反射太阳的镜子，只是在窥视这一侧的景色——在两仪家，式曾听人这么说过。</p>
+</li>
+<li>
+<p>一头宛如以一根根丝线梳就的黑发顺滑无比，只要风势一大，黑发迎风飞舞的模样就散发出无比幽玄之美。</p>
+</li>
+<li>
+<p>刀刃有六寸长，与其说是刀更像是一柄只由白刃构成的凶器。</p>
+</li>
+<li>
+<p>因为天空没有尽头。我认为如果能无拘无束的漫游、能自由飞往任何地方，就可以找到我不讨厌的世界。</p>
+</li>
+<li>
+<p>所谓的 ‘逃’ 有两种，漫无目的的逃以及带有目的的逃。一般将前者称为 ‘漂浮’，后者称为 ‘飞行’。</p>
+</li>
+<li>
+<p>我们并不是根据背负的罪来选择道路，而是先选择道路再背负起自己的罪孽。</p>
+</li>
+<li>
+<p>虽然根本不值得一提，我终究认为自己最后还是应该死于从俯瞰坠落。</p>
+</li>
+<li>
+<p>无论当事人下了什么决定，自杀还是会被视为自杀来处理。</p>
+</li>
+</ul>
+<hr>
+<h2 id="杀人考察前">杀人考察（前）</h2>
+<ul>
+<li>
+<p>人要无知一点比较好，黑桐。人在小时候只看得到自己，根本不会察觉别人的恶意。就算是污秽也好，当被爱的感觉转化成经验，人才能够以善意去对待他人——因为人只能展现本身已具有的情感。</p>
+</li>
+<li>
+<p>你要当心点，黑桐同学。不详的预感，会招来不详的现实</p>
+</li>
+</ul>
+<hr>
+<h2 id="痛觉残留">痛觉残留</h2>
+<ul>
+<li>
+<p>无法适应社会的人非常多，他们的存在本身却从一开始就无法适应这个社会。他们不应该存在，不，是无法存在。</p>
+</li>
+<li>
+<p>这让她很高兴。因为活下去，就等于痛苦下去。</p>
+</li>
+<li>
+<p>被排除在境界之外的人，也会被彻底剥夺其存在意义。所以，那只不过是肉块罢了。</p>
+</li>
+<li>
+<p>对于想不通的事，不要强迫自己接受比较好。</p>
+</li>
+<li>
+<p>因为缺乏感觉的人一样拥有身体，也能够移动自如，我们就认为他们除了没有感觉之外没什么不同。但这是错误的。没有感觉，就代表什么都接收不到喔，黑桐。</p>
+</li>
+<li>
+<p>黑桐没能赶上是吗？接下来，就看暴风雨是先抵达，还是先被制造出来。式一个人去，有可能反被打败啊，两仪。</p>
+</li>
+<li>
+<p>痛觉可是种好东西，有错的终究是伤口，不可以搞错先后顺序。我们需要痛觉，无论多么痛苦都一样。</p>
+</li>
+<li>
+<p>“没有什么伤是无法痊愈的。不会痊愈的伤口不叫伤口，叫作死亡。”</p>
+</li>
+</ul>
+<hr>
+<h2 id="伽蓝之洞">伽蓝之洞</h2>
+<ul>
+<li>
+<p>如果眼睛看得见，我大概正看着他应付的笑容。</p>
+</li>
+<li>
+<p>“你的嗜好还真奇怪。”</p>
+<p>“我好高兴。真让人惊讶，没想到橙子小姐也有跟普通人一样的温情和道义精神！”</p>
+</li>
+<li>
+<p>“没错，你无法过着正常生活。要烦恼也该有个限度，两仪式，你该认清现实了。你原本就是属于我们这边的人吧？ 所以——别再梦想什么普通（幸福）的生活了。”</p>
+</li>
+<li>
+<p>这女的——真是专挑我逃避的问题刺人痛楚。</p>
+</li>
+<li>
+<p>正因为失去的事物永不复返，我决定不再后悔。</p>
+</li>
+</ul>
+<hr>
+<h2 id="矛盾螺旋">矛盾螺旋</h2>
+<ul>
+<li>
+<p>所谓的变成大人，就是明智地将幻想取代。</p>
+<p>自以为早熟的愚昧，让我骄傲地接受了这个事实。</p>
+</li>
+<li>
+<p>追求社会上理所当然的生活就得遭受打击。只要接受我的人生注定如此，就不会觉得自己不幸。这和小时候一样。我以聪明代替幻想，决定一个人活下去。</p>
+</li>
+<li>
+<p>我明明热爱奔跑，奔跑明明曾是我的救赎，到头来我却发现那不过是发生了一些不幸后便可以抛弃的东西，不仅愕然。</p>
+</li>
+<li>
+<p>只要一堕落，人是否就会变得这么婆婆妈妈的？我不禁傻眼。</p>
+</li>
+<li>
+<p>这家伙以前曾说心是看不见的。因此，她绝不会对别人吐露肉眼看不见的烦恼。</p>
+</li>
+<li>
+<p>所以——为了不再做梦，我只不过是在被杀前抢先宰了对方。</p>
+</li>
+<li>
+<p>忍耐明明是你的优点，结果你却选择了痛苦的那条路。第一次见面的时候，胭条巴正要抹杀胭条巴。失去未来，变成空壳的你，也跟现在一样想死是吗？</p>
+</li>
+<li>
+<p>“重点明明在于学到什么，这个国家却本末倒置。只要有真材实料根本不需要什么证据，大家却为了得到资格去学习，而不是透过学习的成果取得资格。一个只剩下用来证明‘我学到这么多！’的资格，不就像契约书一样。”</p>
+</li>
+<li>
+<p>或许，她就是将如暗处鲜花般优美的日本幽灵，与外国童话中的妖精融合而成的结晶。</p>
+</li>
+<li>
+<p>“和他们结识，算是我在伦敦时唯一的疏忽吧。”</p>
+</li>
+<li>
+<p>灵长已经变得太复杂，是过度追求万能，替生命附加种种能力导致的结果。</p>
+</li>
+<li>
+<p>朦胧不定的东西会召唤朦胧不定的言语。事情明明这么简单，方才的平稳气息却已散去，让人难以呼吸。</p>
+</li>
+<li>
+<p>那是因为无论拥有怎样优秀的肉体、素质，对于一个人来说只能把一件事情做到极致。去到高处的话可以，然而除此以外的山便无法去攀登了。</p>
+</li>
+<li>
+<p>“你这是什么表情。让那系统崩坏掉的人就是你吧。所谓的精神异常者呢，由于自以为自己的异常是梦境所以才没有破绽。式过去也是这样的。但是却不由得注意到了名为黑桐干也的人。于是对两仪式的存在方式察觉到了异常。”</p>
+</li>
+<li>
+<p>“哦，离题了。说着与两仪有关的话就没有注意到，似乎是被什么逼迫着一般。不知不觉就说多了。说不定黑桐你明天就死掉了呢。”</p>
+<p>“&hellip;&hellip;不敢当。我会小心车子的。”</p>
+</li>
+<li>
+<p>也就是指男性之中的女性部分和女性之中的男性部分。从男性的语气来推断出是阳性，这结论未免下得太早了。无论是谁都会拥有偏向异性的思考模式。男扮女装的怪癖是最为典型的。现在的式毫无疑问是阴性的式。男性的语气，是她为了死掉的织而在无意识下进行的代偿行为。至少，是希望你还能够记得织的事情也说不定。呼呼呼，这不是很可爱吗？</p>
+<p>“&hellip;”</p>
+</li>
+<li>
+<p>由于没有任何一点小的异常，所以也就注意不到大的异常。</p>
+</li>
+<li>
+<p>“要打开了。这可是阔别半年的自己的家呦，胭条。”</p>
+<p>两仪很开心似的说着。</p>
+</li>
+<li>
+<p>若不在人们身上使用相同的仪式死亡，给你的献祭便不完全。如果死亡之后再次复活的螺旋不完全。没有达到相互交缠且相克的条件，便无法将其联系起来。于是我便准备了他们的尸体作为阴，他们平常的生活作为阳。</p>
+</li>
+<li>
+<p>死者与生者无法兼容。在满是矛盾的这个世界中，个体是没有共通这层意义的。</p>
+</li>
+<li>
+<p>第一次脱离了死的困境，但那只不过是为了迎接第二次、第三次的死所注定的方法。这种有限的死的方式。</p>
+</li>
+<li>
+<p>“&hellip;&hellip;推了煞车坏掉的人一把，这种做法是不对的。”</p>
+</li>
+<li>
+<p>为了消除现象而引起的现象，最终会变成将自己向绝境逼迫的行为。但是果然，即使留下最初的现象不管，也会演变成被逼迫至绝境的情形。无论怎样努力，现象这个词的含义是不会消失的。</p>
+</li>
+<li>
+<p>由于事物总是连带有许多阻碍，所以并不存在完美的事物。</p>
+</li>
+<li>
+<p>橙子小姐的言辞一针见血。</p>
+</li>
+<li>
+<p>不过到了近代这种称呼就不再使用了。文明发达了，人们变得很容易就能够将自身灭绝。</p>
+</li>
+<li>
+<p>“学问和年龄无关，柯尼勒斯，虽然你外表看起来很年轻，但你总是只注意外表，所以内在才会追不上啊。”</p>
+</li>
+<li>
+<p>人类的个体若是完成，生存的意义就会消失。但各种人类却只为了生存下去的欲望而无意识地拒绝它，所有的人类在以人类身份思考时，变成比动物还要不如。明明为了完成而生存，却为了生存而拒绝完成。</p>
+</li>
+<li>
+<p>让一个人了解事物，与其教他，不如让他自己体验来得快。</p>
+</li>
+<li>
+<p>生命的证据不是如何去追求快乐，因为生命的意义，就是要去体会痛苦。</p>
+</li>
+<li>
+<p>——风停了，信号也已响起。</p>
+<p>来吧 ——该开始认真地奔跑了——</p>
+</li>
+<li>
+<p>我虽然讨厌别人的同情，但我知道拒绝别人同情的代价，最后报应会发生在自己身上。</p>
+</li>
+<li>
+<p>然后，男人的手伸了过来。</p>
+<p>“一个人站不起来的话，我就助你一臂之力吧。”</p>
+</li>
+<li>
+<p>男人“嗯”的一声，毫不做作地笑了。</p>
+<p>“我也认为你应该会这么说的。”</p>
+<p>那是一股不可思议、连我也想回报的笑容。</p>
+</li>
+<li>
+<p>“你就拿着吧，因为这以后得由你来守护才行。”</p>
+<p>我努力露出灿烂的笑容，但不知道是不是顺利笑了出来。</p>
+</li>
+<li>
+<p>“&hellip;&hellip;我也一样，希望有人来帮我，一直希望有人来帮我，但是，我却不知道该把自己从哪里解放出来&hellip;&hellip;而结果也不该知道的，因为根本没有可以帮助我的方法。不管意义如何替换，只有一开始的现象无法消除。”</p>
+</li>
+<li>
+<p>他回头看了一眼，那个被蒸汽和水声包围的地下室非常安静。那是连自己死了都不知道，到今天也还继续梦见日常之轮的脑髓灵魂安置所。</p>
+</li>
+<li>
+<p>但那也是不可能的，扭曲的轮回不会在同一个地方转动，若死者不能亲自结束身为死者的存在，日常生活永远不会到来。</p>
+</li>
+<li>
+<p>&hellip;&hellip;我失败了。不该和这些怪物扯上关系啊！</p>
+<p>&hellip;&hellip;那就是，红大衣魔术师最后的思考。</p>
+</li>
+<li>
+<p>从走廊看出去的夜景很安静、很寂寞，公寓周围只存有旁边那栋形状相同的公寓，公寓之间铺着柏油道路，还有绿色的庭院。那光景，与其说是夜景，还不如说是被绿意包围的墓碑。</p>
+</li>
+<li>
+<p>“为什么回来。”</p>
+<p>魔术师用沉重的声音问着。</p>
+<p>巴无力回答，只是一直看着荒耶。他没有回答的余力，若不是全力集中精神，他连正面看着魔术师也作不到。</p>
+</li>
+<li>
+<p>你的意志只不过是由幻想产生，由幻想所活化的东西而已。在这个世界死亡的胭条巴，已经只能在这里生活了。</p>
+</li>
+<li>
+<p>事情就是因为有尽头，所以才能观测到无限这件事。</p>
+</li>
+</ul>
+<hr>
+<h2 id="忘却录音">忘却录音</h2>
+<ul>
+<li>
+<p>在确认自己的记忆时，不可以依靠他人的记忆。毕竟只有名为回忆的自我天平，才能决定过去&hellip;&hellip;</p>
+</li>
+<li>
+<p>所谓的忘记，其实是记忆劣化。回忆是一种不会消失、只会逐渐褪色的废弃物。你不觉得很可惜吗？人们竟然让属于永恒的事物生锈。亲手让身为永恒的事物化为烟尘。</p>
+</li>
+<li>
+<p>污秽由污秽自己解决是最好的作法，因为不管是什么人，想要清除污秽，就一定会受到污秽沾染，这是一个不详的循环，我们称之为 ‘诅咒’。</p>
+</li>
+<li>
+<p>所谓的天才，到最后只是把自己当成对手。</p>
+</li>
+<li>
+<p>妖精很难控制，操纵者常常在不知不觉间，从实现他们自己的愿望变成实现妖精的愿望。鲜花你听清楚了，要注意——使用自己以外的东西所制造出来的使魔，别走到操纵者反被操纵的下场</p>
+</li>
+<li>
+<p>我的能力只能从别人已经走过的道路来获得信息，但你却可以看到接下来的路通往哪里呢&hellip;&hellip;</p>
+</li>
+<li>
+<p>人之所以选择忘却记忆，绝不是因为那些记忆没有必要，而是因为记住那些事很危险。</p>
+</li>
+<li>
+<p>我们刻意忘却过去犯下的种种过错。忘却那些如果记得就会让自己崩溃的记忆。我们靠着这么做——才能守护自己现在是健康而无辜的幻象。</p>
+</li>
+<li>
+<p>“物质是用来消费及磨耗的事物，这个名为地球的世界逐渐走向崩坏也是自然的道理，因为在最后走向死亡是最正确的存在方式，所以谁也不会去解决这个问题。对我们来说，真正的世界只存在于各自的脑髓中而已。”</p>
+</li>
+</ul>
+<hr>
+<h2 id="杀人考察后">杀人考察（后）</h2>
+<ul>
+<li>
+<p>本能在表层意识具现化成人格时，将会驱逐所有理性，会凌驾我这个名为白纯里绪的人格。</p>
+</li>
+<li>
+<p>向对方抱有的情感，超出自己的容许量的时候吧，自己能承受的感情量是一定的，有些人容量很大，也有人容量很小，不论是爱情或者是憎恨，当那种感情超过自己所能容纳的量，那么超出的部分会转变为痛苦，如此一来，便不能忍受对方的存在。</p>
+</li>
+<li>
+<p>为了到最后让自己死去，所以我们只有杀一次人的权利。</p>
+</li>
+<li>
+<p>人一辈子只能承受一人份的人生价值，为了原谅无法走到尽头的人生，所以大家才会用尊重的态度看待死亡，因为生命等价，即使是自己的生命，也不是自己所拥有的东西。</p>
+</li>
+<li>
+<p>光是孕育意识的大脑，无法产生人格。虽然只有脑部也可以活下去，但我们必须先拥有肉体才能产生自我意识。有了肉体之后，和肉体一起培养，就有了现在的人格。喜爱自己肉体的人，应该属于社交型人格，而厌恶自己肉体的人，则属于内向型人格。虽然光有意识也可以培养出人格，但那样的人格是无法认识自己的，一般来说，心灵就会长成特别的东西。那样的话，已经不能称之为人格，和计算机没有什么不同。如果有谁只是一个大脑，那个人就必须创造出一个 ‘只有脑的自己’ 的人格。必须舍弃肉体这个大我，而保存意识这个小我。</p>
+</li>
+<li>
+<p>“不是有了知性才有肉体。”</p>
+<p>“而是，有了肉体之后，知性才得以诞生。”</p>
+</li>
+<li>
+<p>说到底，人类只不过是在自己这个空壳中做着梦而已。明明是那么地显而易见的。</p>
+</li>
+<li>
+<p>大部分的人并不是出于自己的愿望要过那样的生活。想要成为特别的存在却无法实现，这种形式才是真正的平凡人生。</p>
+</li>
+</ul>
+<hr>
+<h2 id="未来福音">未来福音</h2>
+<ul>
+<li>
+<p>她擅长的并非预测未来，而是教人如何避免遭遇到不幸。</p>
+</li>
+<li>
+<p>那是一种希望，希望对方相信她说的话。也是一种绝望，绝望于对方不可能相信。</p>
+</li>
+<li>
+<p>所谓的现实，即为数值尚未确定的公式。公式的数值会不断变动，不用说是求出答案，人们连要求出什么都不知道。然而——一旦这个数值确定下来，答案便再也不会改变。</p>
+</li>
+<li>
+<p>这一切都是醒着的，但没有什么活着的样子。没有任何例外。</p>
+</li>
+<li>
+<p>“就是因为知道得太清楚，才会看不见吗——橙子说得对极了。炸弹魔，你有没有听到？既然你的眼睛什么都没看见，不如废了算了。”</p>
+</li>
+<li>
+<p>“未来并没有不同。‘未来’这种东西，一开始便不存在。不存在的东西，当然没有办法控制。”</p>
+</li>
+<li>
+<p>她依然是老样子，即使自己遇到不幸，也没有显露出来，仍旧表现得潇洒又懒惰，完全就是时下高中女生会有的样子。</p>
+</li>
+<li>
+<p>“没错。那顶多算是憧憬。你就像个看到偶像，拼命叫个不停的幸福小粉丝。所谓的恋爱啊，应该要更轰轰烈烈、更不堪回首、更捉摸不定，如同不是抵达终点，便是发生意外的云霄飞车。总之啊，谈恋爱不可能留下什么美好回忆&hellip;&hellip;”</p>
+</li>
+<li>
+<p>“我漂亮地踩到地雷。”</p>
+</li>
+<li>
+<p>既然我可以用未来视取巧，相对地当然要承担一些代价。</p>
+</li>
+<li>
+<p>不论谁看见她，都会期待她未来的发展，另一方面，又暗暗希望她永远维持现在的样子</p>
+</li>
+<li>
+<p>在这个时代，幸福的未来相当罕见。</p>
+</li>
+<li>
+<p>既然看得见未来，当然也会了解过去。</p>
+</li>
+<li>
+<p>这十年——不，说得更正确，是十二年来，我始终像故事中模仿人类的机器人，融入这个城市的生活罢了。</p>
+</li>
+<li>
+<p>我遇见难得的朋友，之后又失去他。尽管试着承续他的衣钵，却每天被唯一的读者批评。</p>
+</li>
+<li>
+<p>尽管我也为此付出代价，往后的人生满是失败。但我至少还留有什么。</p>
+</li>
+<li>
+<p>“你很快会从这个世界上消失。你的前途一片漆黑，未来完全没有任何希望。你不会留下任何东西，也没有获救的可能&hellip;&hellip;但是，太不可思议了，尽管如此，你的梦想将继续活下去。”</p>
+</li>
+</ul>
+<hr>
+<meting-js server="netease" type="song" id="590515" theme="#233333"></meting-js>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>KOReader on STARRY-S&#39; Blog</title>
+    <link>https://blog.starry-s.moe/categories/koreader/</link>
+    <description>Recent content in KOReader on STARRY-S&#39; Blog</description>
+    <image>
+      <title>STARRY-S&#39; Blog</title>
+      <url>https://blog.starry-s.moe/avatar.png</url>
+      <link>https://blog.starry-s.moe/avatar.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com) &lt;br/&gt; &lt;span id=&#34;busuanzi_container_site_pv&#34;&gt;访问量&lt;span id=&#34;busuanzi_value_site_pv&#34;&gt;&lt;/span&gt;次&lt;/span&gt; |</copyright>
+    <lastBuildDate>Tue, 05 Sep 2023 22:45:15 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/koreader/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kobo Libra 2 安装 KOReader</title>
+      <link>https://blog.starry-s.moe/posts/2023/kobo-libra-2/</link>
+      <pubDate>Tue, 05 Sep 2023 22:45:15 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2023/kobo-libra-2/</guid>
+      <description>&lt;p&gt;今年的六月初的时候赶着 618 活动入手了 Kobo Libra 2 电纸书，距离上次博客更新刚好过去一个月，想于是想着把 Kobo Libra 2 安装 KOReader 踩坑的记录写在这里刚好可以水一篇博客。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>今年的六月初的时候赶着 618 活动入手了 Kobo Libra 2 电纸书，距离上次博客更新刚好过去一个月，想于是想着把 Kobo Libra 2 安装 KOReader 踩坑的记录写在这里刚好可以水一篇博客。</p>
+<meting-js server="netease" type="song" id="1336969300" theme="#233333"></meting-js>
+<blockquote>
+<p>这首歌很魔性……</p>
+</blockquote>
+<p><img loading="lazy" src="images/001.jpg" alt="KOReader" />
+<p style="margin-bottom: -0.8em;" class="image-title">KOReader</p>
+</p>
+<p>Kobo 安装 KOReader 的教程可以参照 <a href="https://github.com/koreader/koreader/wiki/Installation-on-Kobo-devices">KOReader Wiki</a>。</p>
+<h2 id="important-notes">Important Notes</h2>
+<p>首先把 Kobo 连接到电脑，用文本编辑器打开 <code>.kobo/Kobo/Kobo eReader.conf</code>，确保存在以下配置文件，禁止阅读器加载隐藏文件夹中的内容：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[FeatureSettings]
+</span></span><span class="line"><span class="cl">ExcludeSyncFolders=(\\.(?!kobo|adobe).+|([^.][^/]*/)+\\..+)
+</span></span></code></pre></div><h2 id="manual-installation-methods">Manual Installation Methods</h2>
+<p>按照手动安装 KOReader 的步骤，有两种安装方式可选择：</p>
+<ol>
+<li>
+<p>第一种是在 <a href="https://github.com/NiLuJe/kfmon">KFMon</a> 的基础上安装 KOReader，需要先安装 KFMon，安装 KFMon 的教程以及文件的下载连接在<a href="http://www.mobileread.com/forums/showthread.php?t=274231">这里</a>。</p>
+</li>
+<li>
+<p>除此之外另一种安装方法是基于 <a href="https://www.mobileread.com/forums/showthread.php?t=329525">NickelMenu</a> 的方式安装 KOReader。</p>
+</li>
+</ol>
+<p>这里咱使用的是第二种基于 <a href="https://www.mobileread.com/forums/showthread.php?t=329525">NickelMenu</a> 的方式安装 KOReader。</p>
+<ol>
+<li>
+<p>首先下载 NickelMenu 的 <a href="https://github.com/pgaskin/NickelMenu/releases/latest/download/KoboRoot.tgz">KoboRoot.tgz</a> 安装包，像升级系统那样把压缩包拖到 <code>.kobo</code> 文件夹内，弹出 USB 后 Kobo 会自动重新更新。安装完成后 Kobo 右下角菜单栏会多一个 <code>NickelMenu</code> 菜单。</p>
+</li>
+<li>
+<p>在 <a href="https://build.koreader.rocks/download/">此处</a> 下载 KOReader 安装包，因为 Libra 2 等使用相似主板的电子书存在死机重启的不稳定 <a href="https://github.com/koreader/koreader/issues/9806">Bug</a> 建议先下载包含修复此问题的 <code>nightly build</code>（<a href="https://github.com/koreader/koreader/pull/10771#issuecomment-1662928674">参考 Issue</a>），文件名以 <code>koreader-kobo</code> 开头的为 Kobo 使用的安装包。</p>
+</li>
+<li>
+<p>再次将 Kobo 连接到电脑，将 KOReader 安装包解压到 <code>.adds</code> 目录下。</p>
+</li>
+<li>
+<p>新建 <code>.adds/nm/koreader</code> 文件，写入以下内容：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">menu_item:main:KOReader:cmd_spawn:quiet:exec /mnt/onboard/.adds/koreader/koreader.sh
+</span></span></code></pre></div></li>
+<li>
+<p>弹出 USB，等待设备同步完数据后，就可以在 Kobo 的右下角菜单栏中启动 KOReader 了。</p>
+</li>
+</ol>
+<h2 id="known-issues">Known Issues</h2>
+<p>使用过程中只遇到一个 KOReader 的严重影响体验的问题，就是上面说的阅读过程中会经常死机重启，可以在 <a href="https://github.com/koreader/koreader/issues/9806">这篇 Issue</a> 跟踪进度，目前可以尝试使用 <a href="https://github.com/koreader/koreader/pull/10771">这个 Patch</a>，安装 <code>nightly build</code> 的安装包尝试解决。</p>
+<h2 id="others">Others</h2>
+<p>贴几张看电纸书的效果图供参考，Kobo 的显示效果比咱之前用过的 KPW4 好太多了。图书的话基本是从网络上找盗版资源了，KOReader 能够对 PDF 重排所以对 PDF 的支持效果也比 Kindle 好很多。</p>
+<p><img loading="lazy" src="images/002.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/003.jpg" alt="" />
+
+</p>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
