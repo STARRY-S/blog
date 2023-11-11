@@ -30,6 +30,10 @@ languages:
       series: series
     menu:
       main:
+      - identifier: homepage
+        name: 主页
+        url: https://starry-s.moe
+        weight: 9
       - identifier: gallery
         name: 相册
         url: /gallery/
@@ -64,6 +68,10 @@ languages:
       series: series
     menu:
       main:
+      - identifier: homepage
+        name: Homepage
+        url: https://starry-s.moe
+        weight: 9
       - identifier: gallery
         name: Gallery
         url: /gallery/
@@ -100,8 +108,6 @@ languages:
         buttons:
           - name: Homepage
             url: https://starry-s.moe
-          - name: GitHub
-            url: https://github.com/STARRY-S
           - name: Gallery
             url: /en/gallery/
           - name: About
