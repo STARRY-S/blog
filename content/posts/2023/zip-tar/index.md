@@ -13,6 +13,8 @@ categories:
 
 <!--more-->
 
+{{< music server="netease" type="song" id="27594398" >}}
+
 ----
 
 ## tar 文件格式
@@ -154,4 +156,79 @@ $ hexdump -C ./test.tar
 
 ## zip 文件格式
 
-> 睡觉，明天再写。
+zip 压缩包中文件的布局也是依次顺序排列的，文件的 data 可以是未压缩的文件原始数据 (`Store`)，或者是使用 Deflate 算法压缩后的文件数据。
+在 zip 文件末尾还有一块区域，记录了每个文件 header 的索引信息，叫做 `directory` (`central directory record`)，`directory` 后面还有一小块区域用来记录 `directory` 的长度和数量等信息 (`end of central directory record`)。
+
+zip 压缩包中文件的数据布局简单描述一下是这个样子：
+
+```text
++---------------+
+| header        |
++---------------+
+| data          |
++---------------+
+| header        |
++---------------+
+| data          |
++---------------+
+...
++---------------+
+| header        |
++---------------+
+| data          |
++---------------+
+| directory     |
++---------------+
+| directory     |
++---------------+
+....
++---------------+
+| directory     |
++---------------+
+| directory end |
++---------------+
+```
+
+详细的 `zip` 文件格式定义在 [这里](https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT)，因为 `zip` 包中，每个文件的 header 长度是不固定，而且还分为早期的 `zip` 和后续新增的 `zip64` 两种格式，手搓代码还蛮复杂的，图省事咱就不写样例代码了。
+
+### 特点
+
+所以 `zip` 格式支持随机读取，如果想知道 `zip` 中存储了多少文件的话，只需要读取文件末尾的 `directory`。和 `tar` 一样 `zip` 也允许存在多个重明的文件。
+而 `zip` 中存储的文件如果压缩的话，是每个文件单独压缩再写入到 `zip` 归档的，所以压缩的效果会较 `tar` 把所有文件都打包到一起再压缩要差些。
+
+如果想向已有的 `zip` 压缩包中增加新的文件，需要将新文件 header 和数据从 `directory` 处覆盖掉，最后重新在文件末尾写入新的 `directory record`。
+
+所以 zip 看起来比 tar 格式要更灵活一些，支持随机读取，同时还支持在不解压整个压缩包的情况下，增加新的文件。
+
+zip 支持 Deflate 压缩算法或 Store 不压缩仅存储文件原始数据这两种方式。Deflate 压缩算法与 `gzip` 使用的 Deflate 压缩算法是一个东西。区别就是 zip 是把文件单独用 Deflate 算法压缩，存储起来，而 `tar.gz` 是将所有文件先打包到一起，再用 Deflate 算法压缩。
+
+## 背景
+
+上面说了这么多，zip 和 tar 的区别读着应该都已经清楚了。下面咱讲一下为什么要调查这个问题，写这篇博客，不感兴趣的话可以浏览器右上角关掉这个页面节省时间。
+
+起初是咱写了一个将容器镜像的 Blobs 文件导入/导出成一个压缩包的工具（类似 `docker save/load`，但是要支持多架构和多平台一起导出）（关于这个工具等咱逐渐完善后有时间的话打算单独再写一篇博客），一开始用的是 `tar.gz` 格式压缩。导出的逻辑是先把容器镜像的 Blobs (Layers, Manifest 和 Config) 文件先全部下载到本地，之后把这这些巨大的文件打包成一个 `tar.gz` 压缩包。逻辑上没什么问题，但是容器镜像普遍体积不小，尤其是要导出上百个镜像时，最后创建的 tar 包体积要几十个 GB。所以先把 Blobs 文件下载到本地占用了一次磁盘空间，再把本地未打包的 Blobs 文件打包成一个 tar 包又占用了一次空间。最后搞得磁盘被占据了双倍的空间。
+
+这还不算什么，如果在导出容器镜像时有时会遇到网络问题或其他因素导致某些镜像 Blobs 导出失败，这样导出生成的压缩包是一个不完整的 `tar.gz` 包，而咱想向已有的 `tar.gz` 包附加新的镜像 Blobs 文件的话就得把原有的压缩包解压，写入新的文件，再重新打包，体验极其不友好，咱自己用还行，但要是想把工具拿给别人用的话，光是给别人讲背后的逻辑就得磨叽半天，而且本来一个命令就能解决的问题却非要拆成先解压、再追加额外的 Blobs 文件、最后重新压缩这好几个步骤，而且很多时候因为镜像体积太大了解压和压缩很耗时，还会浪费巨多的磁盘空间，很多时候用户根本不知道要给磁盘预留这么大的空间而导致解压到一半失败了。
+
+![](images/dev-user.gif)
+
+所以为了解决这个问题，咱想办法在导出镜像时，采用实时写入的方式，在镜像的 Blobs 文件下载到本地后直接写入到压缩包文件中，而不是先把所有镜像的 Blobs 文件下载下来，再把下载的缓存文件夹打一个压缩包。这样导出镜像时消耗双倍磁盘空间的问题倒是解决了，而且还可以用多线程提个速。
+但正如上面说的那样，`tar.gz` 格式的压缩包在创建完成后就没办法增加新的文件了，这期间咱想过要不换成不压缩的 `tar` 格式而不是 `tar.gz` 格式，因为大多数镜像的 Layer 文件本身是已经有 `gzip` 压缩的了，没必要二次压缩，但是镜像的 Config 和 Manifest 通常是未压缩的文本文件，会有一点额外体积开销。
+这种方法看似可行，但因为 `tar` 他缺少文件索引，所以如果我想按照一份镜像列表按顺序依次将 `tar` 中存储的 Blobs 文件导入到镜像仓库中，就得遍历构建一遍 `tar` 包中的所有文件 header，程序中自行存一份索引，还是有点麻烦。
+
+所以最后在 Google 上搜有没有带索引、可以随机读取还支持附加文件的压缩归档文件格式时，重新熟悉了一下 `zip` 的结构和特点。
+
+因为咱的程序是用 Go 写的，Go 官方标准库提供了 `archive/tar` 和 `archive/zip`，用来创建/读取 tar 和 zip 归档。但是 Go 标准库不支持向 tar 包和 zip 包中附加额外的文件，tar 附加额外文件的方式蛮简单的所以不需要在修改标准库的基础上就能实现追加文件（只需要移除文件末尾的 end blocks）。但是 zip 想追加文件的话，就得先读取文件末尾存储的 `directory` 索引记录存储起来，附加完文件后再重新在文件末尾写入新的 `directory` 索引。
+
+几年前有人向 Go 提过这个 [Issue](https://github.com/golang/go/issues/15626)，希望标准库能实现 zip append 文件的功能。
+因为 Go 的 `zip.Reader` 是使用了 Go 的 `io.ReaderAt` 接口实现的，`zip.Writer` 是用 `io.Writer` 实现的。
+
+Go 标准库中提供的 `io.ReaderAt` 和 `io.WriterAt` 接口可以看作是参考了 POSIX 协议的 C 接口 [pread/pwrite](https://man7.org/linux/man-pages/man2/pread.2.html)（Go 的 Interface 和这个系统调用的 Interface 不是一个东西），`pread` 可以读取文件中指定 offset 和长度的数据，并不改变文件自身的 seek offset。因为读取 zip 文件时要先读取文件末尾的 `directory`，所以用 `io.ReaderAt` 接口实现很合理。而创建 zip 文件时，要按顺序写入文件 header 和 data，最后在文件末尾写入 directory 信息，所以用 `io.Writer` 也很合理。
+
+但是如果想向 zip 附加文件的话，就得先用一个类似 `io.ReaderAt` 接口读取文件末尾已有的 `directiory` 记录，之后用类似 `io.WriterAt` 接口向文件末尾的位置写数据。而偏偏 Go 标准库没有 `io.ReadWriterAt` 这样的接口（就是把 `io.ReaderAt` 和 `io.WriterAt` 结合一起），所以最终这个 Issue 因为需要涉及到 Go 其他 `io` 接口的改动而无法实现关闭掉了。这里额外补充一下，Go 的 zip 标准库是用来对数据流进行操作的，而并非单纯的 zip 文件，所以只要实现了 `io.ReaderAt` 接口的“对象”都可以被 zip 库“解压”，所有实现了 `io.Writer` 的“对象”都可以写入 zip 数据。
+
+所以最后没办法，为了能够让咱写的工具支持在不解压 zip 文件的前提下增添新的文件的功能，只能自行造轮子，在 Go `archive/zip` 标准库的基础上增加了一个 `zip.Updater`。因为 Go 他确实没有 `io.ReadWriterAt` 这样的接口，但是 Go 他有 `io.ReadWriteSeeker` 这个接口，所以在不涉及到多线程竞争访问（或者加锁）的情况下，可以用这个接口实现 `zip.Updater`，向 zip 包附加额外文件的功能。
+
+在搞这些东西的时候刚好赶上公司的 HackWeek，本来咱已经创建了一个 HackWeek Project，就是上面咱说的容器镜像导入/导出工具的开发这些事情。所以咱在这个基础上又创建了一个新的 HackWeek Project，就是在 Go `archive/zip` 标准库基础上新增 `zip.Updater` 相关功能，链接我扔在 [这里](https://hackweek.opensuse.org/23/projects/go-zip-updator-appending-new-files-to-zip-archive-without-decompressing-the-whole-file)，感兴趣的话可以去瞅瞅。
+
+最终咱实现了 `Updater` 的代码仓库在 [这里](https://github.com/STARRY-S/zip)，感兴趣的可以去看看，点个 star 什么的。因为基于 `io.ReadWriteSeeker` 实现的 `zip.Updater` 并不是最优解，最正确的方式是 Go 什么时候出一个类似 `io.ReadWriterAt` 接口，在不用改变 `Seek` 的前提下就能读取/写入指定 offset 的数据，加上自认为咱的程序设计水平还赶不上 Go 维护者，所以咱想了一下就还是先不提 PR 给 Go 源码仓库了。
