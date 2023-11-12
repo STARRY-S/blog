@@ -21,6 +21,7 @@
       <guid>https://blog.starry-s.moe/posts/2023/zip-tar/</guid>
       <description>&lt;p&gt;最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。</p>
+<meting-js server="netease" type="song" id="27594398" theme="#233333"></meting-js>
 <hr>
 <h2 id="tar-文件格式">tar 文件格式</h2>
 <p>tar 格式早期是为了将数据记录在磁带上的（现在貌似也可以？），这种归档格式很简单，要将一个文件写入 tar 包的时候，首先写入记录文件信息的 header，在 header 之后记录文件的数据（tar 格式不支持压缩所以是直接把文件数据拷贝在了 header 后面）。</p>
@@ -121,9 +122,60 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 <p>因此 tar 包不适合随机读取，未压缩的 tar 包还好，只要在首次打开文件时遍历一下把每个文件的 header 和 offset 记录下来就行，但如果是压缩过的例如 <code>tar.gz</code> 格式的压缩包，几乎就没办法随机读取（除非你得再去折腾 <code>gzip</code> 数据流，但几乎没人去这么做），如果想随机解压 <code>tar.gz</code> 中的某个文件，要从头开始先解压 <code>gzip</code> 数据流，从解压的数据流中遍历每个 tar header，在查找到待解压的文件 header 后再将其解压存储下来，麻烦得很！</p>
 <p>所以 <code>tar</code> 以及 <code>tar.gz</code> 等压缩的 <code>tar</code> 归档格式通常适合用在不需要随机读取，不需要向归档末尾附加文件的场景。</p>
 <h2 id="zip-文件格式">zip 文件格式</h2>
-<blockquote>
-<p>睡觉，明天再写。</p>
-</blockquote>]]></content:encoded>
+<p>zip 压缩包中文件的布局也是依次顺序排列的，文件的 data 可以是未压缩的文件原始数据 (<code>Store</code>)，或者是使用 Deflate 算法压缩后的文件数据。
+在 zip 文件末尾还有一块区域，记录了每个文件 header 的索引信息，叫做 <code>directory</code> (<code>central directory record</code>)，<code>directory</code> 后面还有一小块区域用来记录 <code>directory</code> 的长度和数量等信息 (<code>end of central directory record</code>)。</p>
+<p>zip 压缩包中文件的数据布局简单描述一下是这个样子：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| header        |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| data          |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| header        |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| data          |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">...
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| header        |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| data          |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| directory     |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| directory     |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">....
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| directory     |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span><span class="line"><span class="cl">| directory end |
+</span></span><span class="line"><span class="cl">+---------------+
+</span></span></code></pre></div><p>详细的 <code>zip</code> 文件格式定义在 <a href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT">这里</a>，因为 <code>zip</code> 包中，每个文件的 header 长度是不固定，而且还分为早期的 <code>zip</code> 和后续新增的 <code>zip64</code> 两种格式，手搓代码还蛮复杂的，图省事咱就不写样例代码了。</p>
+<h3 id="特点-1">特点</h3>
+<p>所以 <code>zip</code> 格式支持随机读取，如果想知道 <code>zip</code> 中存储了多少文件的话，只需要读取文件末尾的 <code>directory</code>。和 <code>tar</code> 一样 <code>zip</code> 也允许存在多个重明的文件。
+而 <code>zip</code> 中存储的文件如果压缩的话，是每个文件单独压缩再写入到 <code>zip</code> 归档的，所以压缩的效果会较 <code>tar</code> 把所有文件都打包到一起再压缩要差些。</p>
+<p>如果想向已有的 <code>zip</code> 压缩包中增加新的文件，需要将新文件 header 和数据从 <code>directory</code> 处覆盖掉，最后重新在文件末尾写入新的 <code>directory record</code>。</p>
+<p>所以 zip 看起来比 tar 格式要更灵活一些，支持随机读取，同时还支持在不解压整个压缩包的情况下，增加新的文件。</p>
+<p>zip 支持 Deflate 压缩算法或 Store 不压缩仅存储文件原始数据这两种方式。Deflate 压缩算法与 <code>gzip</code> 使用的 Deflate 压缩算法是一个东西。区别就是 zip 是把文件单独用 Deflate 算法压缩，存储起来，而 <code>tar.gz</code> 是将所有文件先打包到一起，再用 Deflate 算法压缩。</p>
+<h2 id="背景">背景</h2>
+<p>上面说了这么多，zip 和 tar 的区别读着应该都已经清楚了。下面咱讲一下为什么要调查这个问题，写这篇博客，不感兴趣的话可以浏览器右上角关掉这个页面节省时间。</p>
+<p>起初是咱写了一个将容器镜像的 Blobs 文件导入/导出成一个压缩包的工具（类似 <code>docker save/load</code>，但是要支持多架构和多平台一起导出）（关于这个工具等咱逐渐完善后有时间的话打算单独再写一篇博客），一开始用的是 <code>tar.gz</code> 格式压缩。导出的逻辑是先把容器镜像的 Blobs (Layers, Manifest 和 Config) 文件先全部下载到本地，之后把这这些巨大的文件打包成一个 <code>tar.gz</code> 压缩包。逻辑上没什么问题，但是容器镜像普遍体积不小，尤其是要导出上百个镜像时，最后创建的 tar 包体积要几十个 GB。所以先把 Blobs 文件下载到本地占用了一次磁盘空间，再把本地未打包的 Blobs 文件打包成一个 tar 包又占用了一次空间。最后搞得磁盘被占据了双倍的空间。</p>
+<p>这还不算什么，如果在导出容器镜像时有时会遇到网络问题或其他因素导致某些镜像 Blobs 导出失败，这样导出生成的压缩包是一个不完整的 <code>tar.gz</code> 包，而咱想向已有的 <code>tar.gz</code> 包附加新的镜像 Blobs 文件的话就得把原有的压缩包解压，写入新的文件，再重新打包，体验极其不友好，咱自己用还行，但要是想把工具拿给别人用的话，光是给别人讲背后的逻辑就得磨叽半天，而且本来一个命令就能解决的问题却非要拆成先解压、再追加额外的 Blobs 文件、最后重新压缩这好几个步骤，而且很多时候因为镜像体积太大了解压和压缩很耗时，还会浪费巨多的磁盘空间，很多时候用户根本不知道要给磁盘预留这么大的空间而导致解压到一半失败了。</p>
+<p><img loading="lazy" src="images/dev-user.gif" alt="" />
+
+</p>
+<p>所以为了解决这个问题，咱想办法在导出镜像时，采用实时写入的方式，在镜像的 Blobs 文件下载到本地后直接写入到压缩包文件中，而不是先把所有镜像的 Blobs 文件下载下来，再把下载的缓存文件夹打一个压缩包。这样导出镜像时消耗双倍磁盘空间的问题倒是解决了，而且还可以用多线程提个速。
+但正如上面说的那样，<code>tar.gz</code> 格式的压缩包在创建完成后就没办法增加新的文件了，这期间咱想过要不换成不压缩的 <code>tar</code> 格式而不是 <code>tar.gz</code> 格式，因为大多数镜像的 Layer 文件本身是已经有 <code>gzip</code> 压缩的了，没必要二次压缩，但是镜像的 Config 和 Manifest 通常是未压缩的文本文件，会有一点额外体积开销。
+这种方法看似可行，但因为 <code>tar</code> 他缺少文件索引，所以如果我想按照一份镜像列表按顺序依次将 <code>tar</code> 中存储的 Blobs 文件导入到镜像仓库中，就得遍历构建一遍 <code>tar</code> 包中的所有文件 header，程序中自行存一份索引，还是有点麻烦。</p>
+<p>所以最后在 Google 上搜有没有带索引、可以随机读取还支持附加文件的压缩归档文件格式时，重新熟悉了一下 <code>zip</code> 的结构和特点。</p>
+<p>因为咱的程序是用 Go 写的，Go 官方标准库提供了 <code>archive/tar</code> 和 <code>archive/zip</code>，用来创建/读取 tar 和 zip 归档。但是 Go 标准库不支持向 tar 包和 zip 包中附加额外的文件，tar 附加额外文件的方式蛮简单的所以不需要在修改标准库的基础上就能实现追加文件（只需要移除文件末尾的 end blocks）。但是 zip 想追加文件的话，就得先读取文件末尾存储的 <code>directory</code> 索引记录存储起来，附加完文件后再重新在文件末尾写入新的 <code>directory</code> 索引。</p>
+<p>几年前有人向 Go 提过这个 <a href="https://github.com/golang/go/issues/15626">Issue</a>，希望标准库能实现 zip append 文件的功能。
+因为 Go 的 <code>zip.Reader</code> 是使用了 Go 的 <code>io.ReaderAt</code> 接口实现的，<code>zip.Writer</code> 是用 <code>io.Writer</code> 实现的。</p>
+<p>Go 标准库中提供的 <code>io.ReaderAt</code> 和 <code>io.WriterAt</code> 接口可以看作是参考了 POSIX 协议的 C 接口 <a href="https://man7.org/linux/man-pages/man2/pread.2.html">pread/pwrite</a>（Go 的 Interface 和这个系统调用的 Interface 不是一个东西），<code>pread</code> 可以读取文件中指定 offset 和长度的数据，并不改变文件自身的 seek offset。因为读取 zip 文件时要先读取文件末尾的 <code>directory</code>，所以用 <code>io.ReaderAt</code> 接口实现很合理。而创建 zip 文件时，要按顺序写入文件 header 和 data，最后在文件末尾写入 directory 信息，所以用 <code>io.Writer</code> 也很合理。</p>
+<p>但是如果想向 zip 附加文件的话，就得先用一个类似 <code>io.ReaderAt</code> 接口读取文件末尾已有的 <code>directiory</code> 记录，之后用类似 <code>io.WriterAt</code> 接口向文件末尾的位置写数据。而偏偏 Go 标准库没有 <code>io.ReadWriterAt</code> 这样的接口（就是把 <code>io.ReaderAt</code> 和 <code>io.WriterAt</code> 结合一起），所以最终这个 Issue 因为需要涉及到 Go 其他 <code>io</code> 接口的改动而无法实现关闭掉了。这里额外补充一下，Go 的 zip 标准库是用来对数据流进行操作的，而并非单纯的 zip 文件，所以只要实现了 <code>io.ReaderAt</code> 接口的“对象”都可以被 zip 库“解压”，所有实现了 <code>io.Writer</code> 的“对象”都可以写入 zip 数据。</p>
+<p>所以最后没办法，为了能够让咱写的工具支持在不解压 zip 文件的前提下增添新的文件的功能，只能自行造轮子，在 Go <code>archive/zip</code> 标准库的基础上增加了一个 <code>zip.Updater</code>。因为 Go 他确实没有 <code>io.ReadWriterAt</code> 这样的接口，但是 Go 他有 <code>io.ReadWriteSeeker</code> 这个接口，所以在不涉及到多线程竞争访问（或者加锁）的情况下，可以用这个接口实现 <code>zip.Updater</code>，向 zip 包附加额外文件的功能。</p>
+<p>在搞这些东西的时候刚好赶上公司的 HackWeek，本来咱已经创建了一个 HackWeek Project，就是上面咱说的容器镜像导入/导出工具的开发这些事情。所以咱在这个基础上又创建了一个新的 HackWeek Project，就是在 Go <code>archive/zip</code> 标准库基础上新增 <code>zip.Updater</code> 相关功能，链接我扔在 <a href="https://hackweek.opensuse.org/23/projects/go-zip-updator-appending-new-files-to-zip-archive-without-decompressing-the-whole-file">这里</a>，感兴趣的话可以去瞅瞅。</p>
+<p>最终咱实现了 <code>Updater</code> 的代码仓库在 <a href="https://github.com/STARRY-S/zip">这里</a>，感兴趣的可以去看看，点个 star 什么的。因为基于 <code>io.ReadWriteSeeker</code> 实现的 <code>zip.Updater</code> 并不是最优解，最正确的方式是 Go 什么时候出一个类似 <code>io.ReadWriterAt</code> 接口，在不用改变 <code>Seek</code> 的前提下就能读取/写入指定 offset 的数据，加上自认为咱的程序设计水平还赶不上 Go 维护者，所以咱想了一下就还是先不提 PR 给 Go 源码仓库了。</p>]]></content:encoded>
     </item>
     
     <item>
