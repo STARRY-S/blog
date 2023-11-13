@@ -203,5 +203,144 @@
 </span></span></code></pre></div>]]></content:encoded>
     </item>
     
+    <item>
+      <title>小米路由器3G折腾之刷OpenWrt记录</title>
+      <link>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</link>
+      <pubDate>Tue, 19 Feb 2019 00:49:20 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</guid>
+      <description>&lt;p&gt;生命不息, 折腾不止&amp;hellip;&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>生命不息, 折腾不止&hellip;</p>
+<hr>
+<meting-js server="netease" type="song" id="22802176" theme="#233333"></meting-js>
+<blockquote>
+<p>本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。</p>
+</blockquote>
+<h2 id="准备工作">准备工作</h2>
+<p>你至少需要以下工具：</p>
+<ul>
+<li>路由器本体</li>
+<li>网线</li>
+<li>一个已格式化为FAT/FAT32格式的U盘, 用来刷开发者固件和ssh激活工具</li>
+<li>一根怼<code>Reset</code>钮的针</li>
+<li>Windows用户需要一个SSH软件（例如：<a href="https://putty.org">putty</a>）</li>
+<li><a href="http://www1.miwifi.com/miwifi_download.html">小米路由器客户端</a>, 用来绑定你的小米账号</li>
+</ul>
+<h2 id="ssh到路由器">SSH到路由器</h2>
+<blockquote>
+<p>路由器重启后指示灯会变为蓝色, 若变为红色则为刷机失败。</p>
+</blockquote>
+<p>安装开发者固件并开启SSH权限：</p>
+<ol>
+<li>
+<p>在<a href="http://www1.miwifi.com/miwifi_download.html">MiWiFi下载页面</a>下载所需要的路由器开发者固件（ROM -&gt; ROM for R3G开发版）,命名为<code>miwifi.bin</code>。</p>
+</li>
+<li>
+<p>路由器断电, 将下载好的开发者固件放入U盘插入路由器USB接口, 捅住reset扭接上电源后待指示灯为黄色闪烁时松开, 数分钟后路由器会自动重启, 此过程不要乱动路由器。</p>
+</li>
+<li>
+<p>小米路由器客户端登陆小米账号绑定路由器设备, 此过程需要路由器联网。</p>
+</li>
+<li>
+<p><a href="http://www1.miwifi.com/miwifi_open.html">MiWiFi开放平台</a>登陆小米账号下载ssh激活工具命名为<code>miwifi_ssh.bin</code>, 记下root密码。</p>
+</li>
+<li>
+<p>操作方式同第二步骤, 刷入ssh激活工具。</p>
+</li>
+</ol>
+<p>SSH到路由器:</p>
+<ul>
+<li>
+<p>Windows系统用putty, ip为<code>191.168.31.1</code>, 用户名：<code>root</code>, 密码为下载激活ssh工具时记下的密码。</p>
+</li>
+<li>
+<p>Unix/Linux系统终端执行：<code>ssh root@191.168.31.1</code></p>
+<p>如果在ssh到路由器时遇到no matching key exchange method found错误，编辑<code>~/.ssh/config</code>, 加入下面两行：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Host *
+</span></span><span class="line"><span class="cl">    KexAlgorithms +diffie-hellman-group1-sha1
+</span></span></code></pre></div></li>
+</ul>
+<h2 id="刷入bootloader推荐可选">刷入Bootloader（推荐/可选）</h2>
+<blockquote>
+<p>该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考<a href="https://www.right.com.cn/forum/forum.php?mod=viewthread&amp;tid=267455">这篇帖子</a>, 不过为了防止变砖, 还是推荐刷Breed。</p>
+</blockquote>
+<p>Breed原作者为hackpascal, <a href="https://breed.hackpascal.net/">此处为下载地址</a>, 文件名为<code>breed-mt7621-xiaomi-r3g.bin</code></p>
+<p>第一种方法是ssh到路由器后通过<code>wget</code>下载breed文件再刷入（需要确保路由器联网）, 下载地址为https所以需要加上<code>--no-check-certificate</code>参数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /tmp
+</span></span><span class="line"><span class="cl">wget --no-check-certificate https://breed.hackpascal.net/breed-mt7621-xiaomi-r3g.bin -O breed.bin
+</span></span><span class="line"><span class="cl">mtd -r write breed.bin Bootloader
+</span></span></code></pre></div><p>另一种方法是将breed通过U盘拷贝到路由器再刷入。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir /tmp/sdcard
+</span></span><span class="line"><span class="cl">mount /dev/sda1 /tmp/sdcard
+</span></span><span class="line"><span class="cl">mtd -r write /tmp/sdcard/breed.bin Bootloader
+</span></span></code></pre></div><p>路由器刷写完毕后会自动重启, <strong>在写入Breed的过程中不要动路由器</strong>。</p>
+<h2 id="刷机">刷机</h2>
+<p>下载所需固件：</p>
+<ul>
+<li>
+<p>tuna镜像站的OpenWrt下载地址：<a href="https://mirrors.tuna.tsinghua.edu.cn/lede/releases/">https://mirrors.tuna.tsinghua.edu.cn/lede/releases/</a></p>
+</li>
+<li>
+<p>官方下载地址: <a href="https://downloads.openwrt.org/releases/">https://downloads.openwrt.org/releases/</a></p>
+</li>
+</ul>
+<h3 id="使用breed的刷机方法">使用Breed的刷机方法</h3>
+<p>按照hackpascal的说法是：</p>
+<blockquote>
+<p>如果kernel0存在kernel1不存在, 那么启动kernel0
+如果kernel1存在kernel0不存在, 那么启动kernel1
+如果kernel0和kernel1都存在, 那么检查环境变量 <code>xiaomi.r3g.bootfw</code> 的值, 如果存在且值为 2, 那么启动kernel1, 否则启动kernel0</p>
+</blockquote>
+<p>简单来说就是：路由器有两个内核, 需要在Breed里设置环境变量让路由器启动kernel1。</p>
+<ol>
+<li>刷入Openwrt固件到Kernel1</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-kernel1.bin kernel1
+</span></span><span class="line"><span class="cl">mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-rootfs0.bin rootfs0
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>路由器断电, 捅住reset按钮后通电, 待指示灯变为蓝色闪烁后用网线连接路由器到电脑, 浏览器打开网址<code>192.168.1.1</code>, 进入Breed界面。</p>
+</li>
+<li>
+<p>在环境变量编辑里添加<code>xiaomi.r3g.bootfw</code>字段, 值为<code>2</code>,保存后重启即可进入Openwrt。</p>
+</li>
+</ol>
+<h3 id="没有刷入breed的刷机方法">没有刷入Breed的刷机方法</h3>
+<blockquote>
+<p><a href="https://openwrt.org/toh/xiaomi/mir3g">OpenWrt官网提供的教程</a>是在没有刷入Breed的情况下刷入OpenWrt固件的。</p>
+</blockquote>
+<p>ssh到路由器, 导入固件后刷机。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-kernel1.bin kernel1
+</span></span><span class="line"><span class="cl">mtd write openwrt-18.06.2-ramips-mt7621-mir3g-squashfs-rootfs0.bin rootfs0
+</span></span><span class="line"><span class="cl">nvram set flag_try_sys1_failed=1
+</span></span><span class="line"><span class="cl">nvram commit
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">reboot
+</span></span></code></pre></div><hr>
+<h2 id="others">Others</h2>
+<ol>
+<li>
+<p>如果刷了Breed + Pandavan/PandoraBox后想换回OpenWrt的话, 首先在Breed中刷回小米路由器开发版的官方固件, 然后SSH到路由器按照上述的使用Breed的刷机方法再刷机。</p>
+</li>
+<li>
+<p>USB3.0会对路由器的2.4G频段信号造成干扰。</p>
+</li>
+<li>
+<p>OpenWrt默认语言为英文, 可安装<code>luci-i18n-base-zh-cn</code>,<code>luci-i18n-base-zh-tw</code>安装简体/繁体中文。</p>
+</li>
+<li>
+<p><a href="http://openwrt-dist.sourceforge.net">OpenWrt-dist</a>可拓展更多功能。</p>
+</li>
+<li>
+<p>为优化软件包安装速度, 可将opkg源改为国内：</p>
+</li>
+</ol>
+<p>LuCI -&gt; System -&gt; Software -&gt; Configuration 中将 Distribution feeds 的<code>http://downloads.openwrt.org</code>替换为<code>http://mirrors.tuna.tsinghua.edu.cn/lede</code>。</p>
+<ol start="6">
+<li>OpenWrt可安装软件包<code>libustream-openssl</code> <code>libustream-mbedtls</code>解决<code>wget</code>无法访问https服务器问题。</li>
+</ol>
+<p>然后建议把opkg源能改为https的都改为https。</p>]]></content:encoded>
+    </item>
+    
   </channel>
 </rss>

@@ -152,7 +152,7 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 </span></span><span class="line"><span class="cl">+---------------+
 </span></span></code></pre></div><p>详细的 <code>zip</code> 文件格式定义在 <a href="https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT">这里</a>，因为 <code>zip</code> 包中，每个文件的 header 长度是不固定，而且还分为早期的 <code>zip</code> 和后续新增的 <code>zip64</code> 两种格式，手搓代码还蛮复杂的，图省事咱就不写样例代码了。</p>
 <h3 id="特点-1">特点</h3>
-<p>所以 <code>zip</code> 格式支持随机读取，如果想知道 <code>zip</code> 中存储了多少文件的话，只需要读取文件末尾的 <code>directory</code>。和 <code>tar</code> 一样 <code>zip</code> 也允许存在多个重明的文件。
+<p>所以 <code>zip</code> 格式支持随机读取，如果想知道 <code>zip</code> 中存储了多少文件的话，只需要读取文件末尾的 <code>directory</code>。和 <code>tar</code> 一样 <code>zip</code> 也允许存在多个重名的文件。
 而 <code>zip</code> 中存储的文件如果压缩的话，是每个文件单独压缩再写入到 <code>zip</code> 归档的，所以压缩的效果会较 <code>tar</code> 把所有文件都打包到一起再压缩要差些。</p>
 <p>如果想向已有的 <code>zip</code> 压缩包中增加新的文件，需要将新文件 header 和数据从 <code>directory</code> 处覆盖掉，最后重新在文件末尾写入新的 <code>directory record</code>。</p>
 <p>所以 zip 看起来比 tar 格式要更灵活一些，支持随机读取，同时还支持在不解压整个压缩包的情况下，增加新的文件。</p>

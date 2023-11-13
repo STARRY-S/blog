@@ -74,6 +74,36 @@
     </item>
     
     <item>
+      <title>旅行</title>
+      <link>https://blog.starry-s.moe/tags/%E6%97%85%E8%A1%8C/</link>
+      <pubDate>Fri, 04 Aug 2023 20:47:50 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/%E6%97%85%E8%A1%8C/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>日常</title>
+      <link>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</link>
+      <pubDate>Fri, 04 Aug 2023 20:47:50 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>摄影</title>
+      <link>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</link>
+      <pubDate>Fri, 04 Aug 2023 20:47:50 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
       <title>Minecraft</title>
       <link>https://blog.starry-s.moe/tags/minecraft/</link>
       <pubDate>Sat, 08 Jul 2023 22:56:44 +0800</pubDate>
@@ -134,21 +164,21 @@
     </item>
     
     <item>
-      <title>日常</title>
-      <link>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</link>
-      <pubDate>Fri, 24 Feb 2023 22:50:26 +0800</pubDate>
+      <title>Flowers</title>
+      <link>https://blog.starry-s.moe/tags/flowers/</link>
+      <pubDate>Sat, 22 Apr 2023 01:07:53 +0800</pubDate>
       
-      <guid>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</guid>
+      <guid>https://blog.starry-s.moe/tags/flowers/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
-      <title>摄影</title>
-      <link>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</link>
-      <pubDate>Fri, 24 Feb 2023 22:50:26 +0800</pubDate>
+      <title>Spring</title>
+      <link>https://blog.starry-s.moe/tags/spring/</link>
+      <pubDate>Sat, 22 Apr 2023 01:07:53 +0800</pubDate>
       
-      <guid>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</guid>
+      <guid>https://blog.starry-s.moe/tags/spring/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
@@ -204,11 +234,11 @@
     </item>
     
     <item>
-      <title>switch</title>
-      <link>https://blog.starry-s.moe/tags/switch/</link>
-      <pubDate>Sun, 16 Oct 2022 15:48:46 +0800</pubDate>
+      <title>食虫植物</title>
+      <link>https://blog.starry-s.moe/tags/%E9%A3%9F%E8%99%AB%E6%A4%8D%E7%89%A9/</link>
+      <pubDate>Sun, 06 Nov 2022 14:58:42 +0800</pubDate>
       
-      <guid>https://blog.starry-s.moe/tags/switch/</guid>
+      <guid>https://blog.starry-s.moe/tags/%E9%A3%9F%E8%99%AB%E6%A4%8D%E7%89%A9/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
@@ -216,9 +246,29 @@
     <item>
       <title>游戏</title>
       <link>https://blog.starry-s.moe/tags/%E6%B8%B8%E6%88%8F/</link>
-      <pubDate>Sun, 16 Oct 2022 15:48:46 +0800</pubDate>
+      <pubDate>Fri, 28 Oct 2022 20:15:42 +0800</pubDate>
       
       <guid>https://blog.starry-s.moe/tags/%E6%B8%B8%E6%88%8F/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>月姬</title>
+      <link>https://blog.starry-s.moe/tags/%E6%9C%88%E5%A7%AC/</link>
+      <pubDate>Fri, 28 Oct 2022 20:15:42 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/%E6%9C%88%E5%A7%AC/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>switch</title>
+      <link>https://blog.starry-s.moe/tags/switch/</link>
+      <pubDate>Sun, 16 Oct 2022 15:48:46 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/switch/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
@@ -459,6 +509,56 @@
       <pubDate>Sun, 19 Jul 2020 15:29:57 +0800</pubDate>
       
       <guid>https://blog.starry-s.moe/tags/nvidia-optimus/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Trip</title>
+      <link>https://blog.starry-s.moe/tags/trip/</link>
+      <pubDate>Fri, 02 Aug 2019 23:49:39 +0000</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/trip/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>琐事</title>
+      <link>https://blog.starry-s.moe/tags/%E7%90%90%E4%BA%8B/</link>
+      <pubDate>Fri, 02 Aug 2019 23:49:39 +0000</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/%E7%90%90%E4%BA%8B/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>HMCL</title>
+      <link>https://blog.starry-s.moe/tags/hmcl/</link>
+      <pubDate>Sun, 29 Jul 2018 17:26:35 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/hmcl/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>音乐</title>
+      <link>https://blog.starry-s.moe/tags/%E9%9F%B3%E4%B9%90/</link>
+      <pubDate>Tue, 16 Jan 2018 22:58:06 +0000</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/%E9%9F%B3%E4%B9%90/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>高中</title>
+      <link>https://blog.starry-s.moe/tags/%E9%AB%98%E4%B8%AD/</link>
+      <pubDate>Tue, 27 Jun 2017 22:47:30 +0000</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/%E9%AB%98%E4%B8%AD/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>

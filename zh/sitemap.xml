@@ -90,13 +90,25 @@
     <loc>https://blog.starry-s.moe/categories/koreader/</loc>
     <lastmod>2023-09-05T22:45:15+08:00</lastmod>
   </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E6%97%85%E8%A1%8C/</loc>
+    <lastmod>2023-08-06T01:07:34+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2023/2023-07-20/</loc>
+    <lastmod>2023-08-06T01:07:34+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</loc>
+    <lastmod>2023-08-06T01:07:34+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</loc>
+    <lastmod>2023-08-06T01:07:34+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</loc>
+    <lastmod>2023-08-06T01:07:34+08:00</lastmod>
+  </url><url>
     <loc>https://blog.starry-s.moe/tags/minecraft/</loc>
     <lastmod>2023-07-08T22:56:44+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/categories/minecraft/</loc>
-    <lastmod>2023-07-08T22:56:44+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</loc>
     <lastmod>2023-07-08T22:56:44+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2023/minecraft/</loc>
@@ -132,13 +144,22 @@
     <loc>https://blog.starry-s.moe/posts/2023/container-manifest/</loc>
     <lastmod>2023-05-21T01:50:27+08:00</lastmod>
   </url><url>
+    <loc>https://blog.starry-s.moe/posts/2023/2023-05-01/</loc>
+    <lastmod>2023-05-21T10:37:04+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/flowers/</loc>
+    <lastmod>2023-04-22T01:07:53+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/spring/</loc>
+    <lastmod>2023-04-22T01:07:53+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/spring/</loc>
+    <lastmod>2023-04-22T01:07:53+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2023/spring-2023/</loc>
+    <lastmod>2023-04-22T01:07:53+08:00</lastmod>
+  </url><url>
     <loc>https://blog.starry-s.moe/posts/2023/canon-eos-r7/</loc>
-    <lastmod>2023-02-24T22:50:26+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</loc>
-    <lastmod>2023-02-24T22:50:26+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</loc>
     <lastmod>2023-02-24T22:50:26+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/%E7%9B%B8%E6%9C%BA/</loc>
@@ -148,7 +169,10 @@
     <lastmod>2023-01-08T11:05:02+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
-    <lastmod>2023-01-08T11:05:02+08:00</lastmod>
+    <lastmod>2023-01-13T01:32:36+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2023/hello-2023/</loc>
+    <lastmod>2023-01-13T01:32:36+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2023/</loc>
     <lastmod>2023-01-01T00:00:00+08:00</lastmod>
@@ -175,6 +199,30 @@
     <loc>https://blog.starry-s.moe/tags/samba/</loc>
     <lastmod>2022-11-20T15:04:46+08:00</lastmod>
   </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E9%A3%9F%E8%99%AB%E6%A4%8D%E7%89%A9/</loc>
+    <lastmod>2022-11-06T14:58:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E9%A3%9F%E8%99%AB%E6%A4%8D%E7%89%A9/</loc>
+    <lastmod>2022-11-06T14:58:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2022/carnivorous-plant-221106/</loc>
+    <lastmod>2022-11-06T14:58:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E6%B8%B8%E6%88%8F/</loc>
+    <lastmod>2022-11-06T18:06:30+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E6%B8%B8%E6%88%8F/</loc>
+    <lastmod>2022-11-06T18:06:30+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2022/tsukihimi/</loc>
+    <lastmod>2022-11-06T18:06:30+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E6%9C%88%E5%A7%AC/</loc>
+    <lastmod>2022-11-06T18:06:30+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E6%9C%88%E5%A7%AC/</loc>
+    <lastmod>2022-11-06T18:06:30+08:00</lastmod>
+  </url><url>
     <loc>https://blog.starry-s.moe/tags/switch/</loc>
     <lastmod>2022-10-16T15:48:46+08:00</lastmod>
   </url><url>
@@ -184,13 +232,10 @@
     <loc>https://blog.starry-s.moe/posts/2022/switch-emulator/</loc>
     <lastmod>2022-10-16T15:48:46+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/tags/%E6%B8%B8%E6%88%8F/</loc>
-    <lastmod>2022-10-16T15:48:46+08:00</lastmod>
+    <loc>https://blog.starry-s.moe/posts/2022/carnivorous-plants-1/</loc>
+    <lastmod>2022-09-18T13:20:04+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2022/finalfantasy-vii/</loc>
-    <lastmod>2022-08-20T20:09:04+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/categories/%E6%B8%B8%E6%88%8F/</loc>
     <lastmod>2022-08-20T20:09:04+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/%E6%9C%80%E7%BB%88%E5%B9%BB%E6%83%B3/</loc>
@@ -247,6 +292,9 @@
     <loc>https://blog.starry-s.moe/tags/%E8%A3%85%E6%9C%BA/</loc>
     <lastmod>2022-02-26T23:07:52+08:00</lastmod>
   </url><url>
+    <loc>https://blog.starry-s.moe/posts/2022/hello-2022/</loc>
+    <lastmod>2022-02-11T21:25:45+08:00</lastmod>
+  </url><url>
     <loc>https://blog.starry-s.moe/posts/2022/</loc>
     <lastmod>2022-01-01T00:00:00+08:00</lastmod>
   </url><url>
@@ -301,6 +349,9 @@
     <loc>https://blog.starry-s.moe/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/</loc>
     <lastmod>2021-05-11T18:03:39+08:00</lastmod>
   </url><url>
+    <loc>https://blog.starry-s.moe/posts/2021/spring-4/</loc>
+    <lastmod>2021-05-03T01:44:57+08:00</lastmod>
+  </url><url>
     <loc>https://blog.starry-s.moe/tags/lenovo-r7000p/</loc>
     <lastmod>2021-04-11T13:50:48+08:00</lastmod>
   </url><url>
@@ -308,10 +359,10 @@
     <lastmod>2021-04-11T13:50:48+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/openwrt/</loc>
-    <lastmod>2021-01-22T22:10:01+08:00</lastmod>
+    <lastmod>2021-01-23T12:36:44+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</loc>
-    <lastmod>2021-01-22T22:10:01+08:00</lastmod>
+    <lastmod>2021-01-23T12:36:44+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</loc>
     <lastmod>2021-01-22T22:10:01+08:00</lastmod>
@@ -324,6 +375,9 @@
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</loc>
     <lastmod>2021-02-23T19:27:32+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2021/hello-2021/</loc>
+    <lastmod>2021-01-14T01:51:06+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2021/</loc>
     <lastmod>2021-01-01T00:00:00+08:00</lastmod>
@@ -366,6 +420,27 @@
                 href="https://blog.starry-s.moe/posts/2020/"
                 />
   </url><url>
+    <loc>https://blog.starry-s.moe/tags/trip/</loc>
+    <lastmod>2019-08-02T23:49:39+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2019/shanghai-2/</loc>
+    <lastmod>2019-08-02T23:49:39+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E7%90%90%E4%BA%8B/</loc>
+    <lastmod>2019-08-02T23:49:39+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2019/spring-3/</loc>
+    <lastmod>2019-05-03T23:20:43+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2019/shanghai/</loc>
+    <lastmod>2019-04-22T00:00:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</loc>
+    <lastmod>2021-01-23T12:36:44+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2019/nier-automata/</loc>
+    <lastmod>2019-02-17T15:34:50+08:00</lastmod>
+  </url><url>
     <loc>https://blog.starry-s.moe/posts/2019/</loc>
     <lastmod>2019-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
@@ -379,6 +454,30 @@
                 href="https://blog.starry-s.moe/posts/2019/"
                 />
   </url><url>
+    <loc>https://blog.starry-s.moe/posts/2018/life-in-sau/</loc>
+    <lastmod>2018-10-01T22:25:49+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E7%90%90%E4%BA%8B/</loc>
+    <lastmod>2018-10-01T22:25:49+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/hmcl/</loc>
+    <lastmod>2018-07-29T17:26:35+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2018/hmcl-minecraft/</loc>
+    <lastmod>2018-07-29T17:26:35+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2018/spring-2/</loc>
+    <lastmod>2018-04-05T18:05:11+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2018/hello-2018/</loc>
+    <lastmod>2018-01-16T22:58:06+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
+    <lastmod>2018-01-16T22:58:06+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E9%9F%B3%E4%B9%90/</loc>
+    <lastmod>2018-01-16T22:58:06+00:00</lastmod>
+  </url><url>
     <loc>https://blog.starry-s.moe/posts/2018/</loc>
     <lastmod>2018-01-01T00:00:00+08:00</lastmod>
     <xhtml:link
@@ -391,6 +490,21 @@
                 hreflang="zh"
                 href="https://blog.starry-s.moe/posts/2018/"
                 />
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E9%AB%98%E4%B8%AD/</loc>
+    <lastmod>2017-06-27T22:47:30+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E9%AB%98%E4%B8%AD/</loc>
+    <lastmod>2017-06-27T22:47:30+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2017/just-a-small-update/</loc>
+    <lastmod>2017-06-27T22:47:30+00:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2017/spring/</loc>
+    <lastmod>2017-05-05T22:28:00+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2017/hello-2017/</loc>
+    <lastmod>2017-01-01T14:59:17+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2017/</loc>
     <lastmod>2017-01-01T00:00:00+08:00</lastmod>
