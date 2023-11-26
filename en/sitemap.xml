@@ -172,7 +172,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/about/</loc>
-    <lastmod>2023-08-24T20:36:41+08:00</lastmod>
+    <lastmod>2023-11-27T00:10:57+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -207,6 +207,18 @@
                 rel="alternate"
                 hreflang="en"
                 href="https://blog.starry-s.moe/en/archives/"
+                />
+  </url><url>
+    <loc>https://blog.starry-s.moe/en/friends/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://blog.starry-s.moe/friends/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.starry-s.moe/en/friends/"
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/en/gallery/</loc>

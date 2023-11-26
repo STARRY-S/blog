@@ -11,7 +11,7 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)</copyright>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
     <lastBuildDate>Sat, 09 Jan 2021 22:12:54 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/dual-moniter/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>解决笔记本外接HIDPI显示器的缩放问题</title>

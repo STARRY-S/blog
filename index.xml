@@ -11,7 +11,7 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)</copyright>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
     <lastBuildDate>Sun, 12 Nov 2023 01:35:41 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何选择 zip 和 tar 文件格式</title>
@@ -6699,8 +6699,12 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://blog.starry-s.moe/gallery/</guid>
-      <description>Powered by hugo-shortcode-gallery.</description>
-      <content:encoded><![CDATA[
+      <description>咱在很久很久以前就开始入坑摄影了。今年年初入手了一台入门级 APS-C 画幅的佳能 R7 和 Sigma 18-35 F1.8 &amp;amp; 50-100 F1.8 镜头用来练习摄影。 咱会把一些旅拍和在漫展拍的高分辨率图</description>
+      <content:encoded><![CDATA[<p>咱在很久很久以前就开始入坑摄影了。今年年初入手了一台入门级 APS-C 画幅的佳能 R7 和 Sigma 18-35 F1.8 &amp; 50-100 F1.8 镜头用来练习摄影。</p>
+<p>咱会把一些旅拍和在漫展拍的高分辨率图片整理在这里，加载可能需要些时间。</p>
+<p>算不上什么精美作品，咱只是个业余的野生摄影</p>
+<hr>
+
 
 
 
@@ -13538,6 +13542,16 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <p>Powered by <a href="https://github.com/mfg92/hugo-shortcode-gallery">hugo-shortcode-gallery</a>.</p>
 </blockquote>
 ]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>友情链接</title>
+      <link>https://blog.starry-s.moe/friends/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.starry-s.moe/friends/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
   </channel>

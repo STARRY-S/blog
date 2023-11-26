@@ -562,7 +562,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/about/</loc>
-    <lastmod>2023-08-24T20:36:41+08:00</lastmod>
+    <lastmod>2023-11-27T00:10:57+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -633,6 +633,18 @@
                 rel="alternate"
                 hreflang="zh"
                 href="https://blog.starry-s.moe/gallery/"
+                />
+  </url><url>
+    <loc>https://blog.starry-s.moe/friends/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.starry-s.moe/en/friends/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://blog.starry-s.moe/friends/"
                 />
   </url>
 </urlset>

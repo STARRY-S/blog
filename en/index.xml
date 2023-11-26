@@ -11,7 +11,7 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)</copyright>
+    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
     <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/en/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Everything is based on “Hello World”</title>
@@ -67,13 +67,27 @@ In my spare time, I occasionally do photography.</description>
     
     
     <item>
+      <title>Friends</title>
+      <link>https://blog.starry-s.moe/en/friends/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.starry-s.moe/en/friends/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
       <title>Gallery</title>
       <link>https://blog.starry-s.moe/en/gallery/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://blog.starry-s.moe/en/gallery/</guid>
-      <description>Powered by hugo-shortcode-gallery.</description>
-      <content:encoded><![CDATA[
+      <description>It&amp;rsquo;s been a long journey for me to learn and practice photography. At the beginning of this year, I acquired an APS-C frame Canon R7 and Sigma 18-35 F1.8 &amp;amp; 50-100 F1.8 lenses for practicing photography.
+Hope you enjoy the photos on this page :-)
+Powered by hugo-shortcode-gallery.</description>
+      <content:encoded><![CDATA[<p>It&rsquo;s been a long journey for me to learn and practice photography. At the beginning of this year, I acquired an APS-C frame Canon R7 and Sigma 18-35 F1.8 &amp; 50-100 F1.8 lenses for practicing photography.</p>
+<p>Hope you enjoy the photos on this page :-)</p>
+
 
 
 
