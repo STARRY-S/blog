@@ -30,10 +30,6 @@ languages:
       series: series
     menu:
       main:
-      - identifier: homepage
-        name: 主页
-        url: https://starry-s.moe
-        weight: 9
       - identifier: gallery
         name: 相册
         url: /gallery/
@@ -54,13 +50,16 @@ languages:
         name: 搜索
         url: /search/
         weight: 50
+      - identifier: friends
+        name: 友链
+        url: /friends/
+        weight: 60
       - identifier: about
         name: 关于
         url: /about/
-        weight: 60
+        weight: 70
   en:
     languageName: English
-    languageAltTitle: English
     weight: 10
     taxonomies:
       category: categories
@@ -68,10 +67,6 @@ languages:
       series: series
     menu:
       main:
-      - identifier: homepage
-        name: Homepage
-        url: https://starry-s.moe
-        weight: 9
       - identifier: gallery
         name: Gallery
         url: /gallery/
@@ -92,15 +87,19 @@ languages:
         name: Search
         url: /search/
         weight: 50
+      - identifier: search
+        name: Friends
+        url: /friends/
+        weight: 60
       - identifier: about
         name: About
         url: /about/
-        weight: 60
+        weight: 70
     params:
       profileMode:
         enabled: true # needs to be explicitly set
         title: STARRY-S' Blog
-        subtitle: "Morning"
+        subtitle: <span id="random-home-info"></span>
         imageUrl: "/apple-touch-icon.png"
         imageWidth: 160
         imageHeight: 160
@@ -116,7 +115,7 @@ languages:
 params:
   # set production to enable google analytics, opengraph,
   # twitter-cards and schema.
-  env: production
+  env:
   title: STARRY-S' Blog
   description: "Morning."
   keywords: [Blog, STARRY-S, PaperMod]
@@ -151,10 +150,10 @@ params:
     apple_touch_icon: "/apple-touch-icon.png"
     safari_pinned_tab: "/apple-touch-icon.png"
 
-  # label:
-  #   text: "Home"
-  #   icon: /apple-touch-icon.png
-  #   iconHeight: 28
+  label:
+    text: "Blog"
+    icon: /apple-touch-icon.png
+    iconHeight: 24
 
   # profile-mode
   profileMode:
@@ -202,7 +201,7 @@ params:
     hiddenInSingle: true # hide on single page
 
   editPost:
-    URL: "https://github.com/STARRY-S/blog/tree/main/content"
+    URL: "https://github.com/STARRY-S/blog/edit/main/content"
     Text: "Edit Text" # edit text
     appendFilePath: true # to append file path to Edit link
 
@@ -266,7 +265,7 @@ outputs:
   - JSON # is necessary
 
 copyright:
-  © 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)
+  © 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)<br />
 hasCJKLanguage: true
 enableGitInfo: false
 timeout: 60000

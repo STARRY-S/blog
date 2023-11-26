@@ -1,7 +1,14 @@
 <script>
+  const pathname = window.location.pathname;
   const images = document.querySelectorAll('img');
 
   Array.from(images).forEach(image => {
+    if (!pathname.includes("/posts/")) {
+      return;
+    }
+    if (image.src.indexOf('images') < 0) {
+      return
+    }
     image.addEventListener('load', () => fitImage(image));
     if (image.complete && image.naturalWidth !== 0) {
       fitImage(image);
@@ -9,10 +16,6 @@
   });
 
   function fitImage(image) {
-    const pathname = window.location.pathname;
-    if (!pathname.includes("/posts/")) {
-      return;
-    }
     image.style.marginLeft = 'auto';
     image.style.marginRight = 'auto';
     // If image is portrait && width / height < 1.1

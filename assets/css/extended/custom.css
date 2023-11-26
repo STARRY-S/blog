@@ -29,11 +29,11 @@ body {
     --code-color: #233333;
     --main-width: 900px;
     --image-title-color: #888;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .dark{
-    --code-color: #ffeeaa;
+    --code-color: #e7edef;
     --image-title-color: #999;
 }
 
