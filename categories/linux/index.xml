@@ -11,7 +11,7 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2023 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
+    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
     <lastBuildDate>Wed, 18 Oct 2023 21:42:02 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>修复缩小磁盘空间后受损的 GPT 分区表</title>
