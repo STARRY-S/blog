@@ -730,11 +730,11 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </li>
 <li>
 <p>将armbian镜像的<code>bootloader</code>和<code>uboot</code>(32-32767区块的部分)用<code>dd</code>写到SD卡中：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Clean the sector before 32
-</span></span><span class="line"><span class="cl">dd if=/dev/zero of=/dev/sdX bs=1M count=32
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># Clean the sector before 32</span>
+</span></span><span class="line"><span class="cl"><span class="n">dd</span> <span class="k">if</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">zero</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdX</span> <span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="n">M</span> <span class="n">count</span><span class="o">=</span><span class="mi">32</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"># Write uBoot and bootloader
-</span></span><span class="line"><span class="cl">dd if=Armbian_*.img of=/dev/sdX skip=31 seek=31 bs=512 count=32736
+</span></span><span class="line"><span class="cl"><span class="c1"># Write uBoot and bootloader</span>
+</span></span><span class="line"><span class="cl"><span class="n">dd</span> <span class="k">if</span><span class="o">=</span><span class="n">Armbian_</span><span class="o">*.</span><span class="n">img</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdX</span> <span class="n">skip</span><span class="o">=</span><span class="mi">31</span> <span class="n">seek</span><span class="o">=</span><span class="mi">31</span> <span class="n">bs</span><span class="o">=</span><span class="mi">512</span> <span class="n">count</span><span class="o">=</span><span class="mi">32736</span>
 </span></span></code></pre></div><blockquote>
 <p>其实可以直接用<code>dd</code>把armbian的整个镜像写到内存卡中然后插入R4S开机，第一次开机后他会自动重新给内存卡分区，然后只需把<code>/dev/sdX1</code>格式化成ext4就能安装alarm了。</p>
 </blockquote>
@@ -1197,8 +1197,8 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </span></span><span class="line"><span class="cl">$ sudo systemctl start tftpd.service
 </span></span></code></pre></div><p>tftp的默认目录为<code>/srv/tftp</code>。</p>
 <p>这里使用HackPascal制作的Breed（第三方Boot Loader），<a href="https://breed.hackpascal.net/">下载链接</a>，把下载好的Breed重命名为<code>breed.bin</code>，复制到tftp的默认目录。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ cd /srv/tftp
-</span></span><span class="line"><span class="cl">$ sudo cp ~/Downloads/breed-mt7620-xiaomi-r3g.bin breed.bin
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">$</span> <span class="n">cd</span> <span class="o">/</span><span class="n">srv</span><span class="o">/</span><span class="n">tftp</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span> <span class="n">sudo</span> <span class="n">cp</span> <span class="o">~/</span><span class="n">Downloads</span><span class="o">/</span><span class="n">breed</span><span class="o">-</span><span class="n">mt7620</span><span class="o">-</span><span class="n">xiaomi</span><span class="o">-</span><span class="n">r3g</span><span class="o">.</span><span class="n">bin</span> <span class="n">breed</span><span class="o">.</span><span class="n">bin</span>
 </span></span></code></pre></div><ol start="2">
 <li>
 <p>路由器插网线连电脑，设置静态ip地址192.168.1.3/24，将串口和电脑连接，先不给路由器通电，通常情况下usb串口的设备名称为<code>/dev/ttyUSB0</code>，如果不确定的话可以<code>dmesg</code>查一下。</p>
@@ -1319,13 +1319,13 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </blockquote>
 <p>Breed原作者为hackpascal, <a href="https://breed.hackpascal.net/">此处为下载地址</a>, 文件名为<code>breed-mt7621-xiaomi-r3g.bin</code></p>
 <p>第一种方法是ssh到路由器后通过<code>wget</code>下载breed文件再刷入（需要确保路由器联网）, 下载地址为https所以需要加上<code>--no-check-certificate</code>参数。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /tmp
-</span></span><span class="line"><span class="cl">wget --no-check-certificate https://breed.hackpascal.net/breed-mt7621-xiaomi-r3g.bin -O breed.bin
-</span></span><span class="line"><span class="cl">mtd -r write breed.bin Bootloader
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">/</span><span class="n">tmp</span>
+</span></span><span class="line"><span class="cl"><span class="n">wget</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">check</span><span class="o">-</span><span class="n">certificate</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">breed</span><span class="o">.</span><span class="n">hackpascal</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">breed</span><span class="o">-</span><span class="n">mt7621</span><span class="o">-</span><span class="n">xiaomi</span><span class="o">-</span><span class="n">r3g</span><span class="o">.</span><span class="n">bin</span> <span class="o">-</span><span class="n">O</span> <span class="n">breed</span><span class="o">.</span><span class="n">bin</span>
+</span></span><span class="line"><span class="cl"><span class="n">mtd</span> <span class="o">-</span><span class="n">r</span> <span class="n">write</span> <span class="n">breed</span><span class="o">.</span><span class="n">bin</span> <span class="n">Bootloader</span>
 </span></span></code></pre></div><p>另一种方法是将breed通过U盘拷贝到路由器再刷入。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir /tmp/sdcard
-</span></span><span class="line"><span class="cl">mount /dev/sda1 /tmp/sdcard
-</span></span><span class="line"><span class="cl">mtd -r write /tmp/sdcard/breed.bin Bootloader
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">mkdir</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">sdcard</span>
+</span></span><span class="line"><span class="cl"><span class="n">mount</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">sdcard</span>
+</span></span><span class="line"><span class="cl"><span class="n">mtd</span> <span class="o">-</span><span class="n">r</span> <span class="n">write</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">sdcard</span><span class="o">/</span><span class="n">breed</span><span class="o">.</span><span class="n">bin</span> <span class="n">Bootloader</span>
 </span></span></code></pre></div><p>路由器刷写完毕后会自动重启, <strong>在写入Breed的过程中不要动路由器</strong>。</p>
 <h2 id="刷机">刷机</h2>
 <p>下载所需固件：</p>

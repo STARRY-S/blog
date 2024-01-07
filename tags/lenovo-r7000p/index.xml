@@ -53,10 +53,10 @@
 </span></span><span class="line"><span class="cl">blacklist ideapad_laptop
 </span></span></code></pre></div><p>编辑内核参数添加<code>acpi_backlight=vendor</code>和<code>amdgpu.backlight=0</code>。</p>
 <p>以systemd-boot为例:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /boot/loader/entries/arch.conf
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># /boot/loader/entries/arch.conf</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">options acpi_backlight=vendor
-</span></span><span class="line"><span class="cl">options amdgpu.backlight=0
+</span></span><span class="line"><span class="cl"><span class="n">options</span> <span class="n">acpi_backlight</span><span class="o">=</span><span class="n">vendor</span>
+</span></span><span class="line"><span class="cl"><span class="n">options</span> <span class="n">amdgpu</span><span class="o">.</span><span class="n">backlight</span><span class="o">=</span><span class="mi">0</span>
 </span></span></code></pre></div><p>最后重启电脑就能调亮度了。</p>
 <h3 id="gdm不自启动">GDM不自启动</h3>
 <p>开机时GDM不会自动显示出来而是得手动切TTY2再切回TTY1才能显示。</p>

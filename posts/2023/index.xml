@@ -981,10 +981,10 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 <p>ArchLinux 上搭建 NFS 服务器：<a href="https://wiki.archlinux.org/title/NFS">https://wiki.archlinux.org/title/NFS</a></p>
 <blockquote>
 <p>在配置 <code>exports</code> 时，需要配置上 <code>no_root_squash</code> 和 <code>no_subtree_check</code>，使挂载的目录及子目录具有写权限。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/exports - exports(5) - directories exported to NFS clients
-</span></span><span class="line"><span class="cl"># Use `exportfs -arv` to reload.
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># /etc/exports - exports(5) - directories exported to NFS clients</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Use `exportfs -arv` to reload.</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">/var/nfs/harbor		10.0.0.0/8(rw,sync,no_root_squash,no_subtree_check)
+</span></span><span class="line"><span class="cl"><span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">nfs</span><span class="o">/</span><span class="n">harbor</span>		<span class="mf">10.0</span><span class="o">.</span><span class="mf">0.0</span><span class="o">/</span><span class="mi">8</span><span class="p">(</span><span class="n">rw</span><span class="p">,</span><span class="n">sync</span><span class="p">,</span><span class="n">no_root_squash</span><span class="p">,</span><span class="n">no_subtree_check</span><span class="p">)</span>
 </span></span></code></pre></div></blockquote>
 </li>
 </ol>

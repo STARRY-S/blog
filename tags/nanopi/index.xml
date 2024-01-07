@@ -56,11 +56,11 @@
 </li>
 <li>
 <p>将armbian镜像的<code>bootloader</code>和<code>uboot</code>(32-32767区块的部分)用<code>dd</code>写到SD卡中：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># Clean the sector before 32
-</span></span><span class="line"><span class="cl">dd if=/dev/zero of=/dev/sdX bs=1M count=32
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1"># Clean the sector before 32</span>
+</span></span><span class="line"><span class="cl"><span class="n">dd</span> <span class="k">if</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">zero</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdX</span> <span class="n">bs</span><span class="o">=</span><span class="mi">1</span><span class="n">M</span> <span class="n">count</span><span class="o">=</span><span class="mi">32</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"># Write uBoot and bootloader
-</span></span><span class="line"><span class="cl">dd if=Armbian_*.img of=/dev/sdX skip=31 seek=31 bs=512 count=32736
+</span></span><span class="line"><span class="cl"><span class="c1"># Write uBoot and bootloader</span>
+</span></span><span class="line"><span class="cl"><span class="n">dd</span> <span class="k">if</span><span class="o">=</span><span class="n">Armbian_</span><span class="o">*.</span><span class="n">img</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdX</span> <span class="n">skip</span><span class="o">=</span><span class="mi">31</span> <span class="n">seek</span><span class="o">=</span><span class="mi">31</span> <span class="n">bs</span><span class="o">=</span><span class="mi">512</span> <span class="n">count</span><span class="o">=</span><span class="mi">32736</span>
 </span></span></code></pre></div><blockquote>
 <p>其实可以直接用<code>dd</code>把armbian的整个镜像写到内存卡中然后插入R4S开机，第一次开机后他会自动重新给内存卡分区，然后只需把<code>/dev/sdX1</code>格式化成ext4就能安装alarm了。</p>
 </blockquote>

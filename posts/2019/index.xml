@@ -298,13 +298,13 @@
 </blockquote>
 <p>Breed原作者为hackpascal, <a href="https://breed.hackpascal.net/">此处为下载地址</a>, 文件名为<code>breed-mt7621-xiaomi-r3g.bin</code></p>
 <p>第一种方法是ssh到路由器后通过<code>wget</code>下载breed文件再刷入（需要确保路由器联网）, 下载地址为https所以需要加上<code>--no-check-certificate</code>参数。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">cd /tmp
-</span></span><span class="line"><span class="cl">wget --no-check-certificate https://breed.hackpascal.net/breed-mt7621-xiaomi-r3g.bin -O breed.bin
-</span></span><span class="line"><span class="cl">mtd -r write breed.bin Bootloader
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">cd</span> <span class="o">/</span><span class="n">tmp</span>
+</span></span><span class="line"><span class="cl"><span class="n">wget</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">check</span><span class="o">-</span><span class="n">certificate</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">breed</span><span class="o">.</span><span class="n">hackpascal</span><span class="o">.</span><span class="n">net</span><span class="o">/</span><span class="n">breed</span><span class="o">-</span><span class="n">mt7621</span><span class="o">-</span><span class="n">xiaomi</span><span class="o">-</span><span class="n">r3g</span><span class="o">.</span><span class="n">bin</span> <span class="o">-</span><span class="n">O</span> <span class="n">breed</span><span class="o">.</span><span class="n">bin</span>
+</span></span><span class="line"><span class="cl"><span class="n">mtd</span> <span class="o">-</span><span class="n">r</span> <span class="n">write</span> <span class="n">breed</span><span class="o">.</span><span class="n">bin</span> <span class="n">Bootloader</span>
 </span></span></code></pre></div><p>另一种方法是将breed通过U盘拷贝到路由器再刷入。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mkdir /tmp/sdcard
-</span></span><span class="line"><span class="cl">mount /dev/sda1 /tmp/sdcard
-</span></span><span class="line"><span class="cl">mtd -r write /tmp/sdcard/breed.bin Bootloader
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">mkdir</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">sdcard</span>
+</span></span><span class="line"><span class="cl"><span class="n">mount</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="n">sda1</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">sdcard</span>
+</span></span><span class="line"><span class="cl"><span class="n">mtd</span> <span class="o">-</span><span class="n">r</span> <span class="n">write</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">sdcard</span><span class="o">/</span><span class="n">breed</span><span class="o">.</span><span class="n">bin</span> <span class="n">Bootloader</span>
 </span></span></code></pre></div><p>路由器刷写完毕后会自动重启, <strong>在写入Breed的过程中不要动路由器</strong>。</p>
 <h2 id="刷机">刷机</h2>
 <p>下载所需固件：</p>
