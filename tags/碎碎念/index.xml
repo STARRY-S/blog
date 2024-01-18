@@ -12,7 +12,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 08 Jan 2023 11:05:02 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 18 Jan 2024 23:12:28 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello 2024</title>
+      <link>https://blog.starry-s.moe/posts/2024/hello-2024/</link>
+      <pubDate>Thu, 18 Jan 2024 23:12:28 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2024/hello-2024/</guid>
+      <description>&lt;p&gt;这里没有年终总结。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>这里没有年终总结。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sed <span class="s1">&#39;s/2023/2024/g&#39;</span>
+</span></span></code></pre></div><p>错过了最适合写年终总结的时间，所以不想写年终总结了。</p>]]></content:encoded>
+    </item>
+    
     <item>
       <title>入手一台家用级 APC UPS</title>
       <link>https://blog.starry-s.moe/posts/2023/apc-ups/</link>
