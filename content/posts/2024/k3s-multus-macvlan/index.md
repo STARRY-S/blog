@@ -36,7 +36,7 @@ sudo ip link add macvlan0 link enp1s0 type macvlan mode bridge  # 这里替换 e
 sudo ip address add 192.168.122.205/24 broadcast 192.168.122.255 dev macvlan0 # 注意 IP 地址冲突
 ```
 
-之后可尝试使用其他处于同一个网络（CIDR）的设备 ping 这个 `192.168.122.205` IP 地址，能 Ping 通就说明你的防火墙没有屏蔽不通设备之间的二层数据转发。
+之后可尝试使用其他处于同一个网络（CIDR）的设备 ping 这个 `192.168.122.205` IP 地址，能 Ping 通就说明你的防火墙没有屏蔽不同设备之间的二层数据转发。
 
 ## 安装 K3s
 
