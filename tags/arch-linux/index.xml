@@ -23,6 +23,7 @@
 &lt;p&gt;最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 &lt;code&gt;pacstrap&lt;/code&gt; 时都要想半天咱需要装什么……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>用这么久 Arch 了，但是却很少写 Arch 相关的博客……</p>
 <p>最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 <code>pacstrap</code> 时都要想半天咱需要装什么……</p>
+<meting-js server="netease" type="song" id="2104716090" theme="#233333"></meting-js>
 <hr>
 <h2 id="装系统">装系统</h2>
 <p>Arch Wiki 的 Installation Guide 在使用 <code>pacstrap</code> 装系统时只写了最基础的软件包 <code>base</code>, <code>linux</code> 和 <code>linux-firmware</code>，可以在这一步补充亿些常用的软件。</p>

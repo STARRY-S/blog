@@ -21,6 +21,7 @@
       <guid>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://k3s.io/&#34;&gt;K3s&lt;/a&gt; 是一个轻量的 Kubernetes 集群，&lt;a href=&#34;https://github.com/k8snetworkplumbingwg/multus-cni&#34;&gt;Multus&lt;/a&gt; 是一个用于给 Pod 创建多个网络接口的 CNI (Container Network Interface) 插件，其创建的接口支持 &lt;code&gt;macvlan&lt;/code&gt;。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p><a href="https://k3s.io/">K3s</a> 是一个轻量的 Kubernetes 集群，<a href="https://github.com/k8snetworkplumbingwg/multus-cni">Multus</a> 是一个用于给 Pod 创建多个网络接口的 CNI (Container Network Interface) 插件，其创建的接口支持 <code>macvlan</code>。</p>
+<meting-js server="netease" type="song" id="4017232" theme="#233333"></meting-js>
 <hr>
 <h2 id="啥是-macvlan">啥是 Macvlan</h2>
 <p>字面意思，根据 MAC 地址划分的虚拟子网 (Vlan) 就是 macvlan，网上能搜到很多有关 Macvlan 的介绍，这里不再过多描述。</p>
