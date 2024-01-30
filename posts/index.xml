@@ -12,7 +12,261 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Thu, 18 Jan 2024 23:12:28 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 Jan 2024 18:52:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>K3s &#43; Multus CNI 插件使用 Macvlan</title>
+      <link>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</link>
+      <pubDate>Tue, 30 Jan 2024 18:52:00 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://k3s.io/&#34;&gt;K3s&lt;/a&gt; 是一个轻量的 Kubernetes 集群，&lt;a href=&#34;https://github.com/k8snetworkplumbingwg/multus-cni&#34;&gt;Multus&lt;/a&gt; 是一个用于给 Pod 创建多个网络接口的 CNI (Container Network Interface) 插件，其创建的接口支持 &lt;code&gt;macvlan&lt;/code&gt;。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p><a href="https://k3s.io/">K3s</a> 是一个轻量的 Kubernetes 集群，<a href="https://github.com/k8snetworkplumbingwg/multus-cni">Multus</a> 是一个用于给 Pod 创建多个网络接口的 CNI (Container Network Interface) 插件，其创建的接口支持 <code>macvlan</code>。</p>
+<hr>
+<h2 id="啥是-macvlan">啥是 Macvlan</h2>
+<p>字面意思，根据 MAC 地址划分的虚拟子网 (Vlan) 就是 macvlan，网上能搜到很多有关 Macvlan 的介绍，这里不再过多描述。</p>
+<p>与之相对应的还有一个叫 ipvlan，是通过 IP 地址划分的虚拟子网。</p>
+<p>Macvlan 和 ipvlan 都是 Linux 系统的特性，其他系统不支持这个功能。</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>可以用 <code>modinfo macvlan</code> 检查系统是否有安装 <code>macvlan</code> 模块，根据 <a href="https://docs.docker.com/network/network-tutorial-macvlan/#prerequisites">Docker 文档</a> 中描述的建议是使用 Linux 3.9 或 4.0 及更新的内核版本。</p>
+<p>可以用以下指令检查系统是否支持 Macvlan（这里使用桥接模式）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo ip link add macvlan0 link enp1s0 <span class="nb">type</span> macvlan mode bridge  <span class="c1"># 这里替换 enp1s0 为网卡接口名称</span>
+</span></span><span class="line"><span class="cl">sudo ip address add 192.168.122.205/24 broadcast 192.168.122.255 dev macvlan0 <span class="c1"># 注意 IP 地址冲突</span>
+</span></span></code></pre></div><p>之后可尝试使用其他处于同一个网络（CIDR）的设备 ping 这个 <code>192.168.122.205</code> IP 地址，能 Ping 通就说明你的防火墙没有屏蔽不通设备之间的二层数据转发。</p>
+<h2 id="安装-k3s">安装 K3s</h2>
+<p>根据 <a href="https://github.com/k8snetworkplumbingwg/multus-cni/blob/master/docs/quickstart.md">Multus 的 QuickStart 手册</a>，准备一个新版本的 Kubernetes 集群（这里用的是 <code>v1.27.8+k3s2</code>），K3s 默认的 CNI 插件使用的是 Flannel。</p>
+<p>在国内的话需要先创建 <code>/etc/rancher/k3s/registries.yaml</code> 配置 Registry Mirror：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">mirrors</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">docker.io</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">endpoint</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;https://docker.nju.edu.cn&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ghcr.io</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">endpoint</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;https://ghcr.nju.edu.cn&#34;</span><span class="w">
+</span></span></span></code></pre></div><p>之后使用国内源一键安装 K3s：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh <span class="p">|</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	<span class="nv">INSTALL_K3S_VERSION</span><span class="o">=</span>v1.27.8+k3s2 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	<span class="nv">INSTALL_K3S_MIRROR</span><span class="o">=</span>cn <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	sh -s - server <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--cluster-init <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--system-default-registry <span class="s2">&#34;docker.nju.edu.cn&#34;</span>
+</span></span></code></pre></div><h2 id="安装-multus-cni">安装 Multus CNI</h2>
+<p>接下来安装 Multus CNI 插件，下载 <code>multus-daemonset.yml</code> 配置，需要编辑 <code>kube-multus-ds</code> DaemonSet hostPath 的路径到 K3s 对应的路径上去。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget <span class="s1">&#39;https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/master/deployments/multus-daemonset.yml&#39;</span>
+</span></span></code></pre></div><p>编辑 <code>kube-multus-ds</code> DaemonSet 的 <code>hostPath</code> 的配置为 K3s 的路径。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cni</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/var/lib/rancher/k3s/agent/etc/cni/net.d</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cnibin</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/var/lib/rancher/k3s/data/current/bin</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span></code></pre></div><p>还要编辑 <code>kube-multus-ds</code> DaemonSet 的 Container 配置，增添一条 command arg：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">kube-multus</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ghcr.io/k8snetworkplumbingwg/multus-cni:snapshot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;/thin_entrypoint&#34;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">args</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;--multus-conf-file=auto&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;--multus-autoconfig-dir=/host/etc/cni/net.d&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;--cni-conf-dir=/host/etc/cni/net.d&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># ADD THIS LINE:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;--multus-kubeconfig-file-host=/var/lib/rancher/k3s/agent/etc/cni/net.d/multus.d/multus.kubeconfig&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span></code></pre></div><p>之后 <code>kubectl apply</code> 上面的 Multus Daemonset 配置，等待 <code>kube-multus-ds</code> DaemonSet 跑起来后，可以看到 <code>/var/lib/rancher/k3s/data/current/bin</code> 目录下有新增 <code>multus</code> 可执行文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ls /var/lib/rancher/k3s/data/current/bin <span class="p">|</span> grep multus
+</span></span><span class="line"><span class="cl"><span class="go">multus
+</span></span></span></code></pre></div><h2 id="自定义-multus-cni-配置文件">自定义 Multus CNI 配置文件</h2>
+<p>新建一个名为 <code>macvlan-conf</code> 的 <code>NetworkAttachmentDefinition</code> Custom Resource，自定义 multus 配置文件：</p>
+<p>这里需要注意 <code>config</code> 中的 <code>master</code> 网卡接口要设置为物理机上对应的网卡接口名。</p>
+<p>咱把 K3s Server 安装在了 QEMU 虚拟机中，虚拟机使用的是 libvirt 创建的默认网卡，CIDR 编址为 <code>192.168.122.0/24</code>，网关 <code>192.168.122.1</code>。
+为了能在其他虚拟机 / 物理机上也能访问到虚拟机中使用了 macvlan 的 pod，multus macvlan 配置文件也使用 libvirt 网卡的 CIDR。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;k8s.cni.cncf.io/v1&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">NetworkAttachmentDefinition</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">macvlan-conf</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;{
+</span></span></span><span class="line"><span class="cl"><span class="s1">      &#34;cniVersion&#34;: &#34;0.3.1&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">      &#34;type&#34;: &#34;macvlan&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">      &#34;master&#34;: &#34;enp1s0&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">      &#34;mode&#34;: &#34;bridge&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">      &#34;ipam&#34;: {
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &#34;type&#34;: &#34;host-local&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &#34;subnet&#34;: &#34;192.168.122.0/24&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &#34;rangeStart&#34;: &#34;192.168.122.200&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &#34;rangeEnd&#34;: &#34;192.168.122.210&#34;,
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &#34;routes&#34;: [
+</span></span></span><span class="line"><span class="cl"><span class="s1">          { &#34;dst&#34;: &#34;0.0.0.0/0&#34; }
+</span></span></span><span class="line"><span class="cl"><span class="s1">        ],
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &#34;gateway&#34;: &#34;192.168.122.1&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s1">      }
+</span></span></span><span class="line"><span class="cl"><span class="s1">    }&#39;</span><span class="w">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> kubectl apply -f macvlan-conf.yaml
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> kubectl get net-attach-def
+</span></span><span class="line"><span class="cl"><span class="go">NAME           AGE
+</span></span></span><span class="line"><span class="cl"><span class="go">macvlan-conf   59s
+</span></span></span></code></pre></div><h2 id="创建-macvlan-pod">创建 Macvlan Pod</h2>
+<p>K3s 将安装包体积做了精简移除了 <code>macvlan</code> CNI 插件，所以创建 Pod 之前需要手动下载 <code>macvlan</code> CNI 插件放到 K3s 的 data bin 目录。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> mkdir -p cni-plugin <span class="o">&amp;&amp;</span> <span class="nb">cd</span> cni-plugin
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> wget https://github.com/containernetworking/plugins/releases/download/v1.4.0/cni-plugins-linux-amd64-v1.4.0.tgz
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> tar -zxvf cni-plugins-linux-amd64-v1.4.0.tgz
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo cp ./macvlan /var/lib/rancher/k3s/data/current/bin/
+</span></span></code></pre></div><p>之后创建 Pod，使用 Annotation 指定网络的配置文件，并让 Pod 被 Multus CNI 识别。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx-macvlan</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l">macvlan-conf</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
+</span></span></span></code></pre></div><p>如果一切顺利的话，<code>kubectl describe pod nginx-macvlan</code> 能看到以下的 Events：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Events:
+</span></span><span class="line"><span class="cl">  Type    Reason          Age   From               Message
+</span></span><span class="line"><span class="cl">  ----    ------          ----  ----               -------
+</span></span><span class="line"><span class="cl">  Normal  Scheduled       2s    default-scheduler  Successfully assigned default/nginx-macvlan to archlinux-k3s-1
+</span></span><span class="line"><span class="cl">  Normal  AddedInterface  2s    multus             Add eth0 [10.42.0.26/24] from cbr0
+</span></span><span class="line"><span class="cl">  Normal  AddedInterface  2s    multus             Add net1 [192.168.122.200/24] from default/macvlan-conf
+</span></span></code></pre></div><p>因为 K3s 服务器跑在了 QEMU KVM 虚拟机里面，libvirt 默认网卡 CIDR 是 <code>192.168.122.0/24</code>。所以咱在物理机上访问虚拟机内的 Macvlan Pod IP <code>192.168.122.200</code>，是能正常访问的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> curl 192.168.122.200
+</span></span><span class="line"><span class="cl"><span class="go">&lt;!DOCTYPE html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;head&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span></code></pre></div><p>然后因为 Macvlan 的子接口 (sub interface) 无法与父接口 (parent interface) 直接访问，所以在节点的主机上访问运行在这个节点内的 macvlan pod 是访问不通的，也就是说无法通过节点主机的接口访问到 macvlan pod 的子接口，除非使用 ipvlan，可以参考以下这几篇讨论：</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/69316893/single-node-microk8s-multus-master-interface-cannot-be-reached">Single node Microk8s multus master interface cannot be reached</a></li>
+<li><a href="https://forums.docker.com/t/host-and-containers-cannot-communicate-macvlan/112968">Host and Containers cannot communicate - MACVLAN</a></li>
+</ul>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>一些 Arch Linux 的常用组件整理</title>
+      <link>https://blog.starry-s.moe/posts/2024/archlinux-utils/</link>
+      <pubDate>Tue, 30 Jan 2024 18:44:07 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2024/archlinux-utils/</guid>
+      <description>&lt;p&gt;用这么久 Arch 了，但是却很少写 Arch 相关的博客……&lt;/p&gt;
+&lt;p&gt;最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 &lt;code&gt;pacstrap&lt;/code&gt; 时都要想半天咱需要装什么……&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>用这么久 Arch 了，但是却很少写 Arch 相关的博客……</p>
+<p>最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 <code>pacstrap</code> 时都要想半天咱需要装什么……</p>
+<hr>
+<h2 id="装系统">装系统</h2>
+<p>Arch Wiki 的 Installation Guide 在使用 <code>pacstrap</code> 装系统时只写了最基础的软件包 <code>base</code>, <code>linux</code> 和 <code>linux-firmware</code>，可以在这一步补充亿些常用的软件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacstrap -K /mnt base linux linux-firmware <span class="se">\ </span>               <span class="c1"># 坠基础的核心组件</span>
+</span></span><span class="line"><span class="cl">    base-devel gcc grub amd-ucode archlinuxcn-keyring <span class="se">\ </span>    <span class="c1"># 装 AUR 软件需要用到, ArchLinux CN 以及启动引导使用的 GRUB</span>
+</span></span><span class="line"><span class="cl">    zsh zsh-syhtax-highlighting zsh-autosuggestions <span class="se">\ </span>      <span class="c1"># 咱使用 zsh</span>
+</span></span><span class="line"><span class="cl">    vim neovim git openbsd-netcat <span class="se">\ </span>                        <span class="c1"># 文本编辑器 &amp; Git 以及ssh 使用 proxy 的工具  </span>
+</span></span><span class="line"><span class="cl">    sudo man-db htop wget <span class="se">\ </span>                                <span class="c1"># sudo、man、更好用的 top、wget</span>
+</span></span><span class="line"><span class="cl">    mkinitcpio-firmware                                     <span class="c1"># 消除 mkinitcpio 的大量 WARNING（没什么用，但强迫症必备）</span>
+</span></span></code></pre></div><p>进 chroot 后编辑 <code>/etc/pacman.conf</code>，添加以下配置，启用 Arch Linux CN。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
+</span></span><span class="line"><span class="cl"># 这里使用北京外国语大学镜像站
+</span></span><span class="line"><span class="cl">[archlinuxcn]
+</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
+</span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S yay
+</span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S os-prober
+</span></span></code></pre></div><p>如果是为 QEMU KVM 虚拟机装系统的话，在执行 <code>grub-install</code> 配置 UEFI 启动引导时记得加一个 <code>--removable</code> 参数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo grub-install --target<span class="o">=</span>x86_64-efi --efi-directory<span class="o">=</span>/boot --bootloader-id<span class="o">=</span>GRUB --removable
+</span></span><span class="line"><span class="cl">sudo grub-mkconfig -o /boot/grub.cfg
+</span></span></code></pre></div><p>如果不装其他网络工具，只使用 <code>systemd-networkd</code> 的话，需要创建一份默认的配置文件使用 DHCP，否则连不上网。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-default.conf
+</span></span><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=enp*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">DHCP=yes
+</span></span></code></pre></div><p>并启用 <code>systemd-networkd</code> Systemd Service：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl enable systemd-networkd
+</span></span></code></pre></div><p>基本上到这里就可以愉快的 <code>reboot</code> 了，一个精简的系统所需要的软件就基本装好了。</p>
+<h2 id="常用命令行工具">常用命令行工具</h2>
+<p>如果只作为服务器 / 不包含图形的虚拟机使用的话，装这些咱常用软件，这部分因人而异，仅供参考。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S go <span class="se">\ </span>    <span class="c1"># 写 Go 用的</span>
+</span></span><span class="line"><span class="cl">    kubectl helm <span class="se">\ </span>     <span class="c1"># k8s 相关的命令行工具</span>
+</span></span><span class="line"><span class="cl">    docker docker-buildx <span class="se">\ </span>   <span class="c1"># 运行容器镜像的工具</span>
+</span></span><span class="line"><span class="cl">    privoxy <span class="se">\ </span>          <span class="c1"># 转发 socks 代理到 HTTP 代理的工具</span>
+</span></span><span class="line"><span class="cl">    proxychains <span class="se">\ </span>      <span class="c1"># 让 C 写的软件走代理的 Hook</span>
+</span></span><span class="line"><span class="cl">    wireguard-tools     <span class="c1"># WireGuard</span>
+</span></span><span class="line"><span class="cl">    axel aria2 <span class="se">\ </span>       <span class="c1"># 支持多线程下载的工具</span>
+</span></span><span class="line"><span class="cl">    ffmpeg <span class="se">\ </span>           <span class="c1"># 转码视频/图片的工具</span>
+</span></span><span class="line"><span class="cl">    jq go-yq <span class="se">\ </span>         <span class="c1"># 格式化处理 json &amp; yaml 的工具</span>
+</span></span><span class="line"><span class="cl">    jdk8-openjdk <span class="se">\ </span>     <span class="c1"># JDK &amp; JRE（这里写的是 Java 8，可以换成其他的 Java LTS 版本）</span>
+</span></span><span class="line"><span class="cl">    lm_sensors <span class="se">\ </span>       <span class="c1"># 硬件监测工具（查看温度之类的）</span>
+</span></span><span class="line"><span class="cl">    net-tools traceroute <span class="se">\ </span> <span class="c1"># 常用网络工具 </span>
+</span></span><span class="line"><span class="cl">    nodejs npm <span class="se">\ </span>       <span class="c1"># NodeJS &amp; Node Package Manager</span>
+</span></span><span class="line"><span class="cl">    python3 python-pip      <span class="c1"># Python 相关</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">yay -S golangci-lint-bin <span class="se">\ </span> <span class="c1"># Go 常用的 linter</span>
+</span></span><span class="line"><span class="cl">    krew-bin  <span class="c1"># 可以理解为一个 kubectl 插件的包管理器</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 装完 Docker 后把普通用户添加到 docker group 中</span>
+</span></span><span class="line"><span class="cl">sudo usermod -aG docker <span class="nv">$USER</span>
+</span></span></code></pre></div><p>创建 Docker Daemon 的配置文件 <code>/etc/docker/daemon.json</code>，设定国内的 Mirror，这里用的是南京大学的 Docker Mirror：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;insecure-registries&#34;</span> <span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;127.0.0.1:5000&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;registry-mirrors&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://docker.nju.edu.cn/&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>如果需要跑虚拟机，需要装 QEMU 和 <code>libvirt</code> 相关的组件（咱用 <code>virsh</code> 管理虚拟机，不手搓 qemu 指令）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S qemu-full libvirt
+</span></span></code></pre></div><h3 id="k3s--rke2-server">K3s / RKE2 Server</h3>
+<p>在 Arch Linux 上安装了 K3s 或 RKE2，关机时会卡在 <code>a stop is running for libcontainer containerd...</code> 一分多钟……</p>
+<p>参考 <a href="https://github.com/k3s-io/k3s/issues/2400#issuecomment-1312621468">这个 Issue</a>，创建一个 <code>/etc/systemd/system/shutdown-k3s.service</code> Systemd 文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Unit]
+</span></span><span class="line"><span class="cl">Description=Kill containerd-shims on shutdown
+</span></span><span class="line"><span class="cl">DefaultDependencies=false
+</span></span><span class="line"><span class="cl">Before=shutdown.target umount.target
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Service]
+</span></span><span class="line"><span class="cl">ExecStart=/usr/local/bin/k3s-killall.sh
+</span></span><span class="line"><span class="cl">Type=oneshot
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Install]
+</span></span><span class="line"><span class="cl">WantedBy=shutdown.target
+</span></span></code></pre></div><p>之后启用 <code>shutdown-k3s.service</code>，在关机时 Kill 掉 K3s。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl daemon-reload
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> shutdown-k3s.service
+</span></span></code></pre></div><h3 id="wireguard-client">WireGuard Client</h3>
+<p>如果 Arch Linux 还配置了 WireGuard 客户端，而这台 Arch Linux Server 被放在了家里，只能通过有公网 IP 的 WireGuard 服务器连接进去，这时尽管设置了 WireGuard 的 <code>persistent keepalive</code>，但在运营商更换了你家的公网 IP 后，还是会碰到无法自动连接回去的情况，这时可以用咱的 <a href="https://github.com/STARRY-S/wireguard-keepalive">这个简单粗暴的脚本</a>，在 WireGuard 断连一段时间后，自动重启接口。</p>
+<h2 id="图形界面">图形界面</h2>
+<p>显卡驱动：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># AMD</span>
+</span></span><span class="line"><span class="cl">pacman -S amdgpu
+</span></span><span class="line"><span class="cl"><span class="c1"># NVIDIA</span>
+</span></span><span class="line"><span class="cl">pacman -S nvidia
+</span></span></code></pre></div><p>X11/Wayland 这些相关组件会随着桌面环境一起安装，所以只需要装桌面环境即可，<span class="spoiler" >这里就不需要你额外装 X 了</span>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 咱用 GNOME</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S gnome
+</span></span><span class="line"><span class="cl"><span class="c1"># 通常不直接装 gnome-extra，而是从里面选咱需要的</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S gnome-tweaks
+</span></span></code></pre></div><h2 id="常用的-gui-软件">常用的 GUI 软件</h2>
+<p>装好图形界面并顺利跑起来之后，就可以装常用的桌面软件了，下面这些是部分可能用到的软件，这些因人而异，仅供参考。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S vlc <span class="se">\ </span>   <span class="c1"># 视频播放器</span>
+</span></span><span class="line"><span class="cl">    virt-manager <span class="se">\ </span>     <span class="c1"># 管理 qemu 虚拟机</span>
+</span></span><span class="line"><span class="cl">    ttf-monaco <span class="se">\ </span>       <span class="c1"># 一个很好看的，在 macOS 上有预装的等宽字体</span>
+</span></span><span class="line"><span class="cl">    noto-sans noto-fonts-cjk noto-fonts-emoji ttf-dejavu <span class="se">\ </span>   <span class="c1"># 一些字体</span>
+</span></span><span class="line"><span class="cl">    ibus ibus-rime <span class="se">\ </span>   <span class="c1"># ibus + RIME 中文输入法</span>
+</span></span><span class="line"><span class="cl">    firefox <span class="se">\ </span>          <span class="c1"># 火狐浏览器</span>
+</span></span><span class="line"><span class="cl">    emacs               <span class="c1"># 文本编辑器</span>
+</span></span></code></pre></div><p>在 AUR 中安装的软件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S google-chrome <span class="se">\ </span>         <span class="c1"># 谷歌浏览器</span>
+</span></span><span class="line"><span class="cl">    visual-studio-code-bin      <span class="c1"># 文本编辑器</span>
+</span></span></code></pre></div><p>基本上是这些了，如果还想到了别的再补充到这儿。</p>]]></content:encoded>
+    </item>
+    
     <item>
       <title>Hello 2024</title>
       <link>https://blog.starry-s.moe/posts/2024/hello-2024/</link>

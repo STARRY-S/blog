@@ -12,7 +12,57 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Thu, 18 Jan 2024 23:12:28 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 Jan 2024 18:52:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>K3s</title>
+      <link>https://blog.starry-s.moe/tags/k3s/</link>
+      <pubDate>Tue, 30 Jan 2024 18:52:00 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/k3s/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Kubernetes</title>
+      <link>https://blog.starry-s.moe/tags/kubernetes/</link>
+      <pubDate>Tue, 30 Jan 2024 18:52:00 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/kubernetes/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Macvlan</title>
+      <link>https://blog.starry-s.moe/tags/macvlan/</link>
+      <pubDate>Tue, 30 Jan 2024 18:52:00 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/macvlan/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Multus</title>
+      <link>https://blog.starry-s.moe/tags/multus/</link>
+      <pubDate>Tue, 30 Jan 2024 18:52:00 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/multus/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Arch Linux</title>
+      <link>https://blog.starry-s.moe/tags/arch-linux/</link>
+      <pubDate>Tue, 30 Jan 2024 18:44:07 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/arch-linux/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>日常</title>
       <link>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</link>
@@ -134,16 +184,6 @@
     </item>
     
     <item>
-      <title>Kubernetes</title>
-      <link>https://blog.starry-s.moe/tags/kubernetes/</link>
-      <pubDate>Sat, 10 Jun 2023 02:33:58 +0800</pubDate>
-      
-      <guid>https://blog.starry-s.moe/tags/kubernetes/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
       <title>Harbor</title>
       <link>https://blog.starry-s.moe/tags/harbor/</link>
       <pubDate>Sun, 28 May 2023 16:49:45 +0800</pubDate>
@@ -199,16 +239,6 @@
       <pubDate>Fri, 24 Feb 2023 22:50:26 +0800</pubDate>
       
       <guid>https://blog.starry-s.moe/tags/%E7%9B%B8%E6%9C%BA/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Arch Linux</title>
-      <link>https://blog.starry-s.moe/tags/arch-linux/</link>
-      <pubDate>Sat, 12 Nov 2022 13:25:03 +0800</pubDate>
-      
-      <guid>https://blog.starry-s.moe/tags/arch-linux/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>

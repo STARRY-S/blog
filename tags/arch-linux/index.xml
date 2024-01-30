@@ -12,7 +12,126 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 12 Nov 2022 13:25:03 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 Jan 2024 18:44:07 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>一些 Arch Linux 的常用组件整理</title>
+      <link>https://blog.starry-s.moe/posts/2024/archlinux-utils/</link>
+      <pubDate>Tue, 30 Jan 2024 18:44:07 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2024/archlinux-utils/</guid>
+      <description>&lt;p&gt;用这么久 Arch 了，但是却很少写 Arch 相关的博客……&lt;/p&gt;
+&lt;p&gt;最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 &lt;code&gt;pacstrap&lt;/code&gt; 时都要想半天咱需要装什么……&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>用这么久 Arch 了，但是却很少写 Arch 相关的博客……</p>
+<p>最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 <code>pacstrap</code> 时都要想半天咱需要装什么……</p>
+<hr>
+<h2 id="装系统">装系统</h2>
+<p>Arch Wiki 的 Installation Guide 在使用 <code>pacstrap</code> 装系统时只写了最基础的软件包 <code>base</code>, <code>linux</code> 和 <code>linux-firmware</code>，可以在这一步补充亿些常用的软件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacstrap -K /mnt base linux linux-firmware <span class="se">\ </span>               <span class="c1"># 坠基础的核心组件</span>
+</span></span><span class="line"><span class="cl">    base-devel gcc grub amd-ucode archlinuxcn-keyring <span class="se">\ </span>    <span class="c1"># 装 AUR 软件需要用到, ArchLinux CN 以及启动引导使用的 GRUB</span>
+</span></span><span class="line"><span class="cl">    zsh zsh-syhtax-highlighting zsh-autosuggestions <span class="se">\ </span>      <span class="c1"># 咱使用 zsh</span>
+</span></span><span class="line"><span class="cl">    vim neovim git openbsd-netcat <span class="se">\ </span>                        <span class="c1"># 文本编辑器 &amp; Git 以及ssh 使用 proxy 的工具  </span>
+</span></span><span class="line"><span class="cl">    sudo man-db htop wget <span class="se">\ </span>                                <span class="c1"># sudo、man、更好用的 top、wget</span>
+</span></span><span class="line"><span class="cl">    mkinitcpio-firmware                                     <span class="c1"># 消除 mkinitcpio 的大量 WARNING（没什么用，但强迫症必备）</span>
+</span></span></code></pre></div><p>进 chroot 后编辑 <code>/etc/pacman.conf</code>，添加以下配置，启用 Arch Linux CN。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
+</span></span><span class="line"><span class="cl"># 这里使用北京外国语大学镜像站
+</span></span><span class="line"><span class="cl">[archlinuxcn]
+</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
+</span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S yay
+</span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S os-prober
+</span></span></code></pre></div><p>如果是为 QEMU KVM 虚拟机装系统的话，在执行 <code>grub-install</code> 配置 UEFI 启动引导时记得加一个 <code>--removable</code> 参数。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo grub-install --target<span class="o">=</span>x86_64-efi --efi-directory<span class="o">=</span>/boot --bootloader-id<span class="o">=</span>GRUB --removable
+</span></span><span class="line"><span class="cl">sudo grub-mkconfig -o /boot/grub.cfg
+</span></span></code></pre></div><p>如果不装其他网络工具，只使用 <code>systemd-networkd</code> 的话，需要创建一份默认的配置文件使用 DHCP，否则连不上网。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-default.conf
+</span></span><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=enp*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">DHCP=yes
+</span></span></code></pre></div><p>并启用 <code>systemd-networkd</code> Systemd Service：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl enable systemd-networkd
+</span></span></code></pre></div><p>基本上到这里就可以愉快的 <code>reboot</code> 了，一个精简的系统所需要的软件就基本装好了。</p>
+<h2 id="常用命令行工具">常用命令行工具</h2>
+<p>如果只作为服务器 / 不包含图形的虚拟机使用的话，装这些咱常用软件，这部分因人而异，仅供参考。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S go <span class="se">\ </span>    <span class="c1"># 写 Go 用的</span>
+</span></span><span class="line"><span class="cl">    kubectl helm <span class="se">\ </span>     <span class="c1"># k8s 相关的命令行工具</span>
+</span></span><span class="line"><span class="cl">    docker docker-buildx <span class="se">\ </span>   <span class="c1"># 运行容器镜像的工具</span>
+</span></span><span class="line"><span class="cl">    privoxy <span class="se">\ </span>          <span class="c1"># 转发 socks 代理到 HTTP 代理的工具</span>
+</span></span><span class="line"><span class="cl">    proxychains <span class="se">\ </span>      <span class="c1"># 让 C 写的软件走代理的 Hook</span>
+</span></span><span class="line"><span class="cl">    wireguard-tools     <span class="c1"># WireGuard</span>
+</span></span><span class="line"><span class="cl">    axel aria2 <span class="se">\ </span>       <span class="c1"># 支持多线程下载的工具</span>
+</span></span><span class="line"><span class="cl">    ffmpeg <span class="se">\ </span>           <span class="c1"># 转码视频/图片的工具</span>
+</span></span><span class="line"><span class="cl">    jq go-yq <span class="se">\ </span>         <span class="c1"># 格式化处理 json &amp; yaml 的工具</span>
+</span></span><span class="line"><span class="cl">    jdk8-openjdk <span class="se">\ </span>     <span class="c1"># JDK &amp; JRE（这里写的是 Java 8，可以换成其他的 Java LTS 版本）</span>
+</span></span><span class="line"><span class="cl">    lm_sensors <span class="se">\ </span>       <span class="c1"># 硬件监测工具（查看温度之类的）</span>
+</span></span><span class="line"><span class="cl">    net-tools traceroute <span class="se">\ </span> <span class="c1"># 常用网络工具 </span>
+</span></span><span class="line"><span class="cl">    nodejs npm <span class="se">\ </span>       <span class="c1"># NodeJS &amp; Node Package Manager</span>
+</span></span><span class="line"><span class="cl">    python3 python-pip      <span class="c1"># Python 相关</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">yay -S golangci-lint-bin <span class="se">\ </span> <span class="c1"># Go 常用的 linter</span>
+</span></span><span class="line"><span class="cl">    krew-bin  <span class="c1"># 可以理解为一个 kubectl 插件的包管理器</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 装完 Docker 后把普通用户添加到 docker group 中</span>
+</span></span><span class="line"><span class="cl">sudo usermod -aG docker <span class="nv">$USER</span>
+</span></span></code></pre></div><p>创建 Docker Daemon 的配置文件 <code>/etc/docker/daemon.json</code>，设定国内的 Mirror，这里用的是南京大学的 Docker Mirror：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;insecure-registries&#34;</span> <span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;127.0.0.1:5000&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">],</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;registry-mirrors&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://docker.nju.edu.cn/&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>如果需要跑虚拟机，需要装 QEMU 和 <code>libvirt</code> 相关的组件（咱用 <code>virsh</code> 管理虚拟机，不手搓 qemu 指令）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S qemu-full libvirt
+</span></span></code></pre></div><h3 id="k3s--rke2-server">K3s / RKE2 Server</h3>
+<p>在 Arch Linux 上安装了 K3s 或 RKE2，关机时会卡在 <code>a stop is running for libcontainer containerd...</code> 一分多钟……</p>
+<p>参考 <a href="https://github.com/k3s-io/k3s/issues/2400#issuecomment-1312621468">这个 Issue</a>，创建一个 <code>/etc/systemd/system/shutdown-k3s.service</code> Systemd 文件。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Unit]
+</span></span><span class="line"><span class="cl">Description=Kill containerd-shims on shutdown
+</span></span><span class="line"><span class="cl">DefaultDependencies=false
+</span></span><span class="line"><span class="cl">Before=shutdown.target umount.target
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Service]
+</span></span><span class="line"><span class="cl">ExecStart=/usr/local/bin/k3s-killall.sh
+</span></span><span class="line"><span class="cl">Type=oneshot
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Install]
+</span></span><span class="line"><span class="cl">WantedBy=shutdown.target
+</span></span></code></pre></div><p>之后启用 <code>shutdown-k3s.service</code>，在关机时 Kill 掉 K3s。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo systemctl daemon-reload
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> shutdown-k3s.service
+</span></span></code></pre></div><h3 id="wireguard-client">WireGuard Client</h3>
+<p>如果 Arch Linux 还配置了 WireGuard 客户端，而这台 Arch Linux Server 被放在了家里，只能通过有公网 IP 的 WireGuard 服务器连接进去，这时尽管设置了 WireGuard 的 <code>persistent keepalive</code>，但在运营商更换了你家的公网 IP 后，还是会碰到无法自动连接回去的情况，这时可以用咱的 <a href="https://github.com/STARRY-S/wireguard-keepalive">这个简单粗暴的脚本</a>，在 WireGuard 断连一段时间后，自动重启接口。</p>
+<h2 id="图形界面">图形界面</h2>
+<p>显卡驱动：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># AMD</span>
+</span></span><span class="line"><span class="cl">pacman -S amdgpu
+</span></span><span class="line"><span class="cl"><span class="c1"># NVIDIA</span>
+</span></span><span class="line"><span class="cl">pacman -S nvidia
+</span></span></code></pre></div><p>X11/Wayland 这些相关组件会随着桌面环境一起安装，所以只需要装桌面环境即可，<span class="spoiler" >这里就不需要你额外装 X 了</span>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 咱用 GNOME</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S gnome
+</span></span><span class="line"><span class="cl"><span class="c1"># 通常不直接装 gnome-extra，而是从里面选咱需要的</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S gnome-tweaks
+</span></span></code></pre></div><h2 id="常用的-gui-软件">常用的 GUI 软件</h2>
+<p>装好图形界面并顺利跑起来之后，就可以装常用的桌面软件了，下面这些是部分可能用到的软件，这些因人而异，仅供参考。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S vlc <span class="se">\ </span>   <span class="c1"># 视频播放器</span>
+</span></span><span class="line"><span class="cl">    virt-manager <span class="se">\ </span>     <span class="c1"># 管理 qemu 虚拟机</span>
+</span></span><span class="line"><span class="cl">    ttf-monaco <span class="se">\ </span>       <span class="c1"># 一个很好看的，在 macOS 上有预装的等宽字体</span>
+</span></span><span class="line"><span class="cl">    noto-sans noto-fonts-cjk noto-fonts-emoji ttf-dejavu <span class="se">\ </span>   <span class="c1"># 一些字体</span>
+</span></span><span class="line"><span class="cl">    ibus ibus-rime <span class="se">\ </span>   <span class="c1"># ibus + RIME 中文输入法</span>
+</span></span><span class="line"><span class="cl">    firefox <span class="se">\ </span>          <span class="c1"># 火狐浏览器</span>
+</span></span><span class="line"><span class="cl">    emacs               <span class="c1"># 文本编辑器</span>
+</span></span></code></pre></div><p>在 AUR 中安装的软件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S google-chrome <span class="se">\ </span>         <span class="c1"># 谷歌浏览器</span>
+</span></span><span class="line"><span class="cl">    visual-studio-code-bin      <span class="c1"># 文本编辑器</span>
+</span></span></code></pre></div><p>基本上是这些了，如果还想到了别的再补充到这儿。</p>]]></content:encoded>
+    </item>
+    
     <item>
       <title>NAS 装机记录</title>
       <link>https://blog.starry-s.moe/posts/2022/build-nas/</link>
