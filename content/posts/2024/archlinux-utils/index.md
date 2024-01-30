@@ -1,0 +1,197 @@
+---
+title: 一些 Arch Linux 的常用组件整理
+date: 2024-01-30T18:44:07+08:00
+layout: post
+tags:
+- Arch Linux
+categories:
+- Linux
+---
+
+用这么久 Arch 了，但是却很少写 Arch 相关的博客……
+
+最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 `pacstrap` 时都要想半天咱需要装什么……
+
+<!--more-->
+
+------
+
+## 装系统
+
+Arch Wiki 的 Installation Guide 在使用 `pacstrap` 装系统时只写了最基础的软件包 `base`, `linux` 和 `linux-firmware`，可以在这一步补充亿些常用的软件。
+
+```sh
+pacstrap -K /mnt base linux linux-firmware \                # 坠基础的核心组件
+    base-devel gcc grub amd-ucode archlinuxcn-keyring \     # 装 AUR 软件需要用到, ArchLinux CN 以及启动引导使用的 GRUB
+    zsh zsh-syhtax-highlighting zsh-autosuggestions \       # 咱使用 zsh
+    vim neovim git openbsd-netcat \                         # 文本编辑器 & Git 以及ssh 使用 proxy 的工具  
+    sudo man-db htop wget \                                 # sudo、man、更好用的 top、wget
+    mkinitcpio-firmware                                     # 消除 mkinitcpio 的大量 WARNING（没什么用，但强迫症必备）
+```
+
+进 chroot 后编辑 `/etc/pacman.conf`，添加以下配置，启用 Arch Linux CN。
+
+```conf
+# /etc/pacman.conf
+# 这里使用北京外国语大学镜像站
+[archlinuxcn]
+Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
+```
+
+之后安装 `yay`:
+
+```sh
+sudo pacman -Syy && sudo pacman -S yay
+```
+
+如果电脑上安装了其他系统的话，需要额外安装 `os-prober`，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。
+
+```sh
+sudo pacman -S os-prober
+```
+
+如果是为 QEMU KVM 虚拟机装系统的话，在执行 `grub-install` 配置 UEFI 启动引导时记得加一个 `--removable` 参数。
+
+```sh
+sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable
+sudo grub-mkconfig -o /boot/grub.cfg
+```
+
+如果不装其他网络工具，只使用 `systemd-networkd` 的话，需要创建一份默认的配置文件使用 DHCP，否则连不上网。
+
+```conf
+# /etc/systemd/network/10-default.conf
+[Match]
+Name=enp*
+
+[Network]
+DHCP=yes
+```
+
+并启用 `systemd-networkd` Systemd Service：
+
+```conf
+sudo systemctl enable systemd-networkd
+```
+
+基本上到这里就可以愉快的 `reboot` 了，一个精简的系统所需要的软件就基本装好了。
+
+## 常用命令行工具
+
+如果只作为服务器 / 不包含图形的虚拟机使用的话，装这些咱常用软件，这部分因人而异，仅供参考。
+
+```sh
+sudo pacman -S go \     # 写 Go 用的
+    kubectl helm \      # k8s 相关的命令行工具
+    docker docker-buildx \    # 运行容器镜像的工具
+    privoxy \           # 转发 socks 代理到 HTTP 代理的工具
+    proxychains \       # 让 C 写的软件走代理的 Hook
+    wireguard-tools     # WireGuard
+    axel aria2 \        # 支持多线程下载的工具
+    ffmpeg \            # 转码视频/图片的工具
+    jq go-yq \          # 格式化处理 json & yaml 的工具
+    jdk8-openjdk \      # JDK & JRE（这里写的是 Java 8，可以换成其他的 Java LTS 版本）
+    lm_sensors \        # 硬件监测工具（查看温度之类的）
+    net-tools traceroute \  # 常用网络工具 
+    nodejs npm \        # NodeJS & Node Package Manager
+    python3 python-pip      # Python 相关
+
+yay -S golangci-lint-bin \  # Go 常用的 linter
+    krew-bin  # 可以理解为一个 kubectl 插件的包管理器
+
+# 装完 Docker 后把普通用户添加到 docker group 中
+sudo usermod -aG docker $USER
+```
+
+创建 Docker Daemon 的配置文件 `/etc/docker/daemon.json`，设定国内的 Mirror，这里用的是南京大学的 Docker Mirror：
+
+```json
+{
+  "insecure-registries" : [
+    "127.0.0.1:5000"
+  ],
+  "registry-mirrors": [
+    "https://docker.nju.edu.cn/"
+  ]
+}
+```
+
+如果需要跑虚拟机，需要装 QEMU 和 `libvirt` 相关的组件（咱用 `virsh` 管理虚拟机，不手搓 qemu 指令）：
+
+```sh
+sudo pacman -S qemu-full libvirt
+```
+
+### K3s / RKE2 Server
+
+在 Arch Linux 上安装了 K3s 或 RKE2，关机时会卡在 `a stop is running for libcontainer containerd...` 一分多钟……
+
+参考 [这个 Issue](https://github.com/k3s-io/k3s/issues/2400#issuecomment-1312621468)，创建一个 `/etc/systemd/system/shutdown-k3s.service` Systemd 文件。
+
+```systemd-config
+[Unit]
+Description=Kill containerd-shims on shutdown
+DefaultDependencies=false
+Before=shutdown.target umount.target
+
+[Service]
+ExecStart=/usr/local/bin/k3s-killall.sh
+Type=oneshot
+
+[Install]
+WantedBy=shutdown.target
+```
+
+之后启用 `shutdown-k3s.service`，在关机时 Kill 掉 K3s。
+
+```sh
+sudo systemctl daemon-reload
+sudo systemctl enable shutdown-k3s.service
+```
+
+### WireGuard Client
+
+如果 Arch Linux 还配置了 WireGuard 客户端，而这台 Arch Linux Server 被放在了家里，只能通过有公网 IP 的 WireGuard 服务器连接进去，这时尽管设置了 WireGuard 的 `persistent keepalive`，但在运营商更换了你家的公网 IP 后，还是会碰到无法自动连接回去的情况，这时可以用咱的 [这个简单粗暴的脚本](https://github.com/STARRY-S/wireguard-keepalive)，在 WireGuard 断连一段时间后，自动重启接口。
+
+## 图形界面
+
+显卡驱动：
+
+```sh
+# AMD
+pacman -S amdgpu
+# NVIDIA
+pacman -S nvidia
+```
+
+X11/Wayland 这些相关组件会随着桌面环境一起安装，所以只需要装桌面环境即可，<span class="spoiler" >这里就不需要你额外装 X 了</span>。
+
+```sh
+# 咱用 GNOME
+sudo pacman -S gnome
+# 通常不直接装 gnome-extra，而是从里面选咱需要的
+sudo pacman -S gnome-tweaks
+```
+
+## 常用的 GUI 软件
+
+装好图形界面并顺利跑起来之后，就可以装常用的桌面软件了，下面这些是部分可能用到的软件，这些因人而异，仅供参考。
+
+```sh
+sudo pacman -S vlc \    # 视频播放器
+    virt-manager \      # 管理 qemu 虚拟机
+    ttf-monaco \        # 一个很好看的，在 macOS 上有预装的等宽字体
+    noto-sans noto-fonts-cjk noto-fonts-emoji ttf-dejavu \    # 一些字体
+    ibus ibus-rime \    # ibus + RIME 中文输入法
+    firefox \           # 火狐浏览器
+    emacs               # 文本编辑器
+```
+
+在 AUR 中安装的软件：
+
+```sh
+yay -S google-chrome \          # 谷歌浏览器
+    visual-studio-code-bin      # 文本编辑器
+```
+
+基本上是这些了，如果还想到了别的再补充到这儿。
