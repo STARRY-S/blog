@@ -31,7 +31,7 @@
 <p>可以用以下指令检查系统是否支持 Macvlan（这里使用桥接模式）：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo ip link add macvlan0 link enp1s0 <span class="nb">type</span> macvlan mode bridge  <span class="c1"># 这里替换 enp1s0 为网卡接口名称</span>
 </span></span><span class="line"><span class="cl">sudo ip address add 192.168.122.205/24 broadcast 192.168.122.255 dev macvlan0 <span class="c1"># 注意 IP 地址冲突</span>
-</span></span></code></pre></div><p>之后可尝试使用其他处于同一个网络（CIDR）的设备 ping 这个 <code>192.168.122.205</code> IP 地址，能 Ping 通就说明你的防火墙没有屏蔽不通设备之间的二层数据转发。</p>
+</span></span></code></pre></div><p>之后可尝试使用其他处于同一个网络（CIDR）的设备 ping 这个 <code>192.168.122.205</code> IP 地址，能 Ping 通就说明你的防火墙没有屏蔽不同设备之间的二层数据转发。</p>
 <h2 id="安装-k3s">安装 K3s</h2>
 <p>根据 <a href="https://github.com/k8snetworkplumbingwg/multus-cni/blob/master/docs/quickstart.md">Multus 的 QuickStart 手册</a>，准备一个新版本的 Kubernetes 集群（这里用的是 <code>v1.27.8+k3s2</code>），K3s 默认的 CNI 插件使用的是 Flannel。</p>
 <p>在国内的话需要先创建 <code>/etc/rancher/k3s/registries.yaml</code> 配置 Registry Mirror：</p>
