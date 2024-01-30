@@ -14,6 +14,8 @@ categories:
 
 <!--more-->
 
+{{< music netease song 2104716090 >}}
+
 ------
 
 ## 装系统

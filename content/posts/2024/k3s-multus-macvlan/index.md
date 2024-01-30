@@ -15,6 +15,8 @@ categories:
 
 <!--more-->
 
+{{< music netease song 4017232 >}}
+
 ----
 
 ## 啥是 Macvlan
