@@ -206,7 +206,11 @@
 </span></span><span class="line"><span class="cl">    lm_sensors <span class="se">\ </span>       <span class="c1"># 硬件监测工具（查看温度之类的）</span>
 </span></span><span class="line"><span class="cl">    net-tools traceroute <span class="se">\ </span> <span class="c1"># 常用网络工具 </span>
 </span></span><span class="line"><span class="cl">    nodejs npm <span class="se">\ </span>       <span class="c1"># NodeJS &amp; Node Package Manager</span>
-</span></span><span class="line"><span class="cl">    python3 python-pip      <span class="c1"># Python 相关</span>
+</span></span><span class="line"><span class="cl">    python3 python-pip <span class="se">\ </span>   <span class="c1"># Python 相关</span>
+</span></span><span class="line"><span class="cl">    btrfs-progs <span class="se">\ </span>      <span class="c1"># btrfs 相关工具</span>
+</span></span><span class="line"><span class="cl">    wireguard-tools <span class="se">\ </span>  <span class="c1"># 咱常用的 VPN</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">bind</span> <span class="se">\ </span>             <span class="c1"># 检查 DNS 网络相关的工具 (dig)</span>
+</span></span><span class="line"><span class="cl">    bc                  <span class="c1"># 命令行计算器</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">yay -S golangci-lint-bin <span class="se">\ </span> <span class="c1"># Go 常用的 linter</span>
 </span></span><span class="line"><span class="cl">    krew-bin  <span class="c1"># 可以理解为一个 kubectl 插件的包管理器</span>
@@ -266,7 +270,21 @@
 </span></span></code></pre></div><p>在 AUR 中安装的软件：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S google-chrome <span class="se">\ </span>         <span class="c1"># 谷歌浏览器</span>
 </span></span><span class="line"><span class="cl">    visual-studio-code-bin      <span class="c1"># 文本编辑器</span>
-</span></span></code></pre></div><p>基本上是这些了，如果还想到了别的再补充到这儿。</p>]]></content:encoded>
+</span></span></code></pre></div><h3 id="启用-multilib">启用 Multilib</h3>
+<p>启用 Multilib 以安装那些 32 位的软件，例如 Steam。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
+</span></span><span class="line"><span class="cl">[multilib]
+</span></span><span class="line"><span class="cl">Include = /etc/pacman.d/mirrorlist
+</span></span></code></pre></div><p>之后安装 Steam。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S steam
+</span></span></code></pre></div><p>如果需要加速 Steam 游戏，可以安装 <a href="https://aur.archlinux.org/packages/uuplugin-bin">uuplugin-bin</a>，把电脑伪装成 Steam Deck。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S uuplugin-bin
+</span></span></code></pre></div><h3 id="音乐">音乐</h3>
+<p><code>netease-cloud-music</code> 这个包已经很久没更新了，现在很多功能用不了，除了这个还有一些基于 GTK4 写的网易云音乐客户端也能用。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S netease-cloud-music <span class="c1"># 网易云音乐</span>
+</span></span><span class="line"><span class="cl">yay -S cider-bin           <span class="c1"># Apple Music</span>
+</span></span></code></pre></div><hr>
+<p>未完待续，如果还想到了别的再补充到这儿。</p>]]></content:encoded>
     </item>
     
     <item>
