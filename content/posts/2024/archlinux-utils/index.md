@@ -96,7 +96,11 @@ sudo pacman -S go \     # 写 Go 用的
     lm_sensors \        # 硬件监测工具（查看温度之类的）
     net-tools traceroute \  # 常用网络工具 
     nodejs npm \        # NodeJS & Node Package Manager
-    python3 python-pip      # Python 相关
+    python3 python-pip \    # Python 相关
+    btrfs-progs \       # btrfs 相关工具
+    wireguard-tools \   # 咱常用的 VPN
+    bind \              # 检查 DNS 网络相关的工具 (dig)
+    bc                  # 命令行计算器
 
 yay -S golangci-lint-bin \  # Go 常用的 linter
     krew-bin  # 可以理解为一个 kubectl 插件的包管理器
@@ -196,4 +200,37 @@ yay -S google-chrome \          # 谷歌浏览器
     visual-studio-code-bin      # 文本编辑器
 ```
 
-基本上是这些了，如果还想到了别的再补充到这儿。
+### 启用 Multilib
+
+启用 Multilib 以安装那些 32 位的软件，例如 Steam。
+
+```conf
+# /etc/pacman.conf
+[multilib]
+Include = /etc/pacman.d/mirrorlist
+```
+
+之后安装 Steam。
+
+```sh
+sudo pacman -S steam
+```
+
+如果需要加速 Steam 游戏，可以安装 [uuplugin-bin](https://aur.archlinux.org/packages/uuplugin-bin)，把电脑伪装成 Steam Deck。
+
+```sh
+yay -S uuplugin-bin
+```
+
+### 音乐
+
+`netease-cloud-music` 这个包已经很久没更新了，现在很多功能用不了，除了这个还有一些基于 GTK4 写的网易云音乐客户端也能用。
+
+```sh
+yay -S netease-cloud-music # 网易云音乐
+yay -S cider-bin           # Apple Music
+```
+
+----
+
+未完待续，如果还想到了别的再补充到这儿。
