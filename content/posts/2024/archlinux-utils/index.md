@@ -216,10 +216,16 @@ Include = /etc/pacman.d/mirrorlist
 sudo pacman -S steam
 ```
 
-如果需要加速 Steam 游戏，可以安装 [uuplugin-bin](https://aur.archlinux.org/packages/uuplugin-bin)，把电脑伪装成 Steam Deck。
+如果需要加速 Steam 游戏，可以安装 [uuplugin-bin](https://aur.archlinux.org/packages/uuplugin-bin)，把电脑伪装成 Steam Deck，酱紫路由器有 UU 加速器插件的话就能给 Steam 加速。
 
 ```sh
 yay -S uuplugin-bin
+```
+
+如果要运行 Windows 游戏，还要安装 Proton。
+
+```sh
+yay -S proton
 ```
 
 ### 音乐
