@@ -3,17 +3,31 @@
 import os, time, subprocess
 
 original_dir = "original"
+whitelist_suffix = [
+    ".jpeg",
+    ".jpg",
+    ".JPG",
+    ".png",
+    ".PNG",
+]
 
 def main():
     directory = os.fsencode(original_dir)
     for file in os.listdir(directory):
         name = os.fsdecode(file)
-        if not name.endswith(".jpg") and not name.endswith(".jpeg"):
+        skip = True
+        for suffix in whitelist_suffix:
+            if name.endswith(suffix):
+                valid = False
+                break
+        if skip:
             continue
 
         input_file = os.path.join(original_dir, name)
         ct = time.strptime(time.ctime(os.path.getmtime(input_file)))
-        output_file = time.strftime("%Y%m%d-%H%M%S.jpg", ct)
+        output_file = time.strftime("%Y%m%d-%H%M%S", ct)
+        meta_file = output_file + ".meta"
+        output_file += ".jpg"
         if os.path.exists(output_file):
             continue
 
@@ -31,6 +45,9 @@ def main():
             "-overwrite_original",
             output_file
         ])
+        f = open(meta_file, "w")
+        f.write('{ "Title": "", "Rating": 3 }')
+        f.close()
 
 if __name__ == "__main__":
     main()
