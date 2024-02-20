@@ -198,7 +198,7 @@
 </span></span><span class="line"><span class="cl">    docker docker-buildx <span class="se">\ </span>   <span class="c1"># 运行容器镜像的工具</span>
 </span></span><span class="line"><span class="cl">    privoxy <span class="se">\ </span>          <span class="c1"># 转发 socks 代理到 HTTP 代理的工具</span>
 </span></span><span class="line"><span class="cl">    proxychains <span class="se">\ </span>      <span class="c1"># 让 C 写的软件走代理的 Hook</span>
-</span></span><span class="line"><span class="cl">    wireguard-tools     <span class="c1"># WireGuard</span>
+</span></span><span class="line"><span class="cl">    wireguard-tools <span class="se">\ </span>   <span class="c1"># WireGuard</span>
 </span></span><span class="line"><span class="cl">    axel aria2 <span class="se">\ </span>       <span class="c1"># 支持多线程下载的工具</span>
 </span></span><span class="line"><span class="cl">    ffmpeg <span class="se">\ </span>           <span class="c1"># 转码视频/图片的工具</span>
 </span></span><span class="line"><span class="cl">    jq go-yq <span class="se">\ </span>         <span class="c1"># 格式化处理 json &amp; yaml 的工具</span>
@@ -210,6 +210,7 @@
 </span></span><span class="line"><span class="cl">    btrfs-progs <span class="se">\ </span>      <span class="c1"># btrfs 相关工具</span>
 </span></span><span class="line"><span class="cl">    wireguard-tools <span class="se">\ </span>  <span class="c1"># 咱常用的 VPN</span>
 </span></span><span class="line"><span class="cl">    <span class="nb">bind</span> <span class="se">\ </span>             <span class="c1"># 检查 DNS 网络相关的工具 (dig)</span>
+</span></span><span class="line"><span class="cl">    ethtool <span class="se">\ </span>          <span class="c1"># 网卡驱动相关工具</span>
 </span></span><span class="line"><span class="cl">    bc                  <span class="c1"># 命令行计算器</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">yay -S golangci-lint-bin <span class="se">\ </span> <span class="c1"># Go 常用的 linter</span>
