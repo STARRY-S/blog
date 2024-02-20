@@ -88,7 +88,7 @@ sudo pacman -S go \     # 写 Go 用的
     docker docker-buildx \    # 运行容器镜像的工具
     privoxy \           # 转发 socks 代理到 HTTP 代理的工具
     proxychains \       # 让 C 写的软件走代理的 Hook
-    wireguard-tools     # WireGuard
+    wireguard-tools \    # WireGuard
     axel aria2 \        # 支持多线程下载的工具
     ffmpeg \            # 转码视频/图片的工具
     jq go-yq \          # 格式化处理 json & yaml 的工具
@@ -100,6 +100,7 @@ sudo pacman -S go \     # 写 Go 用的
     btrfs-progs \       # btrfs 相关工具
     wireguard-tools \   # 咱常用的 VPN
     bind \              # 检查 DNS 网络相关的工具 (dig)
+    ethtool \           # 网卡驱动相关工具
     bc                  # 命令行计算器
 
 yay -S golangci-lint-bin \  # Go 常用的 linter

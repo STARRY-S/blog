@@ -8,7 +8,7 @@ defaultContentLanguage: zh
 
 enableInlineShortcodes: true
 enableRobotsTXT: true
-buildDrafts: true
+buildDrafts: false
 buildFuture: true
 buildExpired: false
 enableEmoji: false
