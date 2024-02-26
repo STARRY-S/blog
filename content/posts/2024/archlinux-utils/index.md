@@ -238,6 +238,14 @@ yay -S netease-cloud-music # 网易云音乐
 yay -S cider-bin           # Apple Music
 ```
 
+### 流程图
+
+Draw.io 这个工具画流程图很好用，而且支持 Linux，可以直接从 Arch Linux CN 安装。
+
+```sh
+sudo pacman -S drawio-desktop-bin
+```
+
 ----
 
 未完待续，如果还想到了别的再补充到这儿。
