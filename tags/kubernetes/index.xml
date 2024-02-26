@@ -12,7 +12,292 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Tue, 30 Jan 2024 18:52:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 26 Feb 2024 19:21:28 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>初探容器网络</title>
+      <link>https://blog.starry-s.moe/posts/2024/container-network-1/</link>
+      <pubDate>Mon, 26 Feb 2024 19:21:28 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2024/container-network-1/</guid>
+      <description>&lt;p&gt;这篇博客稍微折腾一下容器网络相关的东西……&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>这篇博客稍微折腾一下容器网络相关的东西……</p>
+<h2 id="linux-网络命名空间">Linux 网络命名空间</h2>
+<p>在熟悉容器网络之前，首先来看一下 Linux 网络命名空间 (Network Namespace)这个东西。Linux 提供了多个不同种类的 Namespace，可以用 <code>lsns</code> 命令查看。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> lsns
+</span></span><span class="line"><span class="cl"><span class="go">        NS TYPE   NPROCS   PID USER     COMMAND
+</span></span></span><span class="line"><span class="cl"><span class="go">4026531834 time        2  2251 starry-s -zsh
+</span></span></span><span class="line"><span class="cl"><span class="go">4026531835 cgroup      2  2251 starry-s -zsh
+</span></span></span><span class="line"><span class="cl"><span class="go">4026531836 pid         2  2251 starry-s -zsh
+</span></span></span><span class="line"><span class="cl"><span class="go">4026531837 user        2  2251 starry-s -zsh
+</span></span></span><span class="line"><span class="cl"><span class="go">4026531838 uts         2  2251 starry-s -zsh
+</span></span></span><span class="line"><span class="cl"><span class="go">4026531839 ipc         2  2251 starry-s -zsh
+</span></span></span><span class="line"><span class="cl"><span class="go">4026531840 net         2  2251 starry-s -zsh
+</span></span></span><span class="line"><span class="cl"><span class="go">4026531841 mnt         2  2251 starry-s -zsh
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span></code></pre></div><p>参考 <a href="https://man7.org/linux/man-pages/man7/network_namespaces.7.html">network_namespace manpage</a>，Network Namespace 是 Linux 实现网络虚拟化的功能，为同一个系统提供了网络资源隔离功能，不同的 Network Namespace 拥有不同的网卡、ARP、路由表等数据。可以使用 <code>iproute2</code> 工具的 <code>ip</code> 命令对 Linux Network Namespace 执行一系列的操作。</p>
+<blockquote>
+<p>本篇介绍的指令不会系统产生损坏，但依旧建议在虚拟机或一个用于测试的系统上执行以下的 Network Namespace 相关操作，以便于执行重启等暴力操作。</p>
+</blockquote>
+<p>查看设备中已有的 Network Namespace。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ip netns list
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ip netns ls
+</span></span></code></pre></div><p><code>ip netns</code> 命令会列出 <code>/var/run/netns/</code> 目录下存在的 Network Namespace，如果此前没有使用 <code>ip</code> 命令创建过 netns，以上命令不会有输出。首先我们创建两个 Network Namespace。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns ls
+</span></span><span class="line"><span class="cl"><span class="go">ns0
+</span></span></span><span class="line"><span class="cl"><span class="go">ns1
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> ls /var/run/netns/
+</span></span><span class="line"><span class="cl"><span class="go">ns0 ns1
+</span></span></span></code></pre></div><p>每个 Network Namespace 拥有不同的网卡、路由表、ARP 表等信息，可以使用 <code>ip -n [NAMESPACE]</code> 对某个 netns 进行操作，或通过 <code>ip netns exec</code> 在不同的 netns 下执行命令。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 link
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ip link
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 route
+</span></span><span class="line"><span class="cl"><span class="go">Kernel IP routing table
+</span></span></span><span class="line"><span class="cl"><span class="go">Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 arp
+</span></span></code></pre></div><h3 id="veth-pair-连接-network-namespace">veth pair 连接 Network Namespace</h3>
+<p>新建的 netns 只有一个回环接口，没有 ARP 和路由表信息，如果想在不同的 netns 之间通信，需要建立 veth pair（Virtual Cabel）。</p>
+<p>可以使用 <code>ip link add type veth</code> 创建一对 veth pair，注意 veth pair 是成对出现的，可以在创建 veth pair 时指定这对 veth pair 名称。</p>
+<p>首先看一下系统自带的接口信息，默认情况下系统有一个 <code>lo</code> 回环接口和一个 <code>eth0</code> (被重命名为 <code>enp*s*</code> 的接口)，如果运行了 Docker，还会有一个 <code>docker0</code> 接口。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go">2: enp1s0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether ab:cd:ef:89:8f:f5 brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">3: docker0: &lt;NO-CARRIER,BROADCAST,MULTICAST,UP&gt; mtu 1500 qdisc noqueue state DOWN mode DEFAULT group default 
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 02:42:b7:a9:6a:55 brd ff:ff:ff:ff:ff:ff
+</span></span></span></code></pre></div><p>创建一对 veth pair 名为 <code>veth0</code> 和 <code>veth1</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link add veth0 <span class="nb">type</span> veth peer name veth1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link
+</span></span><span class="line"><span class="cl"><span class="go">......
+</span></span></span><span class="line"><span class="cl"><span class="go">4: veth1@veth0: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:7a:4e:96:b1:df brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">5: veth0@veth1: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:5b:51:12:d0:b6 brd ff:ff:ff:ff:ff:ff
+</span></span></span></code></pre></div><p>之后使用 <code>ip link set</code> 将这对 veth pair 分配到不同的 netns 中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> veth0 netns ns0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> veth1 netns ns1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 link
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go">5: veth0@if4: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:5b:51:12:d0:b6 brd ff:ff:ff:ff:ff:ff link-netns ns1
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns1 link
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go">4: veth1@if5: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:7a:4e:96:b1:df brd ff:ff:ff:ff:ff:ff link-netns ns0
+</span></span></span></code></pre></div><p>使用 <code>ip addr add</code> 为 veth pair 接口创建 IP 地址，并使用 <code>ip link set [INTERFACE] up</code> 启动网卡接口。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 addr add 10.0.0.100/24 dev veth0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 addr add 10.0.0.101/24 dev veth1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 link <span class="nb">set</span> veth0 up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 link <span class="nb">set</span> veth1 up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 addr
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go">5: veth0@if4: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:5b:51:12:d0:b6 brd ff:ff:ff:ff:ff:ff link-netns ns1
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.0.0.100/24 scope global veth0
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::5c5b:51ff:fe12:d0b6/64 scope link proto kernel_ll 
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns1 addr
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go">4: veth1@if5: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:7a:4e:96:b1:df brd ff:ff:ff:ff:ff:ff link-netns ns0
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.0.0.101/24 scope global veth1
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::5c7a:4eff:fe96:b1df/64 scope link proto kernel_ll 
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span></code></pre></div><p><code>ip addr add</code> 命令在添加 IP 地址时会自动创建路由表信息。现在两个 netns 之间可通过 veth pair 互相通信。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 route
+</span></span><span class="line"><span class="cl"><span class="go">10.0.0.0/24 dev veth0 proto kernel scope link src 10.0.0.100 
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns1 route
+</span></span><span class="line"><span class="cl"><span class="go">10.0.0.0/24 dev veth1 proto kernel scope link src 10.0.0.101 
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 10.0.0.101
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.0.0.101 (10.0.0.101) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.0.0.101: icmp_seq=1 ttl=64 time=0.051 ms
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">--- 10.0.0.101 ping statistics ---
+</span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 1 received, 0% packet loss, time 0ms
+</span></span></span><span class="line"><span class="cl"><span class="go">rtt min/avg/max/mdev = 0.051/0.051/0.051/0.000 ms
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns1 ping -c <span class="m">1</span> 10.0.0.100
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.0.0.100 (10.0.0.100) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.0.0.100: icmp_seq=1 ttl=64 time=0.040 ms
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">--- 10.0.0.100 ping statistics ---
+</span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 1 received, 0% packet loss, time 0ms
+</span></span></span><span class="line"><span class="cl"><span class="go">rtt min/avg/max/mdev = 0.040/0.040/0.040/0.000 ms
+</span></span></span></code></pre></div><p>到这里，<code>ns0</code> 和 <code>ns1</code> 两个 Network Namespace 之间的拓扑图如下。</p>
+<p><img loading="lazy" src="images/veth.webp" alt="" />
+
+</p>
+<h3 id="使用-bridge-连接多个-network-namespace">使用 bridge 连接多个 Network Namespace</h3>
+<p>veth pair 只能用于两个 netns 之间的通信，如果需要多个 netns 访问到同一个网络中，需要配置桥接网络。</p>
+<p>重启系统，之后重新建立 <code>ns0</code>, <code>ns1</code> 和 <code>ns2</code> 三个 Network Namespace。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns2
+</span></span></code></pre></div><p>使用 <code>ip link add</code> 创建一个桥接接口，并建立三对 veth pair，用于连接 <code>br0</code> 和上述三个 netns。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link add br0 <span class="nb">type</span> bridge
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link add veth0-br <span class="nb">type</span> veth peer name veth0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link add veth1-br <span class="nb">type</span> veth peer name veth1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link add veth2-br <span class="nb">type</span> veth peer name veth2
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ip link
+</span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">4: br0: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether be:60:00:25:c5:37 brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">5: veth0@veth0-br: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:5b:51:12:d0:b6 brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">6: veth0-br@veth0: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 72:01:3d:42:16:8c brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">7: veth1@veth1-br: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:7a:4e:96:b1:df brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">8: veth1-br@veth1: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 1e:13:96:f1:b6:9d brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">9: veth2@veth2-br: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 62:13:73:b6:5d:f9 brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">10: veth2-br@veth2: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether f2:e6:df:92:de:71 brd ff:ff:ff:ff:ff:ff
+</span></span></span></code></pre></div><p>把 <code>veth0</code>, <code>veth1</code>, <code>veth2</code> 分别放到 <code>ns0</code>, <code>ns1</code> 和 <code>ns2</code> 三个 Network Namespace 中，并将他们重命名为 <code>eth0</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev veth0 netns ns0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev veth1 netns ns1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev veth2 netns ns2
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 link <span class="nb">set</span> dev veth0 name eth0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 link <span class="nb">set</span> dev veth1 name eth0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns2 link <span class="nb">set</span> dev veth2 name eth0
+</span></span></code></pre></div><p>并把 <code>veth0-br</code>, <code>veth1-br</code>, <code>veth2-br</code> 分别连接到 <code>br0</code> 桥接网卡中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev veth0-br master br0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev veth1-br master br0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev veth2-br master br0
+</span></span></code></pre></div><p>启用所有的网卡接口（为了能 ping 通每个 netns 的 <code>127.0.0.1</code>，将每个 ns 的 <code>lo</code> 回环接口也启动）。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev br0 up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> veth0-br up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> veth1-br up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> veth2-br up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 link <span class="nb">set</span> eth0 up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 link <span class="nb">set</span> eth0 up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns2 link <span class="nb">set</span> eth0 up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 link <span class="nb">set</span> lo up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 link <span class="nb">set</span> lo up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns2 link <span class="nb">set</span> lo up
+</span></span></code></pre></div><p>为 <code>br0</code> 和 netns 中的 veth 接口 （<code>eth0</code>）添加 IP 地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip addr add 10.1.1.1/24 dev br0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 addr add 10.1.1.10/24 dev eth0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 addr add 10.1.1.11/24 dev eth0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns2 addr add 10.1.1.12/24 dev eth0
+</span></span></code></pre></div><p>查看一下 <code>br0</code> 和 netns 中的 <code>eth0</code> 接口的 IP 地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ip a
+</span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">4: br0: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether be:60:00:25:c5:37 brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.0.0.1/24 scope global br0
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">6: veth0-br@if5: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master br0 state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 72:01:3d:42:16:8c brd ff:ff:ff:ff:ff:ff link-netns ns0
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::7001:3dff:fe42:168c/64 scope link proto kernel_ll 
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">8: veth1-br@if7: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master br0 state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 1e:13:96:f1:b6:9d brd ff:ff:ff:ff:ff:ff link-netns ns1
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::1c13:96ff:fef1:b69d/64 scope link proto kernel_ll 
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">10: veth2-br@if9: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master br0 state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether f2:e6:df:92:de:71 brd ff:ff:ff:ff:ff:ff link-netns ns2
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::f0e6:dfff:fe92:de71/64 scope link proto kernel_ll 
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns0 a
+</span></span><span class="line"><span class="cl"><span class="go">5: eth0@if6: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:5b:51:12:d0:b6 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.1.1.10/24 scope global eth0
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::5c5b:51ff:fe12:d0b6/64 scope link proto kernel_ll 
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns1 a
+</span></span><span class="line"><span class="cl"><span class="go">7: eth0@if8: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:7a:4e:96:b1:df brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.1.1.11/24 scope global eth0
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::5c7a:4eff:fe96:b1df/64 scope link proto kernel_ll 
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns2 a
+</span></span><span class="line"><span class="cl"><span class="go">9: eth0@if10: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 62:13:73:b6:5d:f9 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.1.1.12/24 scope global eth0
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::6013:73ff:feb6:5df9/64 scope link proto kernel_ll 
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span></code></pre></div><p>此时在主机上可以 ping 通三个 netns 的 IP 地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ping -c <span class="m">1</span> 10.1.1.10
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.10 (10.1.1.10) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.10: icmp_seq=1 ttl=64 time=0.130 ms
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> ping -c <span class="m">1</span> 10.1.1.11
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.11 (10.1.1.11) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.11: icmp_seq=1 ttl=64 time=0.117 ms
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> ping -c <span class="m">1</span> 10.1.1.12
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.12 (10.1.1.12) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.12: icmp_seq=1 ttl=64 time=0.119 ms
+</span></span></span></code></pre></div><p>三个 netns 也可以访问主机的 IP 地址 <code>10.1.1.1</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 10.1.1.1
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.1 (10.1.1.1) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.1: icmp_seq=1 ttl=64 time=0.076 ms
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns1 ping -c <span class="m">1</span> 10.1.1.1
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.1 (10.1.1.1) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.1: icmp_seq=1 ttl=64 time=0.071 ms
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns2 ping -c <span class="m">1</span> 10.1.1.1
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.1 (10.1.1.1) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.1: icmp_seq=1 ttl=64 time=0.072 ms
+</span></span></span></code></pre></div><p>默认情况下 Linux 会把 bridge 的二层转发（交换机）功能禁用掉，因此不同的 netns 之间仍无法互相访问。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> -W <span class="m">5</span> 10.1.1.11
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.11 (10.1.1.11) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">--- 10.1.1.11 ping statistics ---
+</span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 0 received, 100% packet loss, time 0ms
+</span></span></span></code></pre></div><p>使用 IP 桌子，激活桥接接口的转发功能。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo iptables -A FORWARD -i br0 -j ACCEPT
+</span></span></code></pre></div><p>此时不同的 netns 之间可以互相 ping 通了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping 10.1.1.12
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.12 (10.1.1.12) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.12: icmp_seq=1 ttl=64 time=0.148 ms
+</span></span></span></code></pre></div><p>到这里，三个 netns 可以通过 <code>10.1.1.0/24</code> 这一个网段互相访问，此时的网络拓扑图变为。</p>
+<p><img loading="lazy" src="images/veth-bridge.webp" alt="" />
+
+</p>
+<p>但是目前 netns 无法访问其他网段的 IP 地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 8.8.8.8
+</span></span><span class="line"><span class="cl"><span class="go">ping: connect: Network is unreachable
+</span></span></span></code></pre></div><p>若需要访问其他网段，则需要将主机的网卡（咱这里为 <code>enp1s0</code>，不同系统可能不一样）也添加到将桥接网卡 <code>br0</code> 中，并为 netns 配置默认网关 <code>10.1.1.1/24</code>，还要再次使用 IP 桌子配置 NAT。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> enp1s0 master br0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo iptables --table nat -A POSTROUTING -s 10.1.1.0/24 -j MASQUERADE
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 route add default via 10.1.1.1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 route add default via 10.1.1.1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns2 route add default via 10.1.1.1
+</span></span></code></pre></div><p>查看一下 netns 中的路由表，这时的默认流量会走 <code>10.1.1.1</code> 网关。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 route
+</span></span><span class="line"><span class="cl"><span class="go">default via 10.1.1.1 dev eth0 
+</span></span></span><span class="line"><span class="cl"><span class="go">10.1.1.0/24 dev eth0 proto kernel scope link src 10.1.1.10
+</span></span></span></code></pre></div><p>到这里不出意外的话，netns 已经具备访问公网的能力了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 8.8.8.8
+</span></span><span class="line"><span class="cl"><span class="go">PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 8.8.8.8: icmp_seq=1 ttl=112 time=66.0 ms
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">--- 8.8.8.8 ping statistics ---
+</span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 1 received, 0% packet loss, time 0ms
+</span></span></span><span class="line"><span class="cl"><span class="go">rtt min/avg/max/mdev = 65.964/65.964/65.964/0.000 ms
+</span></span></span></code></pre></div><h2 id="容器网络">容器网络</h2>
+<blockquote>
+<p>To Be Continued&hellip;</p>
+</blockquote>]]></content:encoded>
+    </item>
+    
     <item>
       <title>K3s &#43; Multus CNI 插件使用 Macvlan</title>
       <link>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</link>
