@@ -19,10 +19,11 @@
       <pubDate>Mon, 26 Feb 2024 19:21:28 +0800</pubDate>
       
       <guid>https://blog.starry-s.moe/posts/2024/container-network-1/</guid>
-      <description>&lt;p&gt;这篇博客稍微折腾一下容器网络相关的东西……&lt;/p&gt;</description>
-      <content:encoded><![CDATA[<p>这篇博客稍微折腾一下容器网络相关的东西……</p>
+      <description>&lt;p&gt;稍微折腾一下容器网络相关的东西……&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>稍微折腾一下容器网络相关的东西……</p>
+<meting-js server="netease" type="song" id="1388992194" theme="#233333"></meting-js>
 <h2 id="linux-网络命名空间">Linux 网络命名空间</h2>
-<p>在熟悉容器网络之前，首先来看一下 Linux 网络命名空间 (Network Namespace)这个东西。Linux 提供了多个不同种类的 Namespace，可以用 <code>lsns</code> 命令查看。</p>
+<p>在熟悉容器网络之前，首先来看一下 Linux 网络命名空间 (Network Namespace) 这个东西。Linux 提供了多个不同种类的 Namespace，可以用 <code>lsns</code> 命令查看。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> lsns
 </span></span><span class="line"><span class="cl"><span class="go">        NS TYPE   NPROCS   PID USER     COMMAND
 </span></span></span><span class="line"><span class="cl"><span class="go">4026531834 time        2  2251 starry-s -zsh
@@ -34,14 +35,16 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">4026531840 net         2  2251 starry-s -zsh
 </span></span></span><span class="line"><span class="cl"><span class="go">4026531841 mnt         2  2251 starry-s -zsh
 </span></span></span><span class="line"><span class="cl"><span class="go">...
-</span></span></span></code></pre></div><p>参考 <a href="https://man7.org/linux/man-pages/man7/network_namespaces.7.html">network_namespace manpage</a>，Network Namespace 是 Linux 实现网络虚拟化的功能，为同一个系统提供了网络资源隔离功能，不同的 Network Namespace 拥有不同的网卡、ARP、路由表等数据。可以使用 <code>iproute2</code> 工具的 <code>ip</code> 命令对 Linux Network Namespace 执行一系列的操作。</p>
+</span></span></span></code></pre></div><p>参考 <a href="https://man7.org/linux/man-pages/man7/network_namespaces.7.html">network_namespace manpage</a>，Network Namespace 是 Linux 实现网络资源隔离的功能，不同的 Network Namespace 拥有不同的网卡、ARP、路由表等数据。可以使用 <code>iproute2</code> 工具的 <code>ip</code> 命令对 Linux Network Namespace 执行一系列的操作。</p>
 <blockquote>
-<p>本篇介绍的指令不会系统产生损坏，但依旧建议在虚拟机或一个用于测试的系统上执行以下的 Network Namespace 相关操作，以便于执行重启等暴力操作。</p>
+<p>本篇介绍的指令不会系统产生损坏，但建议在虚拟机或一个用于测试的系统上执行 Network Namespace 相关操作，以便于执行重启等暴力操作。</p>
 </blockquote>
-<p>查看设备中已有的 Network Namespace。</p>
+<p>开始之前，先安装 <code>net-tools</code> 网络工具包。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo pacman -S net-tools
+</span></span></code></pre></div><p>查看设备中已有的 Network Namespace。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ip netns list
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> ip netns ls
-</span></span></code></pre></div><p><code>ip netns</code> 命令会列出 <code>/var/run/netns/</code> 目录下存在的 Network Namespace，如果此前没有使用 <code>ip</code> 命令创建过 netns，以上命令不会有输出。首先我们创建两个 Network Namespace。</p>
+</span></span></code></pre></div><p><code>ip netns</code> 命令会列出 <code>/var/run/netns/</code> 目录下存在的 Network Namespace，如果之前没有使用 <code>ip</code> 命令创建过 netns，以上命令基本不会有输出（除非有别的工具也修改了这个目录）。首先创建两个 Network Namespace。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns0
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns1
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns ls
@@ -64,7 +67,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 arp
 </span></span></code></pre></div><h3 id="veth-pair-连接-network-namespace">veth pair 连接 Network Namespace</h3>
-<p>新建的 netns 只有一个回环接口，没有 ARP 和路由表信息，如果想在不同的 netns 之间通信，需要建立 veth pair（Virtual Cabel）。</p>
+<p>新建的 netns 只有一个 DOWN 状态的回环接口，没有 ARP 和路由表信息，如果想在不同的 netns 之间通信，需要建立 veth pair（Virtual Cabel），把 netns 连接起来。</p>
 <p>可以使用 <code>ip link add type veth</code> 创建一对 veth pair，注意 veth pair 是成对出现的，可以在创建 veth pair 时指定这对 veth pair 名称。</p>
 <p>首先看一下系统自带的接口信息，默认情况下系统有一个 <code>lo</code> 回环接口和一个 <code>eth0</code> (被重命名为 <code>enp*s*</code> 的接口)，如果运行了 Docker，还会有一个 <code>docker0</code> 接口。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link
@@ -143,7 +146,7 @@
 </p>
 <h3 id="使用-bridge-连接多个-network-namespace">使用 bridge 连接多个 Network Namespace</h3>
 <p>veth pair 只能用于两个 netns 之间的通信，如果需要多个 netns 访问到同一个网络中，需要配置桥接网络。</p>
-<p>重启系统，之后重新建立 <code>ns0</code>, <code>ns1</code> 和 <code>ns2</code> 三个 Network Namespace。</p>
+<p>重启系统（清理掉之前创建的 netns 和 veth pair），之后重新建立 <code>ns0</code>, <code>ns1</code> 和 <code>ns2</code> 三个 Network Namespace。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns0
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns1
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns add ns2
@@ -267,24 +270,32 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping 10.1.1.12
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.12 (10.1.1.12) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.12: icmp_seq=1 ttl=64 time=0.148 ms
-</span></span></span></code></pre></div><p>到这里，三个 netns 可以通过 <code>10.1.1.0/24</code> 这一个网段互相访问，此时的网络拓扑图变为。</p>
+</span></span></span></code></pre></div><p>到这里有关 Linux Network Namespace 的配置就可以完美的告一段落了，咱创建了三个 netns，它们之间可以通过 <code>10.1.1.0/24</code> 这一个网段通过 bridge 桥接网卡和 veth pair 实现互相二层（交换机）访问，此时的网络拓扑图变成了下面这样子。</p>
 <p><img loading="lazy" src="images/veth-bridge.webp" alt="" />
 
 </p>
-<p>但是目前 netns 无法访问其他网段的 IP 地址。</p>
+<hr>
+<p>如果想要更进一步，要实现 netns 内访问其他网段的 IP 地址，还需要再做一些配置，让主机实现网关功能，并配置 NAT，让主机实现 3 层地址转发（路由器）。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 8.8.8.8
 </span></span><span class="line"><span class="cl"><span class="go">ping: connect: Network is unreachable
-</span></span></span></code></pre></div><p>若需要访问其他网段，则需要将主机的网卡（咱这里为 <code>enp1s0</code>，不同系统可能不一样）也添加到将桥接网卡 <code>br0</code> 中，并为 netns 配置默认网关 <code>10.1.1.1/24</code>，还要再次使用 IP 桌子配置 NAT。</p>
+</span></span></span></code></pre></div><p>首先需要将主机的网卡（咱这里为 <code>enp1s0</code>，不同系统可能不一样）也添加到将桥接网卡 <code>br0</code> 中，这里要注意把主机的网卡 <code>enp1s0</code> 添加到桥接网卡 <code>br0</code> 后，要把 <code>enp1s0</code> 网卡上的 IP 地址（咱这里为 <code>192.168.122.101/24</code>）改到桥接网卡 <code>br0</code> 上，不然过一段时间后会网络中断。</p>
+<blockquote>
+<p>这里<strong>不要</strong> ssh 远程操作。</p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> enp1s0 master br0
-</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo iptables --table nat -A POSTROUTING -s 10.1.1.0/24 -j MASQUERADE
-</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 route add default via 10.1.1.1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip addr del 192.168.122.101/24 dev enp1s0
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip addr add 192.168.122.101/24 dev br0
+</span></span></code></pre></div><p>手动为 netns 设定默认网关 <code>10.1.1.1/24</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 route add default via 10.1.1.1
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 route add default via 10.1.1.1
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns2 route add default via 10.1.1.1
+</span></span></code></pre></div><p>接下来使用 IP 桌子配置 IP 地址转发，这里的指令和之前配置 Linux 主机做路由器是一样的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo iptables --table nat -A POSTROUTING -s 10.1.1.0/24 -j MASQUERADE
 </span></span></code></pre></div><p>查看一下 netns 中的路由表，这时的默认流量会走 <code>10.1.1.1</code> 网关。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 route
 </span></span><span class="line"><span class="cl"><span class="go">default via 10.1.1.1 dev eth0 
 </span></span></span><span class="line"><span class="cl"><span class="go">10.1.1.0/24 dev eth0 proto kernel scope link src 10.1.1.10
-</span></span></span></code></pre></div><p>到这里不出意外的话，netns 已经具备访问公网的能力了。</p>
+</span></span></span></code></pre></div><p>到这里如果不出意外的话，三个 netns 已经具备访问公网的能力了。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 8.8.8.8
 </span></span><span class="line"><span class="cl"><span class="go">PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 8.8.8.8: icmp_seq=1 ttl=112 time=66.0 ms
@@ -293,9 +304,93 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 1 received, 0% packet loss, time 0ms
 </span></span></span><span class="line"><span class="cl"><span class="go">rtt min/avg/max/mdev = 65.964/65.964/65.964/0.000 ms
 </span></span></span></code></pre></div><h2 id="容器网络">容器网络</h2>
-<blockquote>
-<p>To Be Continued&hellip;</p>
-</blockquote>]]></content:encoded>
+<p>其实上面咱演示的使用 bridge 桥接网卡 + veth pair 配置多个 Network Namespace 互相访问的这个网络模型基本上就和 Docker 默认的 <code>bridge</code> 网络模型没啥区别了。</p>
+<p>只是 Docker 使用 <a href="https://github.com/opencontainers/runc/tree/main/libcontainer">runc/libcontainer</a> 没有把容器对应的 Network Namespace 文件放到 <code>/var/run/netns/</code> 目录，使用 <code>ip netns</code> 命令发现不到它。不过带胶布，可以把 Docker 容器中应用的 Network Namespace 对应文件软链接到 <code>/var/run/netns/</code> 目录中，再使用 <code>ip</code> 命令执行一些操作。</p>
+<p>首先跑一个 <code>nginx</code> 容器，使用 <code>docker inspect</code> 获取进程的 PID。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> docker run -dit --name nginx -p 80:80 nginx
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> docker inspect --format <span class="s1">&#39;{{.State.Pid}}&#39;</span> nginx
+</span></span><span class="line"><span class="cl"><span class="go">993
+</span></span></span></code></pre></div><p>创建软链接，将进程的 netns 文件链接到 <code>/var/run/netns</code> 目录。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo mkdir -p /var/run/netns
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ln -s /proc/993/ns/net /var/run/netns/ns-993
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ip netns
+</span></span><span class="line"><span class="cl"><span class="go">ns-993
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns-993 ip addr
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 127.0.0.1/8 scope host lo
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">4: eth0@if5: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default 
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span></code></pre></div><p>之后可以像上面那样，再建立一对 veth pair，为容器创建 “第二个网卡” <code>eth1</code>，实现主机和容器之间的访问。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link add eth0-ns-993 <span class="nb">type</span> veth peer name veth-ns-993
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> eth0-ns-993 netns ns-993
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns-993 link <span class="nb">set</span> dev eth0-ns-993 name eth1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns-993 addr
+</span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 127.0.0.1/8 scope host lo
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">4: eth0@if5: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default 
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 02:42:ac:11:00:02 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span></span><span class="line"><span class="cl"><span class="go">    inet 172.17.0.2/16 brd 172.17.255.255 scope global eth0
+</span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
+</span></span></span><span class="line"><span class="cl"><span class="go">9: eth1@if8: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN group default qlen 1000
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 36:57:fa:63:3b:f0 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip addr add 10.1.0.1/24 dev veth-ns-993
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns-993 addr add 10.1.0.2/24 dev eth1
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev veth-ns-993 up
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns-993 link <span class="nb">set</span> dev eth1 up
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> ping 10.1.0.2
+</span></span><span class="line"><span class="cl"><span class="go">PING 10.1.0.2 (10.1.0.2) 56(84) bytes of data.
+</span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.0.2: icmp_seq=1 ttl=64 time=0.040 ms
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> curl 10.1.0.2
+</span></span><span class="line"><span class="cl"><span class="go">&lt;!DOCTYPE html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;head&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span></code></pre></div><p>看吧，就是这么的简单（确信）。</p>
+<p>所以在运行了 Docker 的主机上执行 <code>ip</code> 命令有时能看到一大堆 <code>veth</code> 开头的网卡设备名，到这里我们就能明白这些实际上是 veth pair，一端连接到了 <code>docker0</code> 桥接网卡上，另一端则连接在 Docker 容器的 Network Namespace 中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ip l
+</span></span><span class="line"><span class="cl"><span class="go">3: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP mode DEFAULT group default 
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 02:42:48:1b:aa:e0 brd ff:ff:ff:ff:ff:ff
+</span></span></span><span class="line"><span class="cl"><span class="go">5: veth077b91e@if4: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue master docker0 state UP mode DEFAULT group default 
+</span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 6e:29:0d:fb:d2:43 brd ff:ff:ff:ff:ff:ff link-netnsid 0
+</span></span></span></code></pre></div><h2 id="kubernetes-pod">Kubernetes Pod</h2>
+<p>众所周知，Kubernetes 的一个 Pod 中可以包含多个容器，这些容器共用一个网络命名空间，不同容器运行的程序可以直接通过 <code>127.0.0.1</code> 回环地址互相访问。这里需要补充一个萌新容易混淆的概念就是，Linux 的 Namespace 和 Kubernetes 的 Namespace 不是一个东西，前者是 Linux 内核 Level 的特性，后者是 Kubernetes API Server Level 的功能，虽然都叫 Namespace 但他俩不是一个东西。</p>
+<p>那么 Kubernetes 的 Pod 是如何实现多个容器共用一个 Network Namespace 的呢？之前用过 Kubernetes 的小朋友可能会注意到他们的 Container Runtime 中总能看到名叫 <code>pause</code> 的容器，这又是干什么的呢？</p>
+<p>Docker 的网络模型除了默认的 <code>bridge</code> 之外，还有 <code>host</code>, <code>none</code> 和 <code>container</code> 这几种。其中 <code>host</code> 是指和主机共用同一个网络命名空间，<code>none</code> 是容器的 Network Namespace 不配置任何额外的网络。而 <code>container</code> 网络模型则是用来指定一个已有的容器，和他共用同一个 Network Namespace。</p>
+<p>Kubernetes 的 Pod 需要让多个容器共用同一个 Network Namespace，所以需要先找一个容器创建 Network Namespace，再让其他容器加入到这个预先创建好的 Network Namespace 中。让 Pod 中任何一个容器作为创建 Network Namespace 的容器都不合适，所以就出来了一个 <code>pause</code> 容器，这个容器体积很小，运行之后其进程永远处于休眠（pause）状态，且 pause 容器的进程 PID 为 1，因为除了创建网络命名空间外，<code>pause</code> 容器还创建了 Linux 进程命名空间，用于回收僵尸进程。</p>
+<p>Pause 容器的源码可以在 <a href="https://github.com/kubernetes/kubernetes/blob/master/build/pause/linux/pause.c">这里</a> 找到，可以看到它主要确保自己的 PID 为 1，处理一些 Linux Signal 之外，其余时间一直都在 <code>pause</code>。</p>
+<p>可以用 Docker 的 <code>container</code> 网络模型模拟一个 Kubernetes 的 Pod，因为想不出什么太合适的栗子，所以这个 “Pod” 里运行了一个 nginx server 和一个 registry server。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> docker run -d --name pause -p 8080:80 -p 5000:5000 --ipc<span class="o">=</span>shareable rancher/mirrored-pause:3.6
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> docker run -d --name nginx --net<span class="o">=</span>container:pause --ipc<span class="o">=</span>container:pause --pid<span class="o">=</span>container:pause nginx
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> docker run -d --name registry --net<span class="o">=</span>container:pause --ipc<span class="o">=</span>container:pause --pid<span class="o">=</span>container:pause registry
+</span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> docker ps
+</span></span><span class="line"><span class="cl"><span class="go">CONTAINER ID   IMAGE                        COMMAND                  CREATED         STATUS         PORTS                                                                              NAMES
+</span></span></span><span class="line"><span class="cl"><span class="go">eaace8974956   registry                     &#34;/entrypoint.sh /etc…&#34;   2 minutes ago   Up 2 minutes                                                                                      registry
+</span></span></span><span class="line"><span class="cl"><span class="go">247ed1ca07e3   nginx                        &#34;/docker-entrypoint.…&#34;   2 minutes ago   Up 2 minutes                                                                                      nginx
+</span></span></span><span class="line"><span class="cl"><span class="go">6cdf835a09f0   rancher/mirrored-pause:3.6   &#34;/pause&#34;                 2 minutes ago   Up 2 minutes   0.0.0.0:5000-&gt;5000/tcp, :::5000-&gt;5000/tcp, 0.0.0.0:8080-&gt;80/tcp, :::8080-&gt;80/tcp   pause
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> curl 127.0.0.1:8080
+</span></span><span class="line"><span class="cl"><span class="go">&lt;!DOCTYPE html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;html&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;head&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> docker login 127.0.0.1:5000
+</span></span><span class="line"><span class="cl"><span class="go">Username: admin
+</span></span></span><span class="line"><span class="cl"><span class="go">Password: 
+</span></span></span><span class="line"><span class="cl"><span class="go">Login Succeeded
+</span></span></span></code></pre></div>]]></content:encoded>
     </item>
     
     <item>
