@@ -28,6 +28,7 @@ pacstrap -K /mnt base linux linux-firmware \                # 坠基础的核心
     zsh zsh-syhtax-highlighting zsh-autosuggestions \       # 咱使用 zsh
     vim neovim git openbsd-netcat \                         # 文本编辑器 & Git 以及ssh 使用 proxy 的工具  
     sudo man-db htop wget \                                 # sudo、man、更好用的 top、wget
+    neofetch \                                              # 装 X 用的（确信）
     mkinitcpio-firmware                                     # 消除 mkinitcpio 的大量 WARNING（没什么用，但强迫症必备）
 ```
 
@@ -191,7 +192,8 @@ sudo pacman -S vlc \    # 视频播放器
     noto-sans noto-fonts-cjk noto-fonts-emoji ttf-dejavu \    # 一些字体
     ibus ibus-rime \    # ibus + RIME 中文输入法
     firefox \           # 火狐浏览器
-    emacs               # 文本编辑器
+    emacs \             # 文本编辑器
+    virt-manager        # libvirt 的图形客户端
 ```
 
 在 AUR 中安装的软件：
