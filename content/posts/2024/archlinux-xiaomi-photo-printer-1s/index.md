@@ -18,7 +18,7 @@ categories:
 
 ----
 
-> 参烤连接：[CUPS - ArchWiki](https://wiki.archlinux.org/title/CUPS#Permissions)。
+> 参烤链接：[CUPS - ArchWiki](https://wiki.archlinux.org/title/CUPS#Permissions)。
 
 安装 `CUPS` 和 `ghostscript`，启用 `cups.service`。
 
