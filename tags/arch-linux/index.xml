@@ -12,7 +12,36 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Tue, 30 Jan 2024 18:44:07 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 03 Mar 2024 22:49:16 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Arch Linux 连接小米照片打印机 1S</title>
+      <link>https://blog.starry-s.moe/posts/2024/archlinux-xiaomi-photo-printer-1s/</link>
+      <pubDate>Sun, 03 Mar 2024 22:49:16 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2024/archlinux-xiaomi-photo-printer-1s/</guid>
+      <description>&lt;p&gt;奇怪的反图方式增加了……&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>奇怪的反图方式增加了……</p>
+<meting-js server="netease" type="song" id="41652392" theme="#233333"></meting-js>
+<hr>
+<blockquote>
+<p>参烤连接：<a href="https://wiki.archlinux.org/title/CUPS#Permissions">CUPS - ArchWiki</a>。</p>
+</blockquote>
+<p>安装 <code>CUPS</code> 和 <code>ghostscript</code>，启用 <code>cups.service</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo pacman -S cups
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo systemctl <span class="nb">enable</span> --now cups.service
+</span></span></code></pre></div><p>小米的这个照片打印机支持免驱 <a href="https://en.wikipedia.org/wiki/AirPrint">AirPrint</a>，所以直接使用 <code>lpadmin</code> 添加打印机就行，不用安装驱动（也根本找不到对应的 Linux 驱动），只需要先在路由器中查询打印机的 IP 地址。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo lpadmin -p <span class="s2">&#34;Xiaomi-Photo-AirPrint&#34;</span> -E -v <span class="s2">&#34;ipp://192.168.x.x/ipp/print&#34;</span> -m everywhere
+</span></span></code></pre></div><p>之后打印照片时就可以选择已添加的打印机设备了。</p>
+<p><img loading="lazy" src="images/1.png" alt="" />
+
+</p>
+<p>初次打印时需要改一下打印的纸张大小为 4x6 英寸，不然照片尺寸会有问题，然后图片的质量可以改成最高。</p>
+<p>照片打印出来会比屏幕上看到的更有内种感觉，打印的照片会有一些偏色，但个人认为这种色调害挺好看的。</p>
+<p><img loading="lazy" src="images/2.jpg" alt="" />
+
+</p>]]></content:encoded>
+    </item>
+    
     <item>
       <title>一些 Arch Linux 的常用组件整理</title>
       <link>https://blog.starry-s.moe/posts/2024/archlinux-utils/</link>
