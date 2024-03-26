@@ -18,7 +18,7 @@ def main():
         skip = True
         for suffix in whitelist_suffix:
             if name.endswith(suffix):
-                valid = False
+                skip = False
                 break
         if skip:
             continue
