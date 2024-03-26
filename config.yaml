@@ -105,8 +105,8 @@ languages:
         imageHeight: 160
         imageTitle:
         buttons:
-          - name: Homepage
-            url: https://starry-s.moe
+          - name: 简体中文
+            url: /zh/
           - name: Gallery
             url: /en/gallery/
           - name: About
