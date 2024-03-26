@@ -629,6 +629,18 @@
                 href="https://blog.starry-s.moe/archives/"
                 />
   </url><url>
+    <loc>https://blog.starry-s.moe/gallery/</loc>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.starry-s.moe/en/gallery/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://blog.starry-s.moe/gallery/"
+                />
+  </url><url>
     <loc>https://blog.starry-s.moe/search/</loc>
     <xhtml:link
                 rel="alternate"
@@ -651,18 +663,6 @@
                 rel="alternate"
                 hreflang="zh"
                 href="https://blog.starry-s.moe/series/"
-                />
-  </url><url>
-    <loc>https://blog.starry-s.moe/gallery/</loc>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://blog.starry-s.moe/en/gallery/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://blog.starry-s.moe/gallery/"
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/friends/</loc>

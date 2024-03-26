@@ -7431,17 +7431,18 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
     </item>
     
     
-    
     <item>
-      <title>相册</title>
+      <title>Gallery</title>
       <link>https://blog.starry-s.moe/gallery/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://blog.starry-s.moe/gallery/</guid>
-      <description>咱在很久很久以前就开始入坑摄影了。今年年初入手了一台入门级 APS-C 画幅的佳能 R7 和 Sigma 18-35 F1.8 &amp;amp; 50-100 F1.8 镜头用来练习摄影。 咱会把一些旅拍和在漫展拍的高分辨率图</description>
-      <content:encoded><![CDATA[<p>咱在很久很久以前就开始入坑摄影了。今年年初入手了一台入门级 APS-C 画幅的佳能 R7 和 Sigma 18-35 F1.8 &amp; 50-100 F1.8 镜头用来练习摄影。</p>
-<p>咱会把一些旅拍和在漫展拍的高分辨率图片整理在这里，加载可能需要些时间。</p>
-<p>算不上什么精美作品，咱只是个业余的野生摄影</p>
+      <description>都是些随便拍着玩的照片，没啥好看的&amp;hellip;&amp;hellip; 📷️：佳能 R7 镜头：Sigma 18-35 f1.8, Sigma 50-100 f1.8 Powered by hugo-shortcode-gallery.</description>
+      <content:encoded><![CDATA[<p>都是些随便拍着玩的照片，没啥好看的&hellip;&hellip;</p>
+<ul>
+<li>📷️：佳能 R7</li>
+<li>镜头：<code>Sigma 18-35 f1.8</code>, <code>Sigma 50-100 f1.8</code></li>
+</ul>
 <hr>
 
 
@@ -17905,6 +17906,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </blockquote>
 ]]></content:encoded>
     </item>
+    
     
     <item>
       <title>友情链接</title>
