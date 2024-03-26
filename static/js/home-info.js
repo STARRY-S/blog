@@ -16,10 +16,12 @@ function randomHomeInfo() {
         "如果你和大多数人一样的话，那么和大多数人一样，你不知道自己和大多数人一样",
         "努力不一定被别人看到，但休息一定会",
         "后天的努力最重要，今天和明天先睡大觉",
+        "中国有句古话：识食物者为俊杰",
         "<code>cat /dev/random > /dev/null</code>",
     ];
     let en = [
         "Morning.",
+        "Don't try to be a hero.",
         "<code>cat /dev/random > /dev/null</code>",
     ]
 
