@@ -23,13 +23,12 @@ categories:
 Arch Wiki 的 Installation Guide 在使用 `pacstrap` 装系统时只写了最基础的软件包 `base`, `linux` 和 `linux-firmware`，可以在这一步补充亿些常用的软件。
 
 ```sh
-pacstrap -K /mnt base linux linux-firmware \                # 坠基础的核心组件
-    base-devel gcc grub amd-ucode archlinuxcn-keyring \     # 装 AUR 软件需要用到, ArchLinux CN 以及启动引导使用的 GRUB
-    zsh zsh-syhtax-highlighting zsh-autosuggestions \       # 咱使用 zsh
-    vim neovim git openbsd-netcat \                         # 文本编辑器 & Git 以及ssh 使用 proxy 的工具  
-    sudo man-db htop wget \                                 # sudo、man、更好用的 top、wget
-    neofetch \                                              # 装 X 用的（确信）
-    mkinitcpio-firmware                                     # 消除 mkinitcpio 的大量 WARNING（没什么用，但强迫症必备）
+pacstrap -K /mnt base linux linux-firmware \
+    base-devel gcc grub amd-ucode  \
+    zsh zsh-syntax-highlighting zsh-autosuggestions \
+    vim neovim git openbsd-netcat \
+    sudo man-db htop wget \
+    neofetch
 ```
 
 进 chroot 后编辑 `/etc/pacman.conf`，添加以下配置，启用 Arch Linux CN。
@@ -44,7 +43,7 @@ Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
 之后安装 `yay`:
 
 ```sh
-sudo pacman -Syy && sudo pacman -S yay
+sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring yay
 ```
 
 如果电脑上安装了其他系统的话，需要额外安装 `os-prober`，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。
@@ -84,28 +83,29 @@ sudo systemctl enable systemd-networkd
 如果只作为服务器 / 不包含图形的虚拟机使用的话，装这些咱常用软件，这部分因人而异，仅供参考。
 
 ```sh
-sudo pacman -S go \     # 写 Go 用的
-    kubectl helm \      # k8s 相关的命令行工具
-    docker docker-buildx \    # 运行容器镜像的工具
-    privoxy \           # 转发 socks 代理到 HTTP 代理的工具
-    proxychains \       # 让 C 写的软件走代理的 Hook
-    wireguard-tools \    # WireGuard
-    axel aria2 \        # 支持多线程下载的工具
-    ffmpeg \            # 转码视频/图片的工具
-    jq go-yq \          # 格式化处理 json & yaml 的工具
-    jdk8-openjdk \      # JDK & JRE（这里写的是 Java 8，可以换成其他的 Java LTS 版本）
-    lm_sensors \        # 硬件监测工具（查看温度之类的）
-    net-tools traceroute \  # 常用网络工具 
-    nodejs npm \        # NodeJS & Node Package Manager
-    python3 python-pip \    # Python 相关
-    btrfs-progs \       # btrfs 相关工具
-    wireguard-tools \   # 咱常用的 VPN
-    bind \              # 检查 DNS 网络相关的工具 (dig)
-    ethtool \           # 网卡驱动相关工具
-    bc                  # 命令行计算器
+sudo pacman -S go \
+    kubectl helm \
+    docker docker-buildx \
+    privoxy \
+    proxychains \
+    wireguard-tools \
+    axel aria2 \
+    ffmpeg \
+    jq go-yq \
+    jdk8-openjdk \
+    lm_sensors \
+    net-tools traceroute \
+    nodejs npm \
+    python3 python-pip \
+    btrfs-progs \
+    bind \
+    ethtool \
+    bc \
+    age
 
-yay -S golangci-lint-bin \  # Go 常用的 linter
-    krew-bin  # 可以理解为一个 kubectl 插件的包管理器
+# golangci-lint
+yay -S golangci-lint-bin \
+    krew-bin
 
 # 装完 Docker 后把普通用户添加到 docker group 中
 sudo usermod -aG docker $USER
@@ -167,9 +167,9 @@ sudo systemctl enable shutdown-k3s.service
 
 ```sh
 # AMD
-pacman -S amdgpu
+sudo pacman -S xf86-video-amdgpu
 # NVIDIA
-pacman -S nvidia
+sudo pacman -S nvidia
 ```
 
 X11/Wayland 这些相关组件会随着桌面环境一起安装，所以只需要装桌面环境即可，<span class="spoiler" >这里就不需要你额外装 X 了</span>。
@@ -179,6 +179,9 @@ X11/Wayland 这些相关组件会随着桌面环境一起安装，所以只需�
 sudo pacman -S gnome
 # 通常不直接装 gnome-extra，而是从里面选咱需要的
 sudo pacman -S gnome-tweaks
+# GNOME 系统使用的 NetworkManager 需要额外安装并手动启用，否则无法联网
+sudo pacman -S networkmanager
+sudo systemctl enable --now NetworkManager
 ```
 
 ## 常用的 GUI 软件
@@ -186,21 +189,20 @@ sudo pacman -S gnome-tweaks
 装好图形界面并顺利跑起来之后，就可以装常用的桌面软件了，下面这些是部分可能用到的软件，这些因人而异，仅供参考。
 
 ```sh
-sudo pacman -S vlc \    # 视频播放器
-    virt-manager \      # 管理 qemu 虚拟机
-    ttf-monaco \        # 一个很好看的，在 macOS 上有预装的等宽字体
-    noto-sans noto-fonts-cjk noto-fonts-emoji ttf-dejavu \    # 一些字体
-    ibus ibus-rime \    # ibus + RIME 中文输入法
-    firefox \           # 火狐浏览器
-    emacs \             # 文本编辑器
-    virt-manager        # libvirt 的图形客户端
+sudo pacman -S vlc \
+    virt-manager \
+    ttf-monaco \
+    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-dejavu \
+    ibus ibus-rime \
+    firefox \
+    emacs
 ```
 
 在 AUR 中安装的软件：
 
 ```sh
-yay -S google-chrome \          # 谷歌浏览器
-    visual-studio-code-bin      # 文本编辑器
+yay -S google-chrome \
+    visual-studio-code-bin
 ```
 
 ### 启用 Multilib
