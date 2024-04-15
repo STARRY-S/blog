@@ -572,20 +572,19 @@
 <hr>
 <h2 id="装系统">装系统</h2>
 <p>Arch Wiki 的 Installation Guide 在使用 <code>pacstrap</code> 装系统时只写了最基础的软件包 <code>base</code>, <code>linux</code> 和 <code>linux-firmware</code>，可以在这一步补充亿些常用的软件。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacstrap -K /mnt base linux linux-firmware <span class="se">\ </span>               <span class="c1"># 坠基础的核心组件</span>
-</span></span><span class="line"><span class="cl">    base-devel gcc grub amd-ucode archlinuxcn-keyring <span class="se">\ </span>    <span class="c1"># 装 AUR 软件需要用到, ArchLinux CN 以及启动引导使用的 GRUB</span>
-</span></span><span class="line"><span class="cl">    zsh zsh-syhtax-highlighting zsh-autosuggestions <span class="se">\ </span>      <span class="c1"># 咱使用 zsh</span>
-</span></span><span class="line"><span class="cl">    vim neovim git openbsd-netcat <span class="se">\ </span>                        <span class="c1"># 文本编辑器 &amp; Git 以及ssh 使用 proxy 的工具  </span>
-</span></span><span class="line"><span class="cl">    sudo man-db htop wget <span class="se">\ </span>                                <span class="c1"># sudo、man、更好用的 top、wget</span>
-</span></span><span class="line"><span class="cl">    neofetch <span class="se">\ </span>                                             <span class="c1"># 装 X 用的（确信）</span>
-</span></span><span class="line"><span class="cl">    mkinitcpio-firmware                                     <span class="c1"># 消除 mkinitcpio 的大量 WARNING（没什么用，但强迫症必备）</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacstrap -K /mnt base linux linux-firmware <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    base-devel gcc grub amd-ucode  <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    zsh zsh-syntax-highlighting zsh-autosuggestions <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    vim neovim git openbsd-netcat <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    sudo man-db htop wget <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    neofetch
 </span></span></code></pre></div><p>进 chroot 后编辑 <code>/etc/pacman.conf</code>，添加以下配置，启用 Arch Linux CN。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
 </span></span><span class="line"><span class="cl"># 这里使用北京外国语大学镜像站
 </span></span><span class="line"><span class="cl">[archlinuxcn]
 </span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
 </span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S yay
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S archlinuxcn-keyring yay
 </span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S os-prober
 </span></span></code></pre></div><p>如果是为 QEMU KVM 虚拟机装系统的话，在执行 <code>grub-install</code> 配置 UEFI 启动引导时记得加一个 <code>--removable</code> 参数。</p>
@@ -603,28 +602,29 @@
 </span></span></code></pre></div><p>基本上到这里就可以愉快的 <code>reboot</code> 了，一个精简的系统所需要的软件就基本装好了。</p>
 <h2 id="常用命令行工具">常用命令行工具</h2>
 <p>如果只作为服务器 / 不包含图形的虚拟机使用的话，装这些咱常用软件，这部分因人而异，仅供参考。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S go <span class="se">\ </span>    <span class="c1"># 写 Go 用的</span>
-</span></span><span class="line"><span class="cl">    kubectl helm <span class="se">\ </span>     <span class="c1"># k8s 相关的命令行工具</span>
-</span></span><span class="line"><span class="cl">    docker docker-buildx <span class="se">\ </span>   <span class="c1"># 运行容器镜像的工具</span>
-</span></span><span class="line"><span class="cl">    privoxy <span class="se">\ </span>          <span class="c1"># 转发 socks 代理到 HTTP 代理的工具</span>
-</span></span><span class="line"><span class="cl">    proxychains <span class="se">\ </span>      <span class="c1"># 让 C 写的软件走代理的 Hook</span>
-</span></span><span class="line"><span class="cl">    wireguard-tools <span class="se">\ </span>   <span class="c1"># WireGuard</span>
-</span></span><span class="line"><span class="cl">    axel aria2 <span class="se">\ </span>       <span class="c1"># 支持多线程下载的工具</span>
-</span></span><span class="line"><span class="cl">    ffmpeg <span class="se">\ </span>           <span class="c1"># 转码视频/图片的工具</span>
-</span></span><span class="line"><span class="cl">    jq go-yq <span class="se">\ </span>         <span class="c1"># 格式化处理 json &amp; yaml 的工具</span>
-</span></span><span class="line"><span class="cl">    jdk8-openjdk <span class="se">\ </span>     <span class="c1"># JDK &amp; JRE（这里写的是 Java 8，可以换成其他的 Java LTS 版本）</span>
-</span></span><span class="line"><span class="cl">    lm_sensors <span class="se">\ </span>       <span class="c1"># 硬件监测工具（查看温度之类的）</span>
-</span></span><span class="line"><span class="cl">    net-tools traceroute <span class="se">\ </span> <span class="c1"># 常用网络工具 </span>
-</span></span><span class="line"><span class="cl">    nodejs npm <span class="se">\ </span>       <span class="c1"># NodeJS &amp; Node Package Manager</span>
-</span></span><span class="line"><span class="cl">    python3 python-pip <span class="se">\ </span>   <span class="c1"># Python 相关</span>
-</span></span><span class="line"><span class="cl">    btrfs-progs <span class="se">\ </span>      <span class="c1"># btrfs 相关工具</span>
-</span></span><span class="line"><span class="cl">    wireguard-tools <span class="se">\ </span>  <span class="c1"># 咱常用的 VPN</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">bind</span> <span class="se">\ </span>             <span class="c1"># 检查 DNS 网络相关的工具 (dig)</span>
-</span></span><span class="line"><span class="cl">    ethtool <span class="se">\ </span>          <span class="c1"># 网卡驱动相关工具</span>
-</span></span><span class="line"><span class="cl">    bc                  <span class="c1"># 命令行计算器</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S go <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    kubectl helm <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    docker docker-buildx <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    privoxy <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    proxychains <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    wireguard-tools <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    axel aria2 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    ffmpeg <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    jq go-yq <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    jdk8-openjdk <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    lm_sensors <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    net-tools traceroute <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    nodejs npm <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    python3 python-pip <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    btrfs-progs <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    <span class="nb">bind</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    ethtool <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    bc <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    age
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">yay -S golangci-lint-bin <span class="se">\ </span> <span class="c1"># Go 常用的 linter</span>
-</span></span><span class="line"><span class="cl">    krew-bin  <span class="c1"># 可以理解为一个 kubectl 插件的包管理器</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># golangci-lint</span>
+</span></span><span class="line"><span class="cl">yay -S golangci-lint-bin <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    krew-bin
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 装完 Docker 后把普通用户添加到 docker group 中</span>
 </span></span><span class="line"><span class="cl">sudo usermod -aG docker <span class="nv">$USER</span>
@@ -661,27 +661,29 @@
 <h2 id="图形界面">图形界面</h2>
 <p>显卡驱动：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># AMD</span>
-</span></span><span class="line"><span class="cl">pacman -S amdgpu
+</span></span><span class="line"><span class="cl">sudo pacman -S xf86-video-amdgpu
 </span></span><span class="line"><span class="cl"><span class="c1"># NVIDIA</span>
-</span></span><span class="line"><span class="cl">pacman -S nvidia
+</span></span><span class="line"><span class="cl">sudo pacman -S nvidia
 </span></span></code></pre></div><p>X11/Wayland 这些相关组件会随着桌面环境一起安装，所以只需要装桌面环境即可，<span class="spoiler" >这里就不需要你额外装 X 了</span>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 咱用 GNOME</span>
 </span></span><span class="line"><span class="cl">sudo pacman -S gnome
 </span></span><span class="line"><span class="cl"><span class="c1"># 通常不直接装 gnome-extra，而是从里面选咱需要的</span>
 </span></span><span class="line"><span class="cl">sudo pacman -S gnome-tweaks
+</span></span><span class="line"><span class="cl"><span class="c1"># GNOME 系统使用的 NetworkManager 需要额外安装并手动启用，否则无法联网</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S networkmanager
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now NetworkManager
 </span></span></code></pre></div><h2 id="常用的-gui-软件">常用的 GUI 软件</h2>
 <p>装好图形界面并顺利跑起来之后，就可以装常用的桌面软件了，下面这些是部分可能用到的软件，这些因人而异，仅供参考。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S vlc <span class="se">\ </span>   <span class="c1"># 视频播放器</span>
-</span></span><span class="line"><span class="cl">    virt-manager <span class="se">\ </span>     <span class="c1"># 管理 qemu 虚拟机</span>
-</span></span><span class="line"><span class="cl">    ttf-monaco <span class="se">\ </span>       <span class="c1"># 一个很好看的，在 macOS 上有预装的等宽字体</span>
-</span></span><span class="line"><span class="cl">    noto-sans noto-fonts-cjk noto-fonts-emoji ttf-dejavu <span class="se">\ </span>   <span class="c1"># 一些字体</span>
-</span></span><span class="line"><span class="cl">    ibus ibus-rime <span class="se">\ </span>   <span class="c1"># ibus + RIME 中文输入法</span>
-</span></span><span class="line"><span class="cl">    firefox <span class="se">\ </span>          <span class="c1"># 火狐浏览器</span>
-</span></span><span class="line"><span class="cl">    emacs <span class="se">\ </span>            <span class="c1"># 文本编辑器</span>
-</span></span><span class="line"><span class="cl">    virt-manager        <span class="c1"># libvirt 的图形客户端</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S vlc <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    virt-manager <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    ttf-monaco <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-dejavu <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    ibus ibus-rime <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    firefox <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    emacs
 </span></span></code></pre></div><p>在 AUR 中安装的软件：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S google-chrome <span class="se">\ </span>         <span class="c1"># 谷歌浏览器</span>
-</span></span><span class="line"><span class="cl">    visual-studio-code-bin      <span class="c1"># 文本编辑器</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S google-chrome <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    visual-studio-code-bin
 </span></span></code></pre></div><h3 id="启用-multilib">启用 Multilib</h3>
 <p>启用 Multilib 以安装那些 32 位的软件，例如 Steam。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
