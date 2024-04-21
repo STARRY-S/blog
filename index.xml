@@ -580,9 +580,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    neofetch
 </span></span></code></pre></div><p>进 chroot 后编辑 <code>/etc/pacman.conf</code>，添加以下配置，启用 Arch Linux CN。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
-</span></span><span class="line"><span class="cl"># 这里使用北京外国语大学镜像站
 </span></span><span class="line"><span class="cl">[archlinuxcn]
-</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
+</span></span><span class="line"><span class="cl"># Server = https://repo.archlinuxcn.org/$arch
+</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch # 北外镜像站
 </span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S archlinuxcn-keyring yay
 </span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
@@ -3516,7 +3516,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p><img loading="lazy" src="images/nanopi_7.jpg" alt="" />
 <p style="margin-bottom: -0.8em;" class="image-title">主板正面</p>
 </p>
-<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
+<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
 <h2 id="arch-linux-arm">Arch Linux ARM</h2>
 <p>在Arch Linux ARM (简称alarm) 官网上没找到对R4S的官方的支持，简单搜了一下armbian有对R4S的官方支持。</p>
 <p>因为用惯了<strong>滚动更新</strong>发行版，所以不想用*bian系统，而*WRT系统的软件包相对其他发行版而言更少一些，系统也相当于被魔改过，所以除了做漏油器之外几乎干不了别的，所以这是我想安装Arch Linux的理由。</p>
@@ -3689,7 +3689,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </p>
 <h2 id="参烤链接">参烤链接</h2>
 <ul>
-<li><a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">NanoPi R4S</a></li>
+<li><a href="https://www.friendlyelec.com/index.php?route=product/product&product_id=284">NanoPi R4S</a></li>
 <li><a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">NanoPi R4S - FriendlyELEC WiKi</a></li>
 <li><a href="https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d">Installing Arch Linux AArch64 on the NanoPi R2S</a></li>
 <li><a href="https://archlinuxarm.org/platforms/armv8/generic">Generic AArch64 Installation | Arch Linux ARM</a></li>
@@ -4939,7 +4939,7 @@ Fate的HF线细节很多，音乐也很好听，剧情的节奏把握得也很�
 <p><img loading="lazy" src="images/create_window.png" alt="Window" />
 <p style="margin-bottom: -0.8em;" class="image-title">创建窗口</p>
 </p>
-<p>如果你遇到什么问题，可以<a href="learn-code-1/main.c">对照一下代码</a>是否有问题。</p>
+<p>如果你遇到什么问题，可以<a href="/posts/2021/learn_opengl/learn-code-1/main.c">对照一下代码</a>是否有问题。</p>
 <hr>
 <h2 id="三角形">三角形</h2>
 <p>画三角形的过程很简单，首先要确定三角形的三个顶点坐标，然后告诉GPU这三个点坐标就可以了 :)</p>
@@ -5122,22 +5122,22 @@ Fate的HF线细节很多，音乐也很好听，剧情的节奏把握得也很�
 <p>如果你遇到了问题，或者哪里不太明白，可以看咱写好的代码：</p>
 <ul>
 <li>
-<p><a href="learn-code-2/main.c">main.c</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/main.c">main.c</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/shader.h">shader.h</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/shader.h">shader.h</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/shader.c">shader.c</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/shader.c">shader.c</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/vertex.glsl">vertex.glsl</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/vertex.glsl">vertex.glsl</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/fragment.glsl">fragment.glsl</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/fragment.glsl">fragment.glsl</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/CMakeLists.txt">CMakeLists.txt</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/CMakeLists.txt">CMakeLists.txt</a></p>
 </li>
 </ul>
 <hr>]]></content:encoded>
@@ -5383,7 +5383,7 @@ Fate的HF线细节很多，音乐也很好听，剧情的节奏把握得也很�
 </span></span></code></pre></div><p>按回车后开始刷机，过几秒钟后路由器会自动重启，第三方Boot Loader刷写完成。</p>
 <p>路由器断电，长按reset键的同时通电开机，灯闪烁后打开浏览器输入网址<code>http://192.168.1.1</code>便可访问breed后台。</p>
 <h2 id="done">Done</h2>
-<p>第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照<a href="/posts/2019/xiaomi_r3g_openwrt/#%E4%BD%BF%E7%94%A8Breed%E7%9A%84%E5%88%B7%E6%9C%BA%E6%96%B9%E6%B3%95">小米路由器3G折腾之刷OpenWrt记录</a>这篇文章刷OpenWrt。</p>
+<p>第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照<a href="/posts/2019/xiaomi_r3g_openwrt/#使用Breed的刷机方法">小米路由器3G折腾之刷OpenWrt记录</a>这篇文章刷OpenWrt。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">BusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash)
 </span></span><span class="line"><span class="cl">Enter &#39;help&#39; for a list of built-in commands.
 </span></span><span class="line"><span class="cl">
@@ -6529,7 +6529,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <p>修改<code>/etc/gdm/custom.conf</code>, 移除<code>WaylandEnable=false</code>一行前面的<code>#</code>禁用Wayland而使用X。</p>
 <h3 id="修改配置文件">修改配置文件</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
-</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
+</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="/posts/2021/archlinux-pavilion-gaming-laptop/#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
 <p>之后根据需求来修改开机自动选择显卡：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">startup_mode=auto
 </span></span><span class="line"><span class="cl">startup_auto_battery_mode=intel
@@ -6966,7 +6966,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </ul>
 <h2 id="刷入bootloader推荐可选">刷入Bootloader（推荐/可选）</h2>
 <blockquote>
-<p>该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考<a href="https://www.right.com.cn/forum/forum.php?mod=viewthread&amp;tid=267455">这篇帖子</a>, 不过为了防止变砖, 还是推荐刷Breed。</p>
+<p>该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考<a href="https://www.right.com.cn/forum/forum.php?mod=viewthread&tid=267455">这篇帖子</a>, 不过为了防止变砖, 还是推荐刷Breed。</p>
 </blockquote>
 <p>Breed原作者为hackpascal, <a href="https://breed.hackpascal.net/">此处为下载地址</a>, 文件名为<code>breed-mt7621-xiaomi-r3g.bin</code></p>
 <p>第一种方法是ssh到路由器后通过<code>wget</code>下载breed文件再刷入（需要确保路由器联网）, 下载地址为https所以需要加上<code>--no-check-certificate</code>参数。</p>
@@ -7167,7 +7167,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </ol>
 <h2 id="相关内容">相关内容：</h2>
 <ul>
-<li><a href="https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&amp;variant=zh-cn">教程/成功地启动游戏-Minecraft Wiki</a></li>
+<li><a href="https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&variant=zh-cn">教程/成功地启动游戏-Minecraft Wiki</a></li>
 <li><a href="https://minecraft.net/zh-hans/">官方网站|Minecraft</a></li>
 <li><a href="https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/">树莓派之我的世界服务器</a></li>
 </ul>
@@ -7514,6 +7514,676 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <div id="gallery-665288c8761d48eb3366c37954243edc-0-wrapper" class="gallery-wrapper">
 <div id="gallery-665288c8761d48eb3366c37954243edc-0" class="justified-gallery">
 	
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114123.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>60mm f/1.8 1/80sec  ISO 1600"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/APHgCzAAEk8ACtLUPD19pVhDdXoWHz/uRHO4j16Y/WjSjFZXltezxlxHuk2MOGKj5fwz/Kk13W7zXL3zrm4eZV4j3gLtHpgdKjmblZbFWSWpmUUuP5UuBnGO9Xckm&#43;0yZQZ6DaM88Htg1ZurOGMBkDDPqaofxr9RWte/6taylo1Y0WtzMZAPWmFuvHU5qV6harRLP//Z"
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114123_hucffc8a8ec28b3623b0de419c9ea0629d_325874_12639797f85af9c072e4e9bfe39a945d.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114113.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>100mm f/1.8 1/80sec  ISO 800"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/AOFNrJHIsRX52AwB3zTSpU4Ix9aokzrtH21eeh3c9celRhA&#43;N96pHuWP9K1WI7idHsayxOYvMAymcZHrTMgsV7ipm05Lfw8t5HNMpkbl942dTwBjOay0CtKM3mentSp4qM7&#43;RUqDjYmktrWO4jHkkx7VLKW5OQCearNbwngJj6Grlx/r0/3E/kKrHrVwSsRJ6k0cVvHZMBDly/LMc8Y6YquUQNnYv0xVkf8AHr/wP&#43;lQHrVRS1FJn//Z"
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114113_hu5345281ccc1a13a7b4fbe84499b9fcec_481198_5e5c122ae1fff11eb73cde19e8373447.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114112.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>50mm f/2.8 1/20sec  ISO 1250"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/AJxrVrLqS2MO52IO5&#43;gBHbn6VA3iWyRZiFlYwnBGB649a5jS9Qhi1zzZJlVNznJPHOarC6j23m1xlyce43Gve93a55Vn2O00/XrbULgQRo6vs3EnGOMZH61HZ&#43;IvtOq/Yfs4H7xlLbvQE9Me1ct4dv4bbUmeWVUXYwy3HPH&#43;FLY6hFBrgumkGwzOwHqCD/jQ&#43;UFcoi6hid0NojBgR1xiqX2&#43;QSq0aIgUdAPSny/6786pDqfoa8r2cV0PSlUk2XrC/eO5WURxnywW2lQQec96mXVsQohsbNyT954zn9DWfZ/ef/cP8qB0j&#43;tbOEWtTBSaZ//Z"
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114112_hu90c98e0c9f9040ac28dfe460409e903b_688248_c09a87a5f7a843cc3dac0cd21d7aaa62.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114108.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>52mm f/1.8 1/100sec  ISO 200"
+						
+
+						
+					
+					>
+					<img			
+						width="400" height="600"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIACAAFQMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/APIfLMUnXIHUjtViSN5kRYwZHJwgQZJz2roNN0O1VGvL2TMHmmNYM7ZH9x1zg4/zxW7qOn6Vo9jCoe2t7qFy26RWSQkfMBgcjNSzRaI4W/tpMQrJFJHIqkMroQQQcf41U&#43;zN/dP5GtLXNbXV7zzDG6qhbbvcscFieSfrWb5kf92kk1sNtPVmvY6/d22oW2pTSi4ltGDRLLyD/n&#43;lHibxZqPiy/W61F1Z0XagRAoUZJxx9ayo7lkiZfLRsjqe1Qo&#43;0jgUKPvOQm1ZIuXcFqttbOlyrSOp8xAPuH3qpsi/56fpTXbc2abTjFpbilJN7H//2Q=="
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114108_hu55af0c7d85c869660b2f4ed52487ecd7_267878_603ffcd2dce9bc4d2742c144fc3a88d1.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114105.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>50mm f/1.8 1/125sec  ISO 200"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/AOTuPBFjpvhI6rqElyLp12xRxlSrMR8pyM8fjVB7HT5DC1hbSIgiVXLvhnfby2Occ8kfgKr6NfGeYSSNCsUA&#43;fz34A6DHVjgcd66WbVPD9n4XgjvbMC9nRyCg/eBvmwW7jnHH9M1jJSeiNYtR1OaubCe2yVVyD1yuM/SsadsORjFdn4b1rRr7xDbxasrRaRECmZDyw5ILkc9cZ/nUnxO03wrBJDfeHZox5xAaKJ8oeDkgHkdvzrCEnCXLProbT95Xic54d02C/1CW3kABRCwYjPIHoar&#43;J0hj8QXSQReUgYfLnPOBk/nWp4P/wCQ7P8A9cm/kay/FH/Ix3n&#43;&#43;P5CutbnKzOimeLO09akuruS5Cb8fL6VXFK3QUcqvcfM7WP/2Q=="
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114105_hu8b5e41ea2040e6b6e41b9b36726ed4e2_320858_47770dd10decdd24f4b5367c803eaf0b.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114101.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>100mm f/1.8 1/125sec  ISO 400"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/APM7QzLZ/asqY9&#43;zG8bs4z064561qRyw3ljBa2sU8mpzXG0cjYVIwoHvmmw6Jp82gWctq0w1ZixaAsoLqMncqk8jAA6jJ4xVzTX1NL37RaQS/bYJVZ0igZf3gUjDDoDyfzOK0&#43;sSjoQ6SepzepJc2sxhuoZIJAMlJFKnH0NZ5rvJhaeINVn13xG7QxRYUWag&#43;Y64GDkY9f0rPsNK8OX3hu/lkluLO9tD5hZ/nymSFAUY65AJ7Ee9TKfMylHlQi6ZFca1b2wZo5GJcTJ8pXaCeAMAfd61saD4mm0VtP063srYx6jtdnbeWQksueWPPvxVS0/5Gq0/3JP/AEF6oQ/8hjw5/wBc4/8A0Nq56equzZpXJbTTWvJtYuJbpi1gFfAUASbj6dAc85rN1J4oblS8IlmYbg7sSAB22nPFdDpX&#43;r8Vf9co/wD0Kua1r/j9i/65mp&#43;0vQS&#43;Fn//2Q=="
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114101_hu915d6023875404de3b1c356e0c221c2e_319431_66bf95ceda07cf4318fed16f78a9685e.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114100.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>100mm f/1.8 1/80sec  ISO 400"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/AOKuLVrC1uIHkSYwvsDR52t9M0t54TFvo9rq&#43;p6tBEt7EWhQA5DcFRjHIx1PYkU&#43;0vJLTy7&#43;U&#43;e0Uyyj5uJGHzAZ967e93&#43;IPDdq0&#43;nOjzFZZYVm3RhBz/eGQdgOMHGD35rOJrLSx4zHDv3F3EYCFgWBw3sKkjsZZAjErGjjO&#43;Q7RXQa7qOnrGLPSYECQSPi6K481DyPlPp0yfSsfWNWOrSwt9mjt1hiEapGSRwSc889TV6kaEgDjRg4kOAfu9qoGeXO7zHz/vH/AD3rR/5gX/Aqyj0pRHIGdnPzEmm0UGqIP//Z"
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114100_hube8b15ba387dcdc9a0a2504288c2c236_257427_481b37f85ff5df3fc4fde59aad638f4f.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114058.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>85mm f/1.8 1/80sec  ISO 400"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/APIVR5ZFjRWd3ICqoyST2Fdpb&#43;DLSHwRLqGo/arfUZHYRo0LHZtJG0gdM4PLYx/PBuIYLOZLmPZDIjB1Uy7iD1GAvI/E16xBqV9e&#43;H5bvV9KS3n8pvkDDZtIzltxGOnTJqVK6Kas9Tx62sYtym5mRDu5TOSa0L3SrtdHN/FZSJajB38AEE4yR1qj4luLW48QXctjOZ7Yv&#43;7fZs4x0Az0HSqUl/eS2628lzK0KjAQucAfSjl1vcTfQjdmbliScY5NPe/vHVle7nZWGGBkJB&#43;tRnpUdWxBS0lFID//2Q=="
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114058_hua986b89feafb1db8cbcb53ece16aafc0_269733_9f7a7584ed081eaf7cd9e9467c41bc26.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114057.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>100mm f/1.8 1/250sec  ISO 400"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/AOJe0geSNSdqlgGPTA71qnwgl9pdtJprSNMWYu074VkyQOADz09O&#43;aqpbMSNwqaDV10&#43;QxajqF3Hbqv7pY26dBjPXp2HpUc8Zux0TpyjG5RXwlqc8MjRrEio4RmeTaO2CD6cjmqV3pJNlPKXR5LdtkiKc8dNwPcZFdDqniNLgur29vdW0kS7MpgqvOWwMjIPqR1FO1SYPo8slnZpaGSEMI4j8yRHAJPTg89On4mrhuYy1R0vhPSLPUr26W7jEixKNoPua574l&#43;HbTTZIWtiypLk7DztI9K67wL/x/wB//uj&#43;ZrG&#43;Lf8Ay5/Rv6V87hak/raV9P8AgHq4jaSPPLLVLi1s3aFIAygQOTHkyBs8n3GKntdXePTri2EKl7jl5NxBA/ugDtWZF/x4z/8AXaP&#43;TU6H7v8AwEfzr6OHxnky&#43;E//2Q=="
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114057_hu2ef27c099d907aa4432888ee74bd3f49_312972_176a9e29a6a899c92d2472009704bc52.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
+		
+	
+		
+	
+		
+		
+				
+			
+			
+			
+				
+			
+
+			
+			
+				
+					
+				
+			
+
+
+			
+			
+
+			
+			
+
+
+			<div>
+				
+				
+					
+					
+				
+				<a href="/gallery/images/20240421-114054.jpg" 
+					class="galleryImg"
+					
+						
+
+						
+							data-description="Canon EOS R7 + 50-100mm F1.8 DC HSM | Art 016<br/>100mm f/1.8 1/250sec  ISO 400"
+						
+
+						
+					
+					>
+					<img			
+						width="600" height="400"
+
+						
+							
+							style="filter: blur(25px);"
+							
+								src="data:image/jpeg;base64,/9j/2wCEAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4&#43;JS5ESUM8SDc9PjsBCgsLDg0OHBAQHDsoIig7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O//AABEIABUAIAMBIgACEQEDEQH/xAGiAAABBQEBAQEBAQAAAAAAAAAAAQIDBAUGBwgJCgsQAAIBAwMCBAMFBQQEAAABfQECAwAEEQUSITFBBhNRYQcicRQygZGhCCNCscEVUtHwJDNicoIJChYXGBkaJSYnKCkqNDU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6g4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2drh4uPk5ebn6Onq8fLz9PX29/j5&#43;gEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoLEQACAQIEBAMEBwUEBAABAncAAQIDEQQFITEGEkFRB2FxEyIygQgUQpGhscEJIzNS8BVictEKFiQ04SXxFxgZGiYnKCkqNTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqCg4SFhoeIiYqSk5SVlpeYmZqio6Slpqeoqaqys7S1tre4ubrCw8TFxsfIycrS09TV1tfY2dri4&#43;Tl5ufo6ery8/T19vf4&#43;fr/2gAMAwEAAhEDEQA/AORlQJg4xWsum6e9tpxbUQHu3Cuo52jnOB164HTHPeoxp4uNQSGVgIl&#43;aTnkr3x71sWOjwW0KzWEcUkit50UkkuN6ngjjnAB/PqKcp86ujVw9m7HPa9okumXTiyaS4t1QM0hXhST93I4J6VlW8BKM8h9yK7uS9&#43;3B7HUGjguZkLlA/3UHfcQATkAdM9eTXDSs8bmBSMhirYOR&#43;dXSgnuYzkz1LxxixvrPU7NEhecmOVNuQ/OMn8/0rhtUhvl1G3iGoP5d03CbSRCf9kE8fSu6&#43;IP/Hrp3/Xb/wBmFcfq/wDyF9L/AN/&#43;prnhsby1ZzKX76UPs9suLmKVgLosS23pjHSliXv1J6mqeof8hGX/AK7N/OrsXQV6VFK5xVHof//Z"
+							
+							class="lazy"
+							data-src="/gallery/images/20240421-114054_hu10234b624d744d1051beb96165200c96_313752_ef01a183c02b9c95144a56983a71a4e5.jpg"
+						
+
+						
+							
+								
+							
+						
+					>
+				</a>
+			</div>
 		
 	
 		
@@ -17841,8 +18511,6 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 					>
 				</a>
 			</div>
-		
-	
 		
 	
 </div>

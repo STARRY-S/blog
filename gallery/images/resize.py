@@ -38,6 +38,7 @@ def main():
             "scale='min(if(gt(a,1/1),3840,-1),iw)':'min(if(gt(a,1/1),-1,3840),ih)'",
             output_file
         ])
+        # sudo pacman -S perl-image-exiftool
         subprocess.run([
             "exiftool", "-tagsfromfile",
             input_file,

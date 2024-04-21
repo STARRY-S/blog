@@ -170,7 +170,7 @@
 <p><img loading="lazy" src="images/create_window.png" alt="Window" />
 <p style="margin-bottom: -0.8em;" class="image-title">创建窗口</p>
 </p>
-<p>如果你遇到什么问题，可以<a href="learn-code-1/main.c">对照一下代码</a>是否有问题。</p>
+<p>如果你遇到什么问题，可以<a href="/posts/2021/learn_opengl/learn-code-1/main.c">对照一下代码</a>是否有问题。</p>
 <hr>
 <h2 id="三角形">三角形</h2>
 <p>画三角形的过程很简单，首先要确定三角形的三个顶点坐标，然后告诉GPU这三个点坐标就可以了 :)</p>
@@ -353,22 +353,22 @@
 <p>如果你遇到了问题，或者哪里不太明白，可以看咱写好的代码：</p>
 <ul>
 <li>
-<p><a href="learn-code-2/main.c">main.c</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/main.c">main.c</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/shader.h">shader.h</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/shader.h">shader.h</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/shader.c">shader.c</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/shader.c">shader.c</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/vertex.glsl">vertex.glsl</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/vertex.glsl">vertex.glsl</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/fragment.glsl">fragment.glsl</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/fragment.glsl">fragment.glsl</a></p>
 </li>
 <li>
-<p><a href="learn-code-2/CMakeLists.txt">CMakeLists.txt</a></p>
+<p><a href="/posts/2021/learn_opengl/learn-code-2/CMakeLists.txt">CMakeLists.txt</a></p>
 </li>
 </ul>
 <hr>]]></content:encoded>

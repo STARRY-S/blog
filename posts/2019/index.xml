@@ -294,7 +294,7 @@
 </ul>
 <h2 id="刷入bootloader推荐可选">刷入Bootloader（推荐/可选）</h2>
 <blockquote>
-<p>该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考<a href="https://www.right.com.cn/forum/forum.php?mod=viewthread&amp;tid=267455">这篇帖子</a>, 不过为了防止变砖, 还是推荐刷Breed。</p>
+<p>该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考<a href="https://www.right.com.cn/forum/forum.php?mod=viewthread&tid=267455">这篇帖子</a>, 不过为了防止变砖, 还是推荐刷Breed。</p>
 </blockquote>
 <p>Breed原作者为hackpascal, <a href="https://breed.hackpascal.net/">此处为下载地址</a>, 文件名为<code>breed-mt7621-xiaomi-r3g.bin</code></p>
 <p>第一种方法是ssh到路由器后通过<code>wget</code>下载breed文件再刷入（需要确保路由器联网）, 下载地址为https所以需要加上<code>--no-check-certificate</code>参数。</p>

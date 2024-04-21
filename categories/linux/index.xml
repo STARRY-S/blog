@@ -64,9 +64,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    neofetch
 </span></span></code></pre></div><p>进 chroot 后编辑 <code>/etc/pacman.conf</code>，添加以下配置，启用 Arch Linux CN。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
-</span></span><span class="line"><span class="cl"># 这里使用北京外国语大学镜像站
 </span></span><span class="line"><span class="cl">[archlinuxcn]
-</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
+</span></span><span class="line"><span class="cl"># Server = https://repo.archlinuxcn.org/$arch
+</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch # 北外镜像站
 </span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S archlinuxcn-keyring yay
 </span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
@@ -658,7 +658,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p><img loading="lazy" src="images/nanopi_7.jpg" alt="" />
 <p style="margin-bottom: -0.8em;" class="image-title">主板正面</p>
 </p>
-<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
+<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
 <h2 id="arch-linux-arm">Arch Linux ARM</h2>
 <p>在Arch Linux ARM (简称alarm) 官网上没找到对R4S的官方的支持，简单搜了一下armbian有对R4S的官方支持。</p>
 <p>因为用惯了<strong>滚动更新</strong>发行版，所以不想用*bian系统，而*WRT系统的软件包相对其他发行版而言更少一些，系统也相当于被魔改过，所以除了做漏油器之外几乎干不了别的，所以这是我想安装Arch Linux的理由。</p>
@@ -831,7 +831,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </p>
 <h2 id="参烤链接">参烤链接</h2>
 <ul>
-<li><a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">NanoPi R4S</a></li>
+<li><a href="https://www.friendlyelec.com/index.php?route=product/product&product_id=284">NanoPi R4S</a></li>
 <li><a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">NanoPi R4S - FriendlyELEC WiKi</a></li>
 <li><a href="https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d">Installing Arch Linux AArch64 on the NanoPi R2S</a></li>
 <li><a href="https://archlinuxarm.org/platforms/armv8/generic">Generic AArch64 Installation | Arch Linux ARM</a></li>
@@ -1051,7 +1051,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <p>修改<code>/etc/gdm/custom.conf</code>, 移除<code>WaylandEnable=false</code>一行前面的<code>#</code>禁用Wayland而使用X。</p>
 <h3 id="修改配置文件">修改配置文件</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
-</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
+</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="/posts/2021/archlinux-pavilion-gaming-laptop/#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
 <p>之后根据需求来修改开机自动选择显卡：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">startup_mode=auto
 </span></span><span class="line"><span class="cl">startup_auto_battery_mode=intel

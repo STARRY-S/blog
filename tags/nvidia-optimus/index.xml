@@ -48,7 +48,7 @@
 <p>修改<code>/etc/gdm/custom.conf</code>, 移除<code>WaylandEnable=false</code>一行前面的<code>#</code>禁用Wayland而使用X。</p>
 <h3 id="修改配置文件">修改配置文件</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ sudo cp /usr/share/optimus-manager.conf /etc/optimus-manager/optimus-manager.conf
-</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
+</span></span></code></pre></div><p>不要编辑<code>/usr/share/</code>下的文件, 编辑<code>/etc/optimus-manager/optimus-manager.conf</code>, 将切换方式设为<code>switching=none</code>, 不推荐使用bbswitch（见<a href="/posts/2021/archlinux-pavilion-gaming-laptop/#Others">后续第一条</a>）, 设置<code>pci_power_control=yes</code>让PCI Power Management切换显卡。</p>
 <p>之后根据需求来修改开机自动选择显卡：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">startup_mode=auto
 </span></span><span class="line"><span class="cl">startup_auto_battery_mode=intel

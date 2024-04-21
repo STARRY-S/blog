@@ -580,9 +580,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    neofetch
 </span></span></code></pre></div><p>进 chroot 后编辑 <code>/etc/pacman.conf</code>，添加以下配置，启用 Arch Linux CN。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
-</span></span><span class="line"><span class="cl"># 这里使用北京外国语大学镜像站
 </span></span><span class="line"><span class="cl">[archlinuxcn]
-</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
+</span></span><span class="line"><span class="cl"># Server = https://repo.archlinuxcn.org/$arch
+</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch # 北外镜像站
 </span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S archlinuxcn-keyring yay
 </span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
