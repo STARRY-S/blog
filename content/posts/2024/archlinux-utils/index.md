@@ -35,9 +35,9 @@ pacstrap -K /mnt base linux linux-firmware \
 
 ```conf
 # /etc/pacman.conf
-# 这里使用北京外国语大学镜像站
 [archlinuxcn]
-Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
+# Server = https://repo.archlinuxcn.org/$arch
+Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch # 北外镜像站
 ```
 
 之后安装 `yay`:
