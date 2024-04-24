@@ -10,7 +10,7 @@ ShowWordCount: false
 
 ----
 
-{{< 
+{{<
     gallery
     match="images/*"
     sortOrder="desc"
