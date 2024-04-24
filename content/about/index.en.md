@@ -6,7 +6,7 @@ ShowBreadCrumbs: false
 showtoc: false
 ---
 
-!["West Lake"](images/westlake.jpg "West Lake")
+!["West Lake"](/about/images/westlake.jpg "West Lake")
 
 ## About This Site
 
