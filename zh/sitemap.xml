@@ -2,14 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://blog.starry-s.moe/tags/arch-linux/</loc>
-    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/posts/2024/archlinux-xiaomi-photo-printer-1s/</loc>
-    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
-  </url><url>
     <loc>https://blog.starry-s.moe/categories/</loc>
-    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -22,7 +16,7 @@
                 />
   </url><url>
     <loc>https://blog.starry-s.moe/</loc>
-    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -34,11 +28,11 @@
                 href="https://blog.starry-s.moe/"
                 />
   </url><url>
-    <loc>https://blog.starry-s.moe/categories/linux/</loc>
-    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+    <loc>https://blog.starry-s.moe/tags/flowers/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/</loc>
-    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -50,11 +44,14 @@
                 href="https://blog.starry-s.moe/posts/"
                 />
   </url><url>
-    <loc>https://blog.starry-s.moe/tags/printer/</loc>
-    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+    <loc>https://blog.starry-s.moe/tags/spring/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/spring/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/</loc>
-    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -65,6 +62,27 @@
                 hreflang="zh"
                 href="https://blog.starry-s.moe/tags/"
                 />
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2024/spring-2024/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/arch-linux/</loc>
+    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2024/archlinux-xiaomi-photo-printer-1s/</loc>
+    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/linux/</loc>
+    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/printer/</loc>
+    <lastmod>2024-03-03T22:49:16+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/container/</loc>
     <lastmod>2024-02-26T19:21:28+08:00</lastmod>
@@ -103,9 +121,6 @@
     <lastmod>2024-01-18T23:12:28+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</loc>
-    <lastmod>2024-01-18T23:12:28+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</loc>
     <lastmod>2024-01-18T23:12:28+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>
@@ -150,9 +165,6 @@
     <loc>https://blog.starry-s.moe/posts/2023/2023-07-20/</loc>
     <lastmod>2023-08-06T01:07:34+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</loc>
-    <lastmod>2023-08-06T01:07:34+08:00</lastmod>
-  </url><url>
     <loc>https://blog.starry-s.moe/tags/minecraft/</loc>
     <lastmod>2023-07-08T22:56:44+08:00</lastmod>
   </url><url>
@@ -182,15 +194,6 @@
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2023/2023-05-01/</loc>
     <lastmod>2023-05-21T10:37:04+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/tags/flowers/</loc>
-    <lastmod>2023-04-22T01:07:53+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/tags/spring/</loc>
-    <lastmod>2023-04-22T01:07:53+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/categories/spring/</loc>
-    <lastmod>2023-04-22T01:07:53+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2023/spring-2023/</loc>
     <lastmod>2023-04-22T01:07:53+08:00</lastmod>

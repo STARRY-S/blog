@@ -12,7 +12,37 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 03 Mar 2024 22:49:16 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 24 Apr 2024 23:54:04 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Flowers</title>
+      <link>https://blog.starry-s.moe/tags/flowers/</link>
+      <pubDate>Wed, 24 Apr 2024 23:54:04 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/flowers/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Spring</title>
+      <link>https://blog.starry-s.moe/tags/spring/</link>
+      <pubDate>Wed, 24 Apr 2024 23:54:04 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/spring/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>摄影</title>
+      <link>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</link>
+      <pubDate>Wed, 24 Apr 2024 23:54:04 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>Arch Linux</title>
       <link>https://blog.starry-s.moe/tags/arch-linux/</link>
@@ -184,16 +214,6 @@
     </item>
     
     <item>
-      <title>摄影</title>
-      <link>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</link>
-      <pubDate>Fri, 04 Aug 2023 20:47:50 +0800</pubDate>
-      
-      <guid>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
       <title>Minecraft</title>
       <link>https://blog.starry-s.moe/tags/minecraft/</link>
       <pubDate>Sat, 08 Jul 2023 22:56:44 +0800</pubDate>
@@ -229,26 +249,6 @@
       <pubDate>Sun, 28 May 2023 16:49:45 +0800</pubDate>
       
       <guid>https://blog.starry-s.moe/tags/helm/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Flowers</title>
-      <link>https://blog.starry-s.moe/tags/flowers/</link>
-      <pubDate>Sat, 22 Apr 2023 01:07:53 +0800</pubDate>
-      
-      <guid>https://blog.starry-s.moe/tags/flowers/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Spring</title>
-      <link>https://blog.starry-s.moe/tags/spring/</link>
-      <pubDate>Sat, 22 Apr 2023 01:07:53 +0800</pubDate>
-      
-      <guid>https://blog.starry-s.moe/tags/spring/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
