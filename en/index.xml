@@ -48,7 +48,7 @@ About This Site The blog was originally created in the summer of 2016 and is cur
 My native language is not English, so there are many posts that I can&amp;rsquo;t translate into English.
 About Me I&amp;rsquo;m an Arch Linux user who has a fondness for Linux. I frequently write code and hacking some interesting, abstract concepts.
 In my spare time, I occasionally do photography.</description>
-      <content:encoded><![CDATA[<p><img loading="lazy" src="images/westlake.jpg" alt="&amp;ldquo;West Lake&amp;rdquo;" />
+      <content:encoded><![CDATA[<p><img loading="lazy" src="/about/images/westlake.jpg" alt="&amp;ldquo;West Lake&amp;rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">West Lake</p>
 </p>
 <h2 id="about-this-site">About This Site</h2>
@@ -65,16 +65,6 @@ In my spare time, I occasionally do photography.</description>
 ]]></content:encoded>
     </item>
     
-    
-    <item>
-      <title>Friends</title>
-      <link>https://blog.starry-s.moe/en/friends/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://blog.starry-s.moe/en/friends/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
     
     <item>
       <title>Gallery</title>
@@ -11551,6 +11541,16 @@ Powered by hugo-shortcode-gallery.</description>
 <p>Powered by <a href="https://github.com/mfg92/hugo-shortcode-gallery">hugo-shortcode-gallery</a>.</p>
 </blockquote>
 ]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>https://blog.starry-s.moe/en/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://blog.starry-s.moe/en/projects/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     

@@ -668,16 +668,16 @@
                 href="https://blog.starry-s.moe/series/"
                 />
   </url><url>
-    <loc>https://blog.starry-s.moe/friends/</loc>
+    <loc>https://blog.starry-s.moe/projects/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://blog.starry-s.moe/en/friends/"
+                href="https://blog.starry-s.moe/en/projects/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://blog.starry-s.moe/friends/"
+                href="https://blog.starry-s.moe/projects/"
                 />
   </url>
 </urlset>
