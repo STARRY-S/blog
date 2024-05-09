@@ -11549,8 +11549,22 @@ Powered by hugo-shortcode-gallery.</description>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://blog.starry-s.moe/en/projects/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
+      <description>Here are some of my personal projects:
+github.com/STARRY-S/zip github.com/STARRY-S/esp32-pwm-controller github.com/STARRY-S/telebot github.com/STARRY-S/Aperture The following are the projects I&amp;rsquo;m work and maintain&amp;hellip;
+Hangar </description>
+      <content:encoded><![CDATA[<p>Here are some of my personal projects:</p>
+<ul>
+<li><a href="https://github.com/STARRY-S/zip">github.com/STARRY-S/zip</a></li>
+<li><a href="https://github.com/STARRY-S/esp32-pwm-controller">github.com/STARRY-S/esp32-pwm-controller</a></li>
+<li><a href="https://github.com/STARRY-S/telebot">github.com/STARRY-S/telebot</a></li>
+<li><a href="https://github.com/STARRY-S/Aperture">github.com/STARRY-S/Aperture</a></li>
+</ul>
+<hr>
+<p>The following are the projects I&rsquo;m work and maintain&hellip;</p>
+<ul>
+<li><a href="https://github.com/cnrancher/hangar">Hangar</a></li>
+</ul>
+]]></content:encoded>
     </item>
     
     
