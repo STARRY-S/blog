@@ -37,7 +37,7 @@ pacstrap -K /mnt base linux linux-firmware \
 # /etc/pacman.conf
 [archlinuxcn]
 # Server = https://repo.archlinuxcn.org/$arch
-Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch # 北外镜像站
+Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
 ```
 
 之后安装 `yay`:
@@ -62,12 +62,25 @@ sudo grub-mkconfig -o /boot/grub.cfg
 如果不装其他网络工具，只使用 `systemd-networkd` 的话，需要创建一份默认的配置文件使用 DHCP，否则连不上网。
 
 ```conf
-# /etc/systemd/network/10-default.conf
+# /etc/systemd/network/10-default.network
 [Match]
 Name=enp*
 
 [Network]
 DHCP=yes
+```
+
+如果需要配置静态网络地址：
+
+```conf
+# /etc/systemd/network/10-static.network
+[Match]
+Name=eth0
+
+[Network]
+Address=10.128.0.100/16
+Gateway=10.128.0.1
+DNS=10.128.0.1
 ```
 
 并启用 `systemd-networkd` Systemd Service：
