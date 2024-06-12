@@ -12,7 +12,83 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Tue, 30 Jan 2024 18:52:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 12 Jun 2024 23:58:26 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/kubernetes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Leader Election 折腾小记</title>
+      <link>https://blog.starry-s.moe/posts/2024/leader-election/</link>
+      <pubDate>Wed, 12 Jun 2024 23:58:26 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/posts/2024/leader-election/</guid>
+      <description>&lt;p&gt;最近好忙，有很多想写博客的东西都没时间写，五一去了佛山的 HiFurry，本来想着整理点照片水一篇博客但没时间也没精力，所以最后想写的东西就都咽肚里就饭吃了。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>最近好忙，有很多想写博客的东西都没时间写，五一去了佛山的 HiFurry，本来想着整理点照片水一篇博客但没时间也没精力，所以最后想写的东西就都咽肚里就饭吃了。</p>
+<meting-js server="netease" type="song" id="2055270589" theme="#233333"></meting-js>
+<hr>
+<p>最近在折腾 Operator，就是用现成的框架写的 Controller。Operator 省去了重复且繁琐的使用 client-go 手搓 ClientSet、Informer、Lister、WorkQueue 等一大堆重复代码的步骤，只要基于已有的框架去写资源对象更新/删除时的业务处理逻辑就行了。</p>
+<h2 id="leader-election-是什么">Leader Election 是什么</h2>
+<p>当负载在 Kubernetes 运行时，通常会设置多个 Replicas 冗余副本，以实现高可用（HA），例如通常会将某些系统组件的 Replicas 设置为 2，就会创建两个对应的 Pods，通常这俩 Pod 会被调度到不同的节点上，在某个 Pod 挂掉时还能用另一个节点的 Pod。</p>
+<p>Leader Election 机制是由“领导人选举机制”抽象而来的，可以理解为在多个“候选者”中选取某一个作为 Leader。这里的候选者指的是负载创建的多个冗余 Pod，Leader Election 机制从中选取某一个 Pod 作为 Leader，其他 Pod 则处于“待命”状态，如果 Leader Pod 出现故障，则会重新选举一个 Leader Pod。</p>
+<p>Kubernetes 使用 Lease 资源（译作：租约）作为 Leader Election 的锁。和常用的 Mutex 互斥锁不同，Lease 资源会被 Leader Pod 每隔几秒钟更新一次。如果长达一段时间 Lease 没有被更新，则说明 Leader 挂掉了，其他 Pods 会竞争，尝试更新这个 Lease 锁，而成功更新了 Lease 的 Pod 会成为新的 Leader，其余 Pod 则继续处于待命状态。</p>
+<p>大多数情况下，当某个资源发生更新时，我们不希望所有的冗余副本 Pod 都去处理某一个资源的更新，而是让某一个 Pod 去处理就可以了，不然会混乱（比如刷 Conflict 报错: <code>the object has been modified; please apply your changes to the latest version and try again</code>）。这时可以用到 Leader Election 机制，从多个冗余 Pod 中只选其中某一个 Pod 作为 Leader 处理资源更新，其余 Pod 只作为待命或其他用途。</p>
+<p>如果你的 Controller 没有 Leader Election 机制，通常只能强行设定其 Replicas 为 1，但如果有小聪明修改了冗余数值为 2，则会出现一些问题，日志会刷大量的 Conflict 报错之类的，所以更严谨的方式是为 Controller 添加 Leader Election，以允许多 Replicas 冗余。</p>
+<h2 id="举个栗子">举个栗子</h2>
+<p>client-go 的样例代码中有 <a href="https://github.com/kubernetes/client-go/blob/v0.30.1/examples/leader-election/main.go">Leader Election 例子</a>，所以直接拿这个 Example 做简单的介绍了，把这个 Example 代码拷贝下来在本地跑一下。</p>
+<p>首先你需要有一个 Kubernetes 集群用来调试，如果你觉得搭一个集群太麻烦，或者手里没有可供调试使用的集群的话，一个超级简单的方式是使用 <a href="https://k3d.io/">K3d</a> 在你的 Docker Runtime 中跑一个迷你版 K3s 集群。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> k3d cluster create example
+</span></span><span class="line"><span class="cl"><span class="go">INFO[0000] Prep: Network
+</span></span></span><span class="line"><span class="cl"><span class="go">INFO[0000] Created network &#39;k3d-example&#39;
+</span></span></span><span class="line"><span class="cl"><span class="go">......
+</span></span></span><span class="line"><span class="cl"><span class="go">INFO[0012] Cluster &#39;example&#39; created successfully!
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> kubectl get nodes -o wide
+</span></span><span class="line"><span class="cl"><span class="go">NAME                   STATUS   ROLES                  AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE           KERNEL-VERSION   CONTAINER-RUNTIME
+</span></span></span><span class="line"><span class="cl"><span class="go">k3d-example-server-0   Ready    control-plane,master   98s   v1.28.8+k3s1   172.19.0.2    &lt;none&gt;        K3s v1.28.8+k3s1   6.9.3-arch1-1    containerd://1.7.11-k3s2
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> docker ps
+</span></span><span class="line"><span class="cl"><span class="go">CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS              PORTS                           NAMES
+</span></span></span><span class="line"><span class="cl"><span class="go">a4c1367c04a2   ghcr.io/k3d-io/k3d-proxy:5.6.3   &#34;/bin/sh -c nginx-pr…&#34;   2 minutes ago    Up About a minute   80/tcp, 0.0.0.0:6443-&gt;6443/tcp  k3d-example-serverlb
+</span></span></span><span class="line"><span class="cl"><span class="go">7c95a6ea069b   rancher/k3s:v1.28.8-k3s1         &#34;/bin/k3d-entrypoint…&#34;   2 minutes ago    Up 2 minutes                                        k3d-example-server-0
+</span></span></span></code></pre></div><p>按照样例的 <a href="https://github.com/kubernetes/client-go/blob/v0.30.1/examples/leader-election/README.md">README</a>，在 3 个终端中运行 Leader Election 样例代码。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> go run main.go -kubeconfig<span class="o">=</span>~/.kube/config -logtostderr<span class="o">=</span><span class="nb">true</span> -lease-lock-name<span class="o">=</span>example -lease-lock-namespace<span class="o">=</span>default -id<span class="o">=</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:20.118613   27504 leaderelection.go:250] attempting to acquire leader lease default/example...
+</span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:20.124630   27504 leaderelection.go:260] successfully acquired lease default/example
+</span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:20.124696   27504 main.go:87] Controller loop...
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> go run main.go -kubeconfig<span class="o">=</span>~/.kube/config -logtostderr<span class="o">=</span><span class="nb">true</span> -lease-lock-name<span class="o">=</span>example -lease-lock-namespace<span class="o">=</span>default -id<span class="o">=</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:32.692373   27815 leaderelection.go:250] attempting to acquire leader lease default/example...
+</span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:32.695277   27815 main.go:151] new leader elected: 1
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> go run main.go -kubeconfig<span class="o">=</span>~/.kube/config -logtostderr<span class="o">=</span><span class="nb">true</span> -lease-lock-name<span class="o">=</span>example -lease-lock-namespace<span class="o">=</span>default -id<span class="o">=</span><span class="m">3</span>
+</span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:36.424251   28089 leaderelection.go:250] attempting to acquire leader lease default/example...
+</span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:36.427674   28089 main.go:151] new leader elected: 1
+</span></span></span></code></pre></div><p>按顺序在 3 个终端中依次运行样例代码，可以看到 ID 为 1 的程序最先运行所以它成了 Leader，其余两个程序则在待命中。</p>
+<p>这时对 ID 1 的程序执行 Ctrl-C，发送 <code>SIGINT</code> 中断信号，让它 Context Canceled，ID 1 程序会释放 Lease 锁并结束运行，其余两个程序中的某一个则会重新竞争，其中一个变成 Leader。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> go run main.go -kubeconfig<span class="o">=</span>~/.kube/config -logtostderr<span class="o">=</span><span class="nb">true</span> -lease-lock-name<span class="o">=</span>example -lease-lock-namespace<span class="o">=</span>default -id<span class="o">=</span><span class="m">3</span>
+</span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:36.424251   28089 leaderelection.go:250] attempting to acquire leader lease default/example...
+</span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:36.427674   28089 main.go:151] new leader elected: 1
+</span></span></span><span class="line"><span class="cl"><span class="go">I0612 23:02:56.584777   28089 leaderelection.go:260] successfully acquired lease default/example
+</span></span></span><span class="line"><span class="cl"><span class="go">I0612 23:02:56.584866   28089 main.go:87] Controller loop...
+</span></span></span></code></pre></div><p>查看样例程序代码，<code>leaderelection.RunOrDie</code> 的参数传递的 Config 定义了 Leader Election 机制的 Callback 回调函数以及租约相关的时间 Duration。</p>
+<p><code>Callbacks</code> 回调函数分为：</p>
+<ul>
+<li><code>OnStartedLeading</code>: 当该程序被选举为 Leader 时，执行此回调函数，通常该回调函数启动 Controller 的 Sync 逻辑等一些操作。</li>
+<li><code>OnStoppedLeading</code>: 当该程序不再是 Leader 时（可能是收到了 <code>SIGINT</code> 信号，Context Canceled 或程序出故障，很长一段时间没有去更新 Lease 锁），会执行此回调函数，执行一些资源释放等操作，然后直接 <code>os.Exit</code> 结束程序。</li>
+<li><code>OnNewLeader</code>: 当其他某个程序被选举为 Leader 时，会执行此函数，一般没什么用，可以不配置。</li>
+</ul>
+<p>Config 的其他参数：</p>
+<ul>
+<li><code>Lock</code>: Lease Lock。</li>
+<li><code>ReleaseOnCancel</code>: 当 Context Cancel（当前的 Leader 结束运行）时，释放当前的 Lease 锁，使得其他 Pod 可以立即进行新一轮的选举。如果设置为 false 的话，当前 Leader 挂掉后其他 Pod 并不知道当前 Leader 已经挂掉了，只有过很长一段时间，发现 Lease 锁超过了 <code>LeaseDuration</code> 时间还没被更新，才会去强行的执行新一轮的选举。</li>
+<li><code>LeaseDuration</code>: 结合上方的 <code>ReleaseOnCancel</code> 的介绍，假设当前 Leader Pod 出故障了（例如被 <code>SIGKILL</code> 立即杀死，Context 来不及 Cancel，或者调试进入了 Breakpoint 断点，程序暂停），Lease 锁没被释放，但当前 Leader 出问题挂掉了，其他待命的 Pod 发现 Lease 锁已经超过 <code>LeaseDuration</code> 没有被更新，则会强行进行新一轮的选举，而原 Leader 如果还活着的话，也会执行 <code>OnStoppedLeading</code> 回调函数结束运行。</li>
+<li><code>RenewDeadline</code>: Leader 每隔一段时间会更新一次 Lease 锁。</li>
+<li><code>RetryPeriod</code>: 如果 Leader 更新 Lease 锁失败了，会在一段时间后重试。</li>
+</ul>
+<p>所以有些小朋友在调试软件时，进入断点再恢复运行时会莫名其妙的结束运行，其实就是 Leader Election 机制搞的。所以如果想调试程序，可以临时把 <code>LeaseDuration</code> 设置长一些（例如好几天），这样调试断点恢复后，程序就不会被杀死了。</p>
+<h2 id="杂谈">杂谈</h2>
+<p>常用的 Operator 框架都支持 Leader Election，所以基本不用手写 <code>RunOrDie</code> 这部分代码，例如 Rancher 使用的 <a href="https://github.com/rancher/wrangler/">Wrangler</a> 框架，当程序成为 Leader 时，直接执行 <a href="https://github.com/rancher/rancher/blob/v2.9.0-rc1/pkg/wrangler/context.go#L175">OnLeader</a> 回调函数启动一系列业务逻辑。而当程序还没被选为 Leader 时，只初始化 Informer Cache 等初始化步骤，不启动 Sync 相关逻辑。</p>
+<p>通常 <code>sample-controller</code> 或其他简单的 Controller 在 Worker Start 执行完之后，会加一个 <code>&lt;-ctx.Done()</code> 阻塞（<a href="https://github.com/kubernetes/sample-controller/blob/master/controller.go#L182">代码位置</a>），遇到 Context Cancel 后直接结束运行。但如果加了 Leader Election 机制，当 Context Cancel 时是由 Leader Election 的 <code>OnStoppedLeading</code> 回调函数结束运行并释放 Lease 锁，所以 <code>main</code> 函数可以改为使用 <code>select {}</code> 阻塞，否则程序在 Context Cancel 时 Lease 锁还没来得及释放就由 <code>main</code> 函数结束运行了。</p>
+<p>所以读这里，可以得出结论，就算设置数量特别多的 Replicas，实际上依旧只有一个 Controller Pod 在执行真正的 Sync 逻辑，而其他 Pod 只是在观望，或者只提供一些 Web Server 功能。如果想让多个冗余 Pod 分别 Sync 不同的资源更新，需要设计一个更复杂的锁，而这又会增加一定的 API Server 请求数量……</p>]]></content:encoded>
+    </item>
+    
     <item>
       <title>K3s &#43; Multus CNI 插件使用 Macvlan</title>
       <link>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</link>

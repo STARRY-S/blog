@@ -2,34 +2,8 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://blog.starry-s.moe/</loc>
-    <lastmod>2024-06-12T18:52:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://blog.starry-s.moe/en/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://blog.starry-s.moe/"
-                />
-  </url><url>
-    <loc>https://blog.starry-s.moe/posts/</loc>
-    <lastmod>2024-06-12T18:52:00+08:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://blog.starry-s.moe/en/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://blog.starry-s.moe/posts/"
-                />
-  </url><url>
     <loc>https://blog.starry-s.moe/categories/</loc>
-    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+    <lastmod>2024-06-12T23:58:26+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -41,17 +15,46 @@
                 href="https://blog.starry-s.moe/categories/"
                 />
   </url><url>
-    <loc>https://blog.starry-s.moe/tags/flowers/</loc>
-    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+    <loc>https://blog.starry-s.moe/</loc>
+    <lastmod>2024-06-12T23:58:26+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.starry-s.moe/en/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://blog.starry-s.moe/"
+                />
   </url><url>
-    <loc>https://blog.starry-s.moe/tags/spring/</loc>
-    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+    <loc>https://blog.starry-s.moe/tags/kubernetes/</loc>
+    <lastmod>2024-06-12T23:58:26+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/categories/spring/</loc>
-    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+    <loc>https://blog.starry-s.moe/categories/kubernetes/</loc>
+    <lastmod>2024-06-12T23:58:26+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/leader-election/</loc>
+    <lastmod>2024-06-12T23:58:26+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2024/leader-election/</loc>
+    <lastmod>2024-06-12T23:58:26+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/</loc>
+    <lastmod>2024-06-12T23:58:26+08:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://blog.starry-s.moe/en/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://blog.starry-s.moe/posts/"
+                />
   </url><url>
     <loc>https://blog.starry-s.moe/tags/</loc>
-    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+    <lastmod>2024-06-12T23:58:26+08:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -62,6 +65,15 @@
                 hreflang="zh"
                 href="https://blog.starry-s.moe/tags/"
                 />
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/flowers/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/spring/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/spring/</loc>
+    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</loc>
     <lastmod>2024-04-24T23:54:04+08:00</lastmod>
@@ -90,9 +102,6 @@
     <loc>https://blog.starry-s.moe/categories/container/</loc>
     <lastmod>2024-02-26T19:21:28+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/tags/kubernetes/</loc>
-    <lastmod>2024-02-26T19:21:28+08:00</lastmod>
-  </url><url>
     <loc>https://blog.starry-s.moe/tags/network/</loc>
     <lastmod>2024-02-26T19:21:28+08:00</lastmod>
   </url><url>
@@ -103,9 +112,6 @@
     <lastmod>2024-01-30T18:52:00+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</loc>
-    <lastmod>2024-01-30T18:52:00+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/categories/kubernetes/</loc>
     <lastmod>2024-01-30T18:52:00+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/macvlan/</loc>
