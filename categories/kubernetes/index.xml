@@ -86,7 +86,7 @@
 <h2 id="杂谈">杂谈</h2>
 <p>常用的 Operator 框架都支持 Leader Election，所以基本不用手写 <code>RunOrDie</code> 这部分代码，例如 Rancher 使用的 <a href="https://github.com/rancher/wrangler/">Wrangler</a> 框架，当程序成为 Leader 时，直接执行 <a href="https://github.com/rancher/rancher/blob/v2.9.0-rc1/pkg/wrangler/context.go#L175">OnLeader</a> 回调函数启动一系列业务逻辑。而当程序还没被选为 Leader 时，只初始化 Informer Cache 等初始化步骤，不启动 Sync 相关逻辑。</p>
 <p>通常 <code>sample-controller</code> 或其他简单的 Controller 在 Worker Start 执行完之后，会加一个 <code>&lt;-ctx.Done()</code> 阻塞（<a href="https://github.com/kubernetes/sample-controller/blob/master/controller.go#L182">代码位置</a>），遇到 Context Cancel 后直接结束运行。但如果加了 Leader Election 机制，当 Context Cancel 时是由 Leader Election 的 <code>OnStoppedLeading</code> 回调函数结束运行并释放 Lease 锁，所以 <code>main</code> 函数可以改为使用 <code>select {}</code> 阻塞，否则程序在 Context Cancel 时 Lease 锁还没来得及释放就由 <code>main</code> 函数结束运行了。</p>
-<p>所以读这里，可以得出结论，就算设置数量特别多的 Replicas，实际上依旧只有一个 Controller Pod 在执行真正的 Sync 逻辑，而其他 Pod 只是在观望，或者只提供一些 Web Server 功能。如果想让多个冗余 Pod 分别 Sync 不同的资源更新，需要设计一个更复杂的锁，而这又会增加一定的 API Server 请求数量……</p>]]></content:encoded>
+<p>所以读到这里，可以得出结论，就算设置数量特别多的 Replicas，实际上依旧只有一个 Controller Pod 在执行真正的 Sync 逻辑，而其他 Pod 只是在观望，或者只提供一些 Web Server 功能。如果想让多个冗余 Pod 分别 Sync 不同的资源更新，需要设计一个更复杂的锁，而这又会增加一定的 API Server 请求数量……</p>]]></content:encoded>
     </item>
     
     <item>
