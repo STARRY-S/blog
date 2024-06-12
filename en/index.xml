@@ -118,6 +118,8 @@ Powered by hugo-shortcode-gallery.</description>
 
 
 
+
+
   	
 	
 
@@ -11487,54 +11489,72 @@ Powered by hugo-shortcode-gallery.</description>
 </div>
 
 <script>
-	if (!jQuery) {
-		alert("jquery is not loaded");
+	if (!("HSCGjQuery" in window)) {
+		if (!window.jQuery) {
+			throw new Error("jQuery is not loaded, hugo-shortcode-gallery wont work without it!");
+		}
+		window.HSCGjQuery = window.jQuery.noConflict(true);
 	}
 
-	$( document ).ready(() => {
-		const gallery = $("#gallery-072f34ae741438a5a56c978ee573a437-0");
-		
+	
+	
+	
+	
+	
+	;(function($) {
 
-		
-		let swipeboxInstance = null;
-
-		
-		
-		gallery.on('jg.complete', () => {
+		$( document ).ready(() => {
+			const gallery = $("#gallery-072f34ae741438a5a56c978ee573a437-0");
 			
+
+			
+			let swipeboxInstance = null;
+
+			
+			
+			gallery.on('jg.complete', () => {
 				
-				
-				$(() => {
-					$('.lazy').Lazy({
-						visibleOnly: true,
-						afterLoad: element => element.css({filter: "none", transition: "filter 1.0s ease-in-out"})
+					
+					
+					$(() => {
+						$('.lazy').Lazy({
+							visibleOnly: true,
+							afterLoad: element => element.css({filter: "none", transition: "filter 1.0s ease-in-out"})
+						});
 					});
-				});
-			
+				
 
-			swipeboxInstance = $('.galleryImg').swipebox(
-				jQuery.extend({},
-					{  }
-				)
-			);
+				swipeboxInstance = $('.galleryImg').swipebox(
+					$.extend({},
+						{  }
+					)
+				);
+			});
+
+			
+			gallery.justifiedGallery($.extend(
+				{
+					rowHeight : "180",
+					margins : "5",
+					border : 0,
+					randomize :  false ,
+					waitThumbnailsLoad : false,
+					lastRow : "justify",
+					captions : false,
+					
+					
+				},
+				{  }
+			));
+
+			
+			
 		});
 
-		
-		gallery.justifiedGallery({
-			rowHeight : "180",
-			margins : "5",
-			border : 0,
-			randomize :  false ,
-			waitThumbnailsLoad : false,
-			lastRow : "justify",
-			captions : false,
-			
-			
-		});
-
-		
-		
-	});
+	
+	
+	
+	})(window.HSCGjQuery)
 </script>
 
 <blockquote>

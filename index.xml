@@ -12,7 +12,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Wed, 24 Apr 2024 23:54:04 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 12 Jun 2024 18:52:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>摄影日记 - 2024 春</title>
       <link>https://blog.starry-s.moe/posts/2024/spring-2024/</link>
@@ -646,7 +646,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
 </span></span><span class="line"><span class="cl">[archlinuxcn]
 </span></span><span class="line"><span class="cl"># Server = https://repo.archlinuxcn.org/$arch
-</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch # 北外镜像站
+</span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
 </span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S archlinuxcn-keyring yay
 </span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
@@ -655,12 +655,21 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo grub-install --target<span class="o">=</span>x86_64-efi --efi-directory<span class="o">=</span>/boot --bootloader-id<span class="o">=</span>GRUB --removable
 </span></span><span class="line"><span class="cl">sudo grub-mkconfig -o /boot/grub.cfg
 </span></span></code></pre></div><p>如果不装其他网络工具，只使用 <code>systemd-networkd</code> 的话，需要创建一份默认的配置文件使用 DHCP，否则连不上网。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-default.conf
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-default.network
 </span></span><span class="line"><span class="cl">[Match]
 </span></span><span class="line"><span class="cl">Name=enp*
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">[Network]
 </span></span><span class="line"><span class="cl">DHCP=yes
+</span></span></code></pre></div><p>如果需要配置静态网络地址：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-static.network
+</span></span><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=eth0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">Address=10.128.0.100/16
+</span></span><span class="line"><span class="cl">Gateway=10.128.0.1
+</span></span><span class="line"><span class="cl">DNS=10.128.0.1
 </span></span></code></pre></div><p>并启用 <code>systemd-networkd</code> Systemd Service：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl enable systemd-networkd
 </span></span></code></pre></div><p>基本上到这里就可以愉快的 <code>reboot</code> 了，一个精简的系统所需要的软件就基本装好了。</p>
@@ -7511,6 +7520,8 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 
 
 	
+
+
 
 
 
@@ -18916,54 +18927,72 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </div>
 
 <script>
-	if (!jQuery) {
-		alert("jquery is not loaded");
+	if (!("HSCGjQuery" in window)) {
+		if (!window.jQuery) {
+			throw new Error("jQuery is not loaded, hugo-shortcode-gallery wont work without it!");
+		}
+		window.HSCGjQuery = window.jQuery.noConflict(true);
 	}
 
-	$( document ).ready(() => {
-		const gallery = $("#gallery-665288c8761d48eb3366c37954243edc-0");
-		
+	
+	
+	
+	
+	
+	;(function($) {
 
-		
-		let swipeboxInstance = null;
-
-		
-		
-		gallery.on('jg.complete', () => {
+		$( document ).ready(() => {
+			const gallery = $("#gallery-665288c8761d48eb3366c37954243edc-0");
 			
+
+			
+			let swipeboxInstance = null;
+
+			
+			
+			gallery.on('jg.complete', () => {
 				
-				
-				$(() => {
-					$('.lazy').Lazy({
-						visibleOnly: true,
-						afterLoad: element => element.css({filter: "none", transition: "filter 1.0s ease-in-out"})
+					
+					
+					$(() => {
+						$('.lazy').Lazy({
+							visibleOnly: true,
+							afterLoad: element => element.css({filter: "none", transition: "filter 1.0s ease-in-out"})
+						});
 					});
-				});
-			
+				
 
-			swipeboxInstance = $('.galleryImg').swipebox(
-				jQuery.extend({},
-					{  }
-				)
-			);
+				swipeboxInstance = $('.galleryImg').swipebox(
+					$.extend({},
+						{  }
+					)
+				);
+			});
+
+			
+			gallery.justifiedGallery($.extend(
+				{
+					rowHeight : "180",
+					margins : "5",
+					border : 0,
+					randomize :  false ,
+					waitThumbnailsLoad : false,
+					lastRow : "justify",
+					captions : false,
+					
+					
+				},
+				{  }
+			));
+
+			
+			
 		});
 
-		
-		gallery.justifiedGallery({
-			rowHeight : "180",
-			margins : "5",
-			border : 0,
-			randomize :  false ,
-			waitThumbnailsLoad : false,
-			lastRow : "justify",
-			captions : false,
-			
-			
-		});
-
-		
-		
-	});
+	
+	
+	
+	})(window.HSCGjQuery)
 </script>
 
 <blockquote>
