@@ -1,6 +1,7 @@
 ---
 title: 再探容器网络
 date: 2024-07-11T01:12:36+08:00
+lastmod: 2024-07-16T00:35:24+08:00
 layout: post
 draft: false
 tags:
@@ -105,7 +106,7 @@ CNI 配置文件为 JSON 格式，以下是一个样例配置文件：
 
 ```go
 func main() {
-	skel.PluginMain(cmdAdd, cmdCheck, cmdDel, version.All, bv.BuildString("ptp"))
+    skel.PluginMain(cmdAdd, cmdCheck, cmdDel, version.All, bv.BuildString("ptp"))
 }
 ```
 
@@ -115,48 +116,48 @@ ADD 命令用于为容器创建网卡（或修改已有的网卡），找一下 
 
 ```go
 func cmdAdd(args *skel.CmdArgs) error {
-	// Load CNI Config
-	conf := NetConf{}
-	if err := json.Unmarshal(args.StdinData, &conf); err != nil {
-		return fmt.Errorf("failed to load netconf: %v", err)
-	}
-	// ---------------------------------------------
+    // Load CNI Config
+    conf := NetConf{}
+    if err := json.Unmarshal(args.StdinData, &conf); err != nil {
+        return fmt.Errorf("failed to load netconf: %v", err)
+    }
+    // ---------------------------------------------
 
-	// Execute IPAM command to get IP address
-	r, err := ipam.ExecAdd(conf.IPAM.Type, args.StdinData)
-	if err != nil {
-		return err
-	}
-	result, err := current.NewResultFromResult(r)
-	if err != nil {
-		return err
-	}
-	if len(result.IPs) == 0 {
-		return errors.New("IPAM plugin returned missing IP config")
-	}
-	if err := ip.EnableForward(result.IPs); err != nil {
-		return fmt.Errorf("Could not enable IP forwarding: %v", err)
-	}
-	// ---------------------------------------------
+    // Execute IPAM command to get IP address
+    r, err := ipam.ExecAdd(conf.IPAM.Type, args.StdinData)
+    if err != nil {
+        return err
+    }
+    result, err := current.NewResultFromResult(r)
+    if err != nil {
+        return err
+    }
+    if len(result.IPs) == 0 {
+        return errors.New("IPAM plugin returned missing IP config")
+    }
+    if err := ip.EnableForward(result.IPs); err != nil {
+        return fmt.Errorf("Could not enable IP forwarding: %v", err)
+    }
+    // ---------------------------------------------
 
-	// Create Veth Pair for Pod Network Namespace
-	netns, err := ns.GetNS(args.Netns)
-	if err != nil {
-		return fmt.Errorf("failed to open netns %q: %v", args.Netns, err)
-	}
-	defer netns.Close()
-	hostInterface, _, err := setupContainerVeth(netns, args.IfName, conf.MTU, result)
-	if err != nil {
-		return err
-	}
-	// ---------------------------------------------
+    // Create Veth Pair for Pod Network Namespace
+    netns, err := ns.GetNS(args.Netns)
+    if err != nil {
+        return fmt.Errorf("failed to open netns %q: %v", args.Netns, err)
+    }
+    defer netns.Close()
+    hostInterface, _, err := setupContainerVeth(netns, args.IfName, conf.MTU, result)
+    if err != nil {
+        return err
+    }
+    // ---------------------------------------------
 
-	// Setup Veth Pair for default Network Namespace
-	if err = setupHostVeth(hostInterface.Name, result); err != nil {
-		return err
-	}
-	// Some other IP forward (masquerade) operations...
-	return types.PrintResult(result, conf.CNIVersion)
+    // Setup Veth Pair for default Network Namespace
+    if err = setupHostVeth(hostInterface.Name, result); err != nil {
+        return err
+    }
+    // Some other IP forward (masquerade) operations...
+    return types.PrintResult(result, conf.CNIVersion)
 }
 ```
 
@@ -174,38 +175,38 @@ DEL 命令用于释放容器和主机的网卡接口资源，在 Pod 删除时�
 
 ```go
 func cmdDel(args *skel.CmdArgs) error {
-  // Load CNI Config
-	conf := NetConf{}
-	if err := json.Unmarshal(args.StdinData, &conf); err != nil {
-		return fmt.Errorf("failed to load netconf: %v", err)
-	}
-	// ---------------------------------------------
+    // Load CNI Config
+    conf := NetConf{}
+    if err := json.Unmarshal(args.StdinData, &conf); err != nil {
+        return fmt.Errorf("failed to load netconf: %v", err)
+    }
+    // ---------------------------------------------
 
-	// Execute IPAM command to release IP address
-	if err := ipam.ExecDel(conf.IPAM.Type, args.StdinData); err != nil {
-		return err
-	}
-	// ---------------------------------------------
+    // Execute IPAM command to release IP address
+    if err := ipam.ExecDel(conf.IPAM.Type, args.StdinData); err != nil {
+        return err
+    }
+    // ---------------------------------------------
 
-	// Release link interface & masquerades...
-	var ipnets []*net.IPNet
-	err := ns.WithNetNSPath(args.Netns, func(_ ns.NetNS) error {
-		var err error
-		ipnets, err = ip.DelLinkByNameAddr(args.IfName)
-		if err != nil && err == ip.ErrLinkNotFound {
-			return nil
-		}
-		return err
-	})
-	if err != nil {
-		...
-	}
-	if len(ipnets) != 0 && conf.IPMasq {
-		for _, ipn := range ipnets {
-			err = ip.TeardownIPMasq(ipn, ...)
-		}
-	}
-	return err
+    // Release link interface & masquerades...
+    var ipnets []*net.IPNet
+    err := ns.WithNetNSPath(args.Netns, func(_ ns.NetNS) error {
+        var err error
+        ipnets, err = ip.DelLinkByNameAddr(args.IfName)
+        if err != nil && err == ip.ErrLinkNotFound {
+            return nil
+        }
+        return err
+    })
+    if err != nil {
+        ...
+    }
+    if len(ipnets) != 0 && conf.IPMasq {
+        for _, ipn := range ipnets {
+            err = ip.TeardownIPMasq(ipn, ...)
+        }
+    }
+    return err
 }
 ```
 
@@ -216,7 +217,332 @@ func cmdDel(args *skel.CmdArgs) error {
 
 #### CHECK 命令
 
-CHECK 命令用于校验 Pod 网络，CNI Spec 0.4.0 中，Config 新增了 `prevResult` 字段，记录了 CNI 插件上一次执行 ADD 命令的执行结果。
-CHECK 命令将 `prevResult` 记录的状态信息和设定的期望值进行比对，输出校验结果。
+CHECK 命令用于校验 Pod 网络，在 CNI Spec 0.4.0 中，Config 新增了 `prevResult` 字段，记录了 CNI 插件上一次执行 ADD 命令的结果。
+CHECK 命令将 `prevResult` 记录的状态信息和设定的期望值进行比对。
+
+```go
+func cmdCheck(args *skel.CmdArgs) error {
+    // Load CNI Config
+    conf := NetConf{}
+    if err := json.Unmarshal(args.StdinData, &conf); err != nil {
+        return fmt.Errorf("failed to load netconf: %v", err)
+    }
+    // -----------------------------------
+
+    // Run IPAM plugin CHECK command and get results
+    err = ipam.ExecCheck(conf.IPAM.Type, args.StdinData)
+    if err != nil {
+        return err
+    }
+    // -----------------------------------
+
+    // Parse prevResult
+    if conf.NetConf.RawPrevResult == nil {
+        return fmt.Errorf("ptp: Required prevResult missing")
+    }
+    if err := version.ParsePrevResult(&conf.NetConf); err != nil {
+        return err
+    }
+    // Convert whatever the IPAM result was into the current Result type
+    result, err := current.NewResultFromResult(conf.PrevResult)
+    if err != nil {
+        return err
+    }
+    var contMap current.Interface
+    // Find interfaces for name whe know, that of host-device inside container
+    for _, intf := range result.Interfaces {
+        if args.IfName == intf.Name {
+            if args.Netns == intf.Sandbox {
+                contMap = *intf
+                continue
+            }
+        }
+    }
+    // -----------------------------------
+
+    // Check Network Namespace Name
+    if args.Netns != contMap.Sandbox {
+        return fmt.Errorf("Sandbox in prevResult %s doesn't match configured netns: %s",
+            contMap.Sandbox, args.Netns)
+    }
+
+    // Check prevResults for ips, routes and dns against values found in the container
+    if err := netns.Do(func(_ ns.NetNS) error {
+        // Check interface
+        err := validateCniContainerInterface(contMap)
+        if err != nil {
+            return err
+        }
+
+        // Check IPs
+        err = ip.ValidateExpectedInterfaceIPs(args.IfName, result.IPs)
+        if err != nil {
+            return err
+        }
+
+        // Check routes
+        err = ip.ValidateExpectedRoute(result.Routes)
+        if err != nil {
+            return err
+        }
+        // Other checks...
+        return nil
+    }); err != nil {
+        return err
+    }
+
+    return nil
+}
+```
+
+样例 P2P 插件的 DEL 命令流程大致为：
+1. 加载 CNI Config 配置文件
+1. 执行 IPAM CHECK 命令
+1. 加载 prevResult 信息
+1. 依次校验 Network Namespace 名称、Pod 网卡、Pod IP、路由表等状态信息
+
+### 运行样例 CNI
+
+上述的样例 P2P CNI 插件仅能为 Pod NS 与主机的 Default NS 之间创建 Veth Pair 并简单的配置 IP 地址和路由表，并不能用于更复杂的场景。如果想在你的调试集群中试用上述样例的 CNI 插件，可以使用 [Multus CNI](https://github.com/k8snetworkplumbingwg/multus-cni/)。Multus CNI 可以为 Pod 创建多块网卡，其中 Pod 的默认网卡（通常是 `eth0`）为 Kubernetes 集群的原生 CNI（例如 Calico、Flannel、Cilium 或其他 CNI），使用 Multus CNI 可以调用上述的样例 P2P CNI 插件为 Pod 创建额外的网卡。
+
+#### 安装 Multus CNI
+
+目前 Multus CNI 最新版本 (`4.0.2`) 支持的最高 CNI Spec 版本为 `1.0.0`，可以运行在 K3s 但有亿点小问题（参考 [Issue](https://github.com/k8snetworkplumbingwg/multus-cni/issues/1089#issuecomment-1550442393)），咱写这篇博客用的集群是 K3s `v1.28.10+k3s1`，一共有两个节点，运行在 KVM 虚拟机中方便折腾。
+
+参照 [Multus CNI](https://github.com/k8snetworkplumbingwg/multus-cni/blob/master/docs/quickstart.md#installation) 文档，部署 Multus Daemonset，在每个节点中安装 Multus CNI Binary 文件。
+
+在 K3s 上安装 Multus 的步骤可以看咱之前写的 [K3s + Multus CNI 插件使用 Macvlan](../k3s-multus-macvlan/)。
+
+### 安装样例 CNI Binary 文件
+
+需要将上述的样例 P2P CNI 插件拷贝到 K3s 每个集群节点的 `/var/lib/rancher/k3s/data/current/bin` 目录下（如果是其他集群，路径为 `/opt/cni/bin`）。
+
+```console
+$ mkdir -p cni && cd cni
+$ wget https://github.com/containernetworking/plugins/releases/download/v1.5.1/cni-plugins-linux-amd64-v1.5.1.tgz
+$ tar -zxvf cni-plugins-linux-amd64-v1.5.1.tgz
+$ sudo cp ptp /var/lib/rancher/k3s/data/current/bin/
+```
+
+创建一个 `NetworkAttachmentDefinition` Custom Resource，将 p2p 的 CNI Config 存储在这里，配置 Pod 使用 ptp CNI 插件。
+
+```yaml
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
+metadata:
+  name: ptp-conf
+spec:
+  config: '{
+  "cniVersion": "1.0.0",
+  "type": "ptp",
+  "ipam": {
+    "type": "host-local",
+    "subnet": "192.168.1.0/24"
+  },
+  "dns": {
+    "nameservers": [ "192.168.1.0", "8.8.8.8" ]
+  }
+}'
+```
+
+```console
+$ k get network-attachment-definitions.k8s.cni.cncf.io
+NAME       AGE
+ptp-conf   9s
+```
+
+### 创建样例 Workload
+
+接下来可以创建样例工作负载，设置 `k8s.v1.cni.cncf.io/networks` Annotation 定义 Pod 的第二网卡由上述的 P2P 插件创建。为便于折腾这里的样例负载为 DaemonSet，并赋予容器 Privileged 权限。
+
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: example-ds
+  namespace: default
+spec:
+  selector:
+    matchLabels:
+      app: example-alpine-ds
+  template:
+    metadata:
+      labels:
+        app: example-alpine-ds
+      annotations:
+        k8s.v1.cni.cncf.io/networks: 'ptp-conf'
+    spec:
+      containers:
+      - name: example-alpine
+        image: alpine
+        imagePullPolicy: IfNotPresent
+        command: ["sleep"]
+        args: ["infinity"]
+        securityContext:
+          privileged: true
+```
+
+```console
+$ vim example-ds.yaml
+$ k apply -f example-ds.yaml
+daemonset.apps/example-ds created
+$ k get pods -o wide
+NAME               READY   STATUS    RESTARTS   AGE   IP           NODE    NOMINATED NODE   READINESS GATES
+example-ds-4865k   1/1     Running   0          3s    10.42.1.7    k3s-2   <none>           <none>
+example-ds-9g5kp   1/1     Running   0          3s    10.42.0.12   k3s-1   <none>           <none>
+```
+
+查看 Pod 中的网卡信息，除了 `lo` 回环接口和 `eth0` 接口外，还有一个由 `ptp` 创建的 `net1` 接口，IP 地址为 `192.168.1.2`。
+
+```console
+$ k exec -it example-ds-9g5kp -- sh
+# ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: eth0@if18: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1450 qdisc noqueue state UP
+    link/ether ba:ac:48:99:66:73 brd ff:ff:ff:ff:ff:ff
+    inet 10.42.0.12/24 brd 10.42.0.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::b8ac:48ff:fe99:6673/64 scope link
+       valid_lft forever preferred_lft forever
+3: net1@if19: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP
+    link/ether 6a:0b:7d:4b:6f:c5 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.2/24 brd 192.168.1.255 scope global net1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::680b:7dff:fe4b:6fc5/64 scope link
+       valid_lft forever preferred_lft forever
+# ip r
+default via 10.42.0.1 dev eth0
+10.42.0.0/24 dev eth0 scope link  src 10.42.0.12
+10.42.0.0/16 via 10.42.0.1 dev eth0
+192.168.1.0/24 via 192.168.1.1 dev net1  src 192.168.1.2
+192.168.1.1 dev net1 scope link  src 192.168.1.2
+```
+
+在节点上执行 `ip` 命令，查看节点的网卡和 IP 地址信息，可以看到除了节点的 `lo` 和 `eth0`，Flannel CNI 的 `flannel.1`, `cni0` 和一些其他 Pod 的 Veth Pair，有一个 Veth Pair 的 IP 地址为 `192.168.1.1/32`，这个是由样例 ptp CNI 创建。
+
+```console
+$ ip a
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host noprefixroute
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:de:78:16 brd ff:ff:ff:ff:ff:ff
+    altname enp1s0
+    inet 10.128.0.101/12 brd 10.143.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::5054:ff:fede:7816/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+3: flannel.1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UNKNOWN group default
+    link/ether ee:82:b4:a0:d9:4d brd ff:ff:ff:ff:ff:ff
+    inet 10.42.0.0/32 scope global flannel.1
+       valid_lft forever preferred_lft forever
+    inet6 fe80::ec82:b4ff:fea0:d94d/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+4: cni0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue state UP group default qlen 1000
+    link/ether 6e:99:8d:63:e5:4b brd ff:ff:ff:ff:ff:ff
+    inet 10.42.0.1/24 brd 10.42.0.255 scope global cni0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::6c99:8dff:fe63:e54b/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+18: vethf91807b2@if2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1450 qdisc noqueue master cni0 state UP group default
+    link/ether 6a:dd:6f:b9:29:8a brd ff:ff:ff:ff:ff:ff link-netns cni-dba4ed62-c7d7-98fa-0efb-ffa6a8e526a3
+    inet6 fe80::68dd:6fff:feb9:298a/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+19: veth37d38de3@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default
+    link/ether ee:29:cc:72:e0:a5 brd ff:ff:ff:ff:ff:ff link-netns cni-dba4ed62-c7d7-98fa-0efb-ffa6a8e526a3
+    inet 192.168.1.1/32 scope global veth37d38de3
+       valid_lft forever preferred_lft forever
+    inet6 fe80::ec29:ccff:fe72:e0a5/64 scope link proto kernel_ll
+       valid_lft forever preferred_lft forever
+```
+
+显然这个样例 P2P CNI 只能通过 Veth Pair 访问当前节点的 Pod，无法跨节点访问运行在别的节点的 Pod。
+
+### 手动执行 CNI CHECK 命令
+
+到这里其实你可以魔改一下上面介绍的 P2P 样例 CNI 插件，打一些日志输出到某个文件中，看一下 `netlink` 执行的结果以及 CNI 执行时传递的参数之类的……
+
+在 Pod 创建时会执行 ADD 命令，删除时会执行 DEL 命令，但如果想调试 CHECK 命令，可以手动为 CNI 传递相应参数执行 CHECK 命令。
+
+首先准备一份包含 `prevResult` 的 CNI Config，参照下方的 Config 修改 `prevResult` 字段。
+
+```json
+{
+    "cniVersion": "1.0.0",
+    "name": "ptp-conf",
+    "type": "ptp",
+    "ipam": {
+        "type": "host-local",
+        "subnet": "192.168.1.0/24"
+    },
+    "dns": {
+        "nameservers": [ "192.168.1.0", "8.8.8.8" ]
+    },
+    "prevResult": {
+        "cniVersion": "1.0.0",
+        "type": "ptp",
+        "interfaces": [
+            {
+                "mac": "6a:0b:7d:4b:6f:c5",
+                "name": "net1",
+                "sandbox": "/var/run/netns/cni-dba4ed62-c7d7-98fa-0efb-ffa6a8e526a3"
+            }
+        ],
+        "ips": [
+            {
+                "address": "192.168.1.2/24",
+                "interface": 0
+            }
+        ],
+        "ipam": {
+            "type": "host-local",
+            "subnet": "192.168.1.0/24"
+        },
+        "dns": {
+            "nameservers": [ "192.168.1.0", "8.8.8.8" ]
+        }
+    }
+}
+
+```
+
+设置 CNI 环境变量，传递 CHECK 命令需要的参数。如果实在不清楚 NETNS 和 CONTAINERID 的话，可以魔改 ADD 和 DEL 命令的代码，把参数打印到某个日志文件中。
+
+```sh
+#!/bin/bash
+
+export CNI_PATH="/var/lib/rancher/k3s/data/current/bin"
+export PATH=$CNI_PATH:$PATH
+export CNI_CONTAINERID="f19d5f601d6227bdf0cb28b43862632e98ecd23cd44d08e8ba1b2d8f27c9639c"
+export CNI_NETNS="/var/run/netns/cni-dba4ed62-c7d7-98fa-0efb-ffa6a8e526a3"
+export CNI_IFNAME=net1
+
+export CNI_COMMAND=CHECK
+
+/var/lib/rancher/k3s/data/current/bin/ptp < p2p.json
+```
+
+如果验证错误，会返回一串包含错误信息的 JSON：
+
+```json
+{
+    "code": 999,
+    "msg": "host-local: Failed to find address added by container caf3bc30ca71c847b84741b48a188456277867b404c409628ed33dc7aeb7d1a8"
+}
+```
+
+如果 CHECK 运行成功，CNI 程序的返回值将为 0，没有文字输出。
+
+----
+
+同理，你可以手动创建一个 Network Namespace 模拟容器网络，编辑上方相应的参数执行 CNI Binary 为这个 NS 创建/删除 Veth Pair。
 
 > 未完待续
