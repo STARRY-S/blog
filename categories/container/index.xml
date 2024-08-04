@@ -456,11 +456,9 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;msg&#34;</span><span class="p">:</span> <span class="s2">&#34;host-local: Failed to find address added by container caf3bc30ca71c847b84741b48a188456277867b404c409628ed33dc7aeb7d1a8&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>如果 CHECK 运行成功，CNI 程序的返回值将为 0，没有文字输出。</p>
-<hr>
 <p>同理，你可以手动创建一个 Network Namespace 模拟容器网络，编辑上方相应的参数执行 CNI Binary 为这个 NS 创建/删除 Veth Pair。</p>
-<blockquote>
-<p>未完待续</p>
-</blockquote>]]></content:encoded>
+<h2 id="others">Others</h2>
+<p>前几天生病了所以咕了好几天，感觉一篇博客把 CNI 和它的好朋友们全讲完不太现实，而且篇幅会变得巨长。所以到这里你已经清楚了 CNI 是个什么东西并具备手搓一个简单的 CNI 网络插件的能力了，至于上面提到的 *VLAN 以及那些目前成熟的网络插件们（Calico、Flannel、Cilium 等）感兴趣的话可以自行去折腾了，Kubernetes 集群上使用的成熟的 CNI 插件可不单要实现上面样例的 P2P 插件简单的功能，后面咱如果有时间的话打算再开一篇博客写这些东西了。</p>]]></content:encoded>
     </item>
     
     <item>
