@@ -12,7 +12,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Thu, 11 Jul 2024 01:12:36 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 05 Aug 2024 01:02:47 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Arch Linux</title>
+      <link>https://blog.starry-s.moe/tags/arch-linux/</link>
+      <pubDate>Mon, 05 Aug 2024 01:02:47 +0800</pubDate>
+      
+      <guid>https://blog.starry-s.moe/tags/arch-linux/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>Container</title>
       <link>https://blog.starry-s.moe/tags/container/</link>
@@ -79,16 +89,6 @@
       <pubDate>Wed, 24 Apr 2024 23:54:04 +0800</pubDate>
       
       <guid>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>Arch Linux</title>
-      <link>https://blog.starry-s.moe/tags/arch-linux/</link>
-      <pubDate>Sun, 03 Mar 2024 22:49:16 +0800</pubDate>
-      
-      <guid>https://blog.starry-s.moe/tags/arch-linux/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
