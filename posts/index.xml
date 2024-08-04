@@ -51,7 +51,10 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">--enable-wayland-ime
 </span></span></code></pre></div><h2 id="吐嘈">吐嘈</h2>
 <p>以后再买笔记本时要多留意一下，尽量别买高分屏（但现在中高端本全是高分屏），还要避免双显卡，一旦买了双显卡的电脑大概率没办法用 Wayland，还要多花好多时间折腾双显卡混合交火，还得规避掉英伟达新版本驱动会 Kernel Panic 的 Bug。</p>
-<p>一旦你买了双显卡高分屏笔记本，那么恭喜你只能用 X11，没有分数倍缩放，所以你只需要准备一个放大镜用来看屏幕就能解决问题（确信）。</p>]]></content:encoded>
+<p>一旦你买了双显卡高分屏笔记本，那么恭喜你只能用 X11，没有分数倍缩放，所以你只需要准备一个放大镜用来看屏幕就能解决问题（确信）。</p>
+<p><img loading="lazy" src="images/2.png" alt="" />
+
+</p>]]></content:encoded>
     </item>
     
     <item>
