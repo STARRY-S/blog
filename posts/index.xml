@@ -38,16 +38,16 @@
 <p><img loading="lazy" src="images/1.png" alt="" />
 
 </p>
-<p>切换到 Wayland 并启用 150% 的分数倍缩放后，终于不需要再拿显微镜看屏幕的图标和文字了，但很快就会发现 Chrome 和 Election 的应用的文字全是模糊的，强迫症当然不能忍，查了一下发现原来虽然系统切到 Wayland 了，但这些应用依旧在使用 X 没有切换成 Wayland。</p>
+<p>切换到 Wayland 并启用 150% 的分数倍缩放后，终于不需要再拿显微镜看屏幕的图标和文字了，但很快就会发现 Chrome 和 Electron 的应用的文字全是模糊的，强迫症当然不能忍，查了一下发现原来虽然系统切到 Wayland 了，但这些应用依旧在使用 X 没有切换成 Wayland。</p>
 <p>所以对于 Chrome，需要创建 <code>~/.config/chrome-flags.conf</code> 加几个 Flag 使用 GTK4。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">--gtk-version=4 --ozone-platform=wayland --enable-wayland-ime
 </span></span></code></pre></div><p>那些基于 Electron 的应用，例如 Visual Studio Code，设置 <code>~/.config/code-flags.conf</code>：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">--gtk-version=4 --enable-wayland-ime
-</span></span></code></pre></div><p>然后如果你是 GNOME 用户，你会发现把 Chrome/Election 切换到 Wayland 后没办法使用第三方输入法，因为 GNOME 不支持 <code>text-input-v1</code> 而 Chromium 只支持 <code>text-input-v3</code>，所以对于这个问题，目前的 Workaround 是安装 <code>archlinuxcn/mutter-performance</code> 替换掉 GNOME 的 <code>mutter</code>。</p>
+</span></span></code></pre></div><p>然后如果你是 GNOME 用户，你会发现把 Chrome/Electron 切换到 Wayland 后没办法使用第三方输入法，因为 GNOME 不支持 <code>text-input-v1</code> 而 Chromium 只支持 <code>text-input-v3</code>，所以对于这个问题，目前的 Workaround 是安装 <code>archlinuxcn/mutter-performance</code> 替换掉 GNOME 的 <code>mutter</code>。</p>
 <p>不过这个不是十分完美的解决方法，VSCode 在启动多个窗口，放到不同的 Workspace 里会遇到鼠标右键点不开和输入法的问题，不过勉强能接受，所以不管了（或者我最近在考虑要不要换一个文本编辑器而不是 VSCode）。</p>
 <p>然后就是 Chromium 最近好像在支持 <code>text-input-v3</code> 了，所以别骂了别骂了，不要再黑 GNOME 了……</p>
 <hr>
-<p>所以现在就是，每新安装一个 Election 应用，都得给他创建个 <code>~/.config/[NAME].conf</code>……</p>
+<p>所以现在就是，每新安装一个 Electron 应用，都得给他创建个 <code>~/.config/[NAME].conf</code>……</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">--enable-wayland-ime
 </span></span></code></pre></div><h2 id="吐嘈">吐嘈</h2>
 <p>以后再买笔记本时要多留意一下，尽量别买高分屏（但现在中高端本全是高分屏），还要避免双显卡，一旦买了双显卡的电脑大概率没办法用 Wayland，还要多花好多时间折腾双显卡混合交火，还得规避掉英伟达新版本驱动会 Kernel Panic 的 Bug。</p>
