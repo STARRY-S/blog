@@ -38,7 +38,7 @@ categories:
 
 ![](images/1.png)
 
-切换到 Wayland 并启用 150% 的分数倍缩放后，终于不需要再拿显微镜看屏幕的图标和文字了，但很快就会发现 Chrome 和 Election 的应用的文字全是模糊的，强迫症当然不能忍，查了一下发现原来虽然系统切到 Wayland 了，但这些应用依旧在使用 X 没有切换成 Wayland。
+切换到 Wayland 并启用 150% 的分数倍缩放后，终于不需要再拿显微镜看屏幕的图标和文字了，但很快就会发现 Chrome 和 Electron 的应用的文字全是模糊的，强迫症当然不能忍，查了一下发现原来虽然系统切到 Wayland 了，但这些应用依旧在使用 X 没有切换成 Wayland。
 
 所以对于 Chrome，需要创建 `~/.config/chrome-flags.conf` 加几个 Flag 使用 GTK4。
 
@@ -52,7 +52,7 @@ categories:
 --gtk-version=4 --enable-wayland-ime
 ```
 
-然后如果你是 GNOME 用户，你会发现把 Chrome/Election 切换到 Wayland 后没办法使用第三方输入法，因为 GNOME 不支持 `text-input-v1` 而 Chromium 只支持 `text-input-v3`，所以对于这个问题，目前的 Workaround 是安装 `archlinuxcn/mutter-performance` 替换掉 GNOME 的 `mutter`。
+然后如果你是 GNOME 用户，你会发现把 Chrome/Electron 切换到 Wayland 后没办法使用第三方输入法，因为 GNOME 不支持 `text-input-v1` 而 Chromium 只支持 `text-input-v3`，所以对于这个问题，目前的 Workaround 是安装 `archlinuxcn/mutter-performance` 替换掉 GNOME 的 `mutter`。
 
 不过这个不是十分完美的解决方法，VSCode 在启动多个窗口，放到不同的 Workspace 里会遇到鼠标右键点不开和输入法的问题，不过勉强能接受，所以不管了（或者我最近在考虑要不要换一个文本编辑器而不是 VSCode）。
 
@@ -60,7 +60,7 @@ categories:
 
 ----
 
-所以现在就是，每新安装一个 Election 应用，都得给他创建个 `~/.config/[NAME].conf`……
+所以现在就是，每新安装一个 Electron 应用，都得给他创建个 `~/.config/[NAME].conf`……
 
 ```
 --enable-wayland-ime
