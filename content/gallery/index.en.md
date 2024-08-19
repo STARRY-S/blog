@@ -6,11 +6,9 @@ ShowReadingTime: false
 ShowWordCount: false
 ---
 
-It's been a long journey for me to learn and practice photography. At the beginning of this year, I acquired an APS-C frame Canon R7 and Sigma 18-35 F1.8 & 50-100 F1.8 lenses for practicing photography.
-
 Hope you enjoy the photos on this page :-)
 
-{{< 
+{{<
     gallery
     match="images/*"
     sortOrder="desc"
