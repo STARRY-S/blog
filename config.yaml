@@ -58,46 +58,9 @@ languages:
         name: 关于
         url: /about/
         weight: 70
-  en:
-    languageName: English
-    weight: 10
-    taxonomies:
-      category: categories
-      tag: tags
-      series: series
-    menu:
-      main:
-      - identifier: gallery
-        name: Gallery
-        url: /gallery/
-        weight: 10
-      - identifier: archives
-        name: Archives
-        url: /archives/
-        weight: 20
-      - identifier: tags
-        name: Tags
-        url: /tags/
-        weight: 30
-      - identifier: categories
-        name: Categories
-        url: /categories/
-        weight: 40
-      - identifier: search
-        name: Search
-        url: /search/
-        weight: 50
-      - identifier: search
-        name: Friends
-        url: /friends/
-        weight: 60
-      - identifier: about
-        name: About
-        url: /about/
-        weight: 70
     params:
       profileMode:
-        enabled: true # needs to be explicitly set
+        enabled: false # needs to be explicitly set
         title: STARRY-S' Blog
         subtitle: <span id="random-home-info"></span>
         imageUrl: "/apple-touch-icon.png"
