@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 12 Nov 2023 01:35:41 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 12 Nov 2023 12:21:22 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/categories/%E6%95%99%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何选择 zip 和 tar 文件格式</title>
       <link>https://blog.starry-s.moe/posts/2023/zip-tar/</link>
       <pubDate>Sun, 12 Nov 2023 01:35:41 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/zip-tar/</guid>
       <description>&lt;p&gt;最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。</p>
@@ -177,12 +178,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 <p>在搞这些东西的时候刚好赶上公司的 HackWeek，本来咱已经创建了一个 HackWeek Project，就是上面咱说的容器镜像导入/导出工具的开发这些事情。所以咱在这个基础上又创建了一个新的 HackWeek Project，就是在 Go <code>archive/zip</code> 标准库基础上新增 <code>zip.Updater</code> 相关功能，链接我扔在 <a href="https://hackweek.opensuse.org/23/projects/go-zip-updator-appending-new-files-to-zip-archive-without-decompressing-the-whole-file">这里</a>，感兴趣的话可以去瞅瞅。</p>
 <p>最终咱实现了 <code>Updater</code> 的代码仓库在 <a href="https://github.com/STARRY-S/zip">这里</a>，感兴趣的可以去看看，点个 star 什么的。因为基于 <code>io.ReadWriteSeeker</code> 实现的 <code>zip.Updater</code> 并不是最优解，最正确的方式是 Go 什么时候出一个类似 <code>io.ReadWriterAt</code> 接口，在不用改变 <code>Seek</code> 的前提下就能读取/写入指定 offset 的数据，加上自认为咱的程序设计水平还赶不上 Go 维护者，所以咱想了一下就还是先不提 PR 给 Go 源码仓库了。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>修复缩小磁盘空间后受损的 GPT 分区表</title>
       <link>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</link>
       <pubDate>Wed, 18 Oct 2023 21:42:02 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</guid>
       <description>&lt;p&gt;磁盘的扩容和分区的扩/缩容场景很常见，比如分区用着用着快满了，而磁盘有空闲的未分区空间，而这块区域恰好在这块分区的后面，这时可以对分区扩容。
 在使用虚拟机（例如 QEMU）时，假设起初虚拟机的磁盘只创建了 20G，但用久了会存在不够用的情况，这时可以对磁盘扩容，之后再调整分区的大小。&lt;/p&gt;
@@ -488,12 +487,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 </span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sfdisk /dev/nbd0 &lt; partition-backup.txt
 </span></span></code></pre></div>]]></content:encoded>
     </item>
-    
     <item>
       <title>yuzu - Switch 虚拟机</title>
       <link>https://blog.starry-s.moe/posts/2022/switch-emulator/</link>
       <pubDate>Sun, 16 Oct 2022 15:48:46 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/switch-emulator/</guid>
       <description>&lt;p&gt;一直想玩的游戏没有官方汉化，Switch 的游戏文件没破解的话是没办法装汉化插件的，尽管咱有 Switch OLED 港版主机，但是破解有被封的可能而且过程过于麻烦，破解后就不能联网了，所以咱在买了正版游戏但是看不懂日语后无奈之下选择了虚拟机，正好水一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>一直想玩的游戏没有官方汉化，Switch 的游戏文件没破解的话是没办法装汉化插件的，尽管咱有 Switch OLED 港版主机，但是破解有被封的可能而且过程过于麻烦，破解后就不能联网了，所以咱在买了正版游戏但是看不懂日语后无奈之下选择了虚拟机，正好水一篇博客。</p>
@@ -525,12 +522,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 </span></span><span class="line"><span class="cl">zsh: IOT instruction (core dumped)  yuzu
 </span></span></code></pre></div><p>查了一阵子找到的解决办法是设置 <code>QT_PLUGIN_PATH=/usr/lib/qt/plugins</code> 环境变量，覆盖掉 yuzu 安装包自带的 Qt 插件而是改用系统的。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>移动GM220-S光猫改桥接小记</title>
       <link>https://blog.starry-s.moe/posts/2022/gm220-s-bridge-mode/</link>
       <pubDate>Thu, 07 Jul 2022 17:54:35 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/gm220-s-bridge-mode/</guid>
       <description>&lt;p&gt;最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。</p>
@@ -555,12 +550,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 <hr>
 <p>使用了一下移动的宽带发现貌似他们把所有的ICMP的ECHO回显请求屏蔽掉了，所以尝试ping任何IP都是不通的。别的貌似没什么问题。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>在Arch Linux上配置软路由</title>
       <link>https://blog.starry-s.moe/posts/2022/archlinux-router/</link>
       <pubDate>Wed, 08 Jun 2022 00:49:34 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/archlinux-router/</guid>
       <description>&lt;p&gt;之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用&lt;code&gt;systemd-networkd&lt;/code&gt;配置了一个简易的软路由。不过&lt;code&gt;systemd-networkd&lt;/code&gt;不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为&lt;a href=&#34;https://blog.starry-s.moe/posts/2022/nanopi-r4s/&#34;&gt;R4S上手体验&lt;/a&gt;的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用<code>systemd-networkd</code>配置了一个简易的软路由。不过<code>systemd-networkd</code>不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为<a href="/posts/2022/nanopi-r4s/">R4S上手体验</a>的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。</p>
@@ -686,12 +679,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>配置好“有线中继”模式后，电脑连接无线WIFI后获得的IP地址应当是软路由分配的IP地址，网段为刚刚咱们设置的<code>10.10.10.*</code>，
 而不再是<code>192.168.*</code>的IP地址了。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>NanoPi R4S上手 &amp; 安装Arch Linux ARM</title>
       <link>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</link>
       <pubDate>Fri, 13 May 2022 00:32:40 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</guid>
       <description>&lt;p&gt;前两天下单了个Nano Pi R4S，4G内存的版本。通常情况下这玩意别人都把他当软路由用，但是今天咱收到货后想了一会拍大腿一寻思这玩意不就是个ARM架构的小电脑嘛~&lt;/p&gt;
 &lt;p&gt;所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。&lt;/p&gt;</description>
@@ -896,12 +887,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <li><a href="https://zhuanlan.zhihu.com/p/392619184">在 NanoPi R2S 上安装 Archlinuxarm - 知乎</a></li>
 </ul>]]></content:encoded>
     </item>
-    
     <item>
       <title>自建RSS服务器：Miniflux</title>
       <link>https://blog.starry-s.moe/posts/2022/miniflux-build/</link>
       <pubDate>Tue, 01 Mar 2022 22:24:17 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/miniflux-build/</guid>
       <description>&lt;p&gt;之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。&lt;/p&gt;
 &lt;p&gt;最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
@@ -984,12 +973,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>Miniflux支持Fever和Google Reader等第三方服务，参考<a href="https://miniflux.app/docs/services.html">官方文档</a>，可以在服务器的设置-&gt;集成页面中配置，之后在别的设备中安装客户端，可以阅读订阅的文章，比网页版好用一些。</p>
 <p><strong>STARRY-S</strong></p>]]></content:encoded>
     </item>
-    
     <item>
       <title>使用树莓派搭建一个NAS</title>
       <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
       <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
       <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
@@ -1153,12 +1140,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>所以到此为止，咱的Samba服务器就搭建好了。</p>
 <p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>小米路由器3G之使用TTL串口刷机救砖</title>
       <link>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</link>
       <pubDate>Fri, 22 Jan 2021 22:10:01 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</guid>
       <description>&lt;p&gt;本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。&lt;/p&gt;
 &lt;p&gt;然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。&lt;/p&gt;
@@ -1255,12 +1240,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </span></span><span class="line"><span class="cl">root@XiaoQiang:~#
 </span></span></code></pre></div>]]></content:encoded>
     </item>
-    
     <item>
       <title>小米路由器3G折腾之刷OpenWrt记录</title>
       <link>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</link>
       <pubDate>Tue, 19 Feb 2019 00:49:20 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</guid>
       <description>&lt;p&gt;生命不息, 折腾不止&amp;hellip;&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>生命不息, 折腾不止&hellip;</p>
@@ -1394,6 +1377,5 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </ol>
 <p>然后建议把opkg源能改为https的都改为https。</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

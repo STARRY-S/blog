@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 25 Sep 2021 22:20:03 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Wed, 29 Sep 2021 01:07:48 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用树莓派搭建一个NAS</title>
       <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
       <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
       <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
@@ -181,12 +182,10 @@
 <p>所以到此为止，咱的Samba服务器就搭建好了。</p>
 <p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>树莓派之我的世界服务器</title>
       <link>https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/</link>
       <pubDate>Fri, 25 Nov 2016 15:01:28 +0000</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/</guid>
       <description>&lt;p&gt;刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。</p>
@@ -231,6 +230,5 @@
 </span></span><span class="line"><span class="cl">$ ./java/jdk1.8.0/bin/java -Xms512M -Xmx1024M -jar./paperclip.jar
 </span></span></code></pre></div><p>在配置好你的服务器后就可以和小伙伴一起联机了。经过测试几个人简单的联机运行蛮正常的。</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

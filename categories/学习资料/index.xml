@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Mon, 10 May 2021 21:33:10 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:03:39 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Learn OpenGL</title>
       <link>https://blog.starry-s.moe/posts/2021/learn_opengl/</link>
       <pubDate>Mon, 10 May 2021 21:33:10 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/learn_opengl/</guid>
       <description>&lt;p&gt;其实咱很久很久以前就开始看&lt;a href=&#34;https://learnopengl-cn.github.io/&#34;&gt;LearnOpenGL CN&lt;/a&gt;这个网站了&amp;hellip;&amp;hellip;&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>其实咱很久很久以前就开始看<a href="https://learnopengl-cn.github.io/">LearnOpenGL CN</a>这个网站了&hellip;&hellip;</p>
@@ -373,12 +374,10 @@
 </ul>
 <hr>]]></content:encoded>
     </item>
-    
     <item>
       <title>51单片机习题整理</title>
       <link>https://blog.starry-s.moe/posts/2020/learn-mcs8051/</link>
       <pubDate>Tue, 03 Nov 2020 20:19:36 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2020/learn-mcs8051/</guid>
       <description>&lt;p&gt;赶在&lt;del&gt;期中考试&lt;/del&gt;(骑磨烤柿)前把单片机的课后习题整理出来&amp;hellip;&lt;/p&gt;
 &lt;p&gt;(实在是没什么可拿来更新博客的了, 就干脆写点复习资料吧&amp;hellip;)&lt;/p&gt;</description>
@@ -1343,6 +1342,5 @@
 </table>
 <hr>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

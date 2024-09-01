@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Fri, 02 Aug 2019 23:49:39 +0000</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/trip/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Fri, 02 Aug 2019 23:49:39 +0000</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/trip/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>近期日常：2019.6-2019.8</title>
       <link>https://blog.starry-s.moe/posts/2019/shanghai-2/</link>
       <pubDate>Fri, 02 Aug 2019 23:49:39 +0000</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/shanghai-2/</guid>
       <description>&lt;p&gt;好久没有更新博客了，大一下半年一直在忙各种考试，除此之外还有一堆乱七八糟的事情要忙，更新博客的事就只好一点点往后拖了，于是拖更到了8月，后决定不继续拖更但实在没什么拿得出手的技术类文章可写，正好最近还遇到许多有趣的事情，就整理成日常写在这里吧。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>好久没有更新博客了，大一下半年一直在忙各种考试，除此之外还有一堆乱七八糟的事情要忙，更新博客的事就只好一点点往后拖了，于是拖更到了8月，后决定不继续拖更但实在没什么拿得出手的技术类文章可写，正好最近还遇到许多有趣的事情，就整理成日常写在这里吧。</p>
@@ -60,6 +61,5 @@
 <p style="margin-bottom: -0.8em;" class="image-title">猪笼草</p>
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

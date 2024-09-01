@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Tue, 30 Jan 2024 18:52:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/multus/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 30 Jan 2024 18:52:00 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/multus/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>K3s &#43; Multus CNI 插件使用 Macvlan</title>
       <link>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</link>
       <pubDate>Tue, 30 Jan 2024 18:52:00 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://k3s.io/&#34;&gt;K3s&lt;/a&gt; 是一个轻量的 Kubernetes 集群，&lt;a href=&#34;https://github.com/k8snetworkplumbingwg/multus-cni&#34;&gt;Multus&lt;/a&gt; 是一个用于给 Pod 创建多个网络接口的 CNI (Container Network Interface) 插件，其创建的接口支持 &lt;code&gt;macvlan&lt;/code&gt;。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p><a href="https://k3s.io/">K3s</a> 是一个轻量的 Kubernetes 集群，<a href="https://github.com/k8snetworkplumbingwg/multus-cni">Multus</a> 是一个用于给 Pod 创建多个网络接口的 CNI (Container Network Interface) 插件，其创建的接口支持 <code>macvlan</code>。</p>
@@ -148,6 +149,5 @@
 <li><a href="https://forums.docker.com/t/host-and-containers-cannot-communicate-macvlan/112968">Host and Containers cannot communicate - MACVLAN</a></li>
 </ul>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

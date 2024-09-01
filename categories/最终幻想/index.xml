@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 20 Aug 2022 20:09:04 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/%E6%9C%80%E7%BB%88%E5%B9%BB%E6%83%B3/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sat, 20 Aug 2022 20:09:04 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/categories/%E6%9C%80%E7%BB%88%E5%B9%BB%E6%83%B3/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>FinalFantasy VII Remake 游戏记录</title>
       <link>https://blog.starry-s.moe/posts/2022/finalfantasy-vii/</link>
       <pubDate>Sat, 20 Aug 2022 20:09:04 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/finalfantasy-vii/</guid>
       <description>&lt;p&gt;前一阵子通关了最终幻想7重置版，放几张截图到这里水一期博客。&lt;/p&gt;
 &lt;blockquote&gt;
@@ -126,6 +127,5 @@
 <hr>
 <meting-js server="netease" type="song" id="1818030780" theme="#233333"></meting-js>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

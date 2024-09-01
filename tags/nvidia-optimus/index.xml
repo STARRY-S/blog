@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 19 Jul 2020 15:29:57 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/nvidia-optimus/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 23 Feb 2021 18:58:33 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/nvidia-optimus/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>惠普光影精灵4在Arch Linux下使用Optimus Manager配置双显卡</title>
       <link>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</link>
       <pubDate>Sun, 19 Jul 2020 15:29:57 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</guid>
       <description>&lt;p&gt;自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, &lt;del&gt;尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下&lt;/del&gt;（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, <del>尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下</del>（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。</p>
@@ -203,6 +204,5 @@
 <p style="margin-bottom: -0.8em;" class="image-title">neofetch</p>
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

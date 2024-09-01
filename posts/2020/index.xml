@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Wed, 01 Jan 2020 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/2020/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Wed, 09 Dec 2020 12:31:15 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/posts/2020/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>51单片机习题整理</title>
       <link>https://blog.starry-s.moe/posts/2020/learn-mcs8051/</link>
       <pubDate>Tue, 03 Nov 2020 20:19:36 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2020/learn-mcs8051/</guid>
       <description>&lt;p&gt;赶在&lt;del&gt;期中考试&lt;/del&gt;(骑磨烤柿)前把单片机的课后习题整理出来&amp;hellip;&lt;/p&gt;
 &lt;p&gt;(实在是没什么可拿来更新博客的了, 就干脆写点复习资料吧&amp;hellip;)&lt;/p&gt;</description>
@@ -982,6 +983,12 @@
 </table>
 <hr>]]></content:encoded>
     </item>
-    
+    <item>
+      <title>2020</title>
+      <link>https://blog.starry-s.moe/posts/2020/_index.en/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/posts/2020/_index.en/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

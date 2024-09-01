@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Mon, 05 Aug 2024 01:02:47 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Mon, 05 Aug 2024 01:02:47 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>联想 ThinkBook 16 Gen6 安装 Arch Linux</title>
       <link>https://blog.starry-s.moe/posts/2024/lenovo-thinkbook-16-6g/</link>
       <pubDate>Mon, 05 Aug 2024 01:02:47 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/lenovo-thinkbook-16-6g/</guid>
       <description>&lt;p&gt;本来没打算这么早换笔记本，但是之前大学时买的联想 R7000P 它坏了……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>本来没打算这么早换笔记本，但是之前大学时买的联想 R7000P 它坏了……</p>
@@ -56,12 +57,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>再探容器网络</title>
       <link>https://blog.starry-s.moe/posts/2024/container-network-2/</link>
       <pubDate>Thu, 11 Jul 2024 01:12:36 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/container-network-2/</guid>
       <description>&lt;p&gt;在写之前的 &lt;a href=&#34;../container-network-1/&#34;&gt;初探容器网络&lt;/a&gt; 时是想过什么时候写后续的，这期间鸽了不到半年，嗯也不算很久，忙完手头的事情继续更一下容器网络系列……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>在写之前的 <a href="../container-network-1/">初探容器网络</a> 时是想过什么时候写后续的，这期间鸽了不到半年，嗯也不算很久，忙完手头的事情继续更一下容器网络系列……</p>
@@ -504,12 +503,10 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <h2 id="others">Others</h2>
 <p>前几天生病了所以咕了好几天，感觉一篇博客把 CNI 和它的好朋友们全讲完不太现实，而且篇幅会变得巨长。所以到这里你已经清楚了 CNI 是个什么东西并具备手搓一个简单的 CNI 网络插件的能力了，至于上面提到的 *VLAN 以及那些目前成熟的网络插件们（Calico、Flannel、Cilium 等）感兴趣的话可以自行去折腾了，Kubernetes 集群上使用的成熟的 CNI 插件可不单要实现上面样例的 P2P 插件简单的功能，后面咱如果有时间的话打算再开一篇博客写这些东西了。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Leader Election 折腾小记</title>
       <link>https://blog.starry-s.moe/posts/2024/leader-election/</link>
       <pubDate>Wed, 12 Jun 2024 23:58:26 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/leader-election/</guid>
       <description>&lt;p&gt;最近好忙，有很多想写博客的东西都没时间写，五一去了佛山的 HiFurry，本来想着整理点照片水一篇博客但没时间也没精力，所以最后想写的东西就都咽肚里就饭吃了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近好忙，有很多想写博客的东西都没时间写，五一去了佛山的 HiFurry，本来想着整理点照片水一篇博客但没时间也没精力，所以最后想写的东西就都咽肚里就饭吃了。</p>
@@ -580,12 +577,10 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <p>通常 <code>sample-controller</code> 或其他简单的 Controller 在 Worker Start 执行完之后，会加一个 <code>&lt;-ctx.Done()</code> 阻塞（<a href="https://github.com/kubernetes/sample-controller/blob/master/controller.go#L182">代码位置</a>），遇到 Context Cancel 后直接结束运行。但如果加了 Leader Election 机制，当 Context Cancel 时是由 Leader Election 的 <code>OnStoppedLeading</code> 回调函数结束运行并释放 Lease 锁，所以 <code>main</code> 函数可以改为使用 <code>select {}</code> 阻塞，否则程序在 Context Cancel 时 Lease 锁还没来得及释放就由 <code>main</code> 函数结束运行了。</p>
 <p>所以读到这里，可以得出结论，就算设置数量特别多的 Replicas，实际上依旧只有一个 Controller Pod 在执行真正的 Sync 逻辑，而其他 Pod 只是在观望，或者只提供一些 Web Server 功能。如果想让多个冗余 Pod 分别 Sync 不同的资源更新，需要设计一个更复杂的锁，而这又会增加一定的 API Server 请求数量……</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>摄影日记 - 2024 春</title>
       <link>https://blog.starry-s.moe/posts/2024/spring-2024/</link>
       <pubDate>Wed, 24 Apr 2024 23:54:04 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/spring-2024/</guid>
       <description>&lt;p&gt;差一点就错过了今年春天的花……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>差一点就错过了今年春天的花……</p>
@@ -644,12 +639,10 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Arch Linux 连接小米照片打印机 1S</title>
       <link>https://blog.starry-s.moe/posts/2024/archlinux-xiaomi-photo-printer-1s/</link>
       <pubDate>Sun, 03 Mar 2024 22:49:16 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/archlinux-xiaomi-photo-printer-1s/</guid>
       <description>&lt;p&gt;奇怪的反图方式增加了……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>奇怪的反图方式增加了……</p>
@@ -673,12 +666,10 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>初探容器网络</title>
       <link>https://blog.starry-s.moe/posts/2024/container-network-1/</link>
       <pubDate>Mon, 26 Feb 2024 19:21:28 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/container-network-1/</guid>
       <description>&lt;p&gt;稍微折腾一下容器网络相关的东西……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>稍微折腾一下容器网络相关的东西……</p>
@@ -1053,12 +1044,10 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="go">Login Succeeded
 </span></span></span></code></pre></div>]]></content:encoded>
     </item>
-    
     <item>
       <title>K3s &#43; Multus CNI 插件使用 Macvlan</title>
       <link>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</link>
       <pubDate>Tue, 30 Jan 2024 18:52:00 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/k3s-multus-macvlan/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://k3s.io/&#34;&gt;K3s&lt;/a&gt; 是一个轻量的 Kubernetes 集群，&lt;a href=&#34;https://github.com/k8snetworkplumbingwg/multus-cni&#34;&gt;Multus&lt;/a&gt; 是一个用于给 Pod 创建多个网络接口的 CNI (Container Network Interface) 插件，其创建的接口支持 &lt;code&gt;macvlan&lt;/code&gt;。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p><a href="https://k3s.io/">K3s</a> 是一个轻量的 Kubernetes 集群，<a href="https://github.com/k8snetworkplumbingwg/multus-cni">Multus</a> 是一个用于给 Pod 创建多个网络接口的 CNI (Container Network Interface) 插件，其创建的接口支持 <code>macvlan</code>。</p>
@@ -1189,12 +1178,10 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <li><a href="https://forums.docker.com/t/host-and-containers-cannot-communicate-macvlan/112968">Host and Containers cannot communicate - MACVLAN</a></li>
 </ul>]]></content:encoded>
     </item>
-    
     <item>
       <title>一些 Arch Linux 的常用组件整理</title>
       <link>https://blog.starry-s.moe/posts/2024/archlinux-utils/</link>
       <pubDate>Tue, 30 Jan 2024 18:44:07 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/archlinux-utils/</guid>
       <description>&lt;p&gt;用这么久 Arch 了，但是却很少写 Arch 相关的博客……&lt;/p&gt;
 &lt;p&gt;最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 &lt;code&gt;pacstrap&lt;/code&gt; 时都要想半天咱需要装什么……&lt;/p&gt;</description>
@@ -1346,12 +1333,10 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></code></pre></div><hr>
 <p>未完待续，如果还想到了别的再补充到这儿。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2024</title>
       <link>https://blog.starry-s.moe/posts/2024/hello-2024/</link>
       <pubDate>Thu, 18 Jan 2024 23:12:28 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/hello-2024/</guid>
       <description>&lt;p&gt;这里没有年终总结。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>这里没有年终总结。</p>
@@ -1381,6 +1366,12 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <h2 id="其他">其他</h2>
 <p>2023 年实际上对咱来说是一个很糟糕的一年，我很烦那些不切实际的羡慕，我很反感那些对自己现状不满而总是羡慕别人的人。很多时候咱把咱好的一面展现出来而把不好的事情埋在心里，不想让别人担心，就算是生病或者心情不好到了极点咱也会发点和这些不相关的朋友圈和消息之类的，我不想向别人讲自己的烦恼和困扰，但这会给人一种 “他过得比我好，我好羡慕他” 的感觉。很多时候是咱靠着仅存的一点兴趣和爱好一个人在硬撑着，但是那种有些东西自己没有而别人有就去说风凉话的真的很恶心。很多事都不是凭空偶然发生的，特别的能力会招惹来特别的能力。嗯，不知道自己还能撑多久，也不知道自己以后会去哪里，总之就是挺喜欢橙子老师说的，“我们并不是根据背负的罪来选择道路，而是先选择道路再背负起自己的罪孽”，“所谓的 ‘逃’ 有两种，漫无目的的逃以及带有目的的逃。一般将前者称为 ‘漂浮’，后者称为 ‘飞行’”。不知道咱自己还能飞多久，也不知道自己是在故意挥动翅膀，装出自己好像在飞行的样子，实际已经坠落了呢。</p>]]></content:encoded>
     </item>
-    
+    <item>
+      <title>Posts</title>
+      <link>https://blog.starry-s.moe/posts/_index.en/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://blog.starry-s.moe/posts/_index.en/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

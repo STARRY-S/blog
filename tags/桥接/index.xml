@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Thu, 07 Jul 2022 17:54:35 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E6%A1%A5%E6%8E%A5/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Thu, 07 Jul 2022 17:54:35 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E6%A1%A5%E6%8E%A5/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>移动GM220-S光猫改桥接小记</title>
       <link>https://blog.starry-s.moe/posts/2022/gm220-s-bridge-mode/</link>
       <pubDate>Thu, 07 Jul 2022 17:54:35 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/gm220-s-bridge-mode/</guid>
       <description>&lt;p&gt;最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。</p>
@@ -42,6 +43,5 @@
 <hr>
 <p>使用了一下移动的宽带发现貌似他们把所有的ICMP的ECHO回显请求屏蔽掉了，所以尝试ping任何IP都是不通的。别的貌似没什么问题。</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

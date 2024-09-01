@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Tue, 16 Jan 2018 22:58:06 +0000</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E9%9F%B3%E4%B9%90/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 16 Jan 2018 22:58:06 +0000</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E9%9F%B3%E4%B9%90/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hello 2018</title>
       <link>https://blog.starry-s.moe/posts/2018/hello-2018/</link>
       <pubDate>Tue, 16 Jan 2018 22:58:06 +0000</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2018/hello-2018/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/5cm_per_second.jpg&#34; alt=&#34;秒速5厘米&#34; /&gt;
 
@@ -35,6 +36,5 @@
 <p style="margin-bottom: -0.8em;" class="image-title">秒速五厘米</p>
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

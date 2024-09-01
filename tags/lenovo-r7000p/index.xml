@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Mon, 22 Mar 2021 19:51:32 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/lenovo-r7000p/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 11 Apr 2021 13:50:48 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/lenovo-r7000p/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>联想R7000P安装Arch Linux的常见问题</title>
       <link>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</link>
       <pubDate>Mon, 22 Mar 2021 19:51:32 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</guid>
       <description>&lt;p&gt;旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&amp;hellip;&lt;/p&gt;
 &lt;p&gt;于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。&lt;/p&gt;
@@ -123,6 +124,5 @@
 <p style="margin-bottom: -0.8em;" class="image-title">GNOME 40</p>
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

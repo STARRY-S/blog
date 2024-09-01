@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Mon, 01 Jan 2018 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/2018/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Mon, 01 Oct 2018 22:25:49 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/posts/2018/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Lifeline</title>
       <link>https://blog.starry-s.moe/posts/2018/life-in-sau/</link>
       <pubDate>Mon, 01 Oct 2018 22:25:49 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2018/life-in-sau/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/trip.jpg&#34; alt=&#34;Trip&#34; /&gt;
 
@@ -31,12 +32,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>使用HMCL启动Minecraft</title>
       <link>https://blog.starry-s.moe/posts/2018/hmcl-minecraft/</link>
       <pubDate>Sun, 29 Jul 2018 17:26:35 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2018/hmcl-minecraft/</guid>
       <description>&lt;p&gt;终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( &lt;del&gt;没钱买鼠标？&lt;/del&gt; )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( <del>没钱买鼠标？</del> )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。</p>
@@ -101,12 +100,10 @@
 </ul>
 <p>如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Spring - 2</title>
       <link>https://blog.starry-s.moe/posts/2018/spring-2/</link>
       <pubDate>Thu, 05 Apr 2018 18:05:11 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2018/spring-2/</guid>
       <description></description>
       <content:encoded><![CDATA[<p><img loading="lazy" src="images/05.jpeg" alt="Spring" />
@@ -140,12 +137,10 @@
 <p>拍摄自2018-3-28</p>
 </blockquote>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2018</title>
       <link>https://blog.starry-s.moe/posts/2018/hello-2018/</link>
       <pubDate>Tue, 16 Jan 2018 22:58:06 +0000</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2018/hello-2018/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/5cm_per_second.jpg&#34; alt=&#34;秒速5厘米&#34; /&gt;
 
@@ -163,6 +158,12 @@
 <p style="margin-bottom: -0.8em;" class="image-title">秒速五厘米</p>
 </p>]]></content:encoded>
     </item>
-    
+    <item>
+      <title>2018</title>
+      <link>https://blog.starry-s.moe/posts/2018/_index.en/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/posts/2018/_index.en/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Mon, 05 Aug 2024 01:02:47 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Mon, 05 Aug 2024 01:02:47 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>联想 ThinkBook 16 Gen6 安装 Arch Linux</title>
       <link>https://blog.starry-s.moe/posts/2024/lenovo-thinkbook-16-6g/</link>
       <pubDate>Mon, 05 Aug 2024 01:02:47 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/lenovo-thinkbook-16-6g/</guid>
       <description>&lt;p&gt;本来没打算这么早换笔记本，但是之前大学时买的联想 R7000P 它坏了……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>本来没打算这么早换笔记本，但是之前大学时买的联想 R7000P 它坏了……</p>
@@ -56,12 +57,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Arch Linux 连接小米照片打印机 1S</title>
       <link>https://blog.starry-s.moe/posts/2024/archlinux-xiaomi-photo-printer-1s/</link>
       <pubDate>Sun, 03 Mar 2024 22:49:16 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/archlinux-xiaomi-photo-printer-1s/</guid>
       <description>&lt;p&gt;奇怪的反图方式增加了……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>奇怪的反图方式增加了……</p>
@@ -85,12 +84,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>一些 Arch Linux 的常用组件整理</title>
       <link>https://blog.starry-s.moe/posts/2024/archlinux-utils/</link>
       <pubDate>Tue, 30 Jan 2024 18:44:07 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/archlinux-utils/</guid>
       <description>&lt;p&gt;用这么久 Arch 了，但是却很少写 Arch 相关的博客……&lt;/p&gt;
 &lt;p&gt;最近常需要在虚拟机上装 Arch，所以把常用工具及配置整理在这儿，省得每次 &lt;code&gt;pacstrap&lt;/code&gt; 时都要想半天咱需要装什么……&lt;/p&gt;</description>
@@ -242,12 +239,10 @@
 </span></span></code></pre></div><hr>
 <p>未完待续，如果还想到了别的再补充到这儿。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>NAS 装机记录</title>
       <link>https://blog.starry-s.moe/posts/2022/build-nas/</link>
       <pubDate>Sat, 12 Nov 2022 13:25:03 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/build-nas/</guid>
       <description>&lt;p&gt;差不多去年的这个时候尝试过用树莓派插移动硬盘的方式试探性的组装了一个 NAS，但实际上用了不到两天这个方案就被废弃掉了……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>差不多去年的这个时候尝试过用树莓派插移动硬盘的方式试探性的组装了一个 NAS，但实际上用了不到两天这个方案就被废弃掉了……</p>
@@ -382,12 +377,10 @@
 <hr>
 <p><strong>STARRY-S</strong></p>]]></content:encoded>
     </item>
-    
     <item>
       <title>在Arch Linux上配置软路由</title>
       <link>https://blog.starry-s.moe/posts/2022/archlinux-router/</link>
       <pubDate>Wed, 08 Jun 2022 00:49:34 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/archlinux-router/</guid>
       <description>&lt;p&gt;之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用&lt;code&gt;systemd-networkd&lt;/code&gt;配置了一个简易的软路由。不过&lt;code&gt;systemd-networkd&lt;/code&gt;不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为&lt;a href=&#34;https://blog.starry-s.moe/posts/2022/nanopi-r4s/&#34;&gt;R4S上手体验&lt;/a&gt;的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用<code>systemd-networkd</code>配置了一个简易的软路由。不过<code>systemd-networkd</code>不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为<a href="/posts/2022/nanopi-r4s/">R4S上手体验</a>的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。</p>
@@ -513,12 +506,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>配置好“有线中继”模式后，电脑连接无线WIFI后获得的IP地址应当是软路由分配的IP地址，网段为刚刚咱们设置的<code>10.10.10.*</code>，
 而不再是<code>192.168.*</code>的IP地址了。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>NanoPi R4S上手 &amp; 安装Arch Linux ARM</title>
       <link>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</link>
       <pubDate>Fri, 13 May 2022 00:32:40 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</guid>
       <description>&lt;p&gt;前两天下单了个Nano Pi R4S，4G内存的版本。通常情况下这玩意别人都把他当软路由用，但是今天咱收到货后想了一会拍大腿一寻思这玩意不就是个ARM架构的小电脑嘛~&lt;/p&gt;
 &lt;p&gt;所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。&lt;/p&gt;</description>
@@ -723,12 +714,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <li><a href="https://zhuanlan.zhihu.com/p/392619184">在 NanoPi R2S 上安装 Archlinuxarm - 知乎</a></li>
 </ul>]]></content:encoded>
     </item>
-    
     <item>
       <title>使用树莓派搭建一个NAS</title>
       <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
       <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
       <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
@@ -892,12 +881,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>所以到此为止，咱的Samba服务器就搭建好了。</p>
 <p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>联想R7000P安装Arch Linux的常见问题</title>
       <link>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</link>
       <pubDate>Mon, 22 Mar 2021 19:51:32 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</guid>
       <description>&lt;p&gt;旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&amp;hellip;&lt;/p&gt;
 &lt;p&gt;于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。&lt;/p&gt;
@@ -1003,12 +990,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p style="margin-bottom: -0.8em;" class="image-title">GNOME 40</p>
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>解决笔记本外接HIDPI显示器的缩放问题</title>
       <link>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</link>
       <pubDate>Sat, 09 Jan 2021 22:12:54 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</guid>
       <description>&lt;p&gt;前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经&lt;a href=&#34;https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/&#34;&gt;配置好了optimus-manager&lt;/a&gt;，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。&lt;/p&gt;
 &lt;p&gt;然后一看4K屏上的字小得瞎眼。&lt;/p&gt;
@@ -1066,12 +1051,10 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </li>
 </ul>]]></content:encoded>
     </item>
-    
     <item>
       <title>惠普光影精灵4在Arch Linux下使用Optimus Manager配置双显卡</title>
       <link>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</link>
       <pubDate>Sun, 19 Jul 2020 15:29:57 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</guid>
       <description>&lt;p&gt;自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, &lt;del&gt;尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下&lt;/del&gt;（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, <del>尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下</del>（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。</p>
@@ -1257,6 +1240,5 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <p style="margin-bottom: -0.8em;" class="image-title">neofetch</p>
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

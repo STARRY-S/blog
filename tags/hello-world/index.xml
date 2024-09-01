@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Mon, 22 Aug 2016 14:22:54 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/hello-world/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Mon, 22 Aug 2016 14:22:54 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/hello-world/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Everything is based on “Hello World”</title>
       <link>https://blog.starry-s.moe/posts/2016/hello-world/</link>
       <pubDate>Mon, 22 Aug 2016 14:22:54 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2016/hello-world/</guid>
       <description>&lt;p&gt;你好，世界！&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>你好，世界！</p>
@@ -36,6 +37,5 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

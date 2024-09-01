@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Tue, 01 Mar 2022 22:24:17 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/miniflux/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 01 Mar 2022 22:24:17 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/miniflux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>自建RSS服务器：Miniflux</title>
       <link>https://blog.starry-s.moe/posts/2022/miniflux-build/</link>
       <pubDate>Tue, 01 Mar 2022 22:24:17 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/miniflux-build/</guid>
       <description>&lt;p&gt;之前咱自己搭过一个Miniflux服务器，不过当时用得并不频繁，逐渐的被咱弃用了。&lt;/p&gt;
 &lt;p&gt;最近想订阅一些网站，因为使用RSS订阅的话，能收到更新提醒，不用经常的翻收藏夹去看页面内容有没有更新，使用RSS订阅的话也方便集中管理一些，
@@ -100,6 +101,5 @@
 <p>Miniflux支持Fever和Google Reader等第三方服务，参考<a href="https://miniflux.app/docs/services.html">官方文档</a>，可以在服务器的设置-&gt;集成页面中配置，之后在别的设备中安装客户端，可以阅读订阅的文章，比网页版好用一些。</p>
 <p><strong>STARRY-S</strong></p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

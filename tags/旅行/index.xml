@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Fri, 04 Aug 2023 20:47:50 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E6%97%85%E8%A1%8C/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 06 Aug 2023 01:07:34 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E6%97%85%E8%A1%8C/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>七月末的短暂旅行小记</title>
       <link>https://blog.starry-s.moe/posts/2023/2023-07-20/</link>
       <pubDate>Fri, 04 Aug 2023 20:47:50 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/2023-07-20/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;找不到答案的时候就去看看这个世界。&lt;/p&gt;
@@ -158,12 +159,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>咱今年的五一旅行游记</title>
       <link>https://blog.starry-s.moe/posts/2023/2023-05-01/</link>
       <pubDate>Mon, 08 May 2023 00:37:04 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/2023-05-01/</guid>
       <description>&lt;p&gt;回忆前几天的旅行就仿佛在回忆一场睡了很长的梦一样……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>回忆前几天的旅行就仿佛在回忆一场睡了很长的梦一样……</p>
@@ -372,12 +371,10 @@
 <p>回想一下咱五一假期逛了三个城市，一共五天的漫展，还去了一些其他的旅游景点……</p>
 <p>算是报复性旅游吧，其实一开始没打算这么高强度旅行的，但玩着玩着就成了特种兵式旅游了……</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>一个人的旅行 —— 上海</title>
       <link>https://blog.starry-s.moe/posts/2019/shanghai/</link>
       <pubDate>Tue, 09 Apr 2019 13:24:44 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/shanghai/</guid>
       <description>&lt;p&gt;不要问我为什么过了这么久才把这篇文章码出来…&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>不要问我为什么过了这么久才把这篇文章码出来…</p>
@@ -517,6 +514,5 @@
 </p>
 <p>飞机即将降落时在城市上空绕了好几圈，体验了好几次失重的感觉（太好玩了我还要玩 #啪）</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

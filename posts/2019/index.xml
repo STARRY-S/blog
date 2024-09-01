@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Tue, 01 Jan 2019 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/2019/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sat, 23 Jan 2021 12:36:44 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/posts/2019/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>近期日常：2019.6-2019.8</title>
       <link>https://blog.starry-s.moe/posts/2019/shanghai-2/</link>
       <pubDate>Fri, 02 Aug 2019 23:49:39 +0000</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/shanghai-2/</guid>
       <description>&lt;p&gt;好久没有更新博客了，大一下半年一直在忙各种考试，除此之外还有一堆乱七八糟的事情要忙，更新博客的事就只好一点点往后拖了，于是拖更到了8月，后决定不继续拖更但实在没什么拿得出手的技术类文章可写，正好最近还遇到许多有趣的事情，就整理成日常写在这里吧。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>好久没有更新博客了，大一下半年一直在忙各种考试，除此之外还有一堆乱七八糟的事情要忙，更新博客的事就只好一点点往后拖了，于是拖更到了8月，后决定不继续拖更但实在没什么拿得出手的技术类文章可写，正好最近还遇到许多有趣的事情，就整理成日常写在这里吧。</p>
@@ -60,12 +61,10 @@
 <p style="margin-bottom: -0.8em;" class="image-title">猪笼草</p>
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Spring - 3</title>
       <link>https://blog.starry-s.moe/posts/2019/spring-3/</link>
       <pubDate>Fri, 03 May 2019 23:20:43 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/spring-3/</guid>
       <description></description>
       <content:encoded><![CDATA[<meting-js server="netease" type="song" id="1322356616" theme="#233333"></meting-js>
@@ -89,12 +88,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>一个人的旅行 —— 上海</title>
       <link>https://blog.starry-s.moe/posts/2019/shanghai/</link>
       <pubDate>Tue, 09 Apr 2019 13:24:44 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/shanghai/</guid>
       <description>&lt;p&gt;不要问我为什么过了这么久才把这篇文章码出来…&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>不要问我为什么过了这么久才把这篇文章码出来…</p>
@@ -234,12 +231,10 @@
 </p>
 <p>飞机即将降落时在城市上空绕了好几圈，体验了好几次失重的感觉（太好玩了我还要玩 #啪）</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>小米路由器3G折腾之刷OpenWrt记录</title>
       <link>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</link>
       <pubDate>Tue, 19 Feb 2019 00:49:20 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</guid>
       <description>&lt;p&gt;生命不息, 折腾不止&amp;hellip;&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>生命不息, 折腾不止&hellip;</p>
@@ -373,12 +368,10 @@
 </ol>
 <p>然后建议把opkg源能改为https的都改为https。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Automata</title>
       <link>https://blog.starry-s.moe/posts/2019/nier-automata/</link>
       <pubDate>Sun, 17 Feb 2019 15:34:50 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/nier-automata/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/20190216233002_1.jpg&#34; alt=&#34;&#34; /&gt;
 
@@ -412,6 +405,12 @@
 
 </p>]]></content:encoded>
     </item>
-    
+    <item>
+      <title>2019</title>
+      <link>https://blog.starry-s.moe/posts/2019/_index.en/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/posts/2019/_index.en/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

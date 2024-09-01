@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Tue, 05 Sep 2023 22:45:15 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/koreader/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 05 Sep 2023 22:45:15 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/koreader/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Kobo Libra 2 安装 KOReader</title>
       <link>https://blog.starry-s.moe/posts/2023/kobo-libra-2/</link>
       <pubDate>Tue, 05 Sep 2023 22:45:15 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/kobo-libra-2/</guid>
       <description>&lt;p&gt;今年的六月初的时候赶着 618 活动入手了 Kobo Libra 2 电纸书，距离上次博客更新刚好过去一个月，想于是想着把 Kobo Libra 2 安装 KOReader 踩坑的记录写在这里刚好可以水一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>今年的六月初的时候赶着 618 活动入手了 Kobo Libra 2 电纸书，距离上次博客更新刚好过去一个月，想于是想着把 Kobo Libra 2 安装 KOReader 踩坑的记录写在这里刚好可以水一篇博客。</p>
@@ -73,6 +74,5 @@
 
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

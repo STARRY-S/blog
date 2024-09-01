@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 12 Nov 2022 13:25:03 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/nas/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 20 Nov 2022 15:04:46 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/nas/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>NAS 装机记录</title>
       <link>https://blog.starry-s.moe/posts/2022/build-nas/</link>
       <pubDate>Sat, 12 Nov 2022 13:25:03 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/build-nas/</guid>
       <description>&lt;p&gt;差不多去年的这个时候尝试过用树莓派插移动硬盘的方式试探性的组装了一个 NAS，但实际上用了不到两天这个方案就被废弃掉了……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>差不多去年的这个时候尝试过用树莓派插移动硬盘的方式试探性的组装了一个 NAS，但实际上用了不到两天这个方案就被废弃掉了……</p>
@@ -152,12 +153,10 @@
 <hr>
 <p><strong>STARRY-S</strong></p>]]></content:encoded>
     </item>
-    
     <item>
       <title>使用树莓派搭建一个NAS</title>
       <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
       <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
       <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
@@ -321,6 +320,5 @@
 <p>所以到此为止，咱的Samba服务器就搭建好了。</p>
 <p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

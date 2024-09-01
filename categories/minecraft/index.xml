@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 08 Jul 2023 22:56:44 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/minecraft/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sat, 08 Jul 2023 22:56:44 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/categories/minecraft/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>玩了三年的 Minecraft 生存存档</title>
       <link>https://blog.starry-s.moe/posts/2023/minecraft/</link>
       <pubDate>Sat, 08 Jul 2023 22:56:44 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/minecraft/</guid>
       <description>&lt;p&gt;这个 Minecraft 存档是咱在 2020 年年初的时候建立的，起初是 1.15.2 单机生存，当时在 B 站学着 TIS 以及其他生电服的思路安装了一些生存辅助插件，后来升级到了 1.16.5，并在去年年底迁移到了我的 NAS 上改成了私人服务器。尽管玩了三年多的时间了但我从来没详细的在博客上记录这个存档，只有在前几年的年终总结中提到过“我在玩 Mincraft，今年建了什么建筑……”，眼瞅着三周年已经过去了，本来想录个纪念视频发 B 站上的，但因为太懒、不想学视频剪辑，这个计划一直咕咕了，不过最近想到可以把存档截图放博客里作为三周年纪念。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>这个 Minecraft 存档是咱在 2020 年年初的时候建立的，起初是 1.15.2 单机生存，当时在 B 站学着 TIS 以及其他生电服的思路安装了一些生存辅助插件，后来升级到了 1.16.5，并在去年年底迁移到了我的 NAS 上改成了私人服务器。尽管玩了三年多的时间了但我从来没详细的在博客上记录这个存档，只有在前几年的年终总结中提到过“我在玩 Mincraft，今年建了什么建筑……”，眼瞅着三周年已经过去了，本来想录个纪念视频发 B 站上的，但因为太懒、不想学视频剪辑，这个计划一直咕咕了，不过最近想到可以把存档截图放博客里作为三周年纪念。</p>
@@ -170,12 +171,10 @@
 <hr>
 <p>以上基本是咱玩了三年的单人生存存档的全部内容了，还有些在建和小型的建筑个人认为没必要贴到这里，因为最近逐渐没有玩下去的兴趣了所以不知道以后还能不能继续坚持玩下去，所以想了一下这三年时间建的建筑蛮多的因此写到这里水一篇博客。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>使用HMCL启动Minecraft</title>
       <link>https://blog.starry-s.moe/posts/2018/hmcl-minecraft/</link>
       <pubDate>Sun, 29 Jul 2018 17:26:35 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2018/hmcl-minecraft/</guid>
       <description>&lt;p&gt;终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( &lt;del&gt;没钱买鼠标？&lt;/del&gt; )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( <del>没钱买鼠标？</del> )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。</p>
@@ -240,12 +239,10 @@
 </ul>
 <p>如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>树莓派之我的世界服务器</title>
       <link>https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/</link>
       <pubDate>Fri, 25 Nov 2016 15:01:28 +0000</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/</guid>
       <description>&lt;p&gt;刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>刚买树莓派3B时就想弄一个我的世界服务器，但是那时不懂Linux，服务器也就没建成。这一阵子打算把这个计划再捡起来，和同学一起联机的话树莓派还是能做到的。ARM系列的CPU性能肯定比X86_64电脑的CPU弱许多，外加上树莓派1G的运行内存，让它跑大型服务器肯定是不可能的，所以只能弄一个几个人联机的小服务器了。</p>
@@ -290,6 +287,5 @@
 </span></span><span class="line"><span class="cl">$ ./java/jdk1.8.0/bin/java -Xms512M -Xmx1024M -jar./paperclip.jar
 </span></span></code></pre></div><p>在配置好你的服务器后就可以和小伙伴一起联机了。经过测试几个人简单的联机运行蛮正常的。</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

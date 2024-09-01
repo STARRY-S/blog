@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 12 Nov 2023 01:35:41 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/archive/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 12 Nov 2023 12:21:22 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/archive/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何选择 zip 和 tar 文件格式</title>
       <link>https://blog.starry-s.moe/posts/2023/zip-tar/</link>
       <pubDate>Sun, 12 Nov 2023 01:35:41 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/zip-tar/</guid>
       <description>&lt;p&gt;最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。</p>
@@ -177,6 +178,5 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 <p>在搞这些东西的时候刚好赶上公司的 HackWeek，本来咱已经创建了一个 HackWeek Project，就是上面咱说的容器镜像导入/导出工具的开发这些事情。所以咱在这个基础上又创建了一个新的 HackWeek Project，就是在 Go <code>archive/zip</code> 标准库基础上新增 <code>zip.Updater</code> 相关功能，链接我扔在 <a href="https://hackweek.opensuse.org/23/projects/go-zip-updator-appending-new-files-to-zip-archive-without-decompressing-the-whole-file">这里</a>，感兴趣的话可以去瞅瞅。</p>
 <p>最终咱实现了 <code>Updater</code> 的代码仓库在 <a href="https://github.com/STARRY-S/zip">这里</a>，感兴趣的可以去看看，点个 star 什么的。因为基于 <code>io.ReadWriteSeeker</code> 实现的 <code>zip.Updater</code> 并不是最优解，最正确的方式是 Go 什么时候出一个类似 <code>io.ReadWriterAt</code> 接口，在不用改变 <code>Seek</code> 的前提下就能读取/写入指定 offset 的数据，加上自认为咱的程序设计水平还赶不上 Go 维护者，所以咱想了一下就还是先不提 PR 给 Go 源码仓库了。</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

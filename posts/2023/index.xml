@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 01 Jan 2023 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/2023/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 12 Nov 2023 12:21:22 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/posts/2023/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>如何选择 zip 和 tar 文件格式</title>
       <link>https://blog.starry-s.moe/posts/2023/zip-tar/</link>
       <pubDate>Sun, 12 Nov 2023 01:35:41 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/zip-tar/</guid>
       <description>&lt;p&gt;最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近遇到了一个归档文件格式选择的问题，于是顺手记录下来水一篇博客。</p>
@@ -177,12 +178,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 <p>在搞这些东西的时候刚好赶上公司的 HackWeek，本来咱已经创建了一个 HackWeek Project，就是上面咱说的容器镜像导入/导出工具的开发这些事情。所以咱在这个基础上又创建了一个新的 HackWeek Project，就是在 Go <code>archive/zip</code> 标准库基础上新增 <code>zip.Updater</code> 相关功能，链接我扔在 <a href="https://hackweek.opensuse.org/23/projects/go-zip-updator-appending-new-files-to-zip-archive-without-decompressing-the-whole-file">这里</a>，感兴趣的话可以去瞅瞅。</p>
 <p>最终咱实现了 <code>Updater</code> 的代码仓库在 <a href="https://github.com/STARRY-S/zip">这里</a>，感兴趣的可以去看看，点个 star 什么的。因为基于 <code>io.ReadWriteSeeker</code> 实现的 <code>zip.Updater</code> 并不是最优解，最正确的方式是 Go 什么时候出一个类似 <code>io.ReadWriterAt</code> 接口，在不用改变 <code>Seek</code> 的前提下就能读取/写入指定 offset 的数据，加上自认为咱的程序设计水平还赶不上 Go 维护者，所以咱想了一下就还是先不提 PR 给 Go 源码仓库了。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>修复缩小磁盘空间后受损的 GPT 分区表</title>
       <link>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</link>
       <pubDate>Wed, 18 Oct 2023 21:42:02 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/fix-shrunken-disk-broken-partition-table/</guid>
       <description>&lt;p&gt;磁盘的扩容和分区的扩/缩容场景很常见，比如分区用着用着快满了，而磁盘有空闲的未分区空间，而这块区域恰好在这块分区的后面，这时可以对分区扩容。
 在使用虚拟机（例如 QEMU）时，假设起初虚拟机的磁盘只创建了 20G，但用久了会存在不够用的情况，这时可以对磁盘扩容，之后再调整分区的大小。&lt;/p&gt;
@@ -488,12 +487,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 </span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sfdisk /dev/nbd0 &lt; partition-backup.txt
 </span></span></code></pre></div>]]></content:encoded>
     </item>
-    
     <item>
       <title>Kobo Libra 2 安装 KOReader</title>
       <link>https://blog.starry-s.moe/posts/2023/kobo-libra-2/</link>
       <pubDate>Tue, 05 Sep 2023 22:45:15 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/kobo-libra-2/</guid>
       <description>&lt;p&gt;今年的六月初的时候赶着 618 活动入手了 Kobo Libra 2 电纸书，距离上次博客更新刚好过去一个月，想于是想着把 Kobo Libra 2 安装 KOReader 踩坑的记录写在这里刚好可以水一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>今年的六月初的时候赶着 618 活动入手了 Kobo Libra 2 电纸书，距离上次博客更新刚好过去一个月，想于是想着把 Kobo Libra 2 安装 KOReader 踩坑的记录写在这里刚好可以水一篇博客。</p>
@@ -549,12 +546,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>七月末的短暂旅行小记</title>
       <link>https://blog.starry-s.moe/posts/2023/2023-07-20/</link>
       <pubDate>Fri, 04 Aug 2023 20:47:50 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/2023-07-20/</guid>
       <description>&lt;blockquote&gt;
 &lt;p&gt;找不到答案的时候就去看看这个世界。&lt;/p&gt;
@@ -695,12 +690,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>玩了三年的 Minecraft 生存存档</title>
       <link>https://blog.starry-s.moe/posts/2023/minecraft/</link>
       <pubDate>Sat, 08 Jul 2023 22:56:44 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/minecraft/</guid>
       <description>&lt;p&gt;这个 Minecraft 存档是咱在 2020 年年初的时候建立的，起初是 1.15.2 单机生存，当时在 B 站学着 TIS 以及其他生电服的思路安装了一些生存辅助插件，后来升级到了 1.16.5，并在去年年底迁移到了我的 NAS 上改成了私人服务器。尽管玩了三年多的时间了但我从来没详细的在博客上记录这个存档，只有在前几年的年终总结中提到过“我在玩 Mincraft，今年建了什么建筑……”，眼瞅着三周年已经过去了，本来想录个纪念视频发 B 站上的，但因为太懒、不想学视频剪辑，这个计划一直咕咕了，不过最近想到可以把存档截图放博客里作为三周年纪念。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>这个 Minecraft 存档是咱在 2020 年年初的时候建立的，起初是 1.15.2 单机生存，当时在 B 站学着 TIS 以及其他生电服的思路安装了一些生存辅助插件，后来升级到了 1.16.5，并在去年年底迁移到了我的 NAS 上改成了私人服务器。尽管玩了三年多的时间了但我从来没详细的在博客上记录这个存档，只有在前几年的年终总结中提到过“我在玩 Mincraft，今年建了什么建筑……”，眼瞅着三周年已经过去了，本来想录个纪念视频发 B 站上的，但因为太懒、不想学视频剪辑，这个计划一直咕咕了，不过最近想到可以把存档截图放博客里作为三周年纪念。</p>
@@ -853,12 +846,10 @@ GNU tar 中实现的 header 结构定义文档参考这个 <a href="https://www.
 <hr>
 <p>以上基本是咱玩了三年的单人生存存档的全部内容了，还有些在建和小型的建筑个人认为没必要贴到这里，因为最近逐渐没有玩下去的兴趣了所以不知道以后还能不能继续坚持玩下去，所以想了一下这三年时间建的建筑蛮多的因此写到这里水一篇博客。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>当你刚开始尝试去写 Kubernetes Controller……</title>
       <link>https://blog.starry-s.moe/posts/2023/kube-controller/</link>
       <pubDate>Sat, 10 Jun 2023 02:33:58 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/kube-controller/</guid>
       <description>&lt;p&gt;Controller 对初学着来说有那么亿点点抽象，虽然网络上能找到很多有关 Kubernetes Controller 的讲解，但是 Kubernetes 的学习过程往往是一个离散的而不是连续的过程。如果想弄懂 Controller 还是有蛮高门槛的，不要想着看完 Kubernetes 的文档，速成了 Kubernetes 的基本知识就去尝试写 Controller，这种操作就好比刚过完新手教程就去打高难副本，尽管能仿着 &lt;code&gt;sample-controller&lt;/code&gt; 写一个能“跑”的 Controller，但仅仅只能做到能“跑”的程度……&lt;/p&gt;
 &lt;blockquote&gt;
@@ -942,12 +933,10 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 </blockquote>
 <p>之后如果想把你编写的 Controller (Operator) 应用到生产环境，打包给更多的人使用，可以把编译好的 Operator 二进制文件放到容器镜像中，之后使用 <a href="https://helm.sh">Helm</a> 创建一个 &ldquo;应用程序 (Chart)&quot;，通过编写 <a href="https://helm.sh/docs/chart_best_practices/templates/">模板</a>，在安装 Helm Chart 时编辑 <code>values.yaml</code> 中定义的字段来自定义 CRD 的参数。Helm 的模板本质上是 Go Template 模板渲染引擎，所以用起来都是很简单的（确信）。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>使用 Helm Chart 方式部署 Harbor</title>
       <link>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</link>
       <pubDate>Sun, 28 May 2023 16:49:45 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</guid>
       <description>&lt;p&gt;打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。</p>
@@ -1122,12 +1111,10 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 </span></span></span><span class="line"><span class="cl"><span class="go">Storing list signatures
 </span></span></span></code></pre></div>]]></content:encoded>
     </item>
-    
     <item>
       <title>容器镜像 Manifest 相关内容整理</title>
       <link>https://blog.starry-s.moe/posts/2023/container-manifest/</link>
       <pubDate>Sun, 21 May 2023 01:50:27 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/container-manifest/</guid>
       <description>&lt;p&gt;最近总在弄些容器镜像相关的东西，于是分享一些咱自己总结的有关容器镜像 Manifest 格式、常用工具以及代码相关的芝士。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近总在弄些容器镜像相关的东西，于是分享一些咱自己总结的有关容器镜像 Manifest 格式、常用工具以及代码相关的芝士。</p>
@@ -1619,12 +1606,10 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>构建 Manifest 的栗子中，用到了一部分 Manifest 的代码，用来获取 amd64 架构的镜像和 arm64 架构镜像的 Manifest 文本长度，并计算 Digest。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>咱今年的五一旅行游记</title>
       <link>https://blog.starry-s.moe/posts/2023/2023-05-01/</link>
       <pubDate>Mon, 08 May 2023 00:37:04 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/2023-05-01/</guid>
       <description>&lt;p&gt;回忆前几天的旅行就仿佛在回忆一场睡了很长的梦一样……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>回忆前几天的旅行就仿佛在回忆一场睡了很长的梦一样……</p>
@@ -1833,12 +1818,10 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 <p>回想一下咱五一假期逛了三个城市，一共五天的漫展，还去了一些其他的旅游景点……</p>
 <p>算是报复性旅游吧，其实一开始没打算这么高强度旅行的，但玩着玩着就成了特种兵式旅游了……</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>咱的摄影日记 - 2023 春</title>
       <link>https://blog.starry-s.moe/posts/2023/spring-2023/</link>
       <pubDate>Sat, 22 Apr 2023 01:07:53 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/spring-2023/</guid>
       <description>&lt;p&gt;从去年的春天到现在已经过去一年了……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>从去年的春天到现在已经过去一年了……</p>
@@ -1957,12 +1940,10 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>“关于我逛了一趟漫展然后换了新的相机和镜头这件事”</title>
       <link>https://blog.starry-s.moe/posts/2023/canon-eos-r7/</link>
       <pubDate>Fri, 24 Feb 2023 22:50:26 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/canon-eos-r7/</guid>
       <description>&lt;p&gt;年初逛了一趟漫展之后突然想换新的相机了，因为对手里的 EOS 800D 成像不是很满意，暗光的高感表现很差，ISO 800 的时候 RAW 格式稍微拉一下阴影就会出现许多噪点，所以打算换个更专业点的相机，开拓些新的领域。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>年初逛了一趟漫展之后突然想换新的相机了，因为对手里的 EOS 800D 成像不是很满意，暗光的高感表现很差，ISO 800 的时候 RAW 格式稍微拉一下阴影就会出现许多噪点，所以打算换个更专业点的相机，开拓些新的领域。</p>
@@ -1994,12 +1975,10 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 <p>第一张是在中街用适马 17-50 拍的，后面那几张是在买了适马 18-35 之后去辽宁省博物馆拍的，最后一张是笨蛋公主的 Q 版手办，也是用适马 18-35 拍的，这几张我就稍微调了颜色，没有其他后期，很久没练习拍照了，这几张图就看看就行。</p>
 <p><del>拿巨沉的人像广角镜头去拍实物特写，唉我真的是不知道咋想的……</del></p>]]></content:encoded>
     </item>
-    
     <item>
       <title>入手一台家用级 APC UPS</title>
       <link>https://blog.starry-s.moe/posts/2023/apc-ups/</link>
       <pubDate>Sun, 08 Jan 2023 11:05:02 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/apc-ups/</guid>
       <description>&lt;p&gt;为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。</p>
@@ -2135,12 +2114,10 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 </span></span></code></pre></div><p>运行一个虚拟机一个 MineCraft 服务器，CPU 温度不到 40，所以很安静。</p>
 <p>但是 UPS 它有噪音，晚上睡觉的时候能听见 UPS 它嗡嗡响，比 AMD 散热器的风扇动静还大，这个实在是无解，算了就先这样吧。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2023</title>
       <link>https://blog.starry-s.moe/posts/2023/hello-2023/</link>
       <pubDate>Mon, 02 Jan 2023 01:20:31 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/hello-2023/</guid>
       <description>&lt;p&gt;2023 新年快乐。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>2023 新年快乐。</p>
@@ -2159,6 +2136,12 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 
 </p>]]></content:encoded>
     </item>
-    
+    <item>
+      <title>2023</title>
+      <link>https://blog.starry-s.moe/posts/2023/_index.en/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/posts/2023/_index.en/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

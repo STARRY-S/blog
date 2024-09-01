@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Fri, 13 May 2022 00:32:40 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/nanopi/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Fri, 13 May 2022 00:32:40 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/nanopi/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>NanoPi R4S上手 &amp; 安装Arch Linux ARM</title>
       <link>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</link>
       <pubDate>Fri, 13 May 2022 00:32:40 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</guid>
       <description>&lt;p&gt;前两天下单了个Nano Pi R4S，4G内存的版本。通常情况下这玩意别人都把他当软路由用，但是今天咱收到货后想了一会拍大腿一寻思这玩意不就是个ARM架构的小电脑嘛~&lt;/p&gt;
 &lt;p&gt;所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。&lt;/p&gt;</description>
@@ -222,6 +223,5 @@
 <li><a href="https://zhuanlan.zhihu.com/p/392619184">在 NanoPi R2S 上安装 Archlinuxarm - 知乎</a></li>
 </ul>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

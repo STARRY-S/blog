@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Wed, 12 Jun 2024 23:58:26 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/leader-election/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Wed, 12 Jun 2024 23:58:26 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/leader-election/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Leader Election 折腾小记</title>
       <link>https://blog.starry-s.moe/posts/2024/leader-election/</link>
       <pubDate>Wed, 12 Jun 2024 23:58:26 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/leader-election/</guid>
       <description>&lt;p&gt;最近好忙，有很多想写博客的东西都没时间写，五一去了佛山的 HiFurry，本来想着整理点照片水一篇博客但没时间也没精力，所以最后想写的东西就都咽肚里就饭吃了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>最近好忙，有很多想写博客的东西都没时间写，五一去了佛山的 HiFurry，本来想着整理点照片水一篇博客但没时间也没精力，所以最后想写的东西就都咽肚里就饭吃了。</p>
@@ -88,6 +89,5 @@
 <p>通常 <code>sample-controller</code> 或其他简单的 Controller 在 Worker Start 执行完之后，会加一个 <code>&lt;-ctx.Done()</code> 阻塞（<a href="https://github.com/kubernetes/sample-controller/blob/master/controller.go#L182">代码位置</a>），遇到 Context Cancel 后直接结束运行。但如果加了 Leader Election 机制，当 Context Cancel 时是由 Leader Election 的 <code>OnStoppedLeading</code> 回调函数结束运行并释放 Lease 锁，所以 <code>main</code> 函数可以改为使用 <code>select {}</code> 阻塞，否则程序在 Context Cancel 时 Lease 锁还没来得及释放就由 <code>main</code> 函数结束运行了。</p>
 <p>所以读到这里，可以得出结论，就算设置数量特别多的 Replicas，实际上依旧只有一个 Controller Pod 在执行真正的 Sync 逻辑，而其他 Pod 只是在观望，或者只提供一些 Web Server 功能。如果想让多个冗余 Pod 分别 Sync 不同的资源更新，需要设计一个更复杂的锁，而这又会增加一定的 API Server 请求数量……</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

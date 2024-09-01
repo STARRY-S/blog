@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 15 Aug 2021 00:23:55 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/nier-automata/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 15 Aug 2021 13:22:56 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/nier-automata/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>NieR:Automata 游戏记录</title>
       <link>https://blog.starry-s.moe/posts/2021/nier_automata/</link>
       <pubDate>Sun, 15 Aug 2021 00:23:55 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/nier_automata/</guid>
       <description>&lt;p&gt;这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。&lt;/p&gt;
 &lt;p&gt;尽管游戏玩了3遍，但是不敢保证说我把尼尔前前后后的每个细节都弄清楚，不过还是打算把我遇到的一些有意思的地方记录到博客中。&lt;/p&gt;</description>
@@ -171,6 +172,5 @@
 <p style="margin-bottom: -0.8em;" class="image-title">NieR:Automata</p>
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

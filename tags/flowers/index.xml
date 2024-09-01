@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Wed, 24 Apr 2024 23:54:04 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/flowers/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Wed, 24 Apr 2024 23:54:04 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/flowers/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>摄影日记 - 2024 春</title>
       <link>https://blog.starry-s.moe/posts/2024/spring-2024/</link>
       <pubDate>Wed, 24 Apr 2024 23:54:04 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/spring-2024/</guid>
       <description>&lt;p&gt;差一点就错过了今年春天的花……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>差一点就错过了今年春天的花……</p>
@@ -76,12 +77,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>咱的摄影日记 - 2023 春</title>
       <link>https://blog.starry-s.moe/posts/2023/spring-2023/</link>
       <pubDate>Sat, 22 Apr 2023 01:07:53 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/spring-2023/</guid>
       <description>&lt;p&gt;从去年的春天到现在已经过去一年了……&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>从去年的春天到现在已经过去一年了……</p>
@@ -200,12 +199,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Spring - 4</title>
       <link>https://blog.starry-s.moe/posts/2021/spring-4/</link>
       <pubDate>Mon, 03 May 2021 01:44:57 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/spring-4/</guid>
       <description>&lt;p&gt;咱去年忘了更新这个系列&amp;hellip;&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>咱去年忘了更新这个系列&hellip;</p>
@@ -248,12 +245,10 @@
 </p>
 <h1 id="spring---4">Spring - 4</h1>]]></content:encoded>
     </item>
-    
     <item>
       <title>Spring - 3</title>
       <link>https://blog.starry-s.moe/posts/2019/spring-3/</link>
       <pubDate>Fri, 03 May 2019 23:20:43 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/spring-3/</guid>
       <description></description>
       <content:encoded><![CDATA[<meting-js server="netease" type="song" id="1322356616" theme="#233333"></meting-js>
@@ -277,12 +272,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Spring - 2</title>
       <link>https://blog.starry-s.moe/posts/2018/spring-2/</link>
       <pubDate>Thu, 05 Apr 2018 18:05:11 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2018/spring-2/</guid>
       <description></description>
       <content:encoded><![CDATA[<p><img loading="lazy" src="images/05.jpeg" alt="Spring" />
@@ -316,12 +309,10 @@
 <p>拍摄自2018-3-28</p>
 </blockquote>]]></content:encoded>
     </item>
-    
     <item>
       <title>Spring</title>
       <link>https://blog.starry-s.moe/posts/2017/spring/</link>
       <pubDate>Fri, 05 May 2017 22:28:00 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2017/spring/</guid>
       <description>&lt;p&gt;前一阵子拍的一些花，简单地用手机和电脑调了颜色，感觉蛮好看的。感觉有的照片可以当作壁纸了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>前一阵子拍的一些花，简单地用手机和电脑调了颜色，感觉蛮好看的。感觉有的照片可以当作壁纸了。</p>
@@ -357,6 +348,5 @@
 
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

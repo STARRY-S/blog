@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/2017/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 27 Jun 2017 22:47:30 +0000</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/posts/2017/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>尽可能的写点什么</title>
       <link>https://blog.starry-s.moe/posts/2017/just-a-small-update/</link>
       <pubDate>Tue, 27 Jun 2017 22:47:30 +0000</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2017/just-a-small-update/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image4.jpg&#34; alt=&#34;&#34; /&gt;
 
@@ -38,12 +39,10 @@
 <iframe src="//player.bilibili.com/player.html?aid=810872&cid=1176840&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" width="100%" height="420px"></iframe>
 <h2 id="just-a-small-update">Just A Small Update.</h2>]]></content:encoded>
     </item>
-    
     <item>
       <title>Spring</title>
       <link>https://blog.starry-s.moe/posts/2017/spring/</link>
       <pubDate>Fri, 05 May 2017 22:28:00 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2017/spring/</guid>
       <description>&lt;p&gt;前一阵子拍的一些花，简单地用手机和电脑调了颜色，感觉蛮好看的。感觉有的照片可以当作壁纸了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>前一阵子拍的一些花，简单地用手机和电脑调了颜色，感觉蛮好看的。感觉有的照片可以当作壁纸了。</p>
@@ -79,12 +78,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2017!</title>
       <link>https://blog.starry-s.moe/posts/2017/hello-2017/</link>
       <pubDate>Sun, 01 Jan 2017 14:59:17 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2017/hello-2017/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/image.jpg&#34; alt=&#34;Hello 2017&#34; /&gt;
 
@@ -95,6 +92,12 @@
 <hr>
 <h2 id="hello-2017">Hello 2017!</h2>]]></content:encoded>
     </item>
-    
+    <item>
+      <title>2017</title>
+      <link>https://blog.starry-s.moe/posts/2017/_index.en/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/posts/2017/_index.en/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

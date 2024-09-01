@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 03 Jul 2021 21:01:37 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E6%91%98%E6%8A%84/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Wed, 02 Feb 2022 21:42:10 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E6%91%98%E6%8A%84/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>《空之境界》摘抄</title>
       <link>https://blog.starry-s.moe/posts/2021/karanokyokai/</link>
       <pubDate>Sat, 03 Jul 2021 21:01:37 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/karanokyokai/</guid>
       <description>&lt;p&gt;很久以前就打算二刷空境原著了，由于种种原因进展一直比较缓慢。&lt;/p&gt;
 &lt;p&gt;最终在 Kindle (&lt;del&gt;泡面盖&lt;/del&gt;) 上阅读时标记了一些不错的菌言菌语，整理到博客上。&lt;/p&gt;</description>
@@ -391,6 +392,5 @@
 <hr>
 <meting-js server="netease" type="song" id="590515" theme="#233333"></meting-js>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

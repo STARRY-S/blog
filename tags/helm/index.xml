@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sun, 28 May 2023 16:49:45 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/helm/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 28 May 2023 16:49:45 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/helm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用 Helm Chart 方式部署 Harbor</title>
       <link>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</link>
       <pubDate>Sun, 28 May 2023 16:49:45 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/harbor-helm-chart/</guid>
       <description>&lt;p&gt;打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>打算尝试在咱的 NAS 上搭一个 Harbor Registry Server 玩。</p>
@@ -192,6 +193,5 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">Storing list signatures
 </span></span></span></code></pre></div>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

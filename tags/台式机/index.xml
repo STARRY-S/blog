@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 26 Feb 2022 23:07:52 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E5%8F%B0%E5%BC%8F%E6%9C%BA/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sat, 26 Feb 2022 23:07:52 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E5%8F%B0%E5%BC%8F%E6%9C%BA/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>电脑换壳——先马趣造</title>
       <link>https://blog.starry-s.moe/posts/2022/sama-quzao/</link>
       <pubDate>Sat, 26 Feb 2022 23:07:52 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/sama-quzao/</guid>
       <description>&lt;p&gt;年初的时候买了先马趣造这个机箱，买这个机箱的主要的原因是先马鲁班太大了，之前买先马鲁班的时候没有考虑到机箱便携性的问题，因为台式机压根就没啥便携性可言。&lt;/p&gt;
 &lt;p&gt;然额因为咱今年上半年要去北京，觉得台式机留在家里不用有些不忍心，所以某天在网上闲逛的时候看到了这款机箱。看了很多网上的评测视频后才决定入手。&lt;/p&gt;
@@ -65,12 +66,10 @@
 <p>因为机箱小，去北京实习的时候咱买了个28寸的超大行李箱，于是这个行李箱在塞下这个机箱之后还能塞很多衣服。总之肯定是不会出现像上次那样坐高铁我一个人把机箱和显示器从北京扛回老家的情况了。</p>
 <p><strong>STARRY-S</strong></p>]]></content:encoded>
     </item>
-    
     <item>
       <title>我们来组装一台电脑吧</title>
       <link>https://blog.starry-s.moe/posts/2021/build-desktop/</link>
       <pubDate>Mon, 13 Sep 2021 23:20:29 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/build-desktop/</guid>
       <description>&lt;p&gt;很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。</p>
@@ -211,6 +210,5 @@
 <br>
 <p><strong>STARRY-S</strong></p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

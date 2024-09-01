@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Fri, 22 Jan 2021 22:10:01 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sat, 23 Jan 2021 12:36:44 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>小米路由器3G之使用TTL串口刷机救砖</title>
       <link>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</link>
       <pubDate>Fri, 22 Jan 2021 22:10:01 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</guid>
       <description>&lt;p&gt;本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。&lt;/p&gt;
 &lt;p&gt;然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。&lt;/p&gt;
@@ -114,12 +115,10 @@
 </span></span><span class="line"><span class="cl">root@XiaoQiang:~#
 </span></span></code></pre></div>]]></content:encoded>
     </item>
-    
     <item>
       <title>小米路由器3G折腾之刷OpenWrt记录</title>
       <link>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</link>
       <pubDate>Tue, 19 Feb 2019 00:49:20 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/xiaomi_r3g_openwrt/</guid>
       <description>&lt;p&gt;生命不息, 折腾不止&amp;hellip;&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>生命不息, 折腾不止&hellip;</p>
@@ -253,6 +252,5 @@
 </ol>
 <p>然后建议把opkg源能改为https的都改为https。</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

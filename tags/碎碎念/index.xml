@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Thu, 18 Jan 2024 23:12:28 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Thu, 18 Jan 2024 23:12:28 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hello 2024</title>
       <link>https://blog.starry-s.moe/posts/2024/hello-2024/</link>
       <pubDate>Thu, 18 Jan 2024 23:12:28 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2024/hello-2024/</guid>
       <description>&lt;p&gt;这里没有年终总结。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>这里没有年终总结。</p>
@@ -47,12 +48,10 @@
 <h2 id="其他">其他</h2>
 <p>2023 年实际上对咱来说是一个很糟糕的一年，我很烦那些不切实际的羡慕，我很反感那些对自己现状不满而总是羡慕别人的人。很多时候咱把咱好的一面展现出来而把不好的事情埋在心里，不想让别人担心，就算是生病或者心情不好到了极点咱也会发点和这些不相关的朋友圈和消息之类的，我不想向别人讲自己的烦恼和困扰，但这会给人一种 “他过得比我好，我好羡慕他” 的感觉。很多时候是咱靠着仅存的一点兴趣和爱好一个人在硬撑着，但是那种有些东西自己没有而别人有就去说风凉话的真的很恶心。很多事都不是凭空偶然发生的，特别的能力会招惹来特别的能力。嗯，不知道自己还能撑多久，也不知道自己以后会去哪里，总之就是挺喜欢橙子老师说的，“我们并不是根据背负的罪来选择道路，而是先选择道路再背负起自己的罪孽”，“所谓的 ‘逃’ 有两种，漫无目的的逃以及带有目的的逃。一般将前者称为 ‘漂浮’，后者称为 ‘飞行’”。不知道咱自己还能飞多久，也不知道自己是在故意挥动翅膀，装出自己好像在飞行的样子，实际已经坠落了呢。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>入手一台家用级 APC UPS</title>
       <link>https://blog.starry-s.moe/posts/2023/apc-ups/</link>
       <pubDate>Sun, 08 Jan 2023 11:05:02 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/apc-ups/</guid>
       <description>&lt;p&gt;为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。</p>
@@ -188,12 +187,10 @@
 </span></span></code></pre></div><p>运行一个虚拟机一个 MineCraft 服务器，CPU 温度不到 40，所以很安静。</p>
 <p>但是 UPS 它有噪音，晚上睡觉的时候能听见 UPS 它嗡嗡响，比 AMD 散热器的风扇动静还大，这个实在是无解，算了就先这样吧。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2023</title>
       <link>https://blog.starry-s.moe/posts/2023/hello-2023/</link>
       <pubDate>Mon, 02 Jan 2023 01:20:31 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/hello-2023/</guid>
       <description>&lt;p&gt;2023 新年快乐。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>2023 新年快乐。</p>
@@ -212,12 +209,10 @@
 
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2022</title>
       <link>https://blog.starry-s.moe/posts/2022/hello-2022/</link>
       <pubDate>Sun, 02 Jan 2022 01:09:24 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/hello-2022/</guid>
       <description>&lt;p&gt;又到了写年终总结的时候了，说实话今年发生了好多好多好多的事情，我可能要写很久才能把这些事全写完。然而我文笔不好，回忆事情容易写成流水帐，所以不重要的事情我只好简短略过一下。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>又到了写年终总结的时候了，说实话今年发生了好多好多好多的事情，我可能要写很久才能把这些事全写完。然而我文笔不好，回忆事情容易写成流水帐，所以不重要的事情我只好简短略过一下。</p>
@@ -300,12 +295,10 @@ Fate的HF线细节很多，音乐也很好听，剧情的节奏把握得也很�
 <p>就这些。</p>
 <p><strong>STARRY-S</strong></p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2021</title>
       <link>https://blog.starry-s.moe/posts/2021/hello-2021/</link>
       <pubDate>Wed, 06 Jan 2021 01:57:19 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/hello-2021/</guid>
       <description>&lt;p&gt;本来我已经戴好耳机准备睡觉了的，突然想起来2020年的年终总结还没有写，恰好脑子里有想写的东西，于是大概构思了一下，便从床上爬起来开灯打开电脑开写年终总结。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>本来我已经戴好耳机准备睡觉了的，突然想起来2020年的年终总结还没有写，恰好脑子里有想写的东西，于是大概构思了一下，便从床上爬起来开灯打开电脑开写年终总结。</p>
@@ -357,12 +350,10 @@ Fate的HF线细节很多，音乐也很好听，剧情的节奏把握得也很�
 <p>2020年博客鸽了很长一段时间，当时尽管并没有放弃博客但是我真的什么都写不出来，因为看到自己以前写的水文觉得很恶心而且十分不适，于是就在某个心情不好的时候删掉了。后来换了一个新的域名之后就再也没和任何人提起“我还有一个博客”这件事情，因为把博客的文章全删除后几乎没人访问我的博客，新的访客量到现在为止才800多，其中绝大多数都是我自己调试页面刷新时点出来的。</p>
 <p>对啊博客就是用来记录生活的，所以就让“因为看不惯以前的自己写的啥也不是的水文最终将其全部删掉”也成为博客记录下的一件事吧。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2018</title>
       <link>https://blog.starry-s.moe/posts/2018/hello-2018/</link>
       <pubDate>Tue, 16 Jan 2018 22:58:06 +0000</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2018/hello-2018/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/5cm_per_second.jpg&#34; alt=&#34;秒速5厘米&#34; /&gt;
 
@@ -380,6 +371,5 @@ Fate的HF线细节很多，音乐也很好听，剧情的节奏把握得也很�
 <p style="margin-bottom: -0.8em;" class="image-title">秒速五厘米</p>
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

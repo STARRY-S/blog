@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 09 Jan 2021 22:12:54 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/dual-moniter/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 23 Feb 2021 19:27:32 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/dual-moniter/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>解决笔记本外接HIDPI显示器的缩放问题</title>
       <link>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</link>
       <pubDate>Sat, 09 Jan 2021 22:12:54 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</guid>
       <description>&lt;p&gt;前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经&lt;a href=&#34;https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/&#34;&gt;配置好了optimus-manager&lt;/a&gt;，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。&lt;/p&gt;
 &lt;p&gt;然后一看4K屏上的字小得瞎眼。&lt;/p&gt;
@@ -75,6 +76,5 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </li>
 </ul>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

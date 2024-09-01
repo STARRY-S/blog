@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Fri, 01 Jan 2021 00:00:00 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/posts/2021/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Wed, 02 Feb 2022 21:42:10 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/posts/2021/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>使用树莓派搭建一个NAS</title>
       <link>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</link>
       <pubDate>Sat, 25 Sep 2021 22:20:03 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/raspberry_pi_nas/</guid>
       <description>&lt;p&gt;把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
@@ -181,12 +182,10 @@
 <p>所以到此为止，咱的Samba服务器就搭建好了。</p>
 <p>随便传了个大文件试了一下，内网上传速度在6MB/S左右，有些慢但是还没搞清楚到底是什么原因导致的。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>我们来组装一台电脑吧</title>
       <link>https://blog.starry-s.moe/posts/2021/build-desktop/</link>
       <pubDate>Mon, 13 Sep 2021 23:20:29 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/build-desktop/</guid>
       <description>&lt;p&gt;很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>很久很久以前就想自己组装电脑了，看到别人能有台高性能的电脑别提有多羡慕了。不过考虑到在校期间实在不适合把自己组装的电脑放到寝室中去，要是把电脑放家里的话只能假期玩短短的几星期，其余的时间闲置下来的话又觉得有些浪费，于是组装电脑的计划一直推延至今。最终在大四校外实习自己租房子之后才有了一个短暂而勉强稳定的环境可以让我组装台式机，所以在安置好自己的住处和一系列其他事情之后，我终于可以实现自己这个埋藏心底多年的愿望之一了。</p>
@@ -327,12 +326,10 @@
 <br>
 <p><strong>STARRY-S</strong></p>]]></content:encoded>
     </item>
-    
     <item>
       <title>NieR:Automata 游戏记录</title>
       <link>https://blog.starry-s.moe/posts/2021/nier_automata/</link>
       <pubDate>Sun, 15 Aug 2021 00:23:55 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/nier_automata/</guid>
       <description>&lt;p&gt;这是我入手的第一款RPG游戏，也是我迄今为止买的最贵的游戏，在大一的那个寒假狠下心来用压岁钱花了四百多在Steam上买的正版，后来在今年年初买PS4 Slim时又买了一张二手光碟以及DLC。&lt;/p&gt;
 &lt;p&gt;尽管游戏玩了3遍，但是不敢保证说我把尼尔前前后后的每个细节都弄清楚，不过还是打算把我遇到的一些有意思的地方记录到博客中。&lt;/p&gt;</description>
@@ -486,12 +483,10 @@
 <p style="margin-bottom: -0.8em;" class="image-title">NieR:Automata</p>
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>《空之境界》摘抄</title>
       <link>https://blog.starry-s.moe/posts/2021/karanokyokai/</link>
       <pubDate>Sat, 03 Jul 2021 21:01:37 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/karanokyokai/</guid>
       <description>&lt;p&gt;很久以前就打算二刷空境原著了，由于种种原因进展一直比较缓慢。&lt;/p&gt;
 &lt;p&gt;最终在 Kindle (&lt;del&gt;泡面盖&lt;/del&gt;) 上阅读时标记了一些不错的菌言菌语，整理到博客上。&lt;/p&gt;</description>
@@ -865,12 +860,10 @@
 <hr>
 <meting-js server="netease" type="song" id="590515" theme="#233333"></meting-js>]]></content:encoded>
     </item>
-    
     <item>
       <title>Learn OpenGL</title>
       <link>https://blog.starry-s.moe/posts/2021/learn_opengl/</link>
       <pubDate>Mon, 10 May 2021 21:33:10 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/learn_opengl/</guid>
       <description>&lt;p&gt;其实咱很久很久以前就开始看&lt;a href=&#34;https://learnopengl-cn.github.io/&#34;&gt;LearnOpenGL CN&lt;/a&gt;这个网站了&amp;hellip;&amp;hellip;&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>其实咱很久很久以前就开始看<a href="https://learnopengl-cn.github.io/">LearnOpenGL CN</a>这个网站了&hellip;&hellip;</p>
@@ -1226,12 +1219,10 @@
 </ul>
 <hr>]]></content:encoded>
     </item>
-    
     <item>
       <title>Spring - 4</title>
       <link>https://blog.starry-s.moe/posts/2021/spring-4/</link>
       <pubDate>Mon, 03 May 2021 01:44:57 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/spring-4/</guid>
       <description>&lt;p&gt;咱去年忘了更新这个系列&amp;hellip;&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>咱去年忘了更新这个系列&hellip;</p>
@@ -1274,12 +1265,10 @@
 </p>
 <h1 id="spring---4">Spring - 4</h1>]]></content:encoded>
     </item>
-    
     <item>
       <title>联想R7000P安装Arch Linux的常见问题</title>
       <link>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</link>
       <pubDate>Mon, 22 Mar 2021 19:51:32 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/lenovo-r7000p/</guid>
       <description>&lt;p&gt;旧电脑坏掉了，因为坏的有些复杂而且不忍心拿到学校的修理店去修于是打算等到暑假有时间自己买零部件修。（就不吐槽惠普的产品设计问题了&amp;hellip;&lt;/p&gt;
 &lt;p&gt;于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。&lt;/p&gt;
@@ -1385,12 +1374,10 @@
 <p style="margin-bottom: -0.8em;" class="image-title">GNOME 40</p>
 </p>]]></content:encoded>
     </item>
-    
     <item>
       <title>小米路由器3G之使用TTL串口刷机救砖</title>
       <link>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</link>
       <pubDate>Fri, 22 Jan 2021 22:10:01 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</guid>
       <description>&lt;p&gt;本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。&lt;/p&gt;
 &lt;p&gt;然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。&lt;/p&gt;
@@ -1487,12 +1474,10 @@
 </span></span><span class="line"><span class="cl">root@XiaoQiang:~#
 </span></span></code></pre></div>]]></content:encoded>
     </item>
-    
     <item>
       <title>解决笔记本外接HIDPI显示器的缩放问题</title>
       <link>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</link>
       <pubDate>Sat, 09 Jan 2021 22:12:54 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/laptop-dualscreen-hidpi-scale/</guid>
       <description>&lt;p&gt;前天在狗东买了台27寸4K显示器，型号为优派VX2771-4K-HD，分辨率3840x2160，支持HDR 10bit色深（然而电脑只支持DP1.2），因为之前已经&lt;a href=&#34;https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/&#34;&gt;配置好了optimus-manager&lt;/a&gt;，所以电脑接上显示器就能亮，很幸运没有遇到物理问题。&lt;/p&gt;
 &lt;p&gt;然后一看4K屏上的字小得瞎眼。&lt;/p&gt;
@@ -1550,12 +1535,10 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 </li>
 </ul>]]></content:encoded>
     </item>
-    
     <item>
       <title>Hello 2021</title>
       <link>https://blog.starry-s.moe/posts/2021/hello-2021/</link>
       <pubDate>Wed, 06 Jan 2021 01:57:19 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/hello-2021/</guid>
       <description>&lt;p&gt;本来我已经戴好耳机准备睡觉了的，突然想起来2020年的年终总结还没有写，恰好脑子里有想写的东西，于是大概构思了一下，便从床上爬起来开灯打开电脑开写年终总结。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>本来我已经戴好耳机准备睡觉了的，突然想起来2020年的年终总结还没有写，恰好脑子里有想写的东西，于是大概构思了一下，便从床上爬起来开灯打开电脑开写年终总结。</p>
@@ -1607,12 +1590,17 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <p>2020年博客鸽了很长一段时间，当时尽管并没有放弃博客但是我真的什么都写不出来，因为看到自己以前写的水文觉得很恶心而且十分不适，于是就在某个心情不好的时候删掉了。后来换了一个新的域名之后就再也没和任何人提起“我还有一个博客”这件事情，因为把博客的文章全删除后几乎没人访问我的博客，新的访客量到现在为止才800多，其中绝大多数都是我自己调试页面刷新时点出来的。</p>
 <p>对啊博客就是用来记录生活的，所以就让“因为看不惯以前的自己写的啥也不是的水文最终将其全部删掉”也成为博客记录下的一件事吧。</p>]]></content:encoded>
     </item>
-    
+    <item>
+      <title>2021</title>
+      <link>https://blog.starry-s.moe/posts/2021/_index.en/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/posts/2021/_index.en/</guid>
+      <description></description>
+    </item>
     <item>
       <title>惠普光影精灵4在Arch Linux下使用Optimus Manager配置双显卡</title>
       <link>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</link>
       <pubDate>Sun, 19 Jul 2020 15:29:57 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/archlinux-pavilion-gaming-laptop/</guid>
       <description>&lt;p&gt;自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, &lt;del&gt;尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下&lt;/del&gt;（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>自从高中毕业至今这台笔记本用了将近两年, 已经记不清当初为什么买了这台笔记本, 刚买来电脑第一次装Arch Linux时遇到了一些坑, 不过大多数的问题Google折腾一会或随着后续的软件更新基本上就都解决了, 唯独配置双显卡这个问题在用了两年后才算是找到了比较满意的解决方法（大概是）, <del>尽管现在这电脑已经停产了, 就算有人买了这台电脑也不一定会拿他装Arch Linux, 不过我还是打算把这个问题的解决过程记录一下</del>（本篇讲的方法应该是适用于大多数N卡+i卡的笔记本电脑的, 只是有些细节不一样）, 以备我后续重装系统时有个参考。</p>
@@ -1798,6 +1786,5 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <p style="margin-bottom: -0.8em;" class="image-title">neofetch</p>
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

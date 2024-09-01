@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Wed, 08 Jun 2022 00:49:34 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E8%BD%AF%E8%B7%AF%E7%94%B1/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Wed, 08 Jun 2022 00:49:34 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E8%BD%AF%E8%B7%AF%E7%94%B1/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>在Arch Linux上配置软路由</title>
       <link>https://blog.starry-s.moe/posts/2022/archlinux-router/</link>
       <pubDate>Wed, 08 Jun 2022 00:49:34 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/archlinux-router/</guid>
       <description>&lt;p&gt;之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用&lt;code&gt;systemd-networkd&lt;/code&gt;配置了一个简易的软路由。不过&lt;code&gt;systemd-networkd&lt;/code&gt;不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为&lt;a href=&#34;https://blog.starry-s.moe/posts/2022/nanopi-r4s/&#34;&gt;R4S上手体验&lt;/a&gt;的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用<code>systemd-networkd</code>配置了一个简易的软路由。不过<code>systemd-networkd</code>不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为<a href="/posts/2022/nanopi-r4s/">R4S上手体验</a>的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。</p>
@@ -143,12 +144,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>配置好“有线中继”模式后，电脑连接无线WIFI后获得的IP地址应当是软路由分配的IP地址，网段为刚刚咱们设置的<code>10.10.10.*</code>，
 而不再是<code>192.168.*</code>的IP地址了。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>NanoPi R4S上手 &amp; 安装Arch Linux ARM</title>
       <link>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</link>
       <pubDate>Fri, 13 May 2022 00:32:40 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/nanopi-r4s/</guid>
       <description>&lt;p&gt;前两天下单了个Nano Pi R4S，4G内存的版本。通常情况下这玩意别人都把他当软路由用，但是今天咱收到货后想了一会拍大腿一寻思这玩意不就是个ARM架构的小电脑嘛~&lt;/p&gt;
 &lt;p&gt;所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。&lt;/p&gt;</description>
@@ -353,6 +352,5 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <li><a href="https://zhuanlan.zhihu.com/p/392619184">在 NanoPi R2S 上安装 Archlinuxarm - 知乎</a></li>
 </ul>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

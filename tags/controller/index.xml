@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Sat, 10 Jun 2023 02:33:58 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/controller/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sat, 10 Jun 2023 02:33:58 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/controller/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>当你刚开始尝试去写 Kubernetes Controller……</title>
       <link>https://blog.starry-s.moe/posts/2023/kube-controller/</link>
       <pubDate>Sat, 10 Jun 2023 02:33:58 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2023/kube-controller/</guid>
       <description>&lt;p&gt;Controller 对初学着来说有那么亿点点抽象，虽然网络上能找到很多有关 Kubernetes Controller 的讲解，但是 Kubernetes 的学习过程往往是一个离散的而不是连续的过程。如果想弄懂 Controller 还是有蛮高门槛的，不要想着看完 Kubernetes 的文档，速成了 Kubernetes 的基本知识就去尝试写 Controller，这种操作就好比刚过完新手教程就去打高难副本，尽管能仿着 &lt;code&gt;sample-controller&lt;/code&gt; 写一个能“跑”的 Controller，但仅仅只能做到能“跑”的程度……&lt;/p&gt;
 &lt;blockquote&gt;
@@ -101,6 +102,5 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 </blockquote>
 <p>之后如果想把你编写的 Controller (Operator) 应用到生产环境，打包给更多的人使用，可以把编译好的 Operator 二进制文件放到容器镜像中，之后使用 <a href="https://helm.sh">Helm</a> 创建一个 &ldquo;应用程序 (Chart)&quot;，通过编写 <a href="https://helm.sh/docs/chart_best_practices/templates/">模板</a>，在安装 Helm Chart 时编辑 <code>values.yaml</code> 中定义的字段来自定义 CRD 的参数。Helm 的模板本质上是 Go Template 模板渲染引擎，所以用起来都是很简单的（确信）。</p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

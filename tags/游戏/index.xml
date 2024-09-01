@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Fri, 28 Oct 2022 20:15:42 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/tags/%E6%B8%B8%E6%88%8F/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Sun, 06 Nov 2022 18:06:30 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/tags/%E6%B8%B8%E6%88%8F/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>月姫 -A piece of blue glass moon-</title>
       <link>https://blog.starry-s.moe/posts/2022/tsukihimi/</link>
       <pubDate>Fri, 28 Oct 2022 20:15:42 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/tsukihimi/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;https://blog.starry-s.moe/posts/2022/tsukihimi/images/1.png&#34; alt=&#34;&#34; /&gt;
 
@@ -73,12 +74,10 @@
 <p><a href="https://tsukihimecn.github.io/">https://tsukihimecn.github.io/</a></p>
 </blockquote>]]></content:encoded>
     </item>
-    
     <item>
       <title>yuzu - Switch 虚拟机</title>
       <link>https://blog.starry-s.moe/posts/2022/switch-emulator/</link>
       <pubDate>Sun, 16 Oct 2022 15:48:46 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/switch-emulator/</guid>
       <description>&lt;p&gt;一直想玩的游戏没有官方汉化，Switch 的游戏文件没破解的话是没办法装汉化插件的，尽管咱有 Switch OLED 港版主机，但是破解有被封的可能而且过程过于麻烦，破解后就不能联网了，所以咱在买了正版游戏但是看不懂日语后无奈之下选择了虚拟机，正好水一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>一直想玩的游戏没有官方汉化，Switch 的游戏文件没破解的话是没办法装汉化插件的，尽管咱有 Switch OLED 港版主机，但是破解有被封的可能而且过程过于麻烦，破解后就不能联网了，所以咱在买了正版游戏但是看不懂日语后无奈之下选择了虚拟机，正好水一篇博客。</p>
@@ -110,12 +109,10 @@
 </span></span><span class="line"><span class="cl">zsh: IOT instruction (core dumped)  yuzu
 </span></span></code></pre></div><p>查了一阵子找到的解决办法是设置 <code>QT_PLUGIN_PATH=/usr/lib/qt/plugins</code> 环境变量，覆盖掉 yuzu 安装包自带的 Qt 插件而是改用系统的。</p>]]></content:encoded>
     </item>
-    
     <item>
       <title>FinalFantasy VII Remake 游戏记录</title>
       <link>https://blog.starry-s.moe/posts/2022/finalfantasy-vii/</link>
       <pubDate>Sat, 20 Aug 2022 20:09:04 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2022/finalfantasy-vii/</guid>
       <description>&lt;p&gt;前一阵子通关了最终幻想7重置版，放几张截图到这里水一期博客。&lt;/p&gt;
 &lt;blockquote&gt;
@@ -224,12 +221,10 @@
 <hr>
 <meting-js server="netease" type="song" id="1818030780" theme="#233333"></meting-js>]]></content:encoded>
     </item>
-    
     <item>
       <title>Automata</title>
       <link>https://blog.starry-s.moe/posts/2019/nier-automata/</link>
       <pubDate>Sun, 17 Feb 2019 15:34:50 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2019/nier-automata/</guid>
       <description>&lt;p&gt;&lt;img loading=&#34;lazy&#34; src=&#34;images/20190216233002_1.jpg&#34; alt=&#34;&#34; /&gt;
 
@@ -263,6 +258,5 @@
 
 </p>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>

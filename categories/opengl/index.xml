@@ -9,15 +9,16 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo -- 0.133.1</generator>
     <language>zh</language>
-    <copyright>© 2016 - 2024 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)&lt;br /&gt;</copyright>
-    <lastBuildDate>Mon, 10 May 2021 21:33:10 +0800</lastBuildDate><atom:link href="https://blog.starry-s.moe/categories/opengl/index.xml" rel="self" type="application/rss+xml" />
+    <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+</copyright>
+    <lastBuildDate>Tue, 11 May 2021 18:03:39 +0800</lastBuildDate>
+    <atom:link href="https://blog.starry-s.moe/categories/opengl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Learn OpenGL</title>
       <link>https://blog.starry-s.moe/posts/2021/learn_opengl/</link>
       <pubDate>Mon, 10 May 2021 21:33:10 +0800</pubDate>
-      
       <guid>https://blog.starry-s.moe/posts/2021/learn_opengl/</guid>
       <description>&lt;p&gt;其实咱很久很久以前就开始看&lt;a href=&#34;https://learnopengl-cn.github.io/&#34;&gt;LearnOpenGL CN&lt;/a&gt;这个网站了&amp;hellip;&amp;hellip;&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>其实咱很久很久以前就开始看<a href="https://learnopengl-cn.github.io/">LearnOpenGL CN</a>这个网站了&hellip;&hellip;</p>
@@ -373,6 +374,5 @@
 </ul>
 <hr>]]></content:encoded>
     </item>
-    
   </channel>
 </rss>
