@@ -23,8 +23,8 @@ showtoc: false
 以下是一些咱感兴趣的东西：
 
 - Linux：是个 Arch Linux + GNOME Desktop 用户
-- 工作内容和容器、Kubernetes 相关的内容相关
 - 喜欢写代码，不写代码会死星人
+- 工作内容和容器、Kubernetes 内容相关
 - 目前有一台入门级 APS-C 画幅佳能 R7 和几个 Sigma 残幅镜头，经常拍一些自己想拍的东西
 - 是个月厨，但不玩 FGO
 - 福瑞控萌新，成分复杂，目前有一套兽装，有时会去兽聚和漫展玩
