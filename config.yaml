@@ -3,7 +3,8 @@ title: "STARRY-S' Blog"
 theme:
   - "PaperMod"
   - "hugo-shortcode-gallery"
-paginate: 10
+pagination:
+  paperSize: 10
 defaultContentLanguage: zh
 
 enableInlineShortcodes: true
