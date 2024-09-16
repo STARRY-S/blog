@@ -13,8 +13,15 @@
     <language>zh</language>
     <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
-    <lastBuildDate>Mon, 05 Aug 2024 01:02:47 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 16 Sep 2024 12:38:31 +0800</lastBuildDate>
     <atom:link href="https://blog.starry-s.moe/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>路由器</title>
+      <link>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</link>
+      <pubDate>Mon, 16 Sep 2024 12:38:31 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Linux</title>
       <link>https://blog.starry-s.moe/categories/linux/</link>
@@ -146,13 +153,6 @@
       <link>https://blog.starry-s.moe/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/</link>
       <pubDate>Mon, 10 May 2021 21:33:10 +0800</pubDate>
       <guid>https://blog.starry-s.moe/categories/%E5%AD%A6%E4%B9%A0%E8%B5%84%E6%96%99/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>路由器</title>
-      <link>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</link>
-      <pubDate>Fri, 22 Jan 2021 22:10:01 +0800</pubDate>
-      <guid>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</guid>
       <description></description>
     </item>
     <item>

@@ -2,22 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://blog.starry-s.moe/categories/</loc>
+    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/</loc>
+    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/pandavan/</loc>
+    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2024/pandavan-uu-booster/</loc>
+    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/</loc>
+    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/</loc>
+    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E8%B7%AF%E7%94%B1%E5%99%A8/</loc>
+    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</loc>
+    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+  </url><url>
     <loc>https://blog.starry-s.moe/tags/arch-linux/</loc>
     <lastmod>2024-08-05T01:02:47+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/categories/</loc>
-    <lastmod>2024-08-05T01:02:47+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/</loc>
-    <lastmod>2024-09-02T00:56:52+08:00</lastmod>
-  </url><url>
     <loc>https://blog.starry-s.moe/categories/linux/</loc>
-    <lastmod>2024-08-05T01:02:47+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/posts/</loc>
-    <lastmod>2024-08-05T01:02:47+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/tags/</loc>
     <lastmod>2024-08-05T01:02:47+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2024/lenovo-thinkbook-16-6g/</loc>
@@ -245,9 +257,6 @@
     <loc>https://blog.starry-s.moe/tags/%E5%85%89%E7%8C%AB/</loc>
     <lastmod>2022-07-07T17:54:35+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/tags/%E8%B7%AF%E7%94%B1%E5%99%A8/</loc>
-    <lastmod>2022-07-07T17:54:35+08:00</lastmod>
-  </url><url>
     <loc>https://blog.starry-s.moe/tags/%E6%A1%A5%E6%8E%A5/</loc>
     <lastmod>2022-07-07T17:54:35+08:00</lastmod>
   </url><url>
@@ -357,9 +366,6 @@
     <lastmod>2021-04-11T13:50:48+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/openwrt/</loc>
-    <lastmod>2021-01-23T12:36:44+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</loc>
     <lastmod>2021-01-23T12:36:44+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/</loc>
