@@ -263,6 +263,21 @@ Draw.io 这个工具画流程图很好用，而且支持 Linux，可以直接从
 sudo pacman -S drawio-desktop-bin
 ```
 
+### iPhone
+
+如果需要挂载 iPhone 手机（<span class="spoiler">安分守己</span>）到电脑上，需要安装这些软件。
+
+```sh
+sudo pacman -Sy ifuse usbmuxd libplist libimobiledevice
+```
+
+之后挂载 iPhone 的数据到某个文件夹下，就可以把手机的照片通过数据线拷贝到电脑上了。
+
+```sh
+mkdir -p iPhone
+ifuse ~/iPhone
+```
+
 ----
 
 未完待续，如果还想到了别的再补充到这儿。
