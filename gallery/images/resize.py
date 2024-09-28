@@ -9,6 +9,7 @@ whitelist_suffix = [
     ".JPG",
     ".png",
     ".PNG",
+    ".tif",
 ]
 
 def main():
