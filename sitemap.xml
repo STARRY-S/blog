@@ -3,21 +3,36 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://blog.starry-s.moe/categories/</loc>
-    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/</loc>
-    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/esp32/</loc>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/furry/</loc>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/</loc>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/</loc>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</loc>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</loc>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
+  </url><url>
+    <loc>https://blog.starry-s.moe/posts/2024/esp32-fan-controller/</loc>
+    <lastmod>2024-10-01T00:34:42+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/pandavan/</loc>
     <lastmod>2024-09-16T12:38:31+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2024/pandavan-uu-booster/</loc>
-    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/posts/</loc>
-    <lastmod>2024-09-16T12:38:31+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/tags/</loc>
     <lastmod>2024-09-16T12:38:31+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/%E8%B7%AF%E7%94%B1%E5%99%A8/</loc>
@@ -68,9 +83,6 @@
     <loc>https://blog.starry-s.moe/categories/spring/</loc>
     <lastmod>2024-04-24T23:54:04+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</loc>
-    <lastmod>2024-04-24T23:54:04+08:00</lastmod>
-  </url><url>
     <loc>https://blog.starry-s.moe/tags/%E6%91%84%E5%BD%B1/</loc>
     <lastmod>2024-04-24T23:54:04+08:00</lastmod>
   </url><url>
@@ -102,9 +114,6 @@
     <lastmod>2024-01-30T18:44:07+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/posts/2024/hello-2024/</loc>
-    <lastmod>2024-01-18T23:12:28+08:00</lastmod>
-  </url><url>
-    <loc>https://blog.starry-s.moe/tags/%E6%97%A5%E5%B8%B8/</loc>
     <lastmod>2024-01-18T23:12:28+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/</loc>

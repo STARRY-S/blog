@@ -13,8 +13,15 @@
     <language>zh</language>
     <copyright>2016 - 2024 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
-    <lastBuildDate>Mon, 16 Sep 2024 12:38:31 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 01 Oct 2024 00:34:42 +0800</lastBuildDate>
     <atom:link href="https://blog.starry-s.moe/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>日常</title>
+      <link>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</link>
+      <pubDate>Tue, 01 Oct 2024 00:34:42 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</guid>
+      <description></description>
+    </item>
     <item>
       <title>路由器</title>
       <link>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</link>
@@ -48,13 +55,6 @@
       <link>https://blog.starry-s.moe/categories/spring/</link>
       <pubDate>Wed, 24 Apr 2024 23:54:04 +0800</pubDate>
       <guid>https://blog.starry-s.moe/categories/spring/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>日常</title>
-      <link>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</link>
-      <pubDate>Wed, 24 Apr 2024 23:54:04 +0800</pubDate>
-      <guid>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</guid>
       <description></description>
     </item>
     <item>
