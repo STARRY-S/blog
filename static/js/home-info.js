@@ -10,6 +10,7 @@ function randomHomeInfo() {
         "后天的努力最重要，今天和明天先睡大觉",
         "<code>cat /dev/random > /dev/null</code>",
         "谁都可以睡，但是不能笑",
+        "让我们说中文",
         "It works in my container!",
     ];
     return infos[Math.floor(Math.random() * infos.length)];
