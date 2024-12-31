@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.133.1</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -523,13 +523,13 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。</p>
 <meting-js server="netease" type="song" id="19563215" theme="#233333"></meting-js>
 <h2 id="开箱">开箱</h2>
-<p><img loading="lazy" src="images/nanopi_1.jpg" alt="&amp;ldquo;USB 3.0、SD卡插槽以及三脚架接口&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_1.jpg" alt="&ldquo;USB 3.0、SD卡插槽以及三脚架接口&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">USB 3.0、SD卡插槽以及三脚架接口</p>
 </p>
-<p><img loading="lazy" src="images/nanopi_2.jpg" alt="&amp;ldquo;供电接口和网口&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_2.jpg" alt="&ldquo;供电接口和网口&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">供电接口和网口</p>
 </p>
-<p><img loading="lazy" src="images/nanopi_3.jpg" alt="&amp;ldquo;正面&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_3.jpg" alt="&ldquo;正面&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">正面</p>
 </p>
 <h2 id="拆解">拆解</h2>
@@ -537,7 +537,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p><img loading="lazy" src="images/nanopi_7.jpg" alt="" />
 <p style="margin-bottom: -0.8em;" class="image-title">主板正面</p>
 </p>
-<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
+<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
 <h2 id="arch-linux-arm">Arch Linux ARM</h2>
 <p>在Arch Linux ARM (简称alarm) 官网上没找到对R4S的官方的支持，简单搜了一下armbian有对R4S的官方支持。</p>
 <p>因为用惯了<strong>滚动更新</strong>发行版，所以不想用*bian系统，而*WRT系统的软件包相对其他发行版而言更少一些，系统也相当于被魔改过，所以除了做漏油器之外几乎干不了别的，所以这是我想安装Arch Linux的理由。</p>
@@ -702,15 +702,15 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <h2 id="后续">后续</h2>
 <p>之后咱装了JDK以及一堆我常用的小组件。为了测试性能，我把我以前备份的Minecraft服务器复制到R4S上跑了一下试试。我的服务器之前是在疼讯云学生主机上跑的(1核2G)，装了好多性能优化插件(lithium，phosphor，carpet&hellip;)，版本是1.16.4，抱着尝试的心态跑了一下这个服务器结果发现很流畅，一开始区块加载的时候CPU的6个核心全跑满，之后就恢复到正常水平了。刚才尝试了一下长时间的生成区块貌似没什么大的问题，只要别一直用鞘翅跑图就行，应该是内存够用了所以运行效果要好一些，不过单核性能来讲的话肯定还是X86吊打R4S的。</p>
 <p>毕竟这就是半个巴掌大小的机器，跑MC的时候CPU温度才不到50度，应该不需要主动散热，功耗才十多瓦……</p>
-<p><img loading="lazy" src="images/nanopi_performance.png" alt="&amp;ldquo;MineCraft Server Performance&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_performance.png" alt="&ldquo;MineCraft Server Performance&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">MineCraft Server Performance</p>
 </p>
-<p><img loading="lazy" src="images/nanopi_neofetch.png" alt="&amp;ldquo;Arch Linux ARM&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_neofetch.png" alt="&ldquo;Arch Linux ARM&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">Arch Linux ARM</p>
 </p>
 <h2 id="参烤链接">参烤链接</h2>
 <ul>
-<li><a href="https://www.friendlyelec.com/index.php?route=product/product&product_id=284">NanoPi R4S</a></li>
+<li><a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">NanoPi R4S</a></li>
 <li><a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">NanoPi R4S - FriendlyELEC WiKi</a></li>
 <li><a href="https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d">Installing Arch Linux AArch64 on the NanoPi R2S</a></li>
 <li><a href="https://archlinuxarm.org/platforms/armv8/generic">Generic AArch64 Installation | Arch Linux ARM</a></li>
@@ -934,7 +934,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <h3 id="gdm不自启动">GDM不自启动</h3>
 <p>开机时GDM不会自动显示出来而是得手动切TTY2再切回TTY1才能显示。</p>
 <p>查Wiki得知是因为GDM在显卡驱动被加载之前就启动了。</p>
-<p><a href="https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_(e)GPU_is_present">参照Wiki</a>，设置<a href="https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start">KMS早启动</a>。</p>
+<p><a href="https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_%28e%29GPU_is_present">参照Wiki</a>，设置<a href="https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start">KMS早启动</a>。</p>
 <p>编辑<code>/etc/mkinitcpio.conf</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/mkinitcpio.conf
 </span></span><span class="line"><span class="cl">
@@ -1223,7 +1223,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <h2 id="others">Others</h2>
 <ul>
 <li>
-<p>之所以不推荐使用<code>bbswitch</code>是因为容易遇到<strong>ACPI锁死</strong>的问题, <a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_(lspci_hangs)">参考Wiki</a>, 需要添加<a href="https://wiki.archlinux.org/index.php/Kernel_parameters">内核参数</a><code>acpi_osi=! acpi_osi=&quot;Windows 2009&quot;</code>或<code>acpi_osi=&quot;!Windows 2015&quot;</code>启动, 如果你遇到了锁死可以通过开机时在<a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader">启动加载器界面</a>编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。</p>
+<p>之所以不推荐使用<code>bbswitch</code>是因为容易遇到<strong>ACPI锁死</strong>的问题, <a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_%28lspci_hangs%29">参考Wiki</a>, 需要添加<a href="https://wiki.archlinux.org/index.php/Kernel_parameters">内核参数</a><code>acpi_osi=! acpi_osi=&quot;Windows 2009&quot;</code>或<code>acpi_osi=&quot;!Windows 2015&quot;</code>启动, 如果你遇到了锁死可以通过开机时在<a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader">启动加载器界面</a>编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。</p>
 </li>
 <li>
 <p>如果用不了<code>lspci</code>, 电脑没法正常关机的话, 是nouveau的问题, 可添加内核参数<code>modprobe.blacklist=nouveau</code>禁用。</p>

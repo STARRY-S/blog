@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.133.1</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -84,7 +84,7 @@
 <meting-js server="netease" type="song" id="409931672" theme="#233333"></meting-js>
 <h2 id="砖了">砖了</h2>
 <h2 id="拆机">拆机</h2>
-<p><img loading="lazy" src="images/1.jpg" alt="&amp;ldquo;路由器主板&amp;rdquo;" />
+<p><img loading="lazy" src="images/1.jpg" alt="&ldquo;路由器主板&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">Are You OK?</p>
 </p>
 <blockquote>
@@ -148,7 +148,7 @@
 </span></span></code></pre></div><p>按回车后开始刷机，过几秒钟后路由器会自动重启，第三方Boot Loader刷写完成。</p>
 <p>路由器断电，长按reset键的同时通电开机，灯闪烁后打开浏览器输入网址<code>http://192.168.1.1</code>便可访问breed后台。</p>
 <h2 id="done">Done</h2>
-<p>第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照<a href="/posts/2019/xiaomi_r3g_openwrt/#使用Breed的刷机方法">小米路由器3G折腾之刷OpenWrt记录</a>这篇文章刷OpenWrt。</p>
+<p>第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照<a href="/posts/2019/xiaomi_r3g_openwrt/#%e4%bd%bf%e7%94%a8Breed%e7%9a%84%e5%88%b7%e6%9c%ba%e6%96%b9%e6%b3%95">小米路由器3G折腾之刷OpenWrt记录</a>这篇文章刷OpenWrt。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">BusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash)
 </span></span><span class="line"><span class="cl">Enter &#39;help&#39; for a list of built-in commands.
 </span></span><span class="line"><span class="cl">
@@ -226,7 +226,7 @@
 </ul>
 <h2 id="刷入bootloader推荐可选">刷入Bootloader（推荐/可选）</h2>
 <blockquote>
-<p>该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考<a href="https://www.right.com.cn/forum/forum.php?mod=viewthread&tid=267455">这篇帖子</a>, 不过为了防止变砖, 还是推荐刷Breed。</p>
+<p>该步骤可选是因为Breed不支持直接刷入Openwrt固件, 可参考<a href="https://www.right.com.cn/forum/forum.php?mod=viewthread&amp;tid=267455">这篇帖子</a>, 不过为了防止变砖, 还是推荐刷Breed。</p>
 </blockquote>
 <p>Breed原作者为hackpascal, <a href="https://breed.hackpascal.net/">此处为下载地址</a>, 文件名为<code>breed-mt7621-xiaomi-r3g.bin</code></p>
 <p>第一种方法是ssh到路由器后通过<code>wget</code>下载breed文件再刷入（需要确保路由器联网）, 下载地址为https所以需要加上<code>--no-check-certificate</code>参数。</p>

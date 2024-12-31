@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.133.1</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -32,14 +32,14 @@
 <p>除此之外咱买了一个直径8CM的小风扇(ARCTIC P8)，和一个超薄的1.5CM厚的风扇(ID-COOLING TF9125)。</p>
 <p>配置方面没有太大改动，因为不打算装侧玻璃板，所以咱这次没有装RGB灯条。</p>
 <h2 id="装机">装机</h2>
-<p><img loading="lazy" src="images/6.jpg" alt="&amp;ldquo;最终的样子&amp;rdquo;" />
+<p><img loading="lazy" src="images/6.jpg" alt="&ldquo;最终的样子&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">最终的样子</p>
 </p>
 <p>装机过程还是很顺利的，因为新机箱体积比较小，可供操作的空间有限，所以花了很长时间才装完。一开始还比较担心显卡太长会不会和右侧的ATX电源产生冲突，
 不过华硕B550重炮手的主板的PCIE4X16是在第二槽，第一槽是个PCIE1，所以装上显卡后没有影响到右侧全模组电源的电源线，
 但是显卡的底部空间很小，没办法塞下一个正常厚度的风扇了。</p>
 <hr>
-<p><img loading="lazy" src="images/2.jpg" alt="&amp;ldquo;底部风扇&amp;rdquo;" />
+<p><img loading="lazy" src="images/2.jpg" alt="&ldquo;底部风扇&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">机箱底部</p>
 </p>
 <p>后来咱买了一个1.5cm厚的超薄风扇帮助显卡散热，不过风扇的尺寸咱买小了，本来应该买12cm的风扇咱买了个9cm的，到手后发现把风扇斜过来也能勉强固定住，于是就不打算换了。</p>
@@ -55,7 +55,7 @@
 <p>把所有零件全部装上之后，就没有空间装机械硬盘了，不过还好我只有一块2.5寸固态硬盘，勉强塞在了前面板背面的硬盘位中。</p>
 <p>因为机箱空间有限，所以理线是个大难题，机箱几乎没有可理线的空间，所以我只好把一大团电线捆在一起。</p>
 <h2 id="最终效果">最终效果</h2>
-<p><img loading="lazy" src="images/7.jpg" alt="&amp;ldquo;最终效果&amp;rdquo;" />
+<p><img loading="lazy" src="images/7.jpg" alt="&ldquo;最终效果&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">最终效果</p>
 </p>
 <p>白色机箱的确比黑色机箱好看很多，而且我反而觉得白色机箱更不容易脏一些，因为之前的黑色机箱手一摸就是油乎乎的大手印，但是这个白色机箱就没有。</p>

@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.133.1</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -155,13 +155,13 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>所以咱暂时先不打算给这玩意装OpenWRT或 *WRT这类的路由器系统了，而是把它当成一个超小号的带俩网口的mini主机折腾。</p>
 <meting-js server="netease" type="song" id="19563215" theme="#233333"></meting-js>
 <h2 id="开箱">开箱</h2>
-<p><img loading="lazy" src="images/nanopi_1.jpg" alt="&amp;ldquo;USB 3.0、SD卡插槽以及三脚架接口&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_1.jpg" alt="&ldquo;USB 3.0、SD卡插槽以及三脚架接口&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">USB 3.0、SD卡插槽以及三脚架接口</p>
 </p>
-<p><img loading="lazy" src="images/nanopi_2.jpg" alt="&amp;ldquo;供电接口和网口&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_2.jpg" alt="&ldquo;供电接口和网口&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">供电接口和网口</p>
 </p>
-<p><img loading="lazy" src="images/nanopi_3.jpg" alt="&amp;ldquo;正面&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_3.jpg" alt="&ldquo;正面&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">正面</p>
 </p>
 <h2 id="拆解">拆解</h2>
@@ -169,7 +169,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p><img loading="lazy" src="images/nanopi_7.jpg" alt="" />
 <p style="margin-bottom: -0.8em;" class="image-title">主板正面</p>
 </p>
-<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
+<p>芯片的布局可以在<a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">R4S的商品页面</a>查到，<a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">官方Wiki</a>上也有更多关于R4S的介绍。</p>
 <h2 id="arch-linux-arm">Arch Linux ARM</h2>
 <p>在Arch Linux ARM (简称alarm) 官网上没找到对R4S的官方的支持，简单搜了一下armbian有对R4S的官方支持。</p>
 <p>因为用惯了<strong>滚动更新</strong>发行版，所以不想用*bian系统，而*WRT系统的软件包相对其他发行版而言更少一些，系统也相当于被魔改过，所以除了做漏油器之外几乎干不了别的，所以这是我想安装Arch Linux的理由。</p>
@@ -334,15 +334,15 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <h2 id="后续">后续</h2>
 <p>之后咱装了JDK以及一堆我常用的小组件。为了测试性能，我把我以前备份的Minecraft服务器复制到R4S上跑了一下试试。我的服务器之前是在疼讯云学生主机上跑的(1核2G)，装了好多性能优化插件(lithium，phosphor，carpet&hellip;)，版本是1.16.4，抱着尝试的心态跑了一下这个服务器结果发现很流畅，一开始区块加载的时候CPU的6个核心全跑满，之后就恢复到正常水平了。刚才尝试了一下长时间的生成区块貌似没什么大的问题，只要别一直用鞘翅跑图就行，应该是内存够用了所以运行效果要好一些，不过单核性能来讲的话肯定还是X86吊打R4S的。</p>
 <p>毕竟这就是半个巴掌大小的机器，跑MC的时候CPU温度才不到50度，应该不需要主动散热，功耗才十多瓦……</p>
-<p><img loading="lazy" src="images/nanopi_performance.png" alt="&amp;ldquo;MineCraft Server Performance&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_performance.png" alt="&ldquo;MineCraft Server Performance&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">MineCraft Server Performance</p>
 </p>
-<p><img loading="lazy" src="images/nanopi_neofetch.png" alt="&amp;ldquo;Arch Linux ARM&amp;rdquo;" />
+<p><img loading="lazy" src="images/nanopi_neofetch.png" alt="&ldquo;Arch Linux ARM&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">Arch Linux ARM</p>
 </p>
 <h2 id="参烤链接">参烤链接</h2>
 <ul>
-<li><a href="https://www.friendlyelec.com/index.php?route=product/product&product_id=284">NanoPi R4S</a></li>
+<li><a href="https://www.friendlyelec.com/index.php?route=product/product&amp;product_id=284">NanoPi R4S</a></li>
 <li><a href="https://wiki.friendlyelec.com/wiki/index.php/NanoPi_R4S">NanoPi R4S - FriendlyELEC WiKi</a></li>
 <li><a href="https://gist.github.com/larsch/a8f13faa2163984bb945d02efb897e6d">Installing Arch Linux AArch64 on the NanoPi R2S</a></li>
 <li><a href="https://archlinuxarm.org/platforms/armv8/generic">Generic AArch64 Installation | Arch Linux ARM</a></li>

@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.133.1</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -181,7 +181,7 @@
 <h2 id="others">Others</h2>
 <ul>
 <li>
-<p>之所以不推荐使用<code>bbswitch</code>是因为容易遇到<strong>ACPI锁死</strong>的问题, <a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_(lspci_hangs)">参考Wiki</a>, 需要添加<a href="https://wiki.archlinux.org/index.php/Kernel_parameters">内核参数</a><code>acpi_osi=! acpi_osi=&quot;Windows 2009&quot;</code>或<code>acpi_osi=&quot;!Windows 2015&quot;</code>启动, 如果你遇到了锁死可以通过开机时在<a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader">启动加载器界面</a>编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。</p>
+<p>之所以不推荐使用<code>bbswitch</code>是因为容易遇到<strong>ACPI锁死</strong>的问题, <a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Lockup_issue_%28lspci_hangs%29">参考Wiki</a>, 需要添加<a href="https://wiki.archlinux.org/index.php/Kernel_parameters">内核参数</a><code>acpi_osi=! acpi_osi=&quot;Windows 2009&quot;</code>或<code>acpi_osi=&quot;!Windows 2015&quot;</code>启动, 如果你遇到了锁死可以通过开机时在<a href="https://wiki.archlinux.org/index.php/Arch_boot_process#Boot_loader">启动加载器界面</a>编辑添加内核参数来正常进入系统, 如果你用的是efistub或者没办法编辑内核参数的话就只能用live CD救你的电脑了。</p>
 </li>
 <li>
 <p>如果用不了<code>lspci</code>, 电脑没法正常关机的话, 是nouveau的问题, 可添加内核参数<code>modprobe.blacklist=nouveau</code>禁用。</p>

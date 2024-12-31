@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.133.1</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -22,7 +22,7 @@
       <guid>https://blog.starry-s.moe/posts/2016/hello-world/</guid>
       <description>&lt;p&gt;你好，世界！&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>你好，世界！</p>
-<p><img loading="lazy" src="images/image.jpg" alt="&amp;ldquo;Hello World&amp;rdquo;" />
+<p><img loading="lazy" src="images/image.jpg" alt="&ldquo;Hello World&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">Hello World</p>
 </p>
 <!-- <meting-js server="netease" type="song" id="593814" theme="#233333"></meting-js> -->

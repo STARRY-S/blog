@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.133.1</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -233,7 +233,7 @@
 </ol>
 <h2 id="相关内容">相关内容：</h2>
 <ul>
-<li><a href="https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&variant=zh-cn">教程/成功地启动游戏-Minecraft Wiki</a></li>
+<li><a href="https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&amp;variant=zh-cn">教程/成功地启动游戏-Minecraft Wiki</a></li>
 <li><a href="https://minecraft.net/zh-hans/">官方网站|Minecraft</a></li>
 <li><a href="https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/">树莓派之我的世界服务器</a></li>
 </ul>

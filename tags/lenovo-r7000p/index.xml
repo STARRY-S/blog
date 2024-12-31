@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.133.1</generator>
+    <generator>Hugo -- 0.140.1</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -62,7 +62,7 @@
 <h3 id="gdm不自启动">GDM不自启动</h3>
 <p>开机时GDM不会自动显示出来而是得手动切TTY2再切回TTY1才能显示。</p>
 <p>查Wiki得知是因为GDM在显卡驱动被加载之前就启动了。</p>
-<p><a href="https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_(e)GPU_is_present">参照Wiki</a>，设置<a href="https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start">KMS早启动</a>。</p>
+<p><a href="https://wiki.archlinux.org/index.php/GDM#Black_screen_on_AMD_or_Intel_GPUs_when_an_NVidia_%28e%29GPU_is_present">参照Wiki</a>，设置<a href="https://wiki.archlinux.org/index.php/Kernel_mode_setting#Early_KMS_start">KMS早启动</a>。</p>
 <p>编辑<code>/etc/mkinitcpio.conf</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/mkinitcpio.conf
 </span></span><span class="line"><span class="cl">
