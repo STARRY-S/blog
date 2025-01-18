@@ -38,7 +38,7 @@ categories:
 
 ## 配置清单
 
-- 机箱：乔伯思 N1
+- 机箱：乔思伯 N1
 - 主板：映泰 B550T-SILVER ITX
 - CPU：AMD R7 5700G
 - 内存：英睿达 8G 2666
