@@ -13,8 +13,135 @@
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
 </copyright>
-    <lastBuildDate>Mon, 06 Jan 2025 21:24:37 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 19 Jan 2025 01:37:09 +0800</lastBuildDate>
     <atom:link href="https://blog.starry-s.moe/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>折腾一台 Arch Linux 服务器</title>
+      <link>https://blog.starry-s.moe/posts/2025/archlinux-server/</link>
+      <pubDate>Sun, 19 Jan 2025 01:37:09 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/posts/2025/archlinux-server/</guid>
+      <description>&lt;p&gt;又买了一堆电子垃圾，折腾了一台家用的服务器。&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>又买了一堆电子垃圾，折腾了一台家用的服务器。</p>
+<meting-js server="netease" type="song" id="2102766948" theme="#233333"></meting-js>
+<hr>
+<p>两年前，咱折腾了一台 ITX 主机作为 NAS 使用，以存储这几年相机拍的照片。不过一台迷你 ITX NAS 主机能运行的虚拟机数量已经满足不了咱对于折腾的需求了，于是又捡了些垃圾配件组了个配置差不多的 M-ATX 台式电脑，作为咱的服务器使用。</p>
+<p>配置清单：</p>
+<ul>
+<li>主板：华硕 B550M PLUS 重炮手</li>
+<li>CPU：AMD R7 5700X</li>
+<li>内存：旧电脑上拆下来的镁光 DDR4 3200 8G * 4</li>
+<li>GPU：NVIDIA Tesla P4</li>
+<li>硬盘：国产的杂牌 PCIE 3.0 速率的 NVME 固态，容量 2 TB</li>
+<li>机箱：先马平头哥 M2 MESH</li>
+<li>一些静音风扇</li>
+<li>散热为旧电脑上换下来的双塔散热</li>
+</ul>
+<p>因为是拿二手的电脑配件拼的电脑，CPU 也是买的是散片，内存用的是旧电脑上拆的 8G 条子，所以这个服务器有点灵车的性质，咱也不知道它能不能稳定运行，不过它并不作为 NAS 使用，不需要备份重要文件，所以稳定性不是非常重要，咱也没有给他配 UPS 备用电源。除此之外，因为是家用的服务器，所以选的无集显的 AMD 5700X CPU，插上了一个无视频输出的服务器 GPU 卡。装机过程中虽然主板插上了这个服务器显卡，但因为显卡没有视频输出接口，CPU 也没有集显，所以主板开机启动时 VGA 自检灯会一直白色常亮报警。不过搜了一下 NGA 论坛上的讨论，华硕的 550/570 系列的这个 AMD 主板的 BIOS 里虽然没有显卡无头启动的选项开关，但默认是已经支持无头启动了，虽然自检的 VGA 灯会一直白色常亮，但系统可以正常启动，只是显示器一直黑屏，没有画面输出（BIOS 也不能显示）。</p>
+<p>于是在装系统时，咱把之前装机时买的 GT730D 亮机卡插上去，进 BIOS 关掉亮瞎眼的 ARGB 灯，启用 SVM，配置好内存频率和 UEFI 启动，关掉安全启动，设置风扇为静音模式。之后用 U 盘把系统安装好，写好网络配置文件并启用 SSH 远程连接，之后关机（PCIE 不支持热插拔一定要关机再拔卡）把显卡换成没有视频输出的 Tesla P4。这样一台“无头”，但有 GPU 的服务器就装好了。</p>
+<blockquote>
+<p>其实咱试过要不要把这个 GT730D 亮机卡和 Tesla P4 一起插在主板上，因为毕竟这个主板有两个 PCIE x16 的槽子，一个是 PCIE 4.0，另一个是 PCIE 3.0。但是 GT730D 只支持 nvidia-470xx 版本的驱动（或 nouveau），Tesla P4 尽管不支持近几年新出的 nvidia-open 开源驱动（这个驱动只支持近几年新出的 Turing 图灵系列的卡而 P4 是 Pascal 架构）， 所以咱不想装太旧的显卡驱动于是只好在装机配置电脑的过程中无数次关机，开机箱换显卡……</p>
+</blockquote>
+<h2 id="gpu-passthrough">GPU Passthrough</h2>
+<p>为了能够在虚拟机里也能使用 GPU 资源，有一种方式是可以通过 GPU Passthrough 的方式将显卡设备直通至 KVM 虚拟机，在折腾 vGPU 之前，先试一下 Single GPU Passthrough。</p>
+<h3 id="iommu-group">IOMMU Group</h3>
+<p>参照 <a href="https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF">Arch Wiki</a>，主板在开启 SVM 后，默认就启用了 AMD VT-d 虚拟化并支持 IOMMU，所以默认情况下不需要配置 <code>vfio</code>，直接执行<a href="https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Ensuring_that_the_groups_are_valid">这个 <code>iommu.sh</code> 脚本</a>就可以查看 PCIE 设备对应的 IOMMU Group。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo dmesg <span class="p">|</span> grep AMD-Vi
+</span></span><span class="line"><span class="cl"><span class="go">[    0.796858] pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
+</span></span></span><span class="line"><span class="cl"><span class="go">[    0.799440] AMD-Vi: Extended features (0x58f77ef22294a5a, 0x0): PPR NX GT IA PC GA_vAPIC
+</span></span></span><span class="line"><span class="cl"><span class="go">[    0.799447] AMD-Vi: Interrupt remapping enabled
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo dmesg <span class="p">|</span> grep IOMMU
+</span></span><span class="line"><span class="cl"><span class="go">[    0.741773] perf/amd_iommu: Detected AMD IOMMU #0 (2 banks, 4 counters/bank).
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> iommu.sh
+</span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span><span class="line"><span class="cl"><span class="go">IOMMU Group 14:
+</span></span></span><span class="line"><span class="cl"><span class="go">	07:00.0 3D controller [0302]: NVIDIA Corporation GP104GL [Tesla P4] [10de:1abc] (rev a1)
+</span></span></span><span class="line"><span class="cl"><span class="go">...
+</span></span></span></code></pre></div><p>咱的 Tesla P4 显卡插在华硕 B550M 重炮手的 PCIE 4.0x16 插槽上，执行 <code>iommu.sh</code> 可以看到 Tesla P4 这个卡只在一个 <code>IOMMU Group 14</code> 这个 Group 里面，因为显卡没有输出接口所以这个 Group 里也没有音频输出的 Audio Device。</p>
+<p>注意不能将显卡插在主板的 PCIE 3.0x16 插槽里，如果这么弄的话，这个卡设备会和 CPU 等好多主板设备共用一个 Group，这样就没办法只将显卡设备直通到虚拟机里。</p>
+<p>除此之外因为服务器只有一块显卡，所以当显卡被直通到虚拟机后，服务器将不能运行 X Server，且一个显卡只能直通给一个虚拟机使用，不能分成多个 vGPU。在这篇 <a href="https://gitlab.com/risingprismtv/single-gpu-passthrough/-/wikis/2%29-Editing-your-Bootloader">Single GPU Passhrough Wiki</a> 里介绍可以加内核参数 <code>video=efifb:off</code>，避免显卡设备从虚拟机返回到主机时遇到问题。</p>
+<h3 id="配置-libvirt">配置 libvirt</h3>
+<p>服务器上面只有一块显卡，且这块卡要被直通给虚拟机使用，所以服务器不能跑 X Server 图形界面，也就是说只能手动配置 libvirt 的 Domain XML 启动虚拟机。或者先跑起来一个 VNC Server，使用 <code>virt-manager</code> 创建好虚拟机之后，再停掉 VNC Server 并 <code>rmmod</code> 主机上已加载显卡驱动内核模块。</p>
+<p>libvirt 的安装和配置教程可以直接参照 <a href="https://wiki.archlinux.org/title/Libvirt">Wiki</a>，这里不再赘述。</p>
+<p>最后编辑需要直通显卡设备的虚拟机 Domain XML，参照这里<a href="https://gitlab.com/risingprismtv/single-gpu-passthrough/-/wikis/8%29-Attaching-the-GPU-to-your-VM#removing-the-virtual-display">移除掉 Virtual Display</a>，然后添加一段 <code>hostdev</code> 将主机的显卡设备直通到虚拟机。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;hostdev</span> <span class="na">mode=</span><span class="s">&#34;subsystem&#34;</span> <span class="na">type=</span><span class="s">&#34;pci&#34;</span> <span class="na">managed=</span><span class="s">&#34;yes&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;source&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;address</span> <span class="na">domain=</span><span class="s">&#34;0x0000&#34;</span> <span class="na">bus=</span><span class="s">&#34;0x07&#34;</span> <span class="na">slot=</span><span class="s">&#34;0x00&#34;</span> <span class="na">function=</span><span class="s">&#34;0x0&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/source&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;address</span> <span class="na">type=</span><span class="s">&#34;pci&#34;</span> <span class="na">domain=</span><span class="s">&#34;0x0000&#34;</span> <span class="na">bus=</span><span class="s">&#34;0x07&#34;</span> <span class="na">slot=</span><span class="s">&#34;0x00&#34;</span> <span class="na">function=</span><span class="s">&#34;0x0&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/hostdev&gt;</span>
+</span></span></code></pre></div><p>这里咱的显卡为 <code>07:00.0</code>，对应 XML 中的 <code>domain=&quot;0x0000&quot; bus=&quot;0x07&quot; slot=&quot;0x00&quot; function=&quot;0x0&quot;</code>。</p>
+<p>因为显卡被直通给虚拟机，所以主机上不能运行 X Server，如果 libvirt 在启动虚拟机时卡住，可能是因为显卡驱动还在被主机加载，显卡设备依旧被主机使用而无法被直通给虚拟机。
+这是可以执行 <code>rmmod</code> 重新加载显卡驱动，让主机让出显卡给虚拟机使用。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="c1"># reload-nvidia.sh</span>
+</span></span><span class="line"><span class="cl">sudo rmmod nvidia_drm nvidia_uvm nvidia_modeset nvidia
+</span></span><span class="line"><span class="cl">sudo modprobe nvidia nvidia_uvm
+</span></span></code></pre></div><p>虚拟机启动后，需要通过 SSH 连接到虚拟机，或通过虚拟机的 VNC 图形界面连接到虚拟机，之后在虚拟机里安装好 <code>nvidia</code> 驱动，就可以看到一整块的显卡设备都被直通给这个虚拟机里了。</p>
+<p><img loading="lazy" src="images/1.png" alt="" />
+
+</p>
+<h2 id="vgpu-分割显卡">vGPU 分割显卡</h2>
+<p>Single GPU Passthrough 的局限很明显，只能将显卡直通给一个虚拟机独享，且这期间主机不能使用图形界面。所以可以用 NVIDIA 的 vGPU 将显卡分为多个“虚拟的小卡”，这样每个虚拟机都有显卡资源使用，肥肠适合在虚拟机中模拟 GPU 集群的开发等折腾场景。</p>
+<p>NVIDIA vGPU 驱动为付费使用，可以申请 90 天试用，vGPU 的驱动获取方式这里不赘述。</p>
+<p>因为 Tesla P4 仅支持 G16 及之前版本的 vGPU 驱动，Arch Linux 的 <code>linux</code> 内核版本很别新，且 GCC 版本为 14，英伟达的 vGPU 驱动并没有已编译好的可直接无痛安装的版本，于是只能用 The Hard Way 来编译 NVIDIA 驱动内核模块了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 卸载已安装的显卡驱动</span>
+</span></span><span class="line"><span class="cl">pacman -R nvidia nvidia-utils
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#  解压显卡驱动安装文件</span>
+</span></span><span class="line"><span class="cl">./NVIDIA-Linux-x86_64-535.xxx-vgpu-kvm.run -x
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> NVIDIA-Linux-x86_64*/
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译 DKMS 内核模块并安装</span>
+</span></span><span class="line"><span class="cl">./nvidia-installer --dkms
+</span></span></code></pre></div><p>首先需要解决一下 <code>error: implicit declaration of function 'follow_pfn'; did you mean 'folio_pfn'?</code> 报错，新版的内核移除了 <code>follow_pfn</code>，所以要参照<a href="https://forums.developer.nvidia.com/t/gpl-only-symbols-follow-pte-and-rcu-read-unlock-prevent-470-256-02-to-build-with-kernel-6-10/300052">这里</a>手动改下代码。</p>
+<ol>
+<li>
+<p>编辑 <code>kernel/conftest.sh</code>，修改 <code>unsafe_follow_pfn</code> 为 <code>follow_pfn</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">        follow_pfn<span class="o">)</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">#</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># Determine if follow_pfn() is present.</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">#</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># follow_pfn() was added by commit 69bacee7f9ad</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># (&#34;mm: Add follow_pfn&#34;) in v5.13-rc1.</span>
+</span></span><span class="line"><span class="cl">            <span class="c1">#</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">CODE</span><span class="o">=</span><span class="s2">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            #include &lt;linux/mm.h&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s2">            void conftest_follow_pfn(void) {
+</span></span></span><span class="line"><span class="cl"><span class="s2">                follow_pfn();
+</span></span></span><span class="line"><span class="cl"><span class="s2">            }&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            compile_check_conftest <span class="s2">&#34;</span><span class="nv">$CODE</span><span class="s2">&#34;</span> <span class="s2">&#34;NV_FOLLOW_PFN_PRESENT&#34;</span> <span class="s2">&#34;&#34;</span> <span class="s2">&#34;functions&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">;;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>编辑 <code>kernel/nvidia/nvidia.Kbuild</code>，改成 <code>follow_pfn</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">NV_CONFTEST_FUNCTION_COMPILE_TESTS += follow_pfn
+</span></span></code></pre></div></li>
+<li>
+<p>编辑 <code>kernel/nvidia/os-mlock.c</code> 的 <code>nv_follow_pfn</code> 函数，修改为这样子。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl">    <span class="k">static</span> <span class="kr">inline</span> <span class="kt">int</span> <span class="nf">nv_follow_pfn</span><span class="p">(</span><span class="k">struct</span> <span class="n">vm_area_struct</span> <span class="o">*</span><span class="n">vma</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="n">address</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span><span class="n">pfn</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cp">#if defined(NV_FOLLOW_PFN_PRESENT)
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="k">return</span> <span class="nf">follow_pfn</span><span class="p">(</span><span class="n">vma</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">pfn</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="cp">#endif
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="p">}</span>
+</span></span></code></pre></div></li>
+</ol>
+<p>之后再编译时还会遇到 <code>error: 'no_llseek' undeclared here (not in a function); did you mean 'noop_llseek'?</code> 报错，搜了一下发现在 Kernel 6.12 中 <code>no_llseek</code> <a href="https://github.com/google/gasket-driver/commit/4b2a1464f3b619daaf0f6c664c954a42c4b7ce00.patch">已被移除</a>，
+可以直接编辑 <code>kernel/nvidia-vgpu-vfio/nvidia-vgpu-vfio.c</code> <a href="https://lore.kernel.org/linux-next/20220715140259.205ef267@canb.auug.org.au/">移除掉有 <code>no_llseek</code> 的行</a>。</p>
+<p>然后在加载编译后的内核驱动模块时会遇到 <code>failing symbol_get of non-GPLONLY symbol nvidia_vgpu_vfio_get_ops.</code> 报错。这里为了能让内核模块被加载到内核里，只能编辑 <code>kernel/nvidia/nv-vgpu-vfio-interface.c</code> 将 <code>EXPORT_SYMBOL(nvidia_vgpu_vfio_get_ops)</code> 改成 <code>EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_get_ops)</code>，将 <code>EXPORT_SYMBOL(nvidia_vgpu_vfio_set_ops)</code> 改成 <code>EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_set_ops)</code>。尽管并不建议直接把非 GPL Symbol 改成 GPL，但如果要在最新的内核版本中安装这个驱动，只能这么修改，或者试着降级至某个 <code>linux-lts</code> 版本，不过降级至其他 LTS 版本还需要手动解决 LTS 版本内核编译时遇到的依赖冲突问题……</p>
+<p>驱动安装好之后，就可以参照<a href="https://documentation.suse.com/sles/15-SP6/html/SLES-all/article-nvidia-vgpu.html#configure-nvidia-vgpu-passthrough">这个步骤</a>，将显卡的 <code>mdev</code> 设备分给虚拟机使用了。</p>
+<blockquote>
+<p>未完待续</p>
+</blockquote>]]></content:encoded>
+    </item>
     <item>
       <title>海王星 4 MAX 3D 打印机入坑小记</title>
       <link>https://blog.starry-s.moe/posts/2025/neptune-4-max/</link>
@@ -3705,7 +3832,7 @@ Controller 在运行时实际是一直尝试从 <code>workqueue</code> 中获取
 <hr>
 <h2 id="配置清单">配置清单</h2>
 <ul>
-<li>机箱：乔伯思 N1</li>
+<li>机箱：乔思伯 N1</li>
 <li>主板：映泰 B550T-SILVER ITX</li>
 <li>CPU：AMD R7 5700G</li>
 <li>内存：英睿达 8G 2666</li>
