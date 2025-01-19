@@ -16,10 +16,10 @@
     <lastBuildDate>Sun, 19 Jan 2025 01:37:09 +0800</lastBuildDate>
     <atom:link href="https://blog.starry-s.moe/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Linux</title>
-      <link>https://blog.starry-s.moe/categories/linux/</link>
+      <title>日常</title>
+      <link>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</link>
       <pubDate>Sun, 19 Jan 2025 01:37:09 +0800</pubDate>
-      <guid>https://blog.starry-s.moe/categories/linux/</guid>
+      <guid>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</guid>
       <description></description>
     </item>
     <item>
@@ -30,17 +30,17 @@
       <description></description>
     </item>
     <item>
-      <title>日常</title>
-      <link>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</link>
-      <pubDate>Tue, 01 Oct 2024 00:34:42 +0800</pubDate>
-      <guid>https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/</guid>
-      <description></description>
-    </item>
-    <item>
       <title>路由器</title>
       <link>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</link>
       <pubDate>Mon, 16 Sep 2024 12:38:31 +0800</pubDate>
       <guid>https://blog.starry-s.moe/categories/%E8%B7%AF%E7%94%B1%E5%99%A8/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Linux</title>
+      <link>https://blog.starry-s.moe/categories/linux/</link>
+      <pubDate>Mon, 05 Aug 2024 01:02:47 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/categories/linux/</guid>
       <description></description>
     </item>
     <item>
