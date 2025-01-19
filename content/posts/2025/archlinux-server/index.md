@@ -5,7 +5,7 @@ layout: post
 tags:
 - Arch Linux
 categories:
-- Linux
+- 日常
 ---
 
 又买了一堆电子垃圾，折腾了一台家用的服务器。
@@ -32,7 +32,19 @@ categories:
 
 于是在装系统时，咱把之前装机时买的 GT730D 亮机卡插上去，进 BIOS 关掉亮瞎眼的 ARGB 灯，启用 SVM，配置好内存频率和 UEFI 启动，关掉安全启动，设置风扇为静音模式。之后用 U 盘把系统安装好，写好网络配置文件并启用 SSH 远程连接，之后关机（PCIE 不支持热插拔一定要关机再拔卡）把显卡换成没有视频输出的 Tesla P4。这样一台“无头”，但有 GPU 的服务器就装好了。
 
-> 其实咱试过要不要把这个 GT730D 亮机卡和 Tesla P4 一起插在主板上，因为毕竟这个主板有两个 PCIE x16 的槽子，一个是 PCIE 4.0，另一个是 PCIE 3.0。但是 GT730D 只支持 nvidia-470xx 版本的驱动（或 nouveau），Tesla P4 尽管不支持近几年新出的 nvidia-open 开源驱动（这个驱动只支持近几年新出的 Turing 图灵系列的卡而 P4 是 Pascal 架构）， 所以咱不想装太旧的显卡驱动于是只好在装机配置电脑的过程中无数次关机，开机箱换显卡……
+> 其实咱试过要不要把这个 GT730D 亮机卡和 Tesla P4 一起插在主板上，因为毕竟这个主板有两个 PCIE x16 的槽子，一个是 PCIE 4.0，另一个是 PCIE 3.0。但是 GT730D 只支持 nvidia-470xx 版本的驱动（或 nouveau），Tesla P4 尽管不支持近几年新出的 nvidia-open 开源驱动（这个驱动只支持近几年新出的 Turing 图灵系列的卡而 P4 是 Pascal 架构）， 但是可以用最新的闭源 `nvidia` 驱动。咱不想装太旧的显卡驱动于是只好在装机配置电脑的过程中无数次关机，开机箱换显卡……
+
+Tesla P4 显卡是一个半高卡（刀卡），仅需 PCIE 供电，功耗 75W，无主动散热风扇，因此需要改装风扇散热，咱使用的是网上买的 3D 打印风扇。
+
+![](images/2.jpg "Tesla P4 改装散热")
+
+安装好主板和 CPU、显卡之后是酱紫的。
+
+![](images/3.jpg "安装主板 CPU 和显卡")
+
+最终安装上散热风扇和内存的样子。
+
+![](images/4.jpg "安装散热风扇和内存")
 
 ## GPU Passthrough
 
@@ -67,7 +79,7 @@ IOMMU Group 14:
 
 ### 配置 libvirt
 
-服务器上面只有一块显卡，且这块卡要被直通给虚拟机使用，所以服务器不能跑 X Server 图形界面，也就是说只能手动配置 libvirt 的 Domain XML 启动虚拟机。或者先跑起来一个 VNC Server，使用 `virt-manager` 创建好虚拟机之后，再停掉 VNC Server 并 `rmmod` 主机上已加载显卡驱动内核模块。
+服务器上面只有一块显卡，且这块卡要被直通给虚拟机使用，所以服务器不能跑 X Server 图形界面，也就是说只能手动配置 libvirt 的 Domain XML 启动虚拟机。或者先跑起来一个 VNC Server，使用 `virt-manager` 创建好虚拟机之后，再停掉 VNC Server 并 `rmmod` 主机上已加载的显卡驱动内核模块。
 
 libvirt 的安装和配置教程可以直接参照 [Wiki](https://wiki.archlinux.org/title/Libvirt)，这里不再赘述。
 
