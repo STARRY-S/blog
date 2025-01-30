@@ -11,7 +11,7 @@
     </image>
     <generator>Hugo -- 0.140.2</generator>
     <language>zh</language>
-    <copyright>2016 - 2025 STARRY-S | CC BY-NC-ND 4.0 | Hosted on GitHub Pages
+    <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
     <lastBuildDate>Sun, 19 Jan 2025 01:37:09 +0800</lastBuildDate>
     <atom:link href="https://blog.starry-s.moe/categories/%E6%97%A5%E5%B8%B8/index.xml" rel="self" type="application/rss+xml" />
@@ -149,10 +149,7 @@
 <p>之后再编译时还会遇到 <code>error: 'no_llseek' undeclared here (not in a function); did you mean 'noop_llseek'?</code> 报错，搜了一下发现在 Kernel 6.12 中 <code>no_llseek</code> <a href="https://github.com/google/gasket-driver/commit/4b2a1464f3b619daaf0f6c664c954a42c4b7ce00.patch">已被移除</a>，
 可以直接编辑 <code>kernel/nvidia-vgpu-vfio/nvidia-vgpu-vfio.c</code> <a href="https://lore.kernel.org/linux-next/20220715140259.205ef267@canb.auug.org.au/">移除掉有 <code>no_llseek</code> 的行</a>。</p>
 <p>然后在加载编译后的内核驱动模块时会遇到 <code>failing symbol_get of non-GPLONLY symbol nvidia_vgpu_vfio_get_ops.</code> 报错。这里为了能让内核模块被加载到内核里，只能编辑 <code>kernel/nvidia/nv-vgpu-vfio-interface.c</code> 将 <code>EXPORT_SYMBOL(nvidia_vgpu_vfio_get_ops)</code> 改成 <code>EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_get_ops)</code>，将 <code>EXPORT_SYMBOL(nvidia_vgpu_vfio_set_ops)</code> 改成 <code>EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_set_ops)</code>。尽管并不建议直接把非 GPL Symbol 改成 GPL，但如果要在最新的内核版本中安装这个驱动，只能这么修改，或者试着降级至某个 <code>linux-lts</code> 版本，不过降级至其他 LTS 版本还需要手动解决 LTS 版本内核编译时遇到的依赖冲突问题……</p>
-<p>驱动安装好之后，就可以参照<a href="https://documentation.suse.com/sles/15-SP6/html/SLES-all/article-nvidia-vgpu.html#configure-nvidia-vgpu-passthrough">这个步骤</a>，将显卡的 <code>mdev</code> 设备分给虚拟机使用了。</p>
-<blockquote>
-<p>未完待续</p>
-</blockquote>]]></content:encoded>
+<p>驱动安装好之后，就可以参照<a href="https://documentation.suse.com/sles/15-SP6/html/SLES-all/article-nvidia-vgpu.html#configure-nvidia-vgpu-passthrough">这个步骤</a>，将显卡的 <code>mdev</code> 设备分给虚拟机使用了。</p>]]></content:encoded>
     </item>
     <item>
       <title>自制兽头内置风扇 &amp; LED 发光眼</title>
