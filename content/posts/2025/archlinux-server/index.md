@@ -180,5 +180,3 @@ cd NVIDIA-Linux-x86_64*/
 然后在加载编译后的内核驱动模块时会遇到 `failing symbol_get of non-GPLONLY symbol nvidia_vgpu_vfio_get_ops.` 报错。这里为了能让内核模块被加载到内核里，只能编辑 `kernel/nvidia/nv-vgpu-vfio-interface.c` 将 `EXPORT_SYMBOL(nvidia_vgpu_vfio_get_ops)` 改成 `EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_get_ops)`，将 `EXPORT_SYMBOL(nvidia_vgpu_vfio_set_ops)` 改成 `EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_set_ops)`。尽管并不建议直接把非 GPL Symbol 改成 GPL，但如果要在最新的内核版本中安装这个驱动，只能这么修改，或者试着降级至某个 `linux-lts` 版本，不过降级至其他 LTS 版本还需要手动解决 LTS 版本内核编译时遇到的依赖冲突问题……
 
 驱动安装好之后，就可以参照[这个步骤](https://documentation.suse.com/sles/15-SP6/html/SLES-all/article-nvidia-vgpu.html#configure-nvidia-vgpu-passthrough)，将显卡的 `mdev` 设备分给虚拟机使用了。
-
-> 未完待续
