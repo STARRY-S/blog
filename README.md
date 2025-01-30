@@ -4,4 +4,4 @@
 
 ## LICENSE
 
-[CC BY-NC-ND 4.0](http://creativecommons.org/licenses/by-nc-nd/4.0/)
+[CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/)

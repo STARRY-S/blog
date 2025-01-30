@@ -229,7 +229,7 @@ outputs:
   - JSON # is necessary
 
 copyright:
-  © 2016 - 2025 STARRY-S | [CC BY-NC-ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)<br />
+  © 2016 - 2025 STARRY-S | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)<br />
 hasCJKLanguage: true
 enableGitInfo: false
 timeout: 60000
