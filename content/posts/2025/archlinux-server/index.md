@@ -24,9 +24,10 @@ categories:
 - 内存：旧电脑上拆下来的镁光 DDR4 3200 8G * 4
 - GPU：NVIDIA Tesla P4
 - 硬盘：国产的杂牌 PCIE 3.0 速率的 NVME 固态，容量 2 TB
-- 机箱：先马平头哥 M2 MESH
-- 一些静音风扇
-- 散热为旧电脑上换下来的双塔散热
+- 机箱：先马黑洞 7pro
+- 亿些静音风扇
+- 散热为旧电脑上换下来的利民双塔散热
+- 电源：先马黑洞 1000W ATX 3.0 金牌
 
 因为是拿二手的电脑配件拼的电脑，CPU 也是买的是散片，内存用的是旧电脑上拆的 8G 条子，所以这个服务器有点灵车的性质，咱也不知道它能不能稳定运行，不过它并不作为 NAS 使用，不需要备份重要文件，所以稳定性不是非常重要，咱也没有给他配 UPS 备用电源。除此之外，因为是家用的服务器，所以选的无集显的 AMD 5700X CPU，插上了一个无视频输出的服务器 GPU 卡。装机过程中虽然主板插上了这个服务器显卡，但因为显卡没有视频输出接口，CPU 也没有集显，所以主板开机启动时 VGA 自检灯会一直白色常亮报警。不过搜了一下 NGA 论坛上的讨论，华硕的 550/570 系列的这个 AMD 主板的 BIOS 里虽然没有显卡无头启动的选项开关，但默认是已经支持无头启动了，虽然自检的 VGA 灯会一直白色常亮，但系统可以正常启动，只是显示器一直黑屏，没有画面输出（BIOS 也不能显示）。
 
@@ -45,6 +46,8 @@ Tesla P4 显卡是一个半高卡（刀卡），仅需 PCIE 供电，功耗 75W�
 最终安装上散热风扇和内存的样子。
 
 ![](images/4.jpg "安装散热风扇和内存")
+
+一开始咱用的是先马平头哥 M2 Mesh 这个机箱，但这个机箱比较小只能塞 M-ATX 主板，且只能放一张显卡，如果要塞两张卡的话第二张卡的厚度只能是单槽厚度，所以后来换了个更大，有点闷罐但十分静音的先马黑洞 7pro 机箱。
 
 ## GPU Passthrough
 
@@ -180,3 +183,82 @@ cd NVIDIA-Linux-x86_64*/
 然后在加载编译后的内核驱动模块时会遇到 `failing symbol_get of non-GPLONLY symbol nvidia_vgpu_vfio_get_ops.` 报错。这里为了能让内核模块被加载到内核里，只能编辑 `kernel/nvidia/nv-vgpu-vfio-interface.c` 将 `EXPORT_SYMBOL(nvidia_vgpu_vfio_get_ops)` 改成 `EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_get_ops)`，将 `EXPORT_SYMBOL(nvidia_vgpu_vfio_set_ops)` 改成 `EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_set_ops)`。尽管并不建议直接把非 GPL Symbol 改成 GPL，但如果要在最新的内核版本中安装这个驱动，只能这么修改，或者试着降级至某个 `linux-lts` 版本，不过降级至其他 LTS 版本还需要手动解决 LTS 版本内核编译时遇到的依赖冲突问题……
 
 驱动安装好之后，就可以参照[这个步骤](https://documentation.suse.com/sles/15-SP6/html/SLES-all/article-nvidia-vgpu.html#configure-nvidia-vgpu-passthrough)，将显卡的 `mdev` 设备分给虚拟机使用了。
+
+```console
+$ cd /sys/bus/pci/devices/0000:07:00.0/mdev_supported_types
+$ ls
+nvidia-157  nvidia-214  nvidia-243  nvidia-288  nvidia-289  nvidia-63  nvidia-64  nvidia-65  nvidia-66  nvidia-67  nvidia-68  nvidia-69  nvidia-70  nvidia-71
+$ cat nvidia-64/name
+GRID P4-2Q
+$ cat nvidia-64/description
+num_heads=4, frl_config=60, framebuffer=2048M, max_resolution=7680x4320, max_instance=4
+```
+
+`/sys/bus/pci/devices/0000:07:00.0/mdev_supported_types` 目录中存在许多不同种类的 vGPU 目录，Tesla P4 的 vGPU Type 的介绍可参照[这里](https://docs.nvidia.com/vgpu/14.0/grid-vgpu-user-guide/index.html#vgpu-types-tesla-p4)。咱使用的是 Q 系列的 vGPU，`nvidia-64` 目录对应的是 **2Q** 系列的 vGPU，拥有 2G 显存，最多可创建 4 块 vGPU。
+
+生成几个 UUID 用于创建 vGPU 显卡。
+
+```console
+$ sudo bash -c "echo $(uuidgen) > nvidia-64/create"
+$ sudo bash -c "echo $(uuidgen) > nvidia-64/create"
+$ sudo bash -c "echo $(uuidgen) > nvidia-64/create"
+$ mdevctl list
+06e5abd1-2ecc-c621-30c8-a5134daf4eac 0000:07:00.0 nvidia-64 manual
+4765ca4e-f690-4074-8085-bfb5f6fba68a 0000:07:00.0 nvidia-64 manual
+95b70c98-ac5e-431d-961c-a7a493f45009 0000:07:00.0 nvidia-64 manual
+bfa21f24-d1ea-dcc3-2bf6-3e7acc8281c4 0000:07:00.0 nvidia-64 manual
+```
+
+编辑 libvirt 的 Domain XML，添加 `mdev` 设备，将主机中的 vGPU 添加至虚拟机中。
+
+```xml
+<hostdev mode='subsystem' type='mdev' managed='no' model='vfio-pci' display='off'>
+    <source>
+        <address uuid='abcabcd9-defd-4611-abcabc-abcabc4cef4eac'/>
+    </source>
+    <address type='pci' domain='0x0000' bus='0x00' slot='0x07' function='0x0'/>
+</hostdev>
+```
+
+![](images/5.png)
+
+```console
+$ lspci | grep VGA
+00:07.0 VGA compatible controller: NVIDIA Corporation GP104GL [Tesla P4] (rev a1)
+```
+
+在虚拟机中，需要安装对应的 GRID 显卡驱动，同样的也需要调整虚拟机的内核版本或根据安装驱动时的编译报错来修改驱动的 CFLAGS 和代码，这里不再赘述。
+
+不出意外的话，在虚拟机折腾完显卡驱动后，vGPU 设备就能被驱动正常检测到并使用了。
+
+```console
+$ nvidia-smi
+Mon Feb  3 10:02:45 2025       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 510.85.02    Driver Version: 510.85.02    CUDA Version: 11.6     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  GRID P4-2Q          On   | 00000000:00:07.0 Off |                    0 |
+| N/A   N/A    P8    N/A /  N/A |      0MiB /  2048MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+```
+
+之后可以编辑 `/etc/nvidia/gridd.conf` 配置 License 服务器等设置，参照英伟达的官网文档即可，这里不再赘述。
+
+## Others
+
+经过了好久的折腾之后，咱的感觉是特斯拉 P4 这张卡有些年头了，因为是 Pascal 架构，不支持图灵，所以也不能支持最新的 nvidia-open 驱动，只能安装旧版驱动。
+
+性能方面因为这就是个半高的计算卡，不需要外接供电，只有 PCIE 插槽供电的 75W 功耗，所以别指望它能跑什么复杂的图形运算。不过一些基本的视频渲染之类的应该还是能跑的。如果想搞现在热火朝天的人工智能的话，还是买新一点的大显存显卡比较好，所以想来想去，这个 P4 半高显卡似乎刚好适合插在我的 NAS 上当一个入门级的运算卡来使用……
