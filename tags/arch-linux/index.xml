@@ -32,9 +32,10 @@
 <li>内存：旧电脑上拆下来的镁光 DDR4 3200 8G * 4</li>
 <li>GPU：NVIDIA Tesla P4</li>
 <li>硬盘：国产的杂牌 PCIE 3.0 速率的 NVME 固态，容量 2 TB</li>
-<li>机箱：先马平头哥 M2 MESH</li>
-<li>一些静音风扇</li>
-<li>散热为旧电脑上换下来的双塔散热</li>
+<li>机箱：先马黑洞 7pro</li>
+<li>亿些静音风扇</li>
+<li>散热为旧电脑上换下来的利民双塔散热</li>
+<li>电源：先马黑洞 1000W ATX 3.0 金牌</li>
 </ul>
 <p>因为是拿二手的电脑配件拼的电脑，CPU 也是买的是散片，内存用的是旧电脑上拆的 8G 条子，所以这个服务器有点灵车的性质，咱也不知道它能不能稳定运行，不过它并不作为 NAS 使用，不需要备份重要文件，所以稳定性不是非常重要，咱也没有给他配 UPS 备用电源。除此之外，因为是家用的服务器，所以选的无集显的 AMD 5700X CPU，插上了一个无视频输出的服务器 GPU 卡。装机过程中虽然主板插上了这个服务器显卡，但因为显卡没有视频输出接口，CPU 也没有集显，所以主板开机启动时 VGA 自检灯会一直白色常亮报警。不过搜了一下 NGA 论坛上的讨论，华硕的 550/570 系列的这个 AMD 主板的 BIOS 里虽然没有显卡无头启动的选项开关，但默认是已经支持无头启动了，虽然自检的 VGA 灯会一直白色常亮，但系统可以正常启动，只是显示器一直黑屏，没有画面输出（BIOS 也不能显示）。</p>
 <p>于是在装系统时，咱把之前装机时买的 GT730D 亮机卡插上去，进 BIOS 关掉亮瞎眼的 ARGB 灯，启用 SVM，配置好内存频率和 UEFI 启动，关掉安全启动，设置风扇为静音模式。之后用 U 盘把系统安装好，写好网络配置文件并启用 SSH 远程连接，之后关机（PCIE 不支持热插拔一定要关机再拔卡）把显卡换成没有视频输出的 Tesla P4。这样一台“无头”，但有 GPU 的服务器就装好了。</p>
@@ -53,6 +54,7 @@
 <p><img loading="lazy" src="images/4.jpg" alt="" />
 <p style="margin-bottom: -0.8em;" class="image-title">安装散热风扇和内存</p>
 </p>
+<p>一开始咱用的是先马平头哥 M2 Mesh 这个机箱，但这个机箱比较小只能塞 M-ATX 主板，且只能放一张显卡，如果要塞两张卡的话第二张卡的厚度只能是单槽厚度，所以后来换了个更大，有点闷罐但十分静音的先马黑洞 7pro 机箱。</p>
 <h2 id="gpu-passthrough">GPU Passthrough</h2>
 <p>为了能够在虚拟机里也能使用 GPU 资源，有一种方式是可以通过 GPU Passthrough 的方式将显卡设备直通至 KVM 虚拟机，在折腾 vGPU 之前，先试一下 Single GPU Passthrough。</p>
 <h3 id="iommu-group">IOMMU Group</h3>
@@ -149,7 +151,63 @@
 <p>之后再编译时还会遇到 <code>error: 'no_llseek' undeclared here (not in a function); did you mean 'noop_llseek'?</code> 报错，搜了一下发现在 Kernel 6.12 中 <code>no_llseek</code> <a href="https://github.com/google/gasket-driver/commit/4b2a1464f3b619daaf0f6c664c954a42c4b7ce00.patch">已被移除</a>，
 可以直接编辑 <code>kernel/nvidia-vgpu-vfio/nvidia-vgpu-vfio.c</code> <a href="https://lore.kernel.org/linux-next/20220715140259.205ef267@canb.auug.org.au/">移除掉有 <code>no_llseek</code> 的行</a>。</p>
 <p>然后在加载编译后的内核驱动模块时会遇到 <code>failing symbol_get of non-GPLONLY symbol nvidia_vgpu_vfio_get_ops.</code> 报错。这里为了能让内核模块被加载到内核里，只能编辑 <code>kernel/nvidia/nv-vgpu-vfio-interface.c</code> 将 <code>EXPORT_SYMBOL(nvidia_vgpu_vfio_get_ops)</code> 改成 <code>EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_get_ops)</code>，将 <code>EXPORT_SYMBOL(nvidia_vgpu_vfio_set_ops)</code> 改成 <code>EXPORT_SYMBOL_GPL(nvidia_vgpu_vfio_set_ops)</code>。尽管并不建议直接把非 GPL Symbol 改成 GPL，但如果要在最新的内核版本中安装这个驱动，只能这么修改，或者试着降级至某个 <code>linux-lts</code> 版本，不过降级至其他 LTS 版本还需要手动解决 LTS 版本内核编译时遇到的依赖冲突问题……</p>
-<p>驱动安装好之后，就可以参照<a href="https://documentation.suse.com/sles/15-SP6/html/SLES-all/article-nvidia-vgpu.html#configure-nvidia-vgpu-passthrough">这个步骤</a>，将显卡的 <code>mdev</code> 设备分给虚拟机使用了。</p>]]></content:encoded>
+<p>驱动安装好之后，就可以参照<a href="https://documentation.suse.com/sles/15-SP6/html/SLES-all/article-nvidia-vgpu.html#configure-nvidia-vgpu-passthrough">这个步骤</a>，将显卡的 <code>mdev</code> 设备分给虚拟机使用了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> <span class="nb">cd</span> /sys/bus/pci/devices/0000:07:00.0/mdev_supported_types
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> ls
+</span></span><span class="line"><span class="cl"><span class="go">nvidia-157  nvidia-214  nvidia-243  nvidia-288  nvidia-289  nvidia-63  nvidia-64  nvidia-65  nvidia-66  nvidia-67  nvidia-68  nvidia-69  nvidia-70  nvidia-71
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> cat nvidia-64/name
+</span></span><span class="line"><span class="cl"><span class="go">GRID P4-2Q
+</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> cat nvidia-64/description
+</span></span><span class="line"><span class="cl"><span class="go">num_heads=4, frl_config=60, framebuffer=2048M, max_resolution=7680x4320, max_instance=4
+</span></span></span></code></pre></div><p><code>/sys/bus/pci/devices/0000:07:00.0/mdev_supported_types</code> 目录中存在许多不同种类的 vGPU 目录，Tesla P4 的 vGPU Type 的介绍可参照<a href="https://docs.nvidia.com/vgpu/14.0/grid-vgpu-user-guide/index.html#vgpu-types-tesla-p4">这里</a>。咱使用的是 Q 系列的 vGPU，<code>nvidia-64</code> 目录对应的是 <strong>2Q</strong> 系列的 vGPU，拥有 2G 显存，最多可创建 4 块 vGPU。</p>
+<p>生成几个 UUID 用于创建 vGPU 显卡。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo bash -c <span class="s2">&#34;echo </span><span class="k">$(</span>uuidgen<span class="k">)</span><span class="s2"> &gt; nvidia-64/create&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo bash -c <span class="s2">&#34;echo </span><span class="k">$(</span>uuidgen<span class="k">)</span><span class="s2"> &gt; nvidia-64/create&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo bash -c <span class="s2">&#34;echo </span><span class="k">$(</span>uuidgen<span class="k">)</span><span class="s2"> &gt; nvidia-64/create&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="gp">$</span> mdevctl list
+</span></span><span class="line"><span class="cl"><span class="go">06e5abd1-2ecc-c621-30c8-a5134daf4eac 0000:07:00.0 nvidia-64 manual
+</span></span></span><span class="line"><span class="cl"><span class="go">4765ca4e-f690-4074-8085-bfb5f6fba68a 0000:07:00.0 nvidia-64 manual
+</span></span></span><span class="line"><span class="cl"><span class="go">95b70c98-ac5e-431d-961c-a7a493f45009 0000:07:00.0 nvidia-64 manual
+</span></span></span><span class="line"><span class="cl"><span class="go">bfa21f24-d1ea-dcc3-2bf6-3e7acc8281c4 0000:07:00.0 nvidia-64 manual
+</span></span></span></code></pre></div><p>编辑 libvirt 的 Domain XML，添加 <code>mdev</code> 设备，将主机中的 vGPU 添加至虚拟机中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;hostdev</span> <span class="na">mode=</span><span class="s">&#39;subsystem&#39;</span> <span class="na">type=</span><span class="s">&#39;mdev&#39;</span> <span class="na">managed=</span><span class="s">&#39;no&#39;</span> <span class="na">model=</span><span class="s">&#39;vfio-pci&#39;</span> <span class="na">display=</span><span class="s">&#39;off&#39;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;source&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;address</span> <span class="na">uuid=</span><span class="s">&#39;abcabcd9-defd-4611-abcabc-abcabc4cef4eac&#39;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/source&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;address</span> <span class="na">type=</span><span class="s">&#39;pci&#39;</span> <span class="na">domain=</span><span class="s">&#39;0x0000&#39;</span> <span class="na">bus=</span><span class="s">&#39;0x00&#39;</span> <span class="na">slot=</span><span class="s">&#39;0x07&#39;</span> <span class="na">function=</span><span class="s">&#39;0x0&#39;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/hostdev&gt;</span>
+</span></span></code></pre></div><p><img loading="lazy" src="images/5.png" alt="" />
+
+</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> lspci <span class="p">|</span> grep VGA
+</span></span><span class="line"><span class="cl"><span class="go">00:07.0 VGA compatible controller: NVIDIA Corporation GP104GL [Tesla P4] (rev a1)
+</span></span></span></code></pre></div><p>在虚拟机中，需要安装对应的 GRID 显卡驱动，同样的也需要调整虚拟机的内核版本或根据安装驱动时的编译报错来修改驱动的 CFLAGS 和代码，这里不再赘述。</p>
+<p>不出意外的话，在虚拟机折腾完显卡驱动后，vGPU 设备就能被驱动正常检测到并使用了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> nvidia-smi
+</span></span><span class="line"><span class="cl"><span class="go">Mon Feb  3 10:02:45 2025       
+</span></span></span><span class="line"><span class="cl"><span class="go">+-----------------------------------------------------------------------------+
+</span></span></span><span class="line"><span class="cl"><span class="go">| NVIDIA-SMI 510.85.02    Driver Version: 510.85.02    CUDA Version: 11.6     |
+</span></span></span><span class="line"><span class="cl"><span class="go">|-------------------------------+----------------------+----------------------+
+</span></span></span><span class="line"><span class="cl"><span class="go">| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+</span></span></span><span class="line"><span class="cl"><span class="go">| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+</span></span></span><span class="line"><span class="cl"><span class="go">|                               |                      |               MIG M. |
+</span></span></span><span class="line"><span class="cl"><span class="go">|===============================+======================+======================|
+</span></span></span><span class="line"><span class="cl"><span class="go">|   0  GRID P4-2Q          On   | 00000000:00:07.0 Off |                    0 |
+</span></span></span><span class="line"><span class="cl"><span class="go">| N/A   N/A    P8    N/A /  N/A |      0MiB /  2048MiB |      0%      Default |
+</span></span></span><span class="line"><span class="cl"><span class="go">|                               |                      |                  N/A |
+</span></span></span><span class="line"><span class="cl"><span class="go">+-------------------------------+----------------------+----------------------+
+</span></span></span><span class="line"><span class="cl"><span class="go">                                                                               
+</span></span></span><span class="line"><span class="cl"><span class="go">+-----------------------------------------------------------------------------+
+</span></span></span><span class="line"><span class="cl"><span class="go">| Processes:                                                                  |
+</span></span></span><span class="line"><span class="cl"><span class="go">|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+</span></span></span><span class="line"><span class="cl"><span class="go">|        ID   ID                                                   Usage      |
+</span></span></span><span class="line"><span class="cl"><span class="go">|=============================================================================|
+</span></span></span><span class="line"><span class="cl"><span class="go">|  No running processes found                                                 |
+</span></span></span><span class="line"><span class="cl"><span class="go">+-----------------------------------------------------------------------------+
+</span></span></span></code></pre></div><p>之后可以编辑 <code>/etc/nvidia/gridd.conf</code> 配置 License 服务器等设置，参照英伟达的官网文档即可，这里不再赘述。</p>
+<h2 id="others">Others</h2>
+<p>经过了好久的折腾之后，咱的感觉是特斯拉 P4 这张卡有些年头了，因为是 Pascal 架构，不支持图灵，所以也不能支持最新的 nvidia-open 驱动，只能安装旧版驱动。</p>
+<p>性能方面因为这就是个半高的计算卡，不需要外接供电，只有 PCIE 插槽供电的 75W 功耗，所以别指望它能跑什么复杂的图形运算。不过一些基本的视频渲染之类的应该还是能跑的。如果想搞现在热火朝天的人工智能的话，还是买新一点的大显存显卡比较好，所以想来想去，这个 P4 半高显卡似乎刚好适合插在我的 NAS 上当一个入门级的运算卡来使用……</p>]]></content:encoded>
     </item>
     <item>
       <title>联想 ThinkBook 16 Gen6 安装 Arch Linux</title>
