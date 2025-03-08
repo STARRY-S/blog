@@ -296,7 +296,7 @@
 <h2 id="装系统">装系统</h2>
 <p>Arch Wiki 的 Installation Guide 在使用 <code>pacstrap</code> 装系统时只写了最基础的软件包 <code>base</code>, <code>linux</code> 和 <code>linux-firmware</code>，可以在这一步补充亿些常用的软件。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacstrap -K /mnt base linux linux-firmware <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    base-devel gcc grub amd-ucode  <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    base-devel gcc grub amd-ucode intel-ucode <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    zsh zsh-syntax-highlighting zsh-autosuggestions <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    vim neovim git openbsd-netcat <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    sudo man-db htop wget <span class="se">\
@@ -307,11 +307,13 @@
 </span></span><span class="line"><span class="cl"># Server = https://repo.archlinuxcn.org/$arch
 </span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
 </span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S archlinuxcn-keyring yay
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S archlinuxcn-keyring
+</span></span><span class="line"><span class="cl">sudo pacman -S yay
 </span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S os-prober
 </span></span></code></pre></div><p>如果是为 QEMU KVM 虚拟机装系统的话，在执行 <code>grub-install</code> 配置 UEFI 启动引导时记得加一个 <code>--removable</code> 参数。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo grub-install --target<span class="o">=</span>x86_64-efi --efi-directory<span class="o">=</span>/boot --bootloader-id<span class="o">=</span>GRUB --removable
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S efibootmgr
+</span></span><span class="line"><span class="cl">sudo grub-install --target<span class="o">=</span>x86_64-efi --efi-directory<span class="o">=</span>/boot --bootloader-id<span class="o">=</span>GRUB --removable
 </span></span><span class="line"><span class="cl">sudo grub-mkconfig -o /boot/grub.cfg
 </span></span></code></pre></div><p>如果不装其他网络工具，只使用 <code>systemd-networkd</code> 的话，需要创建一份默认的配置文件使用 DHCP，否则连不上网。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-default.network
@@ -320,7 +322,8 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">[Network]
 </span></span><span class="line"><span class="cl">DHCP=yes
-</span></span></code></pre></div><p>如果需要配置静态网络地址：</p>
+</span></span></code></pre></div><p>如果需要配置静态网络地址：<br>
+（这里只配置了静态 IPv4，如需要禁用 IPv6 的 DHCP，请参阅下方<a href="/posts/2024/archlinux-utils/#%e6%a1%a5%e6%8e%a5%e7%bd%91%e7%bb%9c">桥接网络</a>介绍）</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-static.network
 </span></span><span class="line"><span class="cl">[Match]
 </span></span><span class="line"><span class="cl">Name=eth0
@@ -330,13 +333,48 @@
 </span></span><span class="line"><span class="cl">Gateway=10.128.0.1
 </span></span><span class="line"><span class="cl">DNS=10.128.0.1
 </span></span></code></pre></div><p>并启用 <code>systemd-networkd</code> Systemd Service：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">sudo systemctl enable systemd-networkd
-</span></span></code></pre></div><p>基本上到这里就可以愉快的 <code>reboot</code> 了，一个精简的系统所需要的软件就基本装好了。</p>
-<h2 id="常用命令行工具">常用命令行工具</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">sudo systemctl enable systemd-networkd
+</span></span></span></code></pre></div><p>基本上到这里就可以愉快的 <code>reboot</code> 了，一个精简的系统所需要的软件就基本装好了。</p>
+<h3 id="桥接网络">桥接网络</h3>
+<p>如果需要使用虚拟机的桥接网络，需要在物理网卡的基础上配置一个<a href="https://wiki.archlinux.org/title/Systemd-networkd#Bridge_interface">桥接网卡</a>，然后为这个桥接网卡配置网络。</p>
+<p>先创建一个 <code>br0</code> 网卡设备。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/25-br0.netdev
+</span></span><span class="line"><span class="cl">[NetDev]
+</span></span><span class="line"><span class="cl">Name=br0
+</span></span><span class="line"><span class="cl">Kind=bridge
+</span></span></code></pre></div><p>将 <code>br0</code> 绑定到某个物理网卡设备。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/25-br0-en.network
+</span></span><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=en*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">Bridge=br0
+</span></span></code></pre></div><p>为 <code>br0</code> 桥接网卡配置静态 IP 地址，这里禁用了 IPv4 和 IPv6 的 DHCP。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/25-br0.network
+</span></span><span class="line"><span class="cl">[Match]
+</span></span><span class="line"><span class="cl">Name=br0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Network]
+</span></span><span class="line"><span class="cl">DHCP=no
+</span></span><span class="line"><span class="cl">DNS=10.128.0.1
+</span></span><span class="line"><span class="cl">IPv6AcceptRA=false
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Address]
+</span></span><span class="line"><span class="cl">Address=10.128.0.100/16
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># IPv6 static address
+</span></span><span class="line"><span class="cl"># [Address]
+</span></span><span class="line"><span class="cl"># Address=fd00:cafe:abcd::1001/64
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[Route]
+</span></span><span class="line"><span class="cl">Gateway=10.128.0.1
+</span></span><span class="line"><span class="cl">GatewayOnLink=yes
+</span></span></code></pre></div><h2 id="常用命令行工具">常用命令行工具</h2>
 <p>如果只作为服务器 / 不包含图形的虚拟机使用的话，装这些咱常用软件，这部分因人而异，仅供参考。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S go <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    kubectl helm <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    docker docker-buildx <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    podman <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    privoxy <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    proxychains <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    wireguard-tools <span class="se">\
@@ -360,20 +398,22 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 装完 Docker 后把普通用户添加到 docker group 中</span>
 </span></span><span class="line"><span class="cl">sudo usermod -aG docker <span class="nv">$USER</span>
-</span></span></code></pre></div><p>创建 Docker Daemon 的配置文件 <code>/etc/docker/daemon.json</code>，设定国内的 Mirror，这里用的是南京大学的 Docker Mirror：</p>
+</span></span></code></pre></div><p>创建 Docker Daemon 的配置文件 <code>/etc/docker/daemon.json</code>，设定国内的 Mirror，这里用的是咱自己搭的反向代理：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nt">&#34;insecure-registries&#34;</span> <span class="p">:</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="s2">&#34;127.0.0.1:5000&#34;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">],</span>
 </span></span><span class="line"><span class="cl">  <span class="nt">&#34;registry-mirrors&#34;</span><span class="p">:</span> <span class="p">[</span>
-</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://docker.nju.edu.cn/&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="s2">&#34;https://docker.hxstarrys.me/&#34;</span>
 </span></span><span class="line"><span class="cl">  <span class="p">]</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>如果需要跑虚拟机，需要装 QEMU 和 <code>libvirt</code> 相关的组件（咱用 <code>virsh</code> 管理虚拟机，不手搓 qemu 指令）：</p>
+</span></span></code></pre></div><p>除了 Docker，还建议使用 Podman 运行一些容器，使用方式和 Docker 没什么大区别，以免去 Daemon 依赖并支持 Systemd。</p>
+<p>如果需要跑虚拟机，需要装 QEMU 和 <code>libvirt</code> 相关的组件（咱用 <code>virsh</code> 管理虚拟机，不手搓 qemu 指令）：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S qemu-full libvirt
 </span></span></code></pre></div><h3 id="k3s--rke2-server">K3s / RKE2 Server</h3>
 <p>在 Arch Linux 上安装了 K3s 或 RKE2，关机时会卡在 <code>a stop is running for libcontainer containerd...</code> 一分多钟……</p>
 <p>参考 <a href="https://github.com/k3s-io/k3s/issues/2400#issuecomment-1312621468">这个 Issue</a>，创建一个 <code>/etc/systemd/system/shutdown-k3s.service</code> Systemd 文件。</p>
+<p>(如果用的是 RKE2，把文件的 <code>k3s</code> 替换为 <code>rke2</code>)</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[Unit]
 </span></span><span class="line"><span class="cl">Description=Kill containerd-shims on shutdown
 </span></span><span class="line"><span class="cl">DefaultDependencies=false
@@ -395,15 +435,56 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># AMD</span>
 </span></span><span class="line"><span class="cl">sudo pacman -S xf86-video-amdgpu
 </span></span><span class="line"><span class="cl"><span class="c1"># NVIDIA</span>
-</span></span><span class="line"><span class="cl">sudo pacman -S nvidia
+</span></span><span class="line"><span class="cl"><span class="c1"># (咱并不喜欢 DKMS 因为每次更新内核都得编译一遍 Kernel Module，所以这里使用的和 Linux 内核一同更新的 NVIDIA Open Driver)</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S nvidia-open nvidia-utils nvidia-container-toolkit
 </span></span></code></pre></div><p>X11/Wayland 这些相关组件会随着桌面环境一起安装，所以只需要装桌面环境即可，<span class="spoiler" >这里就不需要你额外装 X 了</span>。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 咱用 GNOME</span>
-</span></span><span class="line"><span class="cl">sudo pacman -S gnome
+<h3 id="wayland-on-nvidia">Wayland on NVIDIA</h3>
+<p>在 NVIDIA 显卡上运行 Wayland 需要一些额外操作。</p>
+<ul>
+<li>
+<p>增加 <code>nvidia_drm.modeset=1</code> 内核参数（记得重新生成 <code>grub.cfg</code>）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/default/grub
+</span></span><span class="line"><span class="cl">GRUB_CMDLINE_LINUX=&#34;nvidia_drm.modeset=1&#34;
+</span></span></code></pre></div></li>
+<li>
+<p>禁用 <code>nouveau</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> <span class="nb">echo</span> <span class="s2">&#34;blacklist nouveau&#34;</span> &gt;&gt; /etc/modprobe.d/blacklist.conf
+</span></span></code></pre></div></li>
+<li>
+<p>KMS Early Load。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/mkinitcpio.conf
+</span></span><span class="line"><span class="cl">MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># 然后移除 HOOKS 那一行里的 kms 以完全禁用 nouveau
+</span></span></code></pre></div><p>记得重新 <code>mkinitcpio -P</code>。</p>
+</li>
+</ul>
+<h3 id="gnome">GNOME</h3>
+<p>如果使用 GNOME Desktop（咱默认使用这个桌面），需要安装这些组件</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S gnome
 </span></span><span class="line"><span class="cl"><span class="c1"># 通常不直接装 gnome-extra，而是从里面选咱需要的</span>
 </span></span><span class="line"><span class="cl">sudo pacman -S gnome-tweaks
 </span></span><span class="line"><span class="cl"><span class="c1"># GNOME 系统使用的 NetworkManager 需要额外安装并手动启用，否则无法联网</span>
 </span></span><span class="line"><span class="cl">sudo pacman -S networkmanager
 </span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now NetworkManager
+</span></span></code></pre></div><h3 id="xfce">XFCE</h3>
+<p>对于服务器或 NAS 的图形界面，咱用 XFCE + TigerVNC Server。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S xfce4 tigervnc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 配置 VNC Server</span>
+</span></span><span class="line"><span class="cl">mkdir ~/.vnc
+</span></span><span class="line"><span class="cl">cat &gt; ~/.vnc/config <span class="s">&lt;&lt; EOF
+</span></span></span><span class="line"><span class="cl"><span class="s">session=xfce
+</span></span></span><span class="line"><span class="cl"><span class="s">geometry=1920x1080
+</span></span></span><span class="line"><span class="cl"><span class="s">localhost=no
+</span></span></span><span class="line"><span class="cl"><span class="s">alwaysshared
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># VNC 登录密码</span>
+</span></span><span class="line"><span class="cl">vncpasswd
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;:1=&lt;USERNAME&gt;&#34;</span> &gt;&gt; /etc/tigervnc/vncserver.users <span class="c1"># 为用户配置使用 VNC 端口 5901 </span>
+</span></span><span class="line"><span class="cl">sudo systemctl <span class="nb">enable</span> --now vncserver@:1
 </span></span></code></pre></div><h2 id="常用的-gui-软件">常用的 GUI 软件</h2>
 <p>装好图形界面并顺利跑起来之后，就可以装常用的桌面软件了，下面这些是部分可能用到的软件，这些因人而异，仅供参考。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S vlc <span class="se">\
@@ -429,8 +510,10 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S proton
 </span></span></code></pre></div><h3 id="音乐">音乐</h3>
 <p><code>netease-cloud-music</code> 这个包已经很久没更新了，现在很多功能用不了，除了这个还有一些基于 GTK4 写的网易云音乐客户端也能用。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S netease-cloud-music <span class="c1"># 网易云音乐</span>
-</span></span><span class="line"><span class="cl">yay -S cider-bin           <span class="c1"># Apple Music</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># yay -S netease-cloud-music # 网易云音乐 (很久未更新，不太好用)</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S netease-cloud-music-gtk4     <span class="c1"># GTK4 版本的网易云音乐</span>
+</span></span><span class="line"><span class="cl">sudo pacman -S electron-netease-cloud-music <span class="c1"># Electron 网易云音乐</span>
+</span></span><span class="line"><span class="cl">yay -S cider2-bin  <span class="c1"># Apple Music （Cider2 软件需要购买）</span>
 </span></span></code></pre></div><h3 id="流程图">流程图</h3>
 <p>Draw.io 这个工具画流程图很好用，而且支持 Linux，可以直接从 Arch Linux CN 安装。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S drawio-desktop-bin
