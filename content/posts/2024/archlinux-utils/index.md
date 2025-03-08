@@ -58,7 +58,7 @@ sudo pacman -S os-prober
 ```sh
 sudo pacman -S efibootmgr
 sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable
-sudo grub-mkconfig -o /boot/grub.cfg
+sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
 如果不装其他网络工具，只使用 `systemd-networkd` 的话，需要创建一份默认的配置文件使用 DHCP，否则连不上网。
@@ -73,7 +73,7 @@ DHCP=yes
 ```
 
 如果需要配置静态网络地址：  
-（这里只配置了静态 IPv4，如需要禁用 IPv6 的 DHCP，请参阅下方[桥接网络](#桥接网络)介绍）
+（这里只配置了静态 IPv4，如需要禁用 IPv6 的 DHCP，请参照下方[桥接网络](#桥接网络)）
 
 ```conf
 # /etc/systemd/network/10-static.network
@@ -160,6 +160,7 @@ sudo pacman -S go \
     jdk8-openjdk \
     lm_sensors \
     net-tools traceroute \
+    openssh \
     nodejs npm \
     python3 python-pip \
     btrfs-progs \
