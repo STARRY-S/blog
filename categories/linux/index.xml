@@ -116,7 +116,7 @@
 </span></span></code></pre></div><p>如果是为 QEMU KVM 虚拟机装系统的话，在执行 <code>grub-install</code> 配置 UEFI 启动引导时记得加一个 <code>--removable</code> 参数。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S efibootmgr
 </span></span><span class="line"><span class="cl">sudo grub-install --target<span class="o">=</span>x86_64-efi --efi-directory<span class="o">=</span>/boot --bootloader-id<span class="o">=</span>GRUB --removable
-</span></span><span class="line"><span class="cl">sudo grub-mkconfig -o /boot/grub.cfg
+</span></span><span class="line"><span class="cl">sudo grub-mkconfig -o /boot/grub/grub.cfg
 </span></span></code></pre></div><p>如果不装其他网络工具，只使用 <code>systemd-networkd</code> 的话，需要创建一份默认的配置文件使用 DHCP，否则连不上网。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-default.network
 </span></span><span class="line"><span class="cl">[Match]
@@ -125,7 +125,7 @@
 </span></span><span class="line"><span class="cl">[Network]
 </span></span><span class="line"><span class="cl">DHCP=yes
 </span></span></code></pre></div><p>如果需要配置静态网络地址：<br>
-（这里只配置了静态 IPv4，如需要禁用 IPv6 的 DHCP，请参阅下方<a href="/posts/2024/archlinux-utils/#%e6%a1%a5%e6%8e%a5%e7%bd%91%e7%bb%9c">桥接网络</a>介绍）</p>
+（这里只配置了静态 IPv4，如需要禁用 IPv6 的 DHCP，请参照下方<a href="/posts/2024/archlinux-utils/#%e6%a1%a5%e6%8e%a5%e7%bd%91%e7%bb%9c">桥接网络</a>）</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/systemd/network/10-static.network
 </span></span><span class="line"><span class="cl">[Match]
 </span></span><span class="line"><span class="cl">Name=eth0
@@ -186,6 +186,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    jdk8-openjdk <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    lm_sensors <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    net-tools traceroute <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    openssh <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    nodejs npm <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    python3 python-pip <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    btrfs-progs <span class="se">\
