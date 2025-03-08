@@ -24,7 +24,7 @@ Arch Wiki 的 Installation Guide 在使用 `pacstrap` 装系统时只写了最�
 
 ```sh
 pacstrap -K /mnt base linux linux-firmware \
-    base-devel gcc grub amd-ucode  \
+    base-devel gcc grub amd-ucode intel-ucode \
     zsh zsh-syntax-highlighting zsh-autosuggestions \
     vim neovim git openbsd-netcat \
     sudo man-db htop wget \
@@ -43,7 +43,8 @@ Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
 之后安装 `yay`:
 
 ```sh
-sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring yay
+sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring
+sudo pacman -S yay
 ```
 
 如果电脑上安装了其他系统的话，需要额外安装 `os-prober`，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。
@@ -55,6 +56,7 @@ sudo pacman -S os-prober
 如果是为 QEMU KVM 虚拟机装系统的话，在执行 `grub-install` 配置 UEFI 启动引导时记得加一个 `--removable` 参数。
 
 ```sh
+sudo pacman -S efibootmgr
 sudo grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB --removable
 sudo grub-mkconfig -o /boot/grub.cfg
 ```
@@ -70,7 +72,8 @@ Name=enp*
 DHCP=yes
 ```
 
-如果需要配置静态网络地址：
+如果需要配置静态网络地址：  
+（这里只配置了静态 IPv4，如需要禁用 IPv6 的 DHCP，请参阅下方[桥接网络](#桥接网络)介绍）
 
 ```conf
 # /etc/systemd/network/10-static.network
@@ -85,11 +88,59 @@ DNS=10.128.0.1
 
 并启用 `systemd-networkd` Systemd Service：
 
-```conf
+```console
 sudo systemctl enable systemd-networkd
 ```
 
 基本上到这里就可以愉快的 `reboot` 了，一个精简的系统所需要的软件就基本装好了。
+
+### 桥接网络
+
+如果需要使用虚拟机的桥接网络，需要在物理网卡的基础上配置一个[桥接网卡](https://wiki.archlinux.org/title/Systemd-networkd#Bridge_interface)，然后为这个桥接网卡配置网络。
+
+先创建一个 `br0` 网卡设备。
+
+```conf
+# /etc/systemd/network/25-br0.netdev
+[NetDev]
+Name=br0
+Kind=bridge
+```
+
+将 `br0` 绑定到某个物理网卡设备。
+
+```conf
+# /etc/systemd/network/25-br0-en.network
+[Match]
+Name=en*
+
+[Network]
+Bridge=br0
+```
+
+为 `br0` 桥接网卡配置静态 IP 地址，这里禁用了 IPv4 和 IPv6 的 DHCP。
+
+```conf
+# /etc/systemd/network/25-br0.network
+[Match]
+Name=br0
+
+[Network]
+DHCP=no
+DNS=10.128.0.1
+IPv6AcceptRA=false
+
+[Address]
+Address=10.128.0.100/16
+
+# IPv6 static address
+# [Address]
+# Address=fd00:cafe:abcd::1001/64
+
+[Route]
+Gateway=10.128.0.1
+GatewayOnLink=yes
+```
 
 ## 常用命令行工具
 
@@ -99,6 +150,7 @@ sudo systemctl enable systemd-networkd
 sudo pacman -S go \
     kubectl helm \
     docker docker-buildx \
+    podman \
     privoxy \
     proxychains \
     wireguard-tools \
@@ -124,7 +176,7 @@ yay -S golangci-lint-bin \
 sudo usermod -aG docker $USER
 ```
 
-创建 Docker Daemon 的配置文件 `/etc/docker/daemon.json`，设定国内的 Mirror，这里用的是南京大学的 Docker Mirror：
+创建 Docker Daemon 的配置文件 `/etc/docker/daemon.json`，设定国内的 Mirror，这里用的是咱自己搭的反向代理：
 
 ```json
 {
@@ -132,10 +184,12 @@ sudo usermod -aG docker $USER
     "127.0.0.1:5000"
   ],
   "registry-mirrors": [
-    "https://docker.nju.edu.cn/"
+    "https://docker.hxstarrys.me/"
   ]
 }
 ```
+
+除了 Docker，还建议使用 Podman 运行一些容器，使用方式和 Docker 没什么大区别，以免去 Daemon 依赖并支持 Systemd。
 
 如果需要跑虚拟机，需要装 QEMU 和 `libvirt` 相关的组件（咱用 `virsh` 管理虚拟机，不手搓 qemu 指令）：
 
@@ -148,6 +202,8 @@ sudo pacman -S qemu-full libvirt
 在 Arch Linux 上安装了 K3s 或 RKE2，关机时会卡在 `a stop is running for libcontainer containerd...` 一分多钟……
 
 参考 [这个 Issue](https://github.com/k3s-io/k3s/issues/2400#issuecomment-1312621468)，创建一个 `/etc/systemd/system/shutdown-k3s.service` Systemd 文件。
+
+(如果用的是 RKE2，把文件的 `k3s` 替换为 `rke2`)
 
 ```systemd-config
 [Unit]
@@ -182,19 +238,73 @@ sudo systemctl enable shutdown-k3s.service
 # AMD
 sudo pacman -S xf86-video-amdgpu
 # NVIDIA
-sudo pacman -S nvidia
+# (咱并不喜欢 DKMS 因为每次更新内核都得编译一遍 Kernel Module，所以这里使用的和 Linux 内核一同更新的 NVIDIA Open Driver)
+sudo pacman -S nvidia-open nvidia-utils nvidia-container-toolkit
 ```
 
 X11/Wayland 这些相关组件会随着桌面环境一起安装，所以只需要装桌面环境即可，<span class="spoiler" >这里就不需要你额外装 X 了</span>。
 
+### Wayland on NVIDIA
+
+在 NVIDIA 显卡上运行 Wayland 需要一些额外操作。
+
+- 增加 `nvidia_drm.modeset=1` 内核参数（记得重新生成 `grub.cfg`）
+
+    ```conf
+    # /etc/default/grub
+    GRUB_CMDLINE_LINUX="nvidia_drm.modeset=1"
+    ```
+- 禁用 `nouveau`。
+
+    ```console
+    $ echo "blacklist nouveau" >> /etc/modprobe.d/blacklist.conf
+    ```
+
+- KMS Early Load。
+
+    ```conf
+    # /etc/mkinitcpio.conf
+    MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
+
+    # 然后移除 HOOKS 那一行里的 kms 以完全禁用 nouveau
+    ```
+
+    记得重新 `mkinitcpio -P`。
+
+### GNOME
+
+如果使用 GNOME Desktop（咱默认使用这个桌面），需要安装这些组件
+
 ```sh
-# 咱用 GNOME
 sudo pacman -S gnome
 # 通常不直接装 gnome-extra，而是从里面选咱需要的
 sudo pacman -S gnome-tweaks
 # GNOME 系统使用的 NetworkManager 需要额外安装并手动启用，否则无法联网
 sudo pacman -S networkmanager
 sudo systemctl enable --now NetworkManager
+```
+
+### XFCE
+
+对于服务器或 NAS 的图形界面，咱用 XFCE + TigerVNC Server。
+
+```sh
+sudo pacman -S xfce4 tigervnc
+
+# 配置 VNC Server
+mkdir ~/.vnc
+cat > ~/.vnc/config << EOF
+session=xfce
+geometry=1920x1080
+localhost=no
+alwaysshared
+EOF
+
+# VNC 登录密码
+vncpasswd
+
+echo ":1=<USERNAME>" >> /etc/tigervnc/vncserver.users # 为用户配置使用 VNC 端口 5901 
+sudo systemctl enable --now vncserver@:1
 ```
 
 ## 常用的 GUI 软件
@@ -251,8 +361,10 @@ yay -S proton
 `netease-cloud-music` 这个包已经很久没更新了，现在很多功能用不了，除了这个还有一些基于 GTK4 写的网易云音乐客户端也能用。
 
 ```sh
-yay -S netease-cloud-music # 网易云音乐
-yay -S cider-bin           # Apple Music
+# yay -S netease-cloud-music # 网易云音乐 (很久未更新，不太好用)
+sudo pacman -S netease-cloud-music-gtk4     # GTK4 版本的网易云音乐
+sudo pacman -S electron-netease-cloud-music # Electron 网易云音乐
+yay -S cider2-bin  # Apple Music （Cider2 软件需要购买）
 ```
 
 ### 流程图
