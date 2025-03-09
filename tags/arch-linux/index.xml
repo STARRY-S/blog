@@ -13,8 +13,50 @@
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
-    <lastBuildDate>Sun, 19 Jan 2025 01:37:09 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 10 Mar 2025 01:55:58 +0800</lastBuildDate>
     <atom:link href="https://blog.starry-s.moe/tags/arch-linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>折腾一台 Arch Linux 服务器 - 2</title>
+      <link>https://blog.starry-s.moe/posts/2025/archlinux-server-2/</link>
+      <pubDate>Mon, 10 Mar 2025 01:55:58 +0800</pubDate>
+      <guid>https://blog.starry-s.moe/posts/2025/archlinux-server-2/</guid>
+      <description>&lt;p&gt;没想到这么短的时间把前阵子新组的服务器拆了换了一大堆配件……&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<p>没想到这么短的时间把前阵子新组的服务器拆了换了一大堆配件……</p>
+<meting-js server="netease" type="song" id="2634469026" theme="#233333"></meting-js>
+<hr>
+<p>起因是意识到 8 核 16 线程的 CPU 根本就满足不了咱对虚拟机的需求，然后就是 B550M 重炮手这主板带两张 2080Ti 显卡有点吃力，当主板插上两张显卡之后，第二槽的显卡是 PCIE 3.0x8 模式，第四槽的显卡只能运行在 PCIE 3.0x4，且第四槽不是一个单独的 IOMMU Group，而是和一堆其他主板设备共享总线。尽管这两张卡用 NVLink 连了起来性能应该不会有太大损耗，但卡二只能跑 PCIE 3.0x4 这个带宽实在有点不太能接受。</p>
+<p>其实一开始是看了几年前的 AMD EPIC 县城撕裂者 CPU，能搜到在卖的某宝店铺蛮少的，而且价格也偏贵，后来想了下就算换成 R9 5950X 这种 32 线程 CPU 也并不够用，于是逛 B 站找到了这套十年前的 Intel E5 V3 神机，虽然是十年前的服务器电脑，但性能数据和现在的 AMD 5600G 差不多，想来想去除了便宜这玩意应该没什么别的优点了，于是只花了 1600 块钱买了一套双路 E5 2696 V3 板 U 套装。然后还发现服务器的 DDR4 ECC 内存某宝上价格也特别便宜，一百多块钱就能买一根 32G 的条子，于是又买了 128G 的内存条，除此之外为了跑更多的虚拟机，咱还又加了根 2TB 的 NVME 硬盘。</p>
+<p>于是更新后的服务器配置变为：</p>
+<ul>
+<li>主板：华南 X99-F8D</li>
+<li>CPU：Intel E5 2696 V3 * 2（36 核心 72 线程）</li>
+<li>内存：4 * DDR4 32G</li>
+<li>GPU：魔改 22G 显存 NVIDIA 2080 Ti * 2 (With NVLink)</li>
+<li>硬盘：两根国产 PCIE 3.0 速率 NVME 固态，容量 2 TB * 2</li>
+<li>机箱：先马黑洞 7pro</li>
+<li>亿些静音风扇</li>
+<li>电源：先马黑洞 1000W ATX 3.0 金牌</li>
+</ul>
+<p><img loading="lazy" src="images/1.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">主板塞在 CPU 后的样子</p>
+</p>
+<p>X99 主板开机有一段的自检时间，因为在换硬盘迁移文件的时候把系统搞崩了于是又不得不重装系统以及重装一些之前已部署过的虚拟机。以现在这个配置来看，这台电脑总算有一个服务器该有的配置了。尽管是十年前的老配置但 Linux 系统本身并不怎么吃性能，咱打算拿他开亿些虚拟机组集群折腾，发挥一下它仅剩的多核性能。至于显卡咱也不打算搞什么 vGPU 给虚拟机了，DKMS 驱动实在是太折腾了，而且咱有两张显卡，如果哪个虚拟机要显卡的话可以把某张空闲的卡直通到虚拟机里就好了，没必要拆卡来用了。这个华南的 X99-F8D 主板素质是要比 B550M 强很多的，两张 2080Ti 显卡其中一个能运行在 PCIE 3.0x16 模式，另一个是 PCIE 3.0x8 模式，然后他们都被划分在了单独的 IOMMU Group 里，所以能很轻易的就把他们直通给虚拟机。（这个主板有三根 PCIE 3.0X16 的插槽所以我甚至还能加一根 PCIE 延长线把之前买的 Tesla P4 也插在这个主板上，组三块显卡……）</p>
+<p><img loading="lazy" src="images/2.jpg" alt="" />
+<p style="margin-bottom: -0.8em;" class="image-title">安装显卡和 CPU 散热</p>
+</p>
+<p><img loading="lazy" src="images/3.png" alt="" />
+
+</p>
+<p>这台服务器打算作为一个 BareMetal Server 装一个单节点的 RKE2 集群，用来运行一些 GPU 相关的服务，然后虚拟机里打算装几个 Harvester 节点，用来搞一些嵌套虚拟化之类的东西，像套娃一样在虚拟机里运行虚拟机、再在虚拟机里运行 K8s 集群，甚至还能在集群里运行一个虚拟机群，不过嵌套虚拟化的稳定性比单层的虚拟化差了好多实测总出一些各种奇怪的问题，折腾了很久也没搞清楚是什么问题所以就先不管他了，如果后续能折腾好所有咱遇到的奇怪问题有时间的话还能再水一篇博客。</p>
+<p>物理机上面咱在 RKE2 集群中部署了 Ollama、OpenWebUI 这些服务，可以跑一些本地的大模型，最多能跑 70b 模型，推理速度够用，这部分用起来都蛮舒服的没遇到什么问题，就是这个涡轮显卡风扇巨吵，推理过程和引擎发动一样嗷嗷响，等以后打算给他改成双风扇散热，解决一下噪音。</p>
+<p><img loading="lazy" src="images/4.jpg" alt="" />
+
+</p>
+<blockquote>
+<p>快过年了，不要再讨论什么 Kubernetes、云原生、容器和虚拟化了。你带你的破笔记本电脑连着集群回到家，打开 <code>kubectl</code>，而朋友们兜里掏出一大把钱吃喝玩乐，你却用破电脑写着 Golang 代码，改你的 YAML Config，处理 CrashLoopBack。亲戚朋友吃饭问你这一年收获了什么，你说你搞了一台服务器，开了十几个虚拟机，组了几个高可用集群，还能嵌套虚拟化，运行虚拟集群。他们懵了，你还在心里默默嘲笑他们不懂 Kubernetes，不懂 KVM，不懂 Rancher，连 Docker 都是云里雾里，你接触的世界他们永远无法触及，你便是唯一拥有者。亲戚们都在说自己的子女一年的收获，儿子买了个房，女儿买了个车，而你的父母却默默无语，说我的孩子用攒一年的钱搞了个破铁盒子，整天嗡嗡响，电表越转越快了……</p>
+</blockquote>
+<p>最后是咱非常关心的耗电问题，咱把它插在小米的插座上用来监测电量，轻度使用一天大概 5 度电，一个月差不多 80 多块钱电费 (……</p>]]></content:encoded>
+    </item>
     <item>
       <title>折腾一台 Arch Linux 服务器</title>
       <link>https://blog.starry-s.moe/posts/2025/archlinux-server/</link>
