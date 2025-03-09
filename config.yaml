@@ -1,7 +1,7 @@
 baseURL: 'https://blog.starry-s.moe/'
 title: "STARRY-S' Blog"
 theme:
-  - "PaperMod"
+  - "hugo-PaperMod"
   - "hugo-shortcode-gallery"
 pagination:
   paperSize: 10
