@@ -13,7 +13,7 @@
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
-    <lastBuildDate>Mon, 10 Mar 2025 01:55:58 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 30 Mar 2025 21:41:20 +0800</lastBuildDate>
     <atom:link href="https://blog.starry-s.moe/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>折腾一台 Arch Linux 服务器 - 2</title>
@@ -30,7 +30,7 @@
 <ul>
 <li>主板：华南 X99-F8D</li>
 <li>CPU：Intel E5 2696 V3 * 2（36 核心 72 线程）</li>
-<li>内存：4 * DDR4 32G</li>
+<li>内存：8 * DDR4 32G</li>
 <li>GPU：魔改 22G 显存 NVIDIA 2080 Ti * 2 (With NVLink)</li>
 <li>硬盘：两根国产 PCIE 3.0 速率 NVME 固态，容量 2 TB * 2</li>
 <li>机箱：先马黑洞 7pro</li>
@@ -55,7 +55,24 @@
 <blockquote>
 <p>快过年了，不要再讨论什么 Kubernetes、云原生、容器和虚拟化了。你带你的破笔记本电脑连着集群回到家，打开 <code>kubectl</code>，而朋友们兜里掏出一大把钱吃喝玩乐，你却用破电脑写着 Golang 代码，改你的 YAML Config，处理 CrashLoopBack。亲戚朋友吃饭问你这一年收获了什么，你说你搞了一台服务器，开了十几个虚拟机，组了几个高可用集群，还能嵌套虚拟化，运行虚拟集群。他们懵了，你还在心里默默嘲笑他们不懂 Kubernetes，不懂 KVM，不懂 Rancher，连 Docker 都是云里雾里，你接触的世界他们永远无法触及，你便是唯一拥有者。亲戚们都在说自己的子女一年的收获，儿子买了个房，女儿买了个车，而你的父母却默默无语，说我的孩子用攒一年的钱搞了个破铁盒子，整天嗡嗡响，电表越转越快了……</p>
 </blockquote>
-<p>最后是咱非常关心的耗电问题，咱把它插在小米的插座上用来监测电量，轻度使用一天大概 5 度电，一个月差不多 80 多块钱电费 (……</p>]]></content:encoded>
+<p>最后是咱非常关心的耗电问题，咱把它插在小米的插座上用来监测电量，轻度使用一天大概 5 度电，一个月差不多 80 多块钱电费 (……</p>
+<h2 id="后续">后续</h2>
+<blockquote>
+<p>2025-03-30 补充</p>
+</blockquote>
+<p>因为涡轮显卡实在是太吵了，然后 128G 内存对于咱这堆虚拟机来说还是不太够用，于是又加了 4 根32G 内存条，共组成了 256G 的内存，然后还买了两张 2080Ti 双风扇版本的显卡散热器，给显卡改装了散热。</p>
+<p><img loading="lazy" src="images/5.jpg" alt="" />
+
+</p>
+<p><img loading="lazy" src="images/6.jpg" alt="" />
+
+</p>
+<p>改装显卡散热时因为咱这个不是公版显卡，所以需要把新买来的公版散热器中框用锯切掉一部分不然显卡尾部的电容会顶着中框。
+然后丽台的显卡主板虽然有两个散热风扇接口但实际只有一个能用，所以需要用分线器将两个散热风扇连到一个接口上去。</p>
+<p>改装完成后就可以美滋滋的用这个服务器跑模型推理并折腾咱那一大堆虚拟机了。</p>
+<p><img loading="lazy" src="images/7.png" alt="" />
+
+</p>]]></content:encoded>
     </item>
     <item>
       <title>折腾一台 Arch Linux 服务器</title>
@@ -1626,15 +1643,15 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    zsh zsh-syntax-highlighting zsh-autosuggestions <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    vim neovim git openbsd-netcat <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    sudo man-db htop wget <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    neofetch
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>    fastfetch
 </span></span></code></pre></div><p>进 chroot 后编辑 <code>/etc/pacman.conf</code>，添加以下配置，启用 Arch Linux CN。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
 </span></span><span class="line"><span class="cl">[archlinuxcn]
 </span></span><span class="line"><span class="cl"># Server = https://repo.archlinuxcn.org/$arch
 </span></span><span class="line"><span class="cl">Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
-</span></span></code></pre></div><p>之后安装 <code>yay</code>:</p>
+</span></span></code></pre></div><p>之后安装 <code>paru</code> (<span class="spoiler" > <s>莫名其妙的会把这玩意联想到尼禄旋转的 PADORU</s> </span>):</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -Syy <span class="o">&amp;&amp;</span> sudo pacman -S archlinuxcn-keyring
-</span></span><span class="line"><span class="cl">sudo pacman -S yay
+</span></span><span class="line"><span class="cl">sudo pacman -S paru
 </span></span></code></pre></div><p>如果电脑上安装了其他系统的话，需要额外安装 <code>os-prober</code>，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S os-prober
 </span></span></code></pre></div><p>如果是为 QEMU KVM 虚拟机装系统的话，在执行 <code>grub-install</code> 配置 UEFI 启动引导时记得加一个 <code>--removable</code> 参数。</p>
@@ -1720,7 +1737,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    age
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># golangci-lint</span>
-</span></span><span class="line"><span class="cl">yay -S golangci-lint-bin <span class="se">\
+</span></span><span class="line"><span class="cl">paru -S golangci-lint-bin <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    krew-bin
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 装完 Docker 后把普通用户添加到 docker group 中</span>
@@ -1822,8 +1839,19 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    firefox <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    emacs
 </span></span></code></pre></div><p>在 AUR 中安装的软件：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S google-chrome <span class="se">\
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">paru -S google-chrome <span class="se">\
 </span></span></span><span class="line"><span class="cl"><span class="se"></span>    visual-studio-code-bin
+</span></span></code></pre></div><h3 id="iommu-group">IOMMU Group</h3>
+<p>默认情况下 AMD CPU 不需要编辑内核参数就已经启用了 IOMMU Group，英特尔平台需要添加内核参数 <code>intel_iommu=on</code> 以启用 IOMMU Group。</p>
+<p>使用 <a href="https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Ensuring_that_the_groups_are_valid">Arch Linux Wiki 提供的以下脚本</a>查看 PCI 设备的 IOMMU Group。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nb">shopt</span> -s nullglob
+</span></span><span class="line"><span class="cl"><span class="k">for</span> g in <span class="k">$(</span>find /sys/kernel/iommu_groups/* -maxdepth <span class="m">0</span> -type d <span class="p">|</span> sort -V<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;IOMMU Group </span><span class="si">${</span><span class="nv">g</span><span class="p">##*/</span><span class="si">}</span><span class="s2">:&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> d in <span class="nv">$g</span>/devices/*<span class="p">;</span> <span class="k">do</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo</span> -e <span class="s2">&#34;\t</span><span class="k">$(</span>lspci -nns <span class="si">${</span><span class="nv">d</span><span class="p">##*/</span><span class="si">}</span><span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">done</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">done</span><span class="p">;</span>
 </span></span></code></pre></div><h3 id="启用-multilib">启用 Multilib</h3>
 <p>启用 Multilib 以安装那些 32 位的软件，例如 Steam。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
@@ -1832,15 +1860,15 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></code></pre></div><p>之后安装 Steam。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S steam
 </span></span></code></pre></div><p>如果需要加速 Steam 游戏，可以安装 <a href="https://aur.archlinux.org/packages/uuplugin-bin">uuplugin-bin</a>，把电脑伪装成 Steam Deck，酱紫路由器有 UU 加速器插件的话就能给 Steam 加速。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S uuplugin-bin
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">paru -S uuplugin-bin
 </span></span></code></pre></div><p>如果要运行 Windows 游戏，还要安装 Proton。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">yay -S proton
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">paru -S proton
 </span></span></code></pre></div><h3 id="音乐">音乐</h3>
 <p><code>netease-cloud-music</code> 这个包已经很久没更新了，现在很多功能用不了，除了这个还有一些基于 GTK4 写的网易云音乐客户端也能用。</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># yay -S netease-cloud-music # 网易云音乐 (很久未更新，不太好用)</span>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># paru -S netease-cloud-music # 网易云音乐 (很久未更新，不太好用)</span>
 </span></span><span class="line"><span class="cl">sudo pacman -S netease-cloud-music-gtk4     <span class="c1"># GTK4 版本的网易云音乐</span>
 </span></span><span class="line"><span class="cl">sudo pacman -S electron-netease-cloud-music <span class="c1"># Electron 网易云音乐</span>
-</span></span><span class="line"><span class="cl">yay -S cider2-bin  <span class="c1"># Apple Music （Cider2 软件需要购买）</span>
+</span></span><span class="line"><span class="cl">paru -S cider2-bin  <span class="c1"># Apple Music （Cider2 软件需要购买）</span>
 </span></span></code></pre></div><h3 id="流程图">流程图</h3>
 <p>Draw.io 这个工具画流程图很好用，而且支持 Linux，可以直接从 Arch Linux CN 安装。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S drawio-desktop-bin
