@@ -28,7 +28,7 @@ pacstrap -K /mnt base linux linux-firmware \
     zsh zsh-syntax-highlighting zsh-autosuggestions \
     vim neovim git openbsd-netcat \
     sudo man-db htop wget \
-    neofetch
+    fastfetch
 ```
 
 进 chroot 后编辑 `/etc/pacman.conf`，添加以下配置，启用 Arch Linux CN。
@@ -40,11 +40,11 @@ pacstrap -K /mnt base linux linux-firmware \
 Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch
 ```
 
-之后安装 `yay`:
+之后安装 `paru` (<span class="spoiler" > <s>莫名其妙的会把这玩意联想到尼禄旋转的 PADORU</s> </span>):
 
 ```sh
 sudo pacman -Syy && sudo pacman -S archlinuxcn-keyring
-sudo pacman -S yay
+sudo pacman -S paru
 ```
 
 如果电脑上安装了其他系统的话，需要额外安装 `os-prober`，让 GRUB 在生成配置文件时搜索安装了其他系统的磁盘。
@@ -170,7 +170,7 @@ sudo pacman -S go \
     age
 
 # golangci-lint
-yay -S golangci-lint-bin \
+paru -S golangci-lint-bin \
     krew-bin
 
 # 装完 Docker 后把普通用户添加到 docker group 中
@@ -325,8 +325,25 @@ sudo pacman -S vlc \
 在 AUR 中安装的软件：
 
 ```sh
-yay -S google-chrome \
+paru -S google-chrome \
     visual-studio-code-bin
+```
+
+### IOMMU Group
+
+默认情况下 AMD CPU 不需要编辑内核参数就已经启用了 IOMMU Group，英特尔平台需要添加内核参数 `intel_iommu=on` 以启用 IOMMU Group。
+
+使用 [Arch Linux Wiki 提供的以下脚本](https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Ensuring_that_the_groups_are_valid)查看 PCI 设备的 IOMMU Group。
+
+```sh
+#!/bin/bash
+shopt -s nullglob
+for g in $(find /sys/kernel/iommu_groups/* -maxdepth 0 -type d | sort -V); do
+    echo "IOMMU Group ${g##*/}:"
+    for d in $g/devices/*; do
+        echo -e "\t$(lspci -nns ${d##*/})"
+    done;
+done;
 ```
 
 ### 启用 Multilib
@@ -348,13 +365,13 @@ sudo pacman -S steam
 如果需要加速 Steam 游戏，可以安装 [uuplugin-bin](https://aur.archlinux.org/packages/uuplugin-bin)，把电脑伪装成 Steam Deck，酱紫路由器有 UU 加速器插件的话就能给 Steam 加速。
 
 ```sh
-yay -S uuplugin-bin
+paru -S uuplugin-bin
 ```
 
 如果要运行 Windows 游戏，还要安装 Proton。
 
 ```sh
-yay -S proton
+paru -S proton
 ```
 
 ### 音乐
@@ -362,10 +379,10 @@ yay -S proton
 `netease-cloud-music` 这个包已经很久没更新了，现在很多功能用不了，除了这个还有一些基于 GTK4 写的网易云音乐客户端也能用。
 
 ```sh
-# yay -S netease-cloud-music # 网易云音乐 (很久未更新，不太好用)
+# paru -S netease-cloud-music # 网易云音乐 (很久未更新，不太好用)
 sudo pacman -S netease-cloud-music-gtk4     # GTK4 版本的网易云音乐
 sudo pacman -S electron-netease-cloud-music # Electron 网易云音乐
-yay -S cider2-bin  # Apple Music （Cider2 软件需要购买）
+paru -S cider2-bin  # Apple Music （Cider2 软件需要购买）
 ```
 
 ### 流程图
