@@ -8432,27 +8432,34 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p></blockquote>
 &lt;p style=&#34;margin-bottom: -0.8em;&#34; class=&#34;image-title&#34;&gt;West Lake&lt;/p&gt;
 &lt;/p&gt;
 &lt;h2 id=&#34;关于咱&#34;&gt;关于咱&lt;/h2&gt;
-&lt;p&gt;是一只野生的 Arch Linux 用户，喜欢 Linux，经常写代码，研究些有意思抽象难以用语言描述的东西。
-有时会搞点摄影，照片可以在本站的 &lt;a href=&#34;https://blog.starry-s.moe/gallery/&#34;&gt;相册&lt;/a&gt; 页找到。啥题材都拍。&lt;/p&gt;</description>
+&lt;p&gt;是一只野生的 Arch Linux 用户，喜欢 Linux 和写代码，研究些有意思抽象难以用语言描述的东西。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;PGP 密钥：&lt;code&gt;E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Email: &lt;a href=&#34;mailto:starry@starry-s.moe&#34;&gt;starry@starry-s.moe&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;GitHub: &lt;a href=&#34;https://github.com/STARRY-S&#34;&gt;https://github.com/STARRY-S&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;成分复杂，以下是一些咱感兴趣的东西：&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p><img loading="lazy" src="images/westlake.jpg" alt="&ldquo;West Lake&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">West Lake</p>
 </p>
 <h2 id="关于咱">关于咱</h2>
-<p>是一只野生的 Arch Linux 用户，喜欢 Linux，经常写代码，研究些有意思抽象难以用语言描述的东西。
-有时会搞点摄影，照片可以在本站的 <a href="/gallery/">相册</a> 页找到。啥题材都拍。</p>
+<p>是一只野生的 Arch Linux 用户，喜欢 Linux 和写代码，研究些有意思抽象难以用语言描述的东西。</p>
 <ul>
 <li>PGP 密钥：<code>E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2</code></li>
 <li>Email: <a href="mailto:starry@starry-s.moe">starry@starry-s.moe</a></li>
 <li>GitHub: <a href="https://github.com/STARRY-S">https://github.com/STARRY-S</a></li>
 </ul>
 <hr>
-<p>以下是一些咱感兴趣的东西：</p>
+<p>成分复杂，以下是一些咱感兴趣的东西：</p>
 <ul>
 <li>Linux：是个 Arch Linux + GNOME Desktop 用户</li>
 <li>喜欢写代码，不写代码会死星人</li>
-<li>工作内容和容器、Kubernetes 内容相关</li>
-<li>目前有一台入门级 APS-C 画幅佳能 R7 和几个 Sigma 残幅镜头，经常拍一些自己想拍的东西</li>
+<li>工作内容和云原生、容器、Kubernetes 内容相关</li>
+<li>目前有一台入门级 APS-C 画幅佳能 R7 和几个 Sigma 残幅镜头，经常拍一些自己想拍的东西，照片可以在本站的 <a href="/gallery/">相册</a> 页找到</li>
 <li>是个月厨，但不玩 FGO</li>
+<li>福瑞控，福瑞相关的内容不会记录到博客中，感兴趣的可以搜我的 B 站和抖音</li>
+<li>喜欢山地车，AM/林道入门，强度不高</li>
 </ul>
 <h2 id="关于本站">关于本站</h2>
 <p>博客最初建于 2016 年 8 月的辣个夏天，目前使用 Hugo 生成静态页托管在 GitHub Pages。</p>
