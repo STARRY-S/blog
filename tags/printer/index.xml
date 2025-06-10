@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.140.2</generator>
+    <generator>Hugo -- 0.147.0</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -25,8 +25,7 @@
 <meting-js server="netease" type="song" id="41652392" theme="#233333"></meting-js>
 <hr>
 <blockquote>
-<p>参烤链接：<a href="https://wiki.archlinux.org/title/CUPS#Permissions">CUPS - ArchWiki</a>。</p>
-</blockquote>
+<p>参烤链接：<a href="https://wiki.archlinux.org/title/CUPS#Permissions">CUPS - ArchWiki</a>。</p></blockquote>
 <p>安装 <code>CUPS</code> 和 <code>ghostscript</code>，启用 <code>cups.service</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo pacman -S cups
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo systemctl <span class="nb">enable</span> --now cups.service

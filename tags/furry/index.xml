@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.140.2</generator>
+    <generator>Hugo -- 0.147.0</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -30,8 +30,7 @@
 <li>
 <p>风扇：要求体积小，风量大，能调速，所以咱使用的是 12V 供电的服务器风扇。<br></p>
 <blockquote>
-<p>其实DC 调速也不是不行，但想让 ESP32 实现 DC 调速驱动大功率电器的话，你还是得让他先输出 PWM 信号，然后结合 MOS 管调节电压。</p>
-</blockquote>
+<p>其实DC 调速也不是不行，但想让 ESP32 实现 DC 调速驱动大功率电器的话，你还是得让他先输出 PWM 信号，然后结合 MOS 管调节电压。</p></blockquote>
 </li>
 <li>
 <p>控制电路：为了能远程使用手机控制，对比了 ESP32 和树莓派 Pico 之后，因为树莓派 PicoW 的价格更贵且体积比 ESP32C3 大，Wifi 支持效果不是很好，所以最后买的是网上的成品 ESP32C3 开发板，用于输出 PWM 信号，并作为 Wifi AP + Web Server 来使用手机控制（因为咱对蓝牙协议不太熟悉且适配蓝牙的话一般来说还要再开发一个 APP，相对于一个 Web Server 来说还是太麻烦了）。</p>

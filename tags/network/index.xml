@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.140.2</generator>
+    <generator>Hugo -- 0.147.0</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -93,15 +93,15 @@
 </span></span></code></pre></div><h4 id="add-命令">ADD 命令</h4>
 <p>ADD 命令用于为容器创建网卡（或修改已有的网卡），找一下 p2p CNI 插件的 <code>cmdAdd</code> 函数，大致简化一下里面的代码流程为：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">cmdAdd</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">skel</span><span class="p">.</span><span class="nx">CmdArgs</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Load CNI Config
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">conf</span> <span class="o">:=</span> <span class="nx">NetConf</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Load CNI Config</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">conf</span> <span class="o">:=</span> <span class="nx">NetConf</span><span class="p">{}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">conf</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;failed to load netconf: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Execute IPAM command to get IP address
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">r</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ipam</span><span class="p">.</span><span class="nf">ExecAdd</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">IPAM</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Execute IPAM command to get IP address</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">r</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ipam</span><span class="p">.</span><span class="nf">ExecAdd</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">IPAM</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
@@ -115,10 +115,10 @@
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ip</span><span class="p">.</span><span class="nf">EnableForward</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">IPs</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;Could not enable IP forwarding: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Create Veth Pair for Pod Network Namespace
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">netns</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ns</span><span class="p">.</span><span class="nf">GetNS</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">Netns</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Create Veth Pair for Pod Network Namespace</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">netns</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ns</span><span class="p">.</span><span class="nf">GetNS</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">Netns</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;failed to open netns %q: %v&#34;</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Netns</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
@@ -127,14 +127,14 @@
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Setup Veth Pair for default Network Namespace
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="p">=</span> <span class="nf">setupHostVeth</span><span class="p">(</span><span class="nx">hostInterface</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">result</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Setup Veth Pair for default Network Namespace</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="p">=</span> <span class="nf">setupHostVeth</span><span class="p">(</span><span class="nx">hostInterface</span><span class="p">.</span><span class="nx">Name</span><span class="p">,</span> <span class="nx">result</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Some other IP forward (masquerade) operations...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">return</span> <span class="nx">types</span><span class="p">.</span><span class="nf">PrintResult</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">CNIVersion</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Some other IP forward (masquerade) operations...</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nx">types</span><span class="p">.</span><span class="nf">PrintResult</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">CNIVersion</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>简单概括样例 P2P Plugin 的 ADD 命令流程大致为：</p>
 <ol>
@@ -148,21 +148,21 @@
 <h4 id="del-命令">DEL 命令</h4>
 <p>DEL 命令用于释放容器和主机的网卡接口资源，在 Pod 删除时被执行，以下是简化的样例 P2P Plugin 的 <code>cmdDel</code> 函数代码：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">cmdDel</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">skel</span><span class="p">.</span><span class="nx">CmdArgs</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Load CNI Config
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">conf</span> <span class="o">:=</span> <span class="nx">NetConf</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Load CNI Config</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">conf</span> <span class="o">:=</span> <span class="nx">NetConf</span><span class="p">{}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">conf</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;failed to load netconf: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Execute IPAM command to release IP address
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ipam</span><span class="p">.</span><span class="nf">ExecDel</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">IPAM</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Execute IPAM command to release IP address</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ipam</span><span class="p">.</span><span class="nf">ExecDel</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">IPAM</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Release link interface &amp; masquerades...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kd">var</span> <span class="nx">ipnets</span> <span class="p">[]</span><span class="o">*</span><span class="nx">net</span><span class="p">.</span><span class="nx">IPNet</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ---------------------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Release link interface &amp; masquerades...</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">ipnets</span> <span class="p">[]</span><span class="o">*</span><span class="nx">net</span><span class="p">.</span><span class="nx">IPNet</span>
 </span></span><span class="line"><span class="cl">    <span class="nx">err</span> <span class="o">:=</span> <span class="nx">ns</span><span class="p">.</span><span class="nf">WithNetNSPath</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">Netns</span><span class="p">,</span> <span class="kd">func</span><span class="p">(</span><span class="nx">_</span> <span class="nx">ns</span><span class="p">.</span><span class="nx">NetNS</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="kd">var</span> <span class="nx">err</span> <span class="kt">error</span>
 </span></span><span class="line"><span class="cl">        <span class="nx">ipnets</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">ip</span><span class="p">.</span><span class="nf">DelLinkByNameAddr</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">IfName</span><span class="p">)</span>
@@ -191,35 +191,35 @@
 <p>CHECK 命令用于校验 Pod 网络，在 CNI Spec 0.4.0 中，Config 新增了 <code>prevResult</code> 字段，记录了 CNI 插件上一次执行 ADD 命令的结果。
 CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望值进行比对。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span> <span class="nf">cmdCheck</span><span class="p">(</span><span class="nx">args</span> <span class="o">*</span><span class="nx">skel</span><span class="p">.</span><span class="nx">CmdArgs</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Load CNI Config
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">conf</span> <span class="o">:=</span> <span class="nx">NetConf</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Load CNI Config</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">conf</span> <span class="o">:=</span> <span class="nx">NetConf</span><span class="p">{}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">json</span><span class="p">.</span><span class="nf">Unmarshal</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">conf</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;failed to load netconf: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// -----------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Run IPAM plugin CHECK command and get results
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">err</span> <span class="p">=</span> <span class="nx">ipam</span><span class="p">.</span><span class="nf">ExecCheck</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">IPAM</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// -----------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Run IPAM plugin CHECK command and get results</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">err</span> <span class="p">=</span> <span class="nx">ipam</span><span class="p">.</span><span class="nf">ExecCheck</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">IPAM</span><span class="p">.</span><span class="nx">Type</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">StdinData</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// -----------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Parse prevResult
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">NetConf</span><span class="p">.</span><span class="nx">RawPrevResult</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// -----------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Parse prevResult</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">conf</span><span class="p">.</span><span class="nx">NetConf</span><span class="p">.</span><span class="nx">RawPrevResult</span> <span class="o">==</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;ptp: Required prevResult missing&#34;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">version</span><span class="p">.</span><span class="nf">ParsePrevResult</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">conf</span><span class="p">.</span><span class="nx">NetConf</span><span class="p">);</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Convert whatever the IPAM result was into the current Result type
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">current</span><span class="p">.</span><span class="nf">NewResultFromResult</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">PrevResult</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Convert whatever the IPAM result was into the current Result type</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">result</span><span class="p">,</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">current</span><span class="p">.</span><span class="nf">NewResultFromResult</span><span class="p">(</span><span class="nx">conf</span><span class="p">.</span><span class="nx">PrevResult</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="kd">var</span> <span class="nx">contMap</span> <span class="nx">current</span><span class="p">.</span><span class="nx">Interface</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Find interfaces for name whe know, that of host-device inside container
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">intf</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Interfaces</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Find interfaces for name whe know, that of host-device inside container</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="nx">_</span><span class="p">,</span> <span class="nx">intf</span> <span class="o">:=</span> <span class="k">range</span> <span class="nx">result</span><span class="p">.</span><span class="nx">Interfaces</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">IfName</span> <span class="o">==</span> <span class="nx">intf</span><span class="p">.</span><span class="nx">Name</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Netns</span> <span class="o">==</span> <span class="nx">intf</span><span class="p">.</span><span class="nx">Sandbox</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">                <span class="nx">contMap</span> <span class="p">=</span> <span class="o">*</span><span class="nx">intf</span>
@@ -227,35 +227,35 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span><span class="line"><span class="cl">            <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// -----------------------------------
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="c1">// Check Network Namespace Name
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Netns</span> <span class="o">!=</span> <span class="nx">contMap</span><span class="p">.</span><span class="nx">Sandbox</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// -----------------------------------</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="c1">// Check Network Namespace Name</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Netns</span> <span class="o">!=</span> <span class="nx">contMap</span><span class="p">.</span><span class="nx">Sandbox</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;Sandbox in prevResult %s doesn&#39;t match configured netns: %s&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">            <span class="nx">contMap</span><span class="p">.</span><span class="nx">Sandbox</span><span class="p">,</span> <span class="nx">args</span><span class="p">.</span><span class="nx">Netns</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="c1">// Check prevResults for ips, routes and dns against values found in the container
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">netns</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span> <span class="nx">ns</span><span class="p">.</span><span class="nx">NetNS</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// Check interface
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">err</span> <span class="o">:=</span> <span class="nf">validateCniContainerInterface</span><span class="p">(</span><span class="nx">contMap</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// Check prevResults for ips, routes and dns against values found in the container</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nx">err</span> <span class="o">:=</span> <span class="nx">netns</span><span class="p">.</span><span class="nf">Do</span><span class="p">(</span><span class="kd">func</span><span class="p">(</span><span class="nx">_</span> <span class="nx">ns</span><span class="p">.</span><span class="nx">NetNS</span><span class="p">)</span> <span class="kt">error</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Check interface</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">err</span> <span class="o">:=</span> <span class="nf">validateCniContainerInterface</span><span class="p">(</span><span class="nx">contMap</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="c1">// Check IPs
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">err</span> <span class="p">=</span> <span class="nx">ip</span><span class="p">.</span><span class="nf">ValidateExpectedInterfaceIPs</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">IfName</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">IPs</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Check IPs</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">err</span> <span class="p">=</span> <span class="nx">ip</span><span class="p">.</span><span class="nf">ValidateExpectedInterfaceIPs</span><span class="p">(</span><span class="nx">args</span><span class="p">.</span><span class="nx">IfName</span><span class="p">,</span> <span class="nx">result</span><span class="p">.</span><span class="nx">IPs</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="c1">// Check routes
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nx">err</span> <span class="p">=</span> <span class="nx">ip</span><span class="p">.</span><span class="nf">ValidateExpectedRoute</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Routes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Check routes</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">err</span> <span class="p">=</span> <span class="nx">ip</span><span class="p">.</span><span class="nf">ValidateExpectedRoute</span><span class="p">(</span><span class="nx">result</span><span class="p">.</span><span class="nx">Routes</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="c1">// Other checks...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">return</span> <span class="kc">nil</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// Other checks...</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">nil</span>
 </span></span><span class="line"><span class="cl">    <span class="p">});</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nx">err</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
@@ -484,8 +484,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="go">...
 </span></span></span></code></pre></div><p>参考 <a href="https://man7.org/linux/man-pages/man7/network_namespaces.7.html">network_namespace manpage</a>，Network Namespace 是 Linux 实现网络资源隔离的功能，不同的 Network Namespace 拥有不同的网卡、ARP、路由表等数据。可以使用 <code>iproute2</code> 工具的 <code>ip</code> 命令对 Linux Network Namespace 执行一系列的操作。</p>
 <blockquote>
-<p>本篇介绍的指令不会系统产生损坏，但建议在虚拟机或一个用于测试的系统上执行 Network Namespace 相关操作，以便于执行重启等暴力操作。</p>
-</blockquote>
+<p>本篇介绍的指令不会系统产生损坏，但建议在虚拟机或一个用于测试的系统上执行 Network Namespace 相关操作，以便于执行重启等暴力操作。</p></blockquote>
 <p>开始之前，先安装 <code>net-tools</code> 网络工具包。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo pacman -S net-tools
 </span></span></code></pre></div><p>查看设备中已有的 Network Namespace。</p>
@@ -727,8 +726,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span><span class="line"><span class="cl"><span class="go">ping: connect: Network is unreachable
 </span></span></span></code></pre></div><p>首先需要将主机的网卡（咱这里为 <code>enp1s0</code>，不同系统可能不一样）也添加到将桥接网卡 <code>br0</code> 中，这里要注意把主机的网卡 <code>enp1s0</code> 添加到桥接网卡 <code>br0</code> 后，要把 <code>enp1s0</code> 网卡上的 IP 地址（咱这里为 <code>192.168.122.101/24</code>）改到桥接网卡 <code>br0</code> 上，不然过一段时间后会网络中断。</p>
 <blockquote>
-<p>这里<strong>不要</strong> ssh 远程操作。</p>
-</blockquote>
+<p>这里<strong>不要</strong> ssh 远程操作。</p></blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> enp1s0 master br0
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip addr del 192.168.122.101/24 dev enp1s0
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip addr add 192.168.122.101/24 dev br0

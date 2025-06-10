@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.140.2</generator>
+    <generator>Hugo -- 0.147.0</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -26,8 +26,7 @@
 <meting-js server="netease" type="song" id="590252" theme="#233333"></meting-js>
 <h2 id="起因">起因</h2>
 <blockquote>
-<p>这段基本是废话，可以直接跳过……</p>
-</blockquote>
+<p>这段基本是废话，可以直接跳过……</p></blockquote>
 <p>旧笔记本经常蓝屏死机掉驱动重启，送修过一次但依旧没修好，于是把它当有问题的二手电脑卖掉了，买了今年新出的联想 ThinkBook 16 Gen6。因为咱有台式，所以笔记本的需求就是轻薄，Linux 友好，便宜就行。之前总是被笔记本的双显卡驱动折磨得头疼，英伟达显卡驱动 4202 年了依旧是那么的拉跨，相同规格的 AMD 版本比 Intel 便宜好几百，所以最终选的这个能 PD 充电，只有 AMD 集显，8 核 16 线程 32G 内存的电脑，只想拿它写代码，本地跑编译，跑 KVM 虚拟机用（稍微吐嘈一下某 ARM 架构的电脑，KVM 虚拟机各种限制，想建一个 NAT 类型的 Libvirt Network 都不行）。</p>
 <p>为避免引战，这里先只说一下咱个人的观点，可能是因为折腾 Linux 系统时间很久了吧所以对咱来说最舒服的系统还是 Linux，咱很赞同 Linus TechTips 这个视频里对 macOS 的吐嘈，因为 Win/Linux 与 macOS 的键盘、快捷键、手势操作、鼠标指针加速度不一致，所以想同时适应两套不同的手势快捷键、鼠标加速度很是让人头疼。不过这些在倒是能在长时间的适应之后通过修改系统设置的快捷键布局、安装第三方的鼠标加速度修复工具、和第三方输入法来缓解。</p>
 <iframe src="//player.bilibili.com/player.html?isOutside=true&aid=563073437&bvid=BV1Rv4y127d5&cid=904126423&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
@@ -67,8 +66,7 @@
 <meting-js server="netease" type="song" id="41652392" theme="#233333"></meting-js>
 <hr>
 <blockquote>
-<p>参烤链接：<a href="https://wiki.archlinux.org/title/CUPS#Permissions">CUPS - ArchWiki</a>。</p>
-</blockquote>
+<p>参烤链接：<a href="https://wiki.archlinux.org/title/CUPS#Permissions">CUPS - ArchWiki</a>。</p></blockquote>
 <p>安装 <code>CUPS</code> 和 <code>ghostscript</code>，启用 <code>cups.service</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo pacman -S cups
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo systemctl <span class="nb">enable</span> --now cups.service
@@ -388,8 +386,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">nbd0  43:0    0  10G  0 disk
 </span></span></span></code></pre></div><p>使用 <code>fdisk</code> 初始化 GPT 分区表，并随便新建几个分区。</p>
 <blockquote>
-<p>咱都是 Arch Linux 用户了，fdisk 就不用我再详细说了吧。</p>
-</blockquote>
+<p>咱都是 Arch Linux 用户了，fdisk 就不用我再详细说了吧。</p></blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
 </span></span><span class="line"><span class="cl"><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
@@ -657,8 +654,7 @@
       <description>&lt;p&gt;之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用&lt;code&gt;systemd-networkd&lt;/code&gt;配置了一个简易的软路由。不过&lt;code&gt;systemd-networkd&lt;/code&gt;不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为&lt;a href=&#34;https://blog.starry-s.moe/posts/2022/nanopi-r4s/&#34;&gt;R4S上手体验&lt;/a&gt;的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>之前买了个NanoPi R4S，当时给他装了Arch Linux ARM并用<code>systemd-networkd</code>配置了一个简易的软路由。不过<code>systemd-networkd</code>不支持PPPoE，所以当时我是把R4S接在租的房子的主路由下做子路由的，然后再给R4S接了一个小米路由器当作无线AP。最近从北京搬回家了所以想直接使用R4S做家里的主路由，因为<a href="/posts/2022/nanopi-r4s/">R4S上手体验</a>的那篇文章已经写完很久了，所以就不打算在那篇博客上做修改了，而是新开（水）了一篇博客。</p>
 <blockquote>
-<p>这里偷偷骂一下长城宽带没人反对吧</p>
-</blockquote>
+<p>这里偷偷骂一下长城宽带没人反对吧</p></blockquote>
 <h2 id="准备工作">准备工作</h2>
 <p>按照Arch Wiki的<a href="https://wiki.archlinux.org/title/Router#Connection_sharing">Router页面</a>，你的电脑需要符合安装Arch Linux的基础硬件要求，且至少具备俩物理网口。</p>
 <p>个人觉得软路由没必要非得刷*WRT或者其他路由器专用系统，也没必要搞个爱快群辉什么的系统，我只想给他装我喜欢的发行版，然后我自己配置我需要的服务，只要有两个以上的物理网口就可以配置路由功能，给他们配置DHCP和流量转发就完事了，这样搞出来的路由器更符合咱自己的需求，相对来讲也更灵活一些，不用受限于那些路由器/NAS定制的系统，而缺点则是比较折腾，有可能不稳定。</p>
@@ -684,8 +680,7 @@
 IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**</code>开头的一般都是局域网的IP地址。</p>
 <p>之后给WAN口配置DHCP或PPPoE协议。</p>
 <blockquote>
-<p>配置DHCP的方式自行翻Wiki或者看example，这里不重复讲了。</p>
-</blockquote>
+<p>配置DHCP的方式自行翻Wiki或者看example，这里不重复讲了。</p></blockquote>
 <p>在配置PPPoE之前需要安装<code>ppp</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/netctl/extern0-profile
 </span></span><span class="line"><span class="cl"># Config file for public interface (WAN)
@@ -815,8 +810,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <li>
 <p>下载armbian的镜像，下载链接自行谷歌。</p>
 <blockquote>
-<p>通常下载好的文件是<code>xz</code>格式的压缩文件，需要使用<code>unxz</code>解压成<code>img</code>镜像。</p>
-</blockquote>
+<p>通常下载好的文件是<code>xz</code>格式的压缩文件，需要使用<code>unxz</code>解压成<code>img</code>镜像。</p></blockquote>
 </li>
 <li>
 <p>将armbian镜像的<code>bootloader</code>和<code>uboot</code>(32-32767区块的部分)用<code>dd</code>写到SD卡中：</p>
@@ -826,8 +820,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </span></span><span class="line"><span class="cl"><span class="c1"># Write uBoot and bootloader</span>
 </span></span><span class="line"><span class="cl"><span class="n">dd</span> <span class="k">if</span><span class="o">=</span><span class="n">Armbian_</span><span class="o">*.</span><span class="n">img</span> <span class="n">of</span><span class="o">=/</span><span class="n">dev</span><span class="o">/</span><span class="n">sdX</span> <span class="n">skip</span><span class="o">=</span><span class="mi">31</span> <span class="n">seek</span><span class="o">=</span><span class="mi">31</span> <span class="n">bs</span><span class="o">=</span><span class="mi">512</span> <span class="n">count</span><span class="o">=</span><span class="mi">32736</span>
 </span></span></code></pre></div><blockquote>
-<p>其实可以直接用<code>dd</code>把armbian的整个镜像写到内存卡中然后插入R4S开机，第一次开机后他会自动重新给内存卡分区，然后只需把<code>/dev/sdX1</code>格式化成ext4就能安装alarm了。</p>
-</blockquote>
+<p>其实可以直接用<code>dd</code>把armbian的整个镜像写到内存卡中然后插入R4S开机，第一次开机后他会自动重新给内存卡分区，然后只需把<code>/dev/sdX1</code>格式化成ext4就能安装alarm了。</p></blockquote>
 </li>
 <li>
 <p>使用<code>fdisk</code>给内存卡分区并格式化文件系统</p>
@@ -872,8 +865,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </span></span></code></pre></div><p>编辑<code>armbianEnv.txt</code>，在末尾添加一行<code>fdtfile=rockchip/rk3399-rockpro64.dtb</code>。</p>
 <blockquote>
 <p>在<code>/boot/dtb/rockchip</code>目录下是可以找到<code>rk3399-nanopi-r4s.dtb</code>文件的，但是目前用这个DTB的话会导致PCIE不能正常工作，导致LAN口无法使用。
-<code>dmesg</code>的输出为：</p>
-</blockquote>
+<code>dmesg</code>的输出为：</p></blockquote>
 <blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-prolog" data-lang="prolog"><span class="line"><span class="cl"><span class="s">dmesg</span> <span class="p">|</span> <span class="s">grep</span> <span class="s">pci</span>
 </span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">0.538310</span><span class="p">]</span> <span class="s">ehci</span><span class="o">-</span><span class="nn">pci</span><span class="p">:</span> <span class="nv">EHCI</span> <span class="nv">PCI</span> <span class="s">platform</span> <span class="s">driver</span>
@@ -884,8 +876,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.000410</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span> <span class="s">no</span> <span class="s">vpcie12v</span> <span class="s">regulator</span> <span class="s">found</span>
 </span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.500881</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="s">pcie</span> <span class="s">f8000000</span><span class="p">.</span><span class="nn">pcie</span><span class="p">:</span> <span class="nv">PCIe</span> <span class="s">link</span> <span class="s">training</span> <span class="s">gen1</span> <span class="s">timeout</span><span class="p">!</span>
 </span></span><span class="line"><span class="cl"><span class="p">[</span>    <span class="mf">3.500944</span><span class="p">]</span> <span class="s">rockchip</span><span class="o">-</span><span class="nn">pcie</span><span class="p">:</span> <span class="s">probe</span> <span class="s">of</span> <span class="s">f8000000</span><span class="p">.</span><span class="s">pcie</span> <span class="s">failed</span> <span class="s">with</span> <span class="s">error</span> <span class="o">-</span><span class="mi">110</span>
-</span></span></code></pre></div><p>于是就先用rockpro64的DTB文件了。</p>
-</blockquote>
+</span></span></code></pre></div><p>于是就先用rockpro64的DTB文件了。</p></blockquote>
 </li>
 <li>
 <p>创建uBoot镜像和initramfs。</p>
@@ -915,12 +906,10 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>虽然装的是Arch Linux ARM系统，但是这并不代表它不能作为一个路由器使用。</p>
 <p>系统默认用的是<code>systemd-networkd</code>管理网络，所以以下内容使用<code>systemd-networkd</code>配置路由器，暂时没遇到问题，如果不行的话我再换别的。</p>
 <blockquote>
-<p>参考: <a href="https://wiki.archlinux.org/title/Router">Router - ArchWiki</a></p>
-</blockquote>
+<p>参考: <a href="https://wiki.archlinux.org/title/Router">Router - ArchWiki</a></p></blockquote>
 <h3 id="重命名网络接口">重命名网络接口</h3>
 <blockquote>
-<p>这一步并非必须，但是我有遇到重启系统后网口从<code>eth0</code>变成<code>eth1</code>的情况，所以还是给网口重命个名好一些。</p>
-</blockquote>
+<p>这一步并非必须，但是我有遇到重启系统后网口从<code>eth0</code>变成<code>eth1</code>的情况，所以还是给网口重命个名好一些。</p></blockquote>
 <p>首先移除并备份<code>/etc/systemd/network</code>中原有的配置文件。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /etc/systemd/network
 </span></span><span class="line"><span class="cl">
@@ -998,8 +987,7 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>于是在网上逛了一会下决心再也不碰惠普了之后买了联想R7000P 2020，满血RTX 2060(这里指的是最大功耗为115W的笔记本显卡) + R7 4800H还是很香的，打守望屁股终于能稳定200+fps了。</p>
 <p>所以隔了这么久我终于更新博客了。</p>
 <blockquote>
-<p>本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。</p>
-</blockquote>
+<p>本篇原标题为「联想R7000P上手体验」，因为内容大多在讲安装Linux时遇到的问题及解决方法，所以把标题更改为「联想R7000P安装Arch Linux的常见问题」。</p></blockquote>
 <hr>
 <h2 id="安装arch-linux">安装Arch Linux</h2>
 <p>到手后就把之前买的西数SN750 1T固态换到了新电脑上，顺便格式化重装了个系统。</p>
@@ -1126,15 +1114,13 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 <p>这样笔记本上的画面也显示正常了。</p>
 <p>但是用过一阵子会发现笔记本显示器上的字比4K显示器上的字小很多，看起来不方便，所以把缩放倍数改为1.6（我是从1.5-2.0之间一点点试的，才找到最适合自己的缩放倍数），这样解决了字体大小的问题，不过笔记本画面还是会有模糊（能接受）。</p>
 <blockquote>
-<p>[1920 * 1.6]x[1080 * 1.6]=3072x1728</p>
-</blockquote>
+<p>[1920 * 1.6]x[1080 * 1.6]=3072x1728</p></blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ xrandr --output eDP-1-1 --scale 1.6x1.6 --panning 3072x1728+0+2160 --output HDMI-0 --auto
 </span></span></code></pre></div><p>用到现在GNOME的缩放还算是完美，除了玩Minecraft用的HMCL启动器（Java程序）没有被放大之外~~（貌似缺配置，要是配置好了我再补充）~~，Steam界面缩放正常，饥荒、Dota2也都没问题。</p>
 <blockquote>
 <p>Java8不支持Hidpi缩放，如果想让HMCL支持缩放需要需要安装Java9以上的版本，所以还是算了，又不是不能用。
 网易云音乐缩放方法参考<a href="https://ntzyz.io/post/fix-cloud-music-linux-client-hidpi-issue">这篇博客</a>。
-qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
-</blockquote>
+qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p></blockquote>
 <h2 id="others">Others</h2>
 <ul>
 <li>
@@ -1166,8 +1152,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <hr>
 <h2 id="先描述一下踩坑经过">先描述一下踩坑经过</h2>
 <blockquote>
-<p>本段略微有些废话, 可以跳过</p>
-</blockquote>
+<p>本段略微有些废话, 可以跳过</p></blockquote>
 <p>记得在刚买来这台笔记本（2018年夏）, Linux内核还没升到5.0的时候, 使用live CD装系统时会遇到<code>lspci</code>卡死, 关机的时候会卡死的问题, 查系统日记都是一堆ACPI的报错。当时网上查了一下大概是内核和驱动一些bug, 没找到解决办法, Google到论坛的帖子说是在关机/重启发生卡死时只能直接长按电源关机就（找不到搜的回答了）</p>
 <p>装完系统后安装显卡驱动时想通过Bumblebee + bbswitch切换双显卡, 于是装了Gnome然后照着wiki配置完Bumblebee和bbswitch后重启电脑直接死机。</p>
 <p>经过多次重装系统的折磨后, 发现只装Bumblebee不装bbswitch不<code>systemctl enable bumblebeed.service</code>时, 能正常开机, 然后之前遇到的两个问题也莫名其妙就好了, 即系统重启关机不会卡死, <code>lspci</code>也正常了（迷）</p>
@@ -1176,8 +1161,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <p>今年年初买了一块拓展屏想搞双显示器, 本来显示器应该插上HDMI直接就能用的, 但是因为这电脑的HDMI走的独显输出, Bumblebee不能直接用, wiki上教的创建个intel的虚拟输出啥的方法有试过但是没成功, 于是又Google了一下后卸了Bumblebee改用<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Use_NVIDIA_graphics_only">NVIDIA Optimus 只使用独显</a>的方式, 这样双显示器倒是能用了, 但是如果笔记本只用电池没连着拓展屏的时候还跑着独显这也太费电了。</p>
 <p>所以最后找到了能切换显卡的<a href="https://github.com/Askannz/optimus-manager">Optimus Manager</a>。</p>
 <blockquote>
-<p>查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。</p>
-</blockquote>
+<p>查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。</p></blockquote>
 <h2 id="安装过程">安装过程</h2>
 <p>照着<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus">Wiki</a>和Optimus Manager的<a href="https://github.com/Askannz/optimus-manager#optimus-manager">README</a>。首先安装好显卡驱动相关的软件, 如果有Bumblebee的话使用<code>systemctl disable bumblebeed</code>停用。</p>
 <p>首先清除（记得备份）<code>/etc/X11/xorg.conf.d/</code>下的配置文件, 并删掉（记得备份）<code>/etc/X11/xorg.conf</code>（如果有的话）, 因为Optimus Manager会自动生成配置文件存放到<code>/etc/X11/xorg.conf.d/</code>里面, 所以建议安装前把显示配置相关的文件都清除掉。</p>

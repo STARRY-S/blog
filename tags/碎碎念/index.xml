@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.140.2</generator>
+    <generator>Hugo -- 0.147.0</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -56,8 +56,7 @@
       <description>&lt;p&gt;为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>为了让咱的 NAS 长时间稳定运行，斥巨资买了一台 APC BK650M2-CH，在 Arch Wiki 上看 APC 的 UPS 对 Linux 的支持比较友好，于是挑了个最便宜的带停电自动关机的 APC UPS，防止咱啥时候忘了交电费导致停电数据受损。</p>
 <blockquote>
-<p>参烤链接: <a href="https://wiki.archlinux.org/title/APC_UPS">APC UPS - ArchWiki</a></p>
-</blockquote>
+<p>参烤链接: <a href="https://wiki.archlinux.org/title/APC_UPS">APC UPS - ArchWiki</a></p></blockquote>
 <hr>
 <p>UPS 到手后花了半个多小时读使用说明书，然后第一件事是把 UPS 的断电报警蜂鸣器关掉，省得我不在公寓的时候停电了 UPS 叫个没完吵到邻居。</p>
 <p>之后在装 UPS 之前先把我电脑支架背面一团电线重新整理了一遍，现在是台式机、显示器、NAS、光猫、路由器、无线 AP 都放在一起了，他们的电源线、网线、数据线、显示器线都团在了一起，整理起来炒鸡麻烦。</p>
@@ -79,13 +78,11 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">......
 </span></span></span></code></pre></div><p>先把 NAS 里所有的应用都停掉，之后编辑 <code>/etc/apcupsd/apcupsd.conf</code>，把 <code>TIMEOUT</code> 改为 <code>1</code>，然后给 UPS 断电，这时 NAS 会自动关机。</p>
 <blockquote>
-<p>UPS 重新连接电源后，NAS 可能会自动开机，我的 NAS 是这样，但不确定所有 NAS 都这样。</p>
-</blockquote>
+<p>UPS 重新连接电源后，NAS 可能会自动开机，我的 NAS 是这样，但不确定所有 NAS 都这样。</p></blockquote>
 <h2 id="配置自动休眠">配置自动休眠</h2>
 <p>按照 Wiki 配置停电后自动休眠 (Hibernate / 休眠到硬盘)。</p>
 <blockquote>
-<p>在此之前，需要创建 swap 分区 (或 swap file)，然后配置休眠需要的内核参数并重构 <code>initramfs</code>。</p>
-</blockquote>
+<p>在此之前，需要创建 swap 分区 (或 swap file)，然后配置休眠需要的内核参数并重构 <code>initramfs</code>。</p></blockquote>
 <p>以 root 用户创建 <code>/usr/local/bin/hibernate</code>：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1"># Hibernate the system - designed to be called via symlink from /etc/apcupsd</span>
@@ -168,8 +165,7 @@
 </span></span></code></pre></div><p>接下来给 UPS 断电，NAS 会自动休眠，等 NAS 休眠后再过几分钟 UPS 也会关机。</p>
 <p>UPS 关机后，给 UPS 接上电源，这时 UPS 会自动开机，然后 NAS 也会从休眠中恢复。</p>
 <blockquote>
-<p>不要在 UPS 还没关机的时候给 UPS 重新接回电源，会导致 UPS 关机后 NAS 刚从休眠中恢复就被强制断电。</p>
-</blockquote>
+<p>不要在 UPS 还没关机的时候给 UPS 重新接回电源，会导致 UPS 关机后 NAS 刚从休眠中恢复就被强制断电。</p></blockquote>
 <h2 id="其他">其他</h2>
 <p>折腾 UPS 的时候顺手给 NAS 换了个散热器升级了一下内存。AMD 原装散热器有亿点点吵所以换成了咱之前买的 ITX 散热器。</p>
 <figure>
@@ -334,8 +330,7 @@ Fate的HF线细节很多，音乐也很好听，剧情的节奏把握得也很�
 <blockquote>
 <p>2021年1月22日后续：
 最终买了二手港版PS4 Slim，考虑了价格、重量、性能、体积等因素后没有买Pro（主要是没钱），因此现在变得非常贫穷。
-换了笔记本上拆下来闲置了一年的1T硬盘，尝试着在尼尔：伪装者发售前三刷一遍尼尔：机械纪元，因为PS4太好玩了所以现在在后悔为什么不早点买PS4。</p>
-</blockquote>
+换了笔记本上拆下来闲置了一年的1T硬盘，尝试着在尼尔：伪装者发售前三刷一遍尼尔：机械纪元，因为PS4太好玩了所以现在在后悔为什么不早点买PS4。</p></blockquote>
 <hr>
 <p>2020年4月份的时候新开了一个Minecraft单机生存的坑，原本是打算看一下新版本（1.15.2）更新了什么新特性的（蜜蜂），结果玩上生存就停不下来了。先是花了两个星期用纯铁镐手挖两个史莱姆区块，用矿车运村民和僵尸照着B站的视频建了简易的刷铁机，之后又用不到一个月的时间解放末地。总之就是玩上了就停不下来了。然后照着B站各大UP主的视频做了末地刷沙机、然后是混凝土固化机，后来挂三向轰炸机肝了3天清了出生点空置域。用了短短几个月的时间一个人建了很多东西，去地狱打了凋零骷髅头，建海上刷怪塔刷火药和骨粉。后来物资储备足够多了之后就开始挖地铁（旧习难改吧），一年的时间挖了两条地铁线路，盖了十几座车站、一座跨海大桥、一栋摩天大楼。</p>
 <p>原来单机生存还能玩得这么有意思，B站上有很多生电大佬，然而红科搬的视频我基本都看不懂。</p>

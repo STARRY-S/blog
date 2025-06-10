@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.140.2</generator>
+    <generator>Hugo -- 0.147.0</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -163,8 +163,7 @@
 <p>大循环每循环一次，OpenGL就渲染了一帧画面并显示在显示器上，所以你可以计算一秒钟循环的次数而估算游戏的帧率。</p>
 <blockquote>
 <p>因为我们使用了双缓冲，所以这时游戏的帧数被限制为等于显示的刷新帧数，
-比如显示器刷新率为144帧，游戏的帧率就被锁为144，如果想解除这个限制需要改为单缓冲。</p>
-</blockquote>
+比如显示器刷新率为144帧，游戏的帧率就被锁为144，如果想解除这个限制需要改为单缓冲。</p></blockquote>
 <hr>
 <p>到此为止，我们已经创建了一个游戏引擎，但是这个引擎还什么都没有做。</p>
 <p>尝试编译代码，可以看到一个黑色（深灰）的窗口，按<code>ESC</code>或<code>Q</code>即可结束运行。</p>
@@ -176,8 +175,7 @@
 <h2 id="三角形">三角形</h2>
 <p>画三角形的过程很简单，首先要确定三角形的三个顶点坐标，然后告诉GPU这三个点坐标就可以了 :)</p>
 <blockquote>
-<p>如果你看不懂顶点着色器、几何着色器、片段着色器、光栅化这些难懂的知识点，那么你不必急于弄懂这个过程，等把图形绘制出来后再回来看这部分的内容。</p>
-</blockquote>
+<p>如果你看不懂顶点着色器、几何着色器、片段着色器、光栅化这些难懂的知识点，那么你不必急于弄懂这个过程，等把图形绘制出来后再回来看这部分的内容。</p></blockquote>
 <h3 id="标准化设备坐标">标准化设备坐标</h3>
 <p>因为OpenGL的坐标为都是-1.0f到1.0f之间的数（我们先不考虑视口变换这些复杂的情形）</p>
 <p>x, y, z的坐标为-1.0f到1.0f的坐标称作标准化设备坐标，坐标原点在窗口的正中央且在窗口的表面上，往右为x正方向，往上为y正方向，往屏幕里面为z正方向（这里是左手系）。</p>
@@ -259,8 +257,7 @@
 </span></span></code></pre></div><h3 id="着色器">着色器</h3>
 <p>我们需要写两个着色器程序，分别为顶点着色器和片段着色器。</p>
 <blockquote>
-<p>开头说的核心模式可编程管线就是指我们可以写着色器程序，手动指定管线都进行什么操作。</p>
-</blockquote>
+<p>开头说的核心模式可编程管线就是指我们可以写着色器程序，手动指定管线都进行什么操作。</p></blockquote>
 <h4 id="顶点着色器">顶点着色器</h4>
 <p>因为OpenGL使用的是标准化设备坐标而不是屏幕上的像素点为坐标，所以GPU需要把标准化设备坐标转换为屏幕上的像素点，这个过程由顶点着色器实现。</p>
 <p>而顶点着色器不知道咱们三角形的每个顶点的坐标是多少，所以咱们得往着色器中传我们刚才创建的VBO里面存储的坐标。</p>
@@ -388,8 +385,7 @@
 <p>本篇内容为作者整理资料所得, 仅供学习使用。如需转载请务必遵循CC BY-NC-ND 4.0协议。
 请勿将本篇内容作为权威的教学辅导资料使用, 因无法保证100%准确, 仅供参考。</p>
 <p>如果发现了本篇存在的错误, 欢迎在页面下方提issue指正。</p>
-<p>本篇文章使用MathJax显示数学公式，在使用RSS阅读器时会出现无法正确显示的情况。</p>
-</blockquote>
+<p>本篇文章使用MathJax显示数学公式，在使用RSS阅读器时会出现无法正确显示的情况。</p></blockquote>
 <meting-js server="netease" type="song" id="1429420739" theme="#233333"></meting-js>
 <h2 id="硬件结构指令系统">硬件结构&amp;指令系统</h2>
 <ol>
@@ -569,8 +565,7 @@
 <p><code>LCALL addr16</code>这条指令占3字节, 其中addr16占两字节, 因此程序可跳转64KB范围内的地址。</p>
 <p>(<code>ACALL</code>指令只能跳转当前所在的<strong>2K范围内</strong>的地址, 如果不涉及到片外数据存储器的话, 通常只用<code>SJMP</code>和<code>AJMP</code>)</p>
 <blockquote>
-<p>在网上搜到的答案「将<code>3500H</code>送入PC」是错误的, 实际是将<code>20A0H</code>送入PC, 因为DELAY所在的地址为<code>20A0H</code>, 和<code>3500H</code>一点关系都没有。</p>
-</blockquote>
+<p>在网上搜到的答案「将<code>3500H</code>送入PC」是错误的, 实际是将<code>20A0H</code>送入PC, 因为DELAY所在的地址为<code>20A0H</code>, 和<code>3500H</code>一点关系都没有。</p></blockquote>
 <ol start="12">
 <li><code>MOVC</code>访问 <strong>程序(ROM)</strong> 存储器, <code>MOVX</code>指令访问 <strong>外部数据</strong> 存储器。</li>
 </ol>
@@ -600,8 +595,7 @@
 <p>(实际上有10次<code>MOV R6, #250</code>和10次<code>DJNZ R7, L0</code>造成的30个机器周期的约0.6ms的误差)</p>
 <hr>
 <blockquote>
-<p>以下部分写于2020年11月25日</p>
-</blockquote>
+<p>以下部分写于2020年11月25日</p></blockquote>
 <h2 id="汇编语言程序">汇编语言程序</h2>
 <ol>
 <li>
@@ -641,8 +635,7 @@
 <li>
 <p>内部RAM 30H单元存放两位十进制数 (压缩BCD码), 编写将该十进制数转换为对应ASCII码的子程序, 转换结果存放到内部RAM 40H (十位数) 和41H (个位数) 单元。</p>
 <blockquote>
-<p>ASCII码： <code>30H</code>为<code>0</code>, <code>41H</code>为<code>A</code>, <code>61H</code>为<code>a</code></p>
-</blockquote>
+<p>ASCII码： <code>30H</code>为<code>0</code>, <code>41H</code>为<code>A</code>, <code>61H</code>为<code>a</code></p></blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">CV:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="mi">30</span><span class="no">H</span>
 </span></span><span class="line"><span class="cl"><span class="nf">ANL</span> <span class="no">A</span><span class="p">,</span> <span class="c1">#0FH
@@ -898,8 +891,7 @@
 <hr>
 <blockquote>
 <p>2020年12月3日：
-前两天感冒, 休息了几天(<del>打了两天的游戏</del>)后继续。</p>
-</blockquote>
+前两天感冒, 休息了几天(<del>打了两天的游戏</del>)后继续。</p></blockquote>
 <h2 id="串行口">串行口</h2>
 <ol>
 <li>
@@ -956,8 +948,7 @@
 <p><span class="has-mathjax">\(X\)</span>为定时器T1的初值。</p>
 <p>串口工作在方式1，波特率为2400，则每秒钟最大能发送/接收 <span class="has-mathjax">\(2400 \div 10 = 240Byte\)</span> 的数据。</p>
 <blockquote>
-<p>单片机工作在方式1时, 1帧数据为1个起始位、8个数据位、1个停止位共10位。</p>
-</blockquote>
+<p>单片机工作在方式1时, 1帧数据为1个起始位、8个数据位、1个停止位共10位。</p></blockquote>
 <p>8051的UART工作在方式3，要求每秒钟能传送不少于900个字节的数据，则波特率应当大于 <span class="has-mathjax">\(900 \times 8 = 7200bits/s\)</span>。</p>
 </li>
 <li>
@@ -1002,8 +993,7 @@
 </ol>
 <hr>
 <blockquote>
-<p>2020年12月7日：</p>
-</blockquote>
+<p>2020年12月7日：</p></blockquote>
 <h2 id="io口--外部存储器拓展">I/O口 &amp; 外部存储器拓展</h2>
 <ol>
 <li>
@@ -1031,8 +1021,7 @@
 </li>
 </ol>
 <blockquote>
-<p>除此之外LED数码管和外部存储器拓展、外部I/O设备拓展部分有很多需要根据线路图计算地址和DA转换的题，因为线路图源自老师提供的PDF，而老师为PDF加了密码，意味着不允许外传，所以我就不放到博客上面了，<del>除非我自己用Porteus画一个类似的</del></p>
-</blockquote>
+<p>除此之外LED数码管和外部存储器拓展、外部I/O设备拓展部分有很多需要根据线路图计算地址和DA转换的题，因为线路图源自老师提供的PDF，而老师为PDF加了密码，意味着不允许外传，所以我就不放到博客上面了，<del>除非我自己用Porteus画一个类似的</del></p></blockquote>
 <ol start="6">
 <li>
 <p>LED段码入口地址8004H，位选入口地址8002H，将30H-32H保存的6个压缩BCD码发送到6位共阴极数码管上显示， 要求编写延时1ms的子程序。</p>
