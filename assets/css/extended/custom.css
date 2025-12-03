@@ -1,6 +1,6 @@
 code {
     font-family: Monaco, Menlo, Consolas, "DejaVu Sans Mono", monospace;
-    color: var(--code-color);
+    /* color: var(--code-color); */
 }
 
 /* Fixes iOS font sizing anomaly */
