@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -46,13 +46,15 @@
 <p>这样笔记本上的画面也显示正常了。</p>
 <p>但是用过一阵子会发现笔记本显示器上的字比4K显示器上的字小很多，看起来不方便，所以把缩放倍数改为1.6（我是从1.5-2.0之间一点点试的，才找到最适合自己的缩放倍数），这样解决了字体大小的问题，不过笔记本画面还是会有模糊（能接受）。</p>
 <blockquote>
-<p>[1920 * 1.6]x[1080 * 1.6]=3072x1728</p></blockquote>
+<p>[1920 * 1.6]x[1080 * 1.6]=3072x1728</p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">$ xrandr --output eDP-1-1 --scale 1.6x1.6 --panning 3072x1728+0+2160 --output HDMI-0 --auto
 </span></span></code></pre></div><p>用到现在GNOME的缩放还算是完美，除了玩Minecraft用的HMCL启动器（Java程序）没有被放大之外~~（貌似缺配置，要是配置好了我再补充）~~，Steam界面缩放正常，饥荒、Dota2也都没问题。</p>
 <blockquote>
 <p>Java8不支持Hidpi缩放，如果想让HMCL支持缩放需要需要安装Java9以上的版本，所以还是算了，又不是不能用。
 网易云音乐缩放方法参考<a href="https://ntzyz.io/post/fix-cloud-music-linux-client-hidpi-issue">这篇博客</a>。
-qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p></blockquote>
+qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
+</blockquote>
 <h2 id="others">Others</h2>
 <ul>
 <li>

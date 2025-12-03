@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -32,7 +32,8 @@
 <p>然后路由器毕竟是路由器，你即要它负责整个家庭几十个网络设备的路由功能，又要跑 Samba 服务器，还要往里面装一些“上网插件”的话，对 CPU 的性能还是有一定要求的。因为我的路由器和电脑都有 2.5G 网口，所以我实际测试过当通过 Samba 拷贝文件的速度接近于 200MB/S 时，路由器的 CPU 4个核心就会全跑到 100%，然后拷贝就卡住了，时间久了文件就拷贝失败了（然后我不得不又设置了 QoS 把 2.5G 的网口限速成千兆网口）。</p>
 <p>所以最好的办法还是把 NAS 和路由器分开，路由器就用来做路由器该做的事情，NAS 就做 NAS 该做的事情。</p>
 <blockquote>
-<p>以上就是我组装 NAS 的整个心路历程，如果觉得上面这一大堆太磨叽的话，直接看下面就好了。</p></blockquote>
+<p>以上就是我组装 NAS 的整个心路历程，如果觉得上面这一大堆太磨叽的话，直接看下面就好了。</p>
+</blockquote>
 <hr>
 <h2 id="配置清单">配置清单</h2>
 <ul>
@@ -161,7 +162,8 @@
       <content:encoded><![CDATA[<p>把吃灰了好久的树莓派带了过来，打算搞个NAS玩一下，简短的记录一下整个过程。</p>
 <meting-js server="netease" type="song" id="750905" theme="#233333"></meting-js>
 <blockquote>
-<p>这歌太魔性了哈哈哈哈哈……</p></blockquote>
+<p>这歌太魔性了哈哈哈哈哈……</p>
+</blockquote>
 <h2 id="准备工作">准备工作</h2>
 <ul>
 <li>树莓派以及所需的电源（废话）</li>
@@ -203,7 +205,8 @@
 <h2 id="配置网络">配置网络</h2>
 <blockquote>
 <p>配置网络部分不适合在SSH中操作，建议使用显示器和键盘连接到树莓派上操作。</p>
-<p>除非你能保证你执行的每个命令都肥肠正确。</p></blockquote>
+<p>除非你能保证你执行的每个命令都肥肠正确。</p>
+</blockquote>
 <h3 id="无线网络">无线网络</h3>
 <p>因为我电脑离路由器肥肠远，所以为了方便我还要给树莓派配置无线网络。首先照着<a href="https://wiki.archlinux.org/title/Netctl">Wiki上的netctl页面</a>安装了<code>wifi-menu</code>所需要用的<code>dialog</code>，然后就用<code>wifi-menu</code>连接wifi了。不过为了方便以后连接，我需要给他设置静态IP：</p>
 <p>首先使用你比较喜欢的文本编辑器打开<code>wifi-menu</code>自动生成的配置文件，并修改成以下的样子</p>
@@ -286,7 +289,8 @@
 打开文件资源管理器输入地址<code>\\192.168.xxx.xxx\</code>，登录后就能访问共享文件夹了。</p>
 <h2 id="frp内网穿透">Frp内网穿透</h2>
 <blockquote>
-<p>配合<a href="https://gofrp.org/docs/">frp文档</a>食用更佳</p></blockquote>
+<p>配合<a href="https://gofrp.org/docs/">frp文档</a>食用更佳</p>
+</blockquote>
 <p>首先在frp的<a href="https://github.com/fatedier/frp/releases">GitHub Release</a>页面下载安装包。</p>
 <p>如果是树莓派用的话就下载<code>arm</code>版本的安装包即可。Arch Linux可以在ArchLinux CN源或AUR中安装<code>frpc</code>和<code>frps</code>作为客户端和服务端。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="c1"># 树莓派上下载编译好的文件</span>

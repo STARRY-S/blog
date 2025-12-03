@@ -1,13 +1,510 @@
-<!doctype html><html lang=zh dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>使用HMCL启动Minecraft | STARRY-S' Blog</title><meta name=keywords content="Minecraft,HMCL"><meta name=description content="终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。"><meta name=author content="STARRY-S"><link rel=canonical href=https://blog.starry-s.moe/posts/2018/hmcl-minecraft/><link crossorigin=anonymous href=/assets/css/stylesheet.6c90a77e0bb06670e5068e51e589ed8b237ada0173c304780a7491b96adcf310.css integrity="sha256-bJCnfguwZnDlBo5R5YntiyN62gFzwwR4CnSRuWrc8xA=" rel="preload stylesheet" as=style><link rel=icon href=https://blog.starry-s.moe/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=https://blog.starry-s.moe/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://blog.starry-s.moe/favicon-32x32.png><link rel=apple-touch-icon href=https://blog.starry-s.moe/apple-touch-icon.png><link rel=mask-icon href=https://blog.starry-s.moe/apple-touch-icon.png><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=zh href=https://blog.starry-s.moe/posts/2018/hmcl-minecraft/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><meta name=msapplication-TileColor content="#da532c"><meta name=theme-color content="#232323"><meta property="og:url" content="https://blog.starry-s.moe/posts/2018/hmcl-minecraft/"><meta property="og:site_name" content="STARRY-S' Blog"><meta property="og:title" content="使用HMCL启动Minecraft"><meta property="og:description" content="终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。"><meta property="og:locale" content="zh"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2018-07-29T17:26:35+08:00"><meta property="article:modified_time" content="2018-07-29T17:26:35+08:00"><meta property="article:tag" content="Minecraft"><meta property="article:tag" content="HMCL"><meta property="og:image" content="https://blog.starry-s.moe/avatar.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://blog.starry-s.moe/avatar.png"><meta name=twitter:title content="使用HMCL启动Minecraft"><meta name=twitter:description content="终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://blog.starry-s.moe/posts/"},{"@type":"ListItem","position":2,"name":"使用HMCL启动Minecraft","item":"https://blog.starry-s.moe/posts/2018/hmcl-minecraft/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"使用HMCL启动Minecraft","name":"使用HMCL启动Minecraft","description":"终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。\n","keywords":["Minecraft","HMCL"],"articleBody":"终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。\n本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。\n本教程将分为二个部分，第一部分将指导你如何使用HMCL启动器安装并使用Minecraft（非网易代理版），第二部分处理一些常见的问题。 本教程主要写给Windows用户，我想Linux用户不太需要我的教程了吧。。 可能有人是刚接触电脑的新人，所以我尽可能的把每一步都写详细清楚，方便大家的理解。\n本教程仅提供所述内容的下载连接，游戏的版权归Mojang所有。\n顺便说一下网易版并不支持MacOS哈哈哈哈。。。。\n第一部分： 如果你尚未在官网购买正版的Minecraft，你可以使用HMCL（Hello Minecraft Launcher )启动器下载并运行MC。\n你需要确保你的电脑已安装java8。下载java：http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html\n接下来你需要下载HMCL启动器。 我建议去HMCL的官方服务器 下载所需的exe文件，最好不要从贴吧/论坛下载来路不明/非最新版本的HMCL启动器。\n选择最新版本的后缀为.exe的文件下载即可。或者你可以下载后缀为.jar的文件（用于Linux，MacOS）\n新建一个文件夹（放在你喜欢的位置例如桌面），将下载的exe/jar文件复制到这里。 Windows用户直接双击exe文件运行即可，\nLinux用户你下载的是jar文件所以如果你想运行你需要新建一个可执行文件：\n$ cd 你的文件夹名称 $ echo \"java -jar hmcl-对应的版本号.jar\" \u003e ./start.sh $ chmod 744 ./start.sh 然后在终端执行./start.sh。\n或者直接在终端执行java -jar hmcl-*.jar即可。\n设置一个你喜欢的名字并一直使用它，选择离线模式 在HMCL里点击右下角的加号下载游戏文件,建议将游戏下载到你启动器所在的文件夹内。\n如果你已购买正版Minecraft，在确保java安装好后直接去官网下载启动器再到启动器中下载游戏即可，可能会因网络原因速度慢，这是正常现象。\n请支持正版，RMB165，可使用支付宝。\n第二部分： 笔记本双显卡用户请确保你正确的安装了显卡驱动（新买的笔记本不知道什么是显卡驱动就默认已经安装好了），NVIDA显卡用户在桌面右键选择NVIDIA控制面板（没有这个选项可能是你的显卡驱动没安装好），选择 3D设置-\u003e管理3D设置 ，选择添加，找到你安装的JAVA目录下的java.exe，将其设置为高性能处理器。然后保存设置并退出。（ps现在市面上新出的笔记本用集成显卡玩这个游戏也已经很流畅了） 在游戏中按F3，若右侧有NVIDIA字样就说明你已成功的使用独显运行游戏了，在左侧可以观察帧数。\nLinux用户如果可以启动HMCL但是无法启动游戏错误报告是有关OpenGL的话在确定显卡驱动配置正常后检查一下是否安装了xorg-xrandr。\n64位系统的用户不要安装32位的java，不仅影响性能而且对可使用的内存大小也有限制。\nLinux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 Linux下使Steam调用Bumblebee使用独显,当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。\n相关内容： 教程/成功地启动游戏-Minecraft Wiki 官方网站|Minecraft 树莓派之我的世界服务器 如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。\n","wordCount":"1569","inLanguage":"zh","image":"https://blog.starry-s.moe/avatar.png","datePublished":"2018-07-29T17:26:35+08:00","dateModified":"2018-07-29T17:26:35+08:00","author":{"@type":"Person","name":"STARRY-S"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://blog.starry-s.moe/posts/2018/hmcl-minecraft/"},"publisher":{"@type":"Organization","name":"STARRY-S' Blog","logo":{"@type":"ImageObject","url":"https://blog.starry-s.moe/favicon-32x32.png"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://blog.starry-s.moe/ accesskey=h title="Blog (Alt + H)"><img src=https://blog.starry-s.moe/apple-touch-icon.png alt aria-label=logo height=24>Blog</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
-<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://blog.starry-s.moe/gallery/ title=相册><span>相册</span></a></li><li><a href=https://blog.starry-s.moe/archives/ title=归档><span>归档</span></a></li><li><a href=https://blog.starry-s.moe/tags/ title=标签><span>标签</span></a></li><li><a href=https://blog.starry-s.moe/categories/ title=分类><span>分类</span></a></li><li><a href=https://blog.starry-s.moe/search/ title="搜索 (Alt + /)" accesskey=/><span>搜索</span></a></li><li><a href=https://blog.starry-s.moe/projects/ title=项目><span>项目</span></a></li><li><a href=https://blog.starry-s.moe/about/ title=关于><span>关于</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://blog.starry-s.moe/>主页</a>&nbsp;»&nbsp;<a href=https://blog.starry-s.moe/posts/>Posts</a></div><h1 class="post-title entry-hint-parent">使用HMCL启动Minecraft</h1><div class=post-meta><span title='2018-07-29 17:26:35 +0800 +0800'>2018-07-29 17:26:35 +0800</span>&nbsp;·&nbsp;4 分钟&nbsp;·&nbsp;1569 字&nbsp;·&nbsp;STARRY-S&nbsp;|&nbsp;<a href=https://github.com/STARRY-S/blog/edit/main/content/posts/2018/hmcl-minecraft/index.md rel="noopener noreferrer edit" target=_blank>Edit Text</a></div></header><div class=toc><details><summary accesskey=c title="(Alt + C)"><span class=details>目录</span></summary><div class=inner><nav id=TableOfContents><ul><li><a href=#第一部分>第一部分：</a></li><li><a href=#第二部分>第二部分：</a></li><li><a href=#相关内容>相关内容：</a></li></ul></nav></div></details></div><div class=post-content><p>终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( <del>没钱买鼠标？</del> )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。</p><blockquote><p>本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。</p></blockquote><blockquote><p>本教程将分为二个部分，第一部分将指导你如何使用HMCL启动器安装并使用Minecraft（非网易代理版），第二部分处理一些常见的问题。
+<!DOCTYPE html>
+<html lang="zh" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>使用HMCL启动Minecraft | STARRY-S&#39; Blog</title>
+<meta name="keywords" content="Minecraft, HMCL">
+<meta name="description" content="终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。">
+<meta name="author" content="STARRY-S">
+<link rel="canonical" href="https://blog.starry-s.moe/posts/2018/hmcl-minecraft/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.d98846015e8268e7074642d4f7006ba8b9f312505ebef3dfa32585753fdf3652.css" integrity="sha256-2YhGAV6CaOcHRkLU9wBrqLnzElBevvPfoyWFdT/fNlI=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://blog.starry-s.moe/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="https://blog.starry-s.moe/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://blog.starry-s.moe/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://blog.starry-s.moe/apple-touch-icon.png">
+<link rel="mask-icon" href="https://blog.starry-s.moe/apple-touch-icon.png">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="zh" href="https://blog.starry-s.moe/posts/2018/hmcl-minecraft/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+<meta name="msapplication-TileColor" content="#da532c">
+<meta name="theme-color" content="#232323">
+<meta property="og:url" content="https://blog.starry-s.moe/posts/2018/hmcl-minecraft/">
+  <meta property="og:site_name" content="STARRY-S&#39; Blog">
+  <meta property="og:title" content="使用HMCL启动Minecraft">
+  <meta property="og:description" content="终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2018-07-29T17:26:35+08:00">
+    <meta property="article:modified_time" content="2018-07-29T17:26:35+08:00">
+    <meta property="article:tag" content="Minecraft">
+    <meta property="article:tag" content="HMCL">
+      <meta property="og:image" content="https://blog.starry-s.moe/avatar.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blog.starry-s.moe/avatar.png">
+<meta name="twitter:title" content="使用HMCL启动Minecraft">
+<meta name="twitter:description" content="终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://blog.starry-s.moe/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "使用HMCL启动Minecraft",
+      "item": "https://blog.starry-s.moe/posts/2018/hmcl-minecraft/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "使用HMCL启动Minecraft",
+  "name": "使用HMCL启动Minecraft",
+  "description": "终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。\n",
+  "keywords": [
+    "Minecraft", "HMCL"
+  ],
+  "articleBody": "终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( 没钱买鼠标？ )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。\n本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。\n本教程将分为二个部分，第一部分将指导你如何使用HMCL启动器安装并使用Minecraft（非网易代理版），第二部分处理一些常见的问题。 本教程主要写给Windows用户，我想Linux用户不太需要我的教程了吧。。 可能有人是刚接触电脑的新人，所以我尽可能的把每一步都写详细清楚，方便大家的理解。\n本教程仅提供所述内容的下载连接，游戏的版权归Mojang所有。\n顺便说一下网易版并不支持MacOS哈哈哈哈。。。。\n第一部分： 如果你尚未在官网购买正版的Minecraft，你可以使用HMCL（Hello Minecraft Launcher )启动器下载并运行MC。\n你需要确保你的电脑已安装java8。下载java：http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html\n接下来你需要下载HMCL启动器。 我建议去HMCL的官方服务器 下载所需的exe文件，最好不要从贴吧/论坛下载来路不明/非最新版本的HMCL启动器。\n选择最新版本的后缀为.exe的文件下载即可。或者你可以下载后缀为.jar的文件（用于Linux，MacOS）\n新建一个文件夹（放在你喜欢的位置例如桌面），将下载的exe/jar文件复制到这里。 Windows用户直接双击exe文件运行即可，\nLinux用户你下载的是jar文件所以如果你想运行你需要新建一个可执行文件：\n$ cd 你的文件夹名称 $ echo \"java -jar hmcl-对应的版本号.jar\" \u003e ./start.sh $ chmod 744 ./start.sh 然后在终端执行./start.sh。\n或者直接在终端执行java -jar hmcl-*.jar即可。\n设置一个你喜欢的名字并一直使用它，选择离线模式 在HMCL里点击右下角的加号下载游戏文件,建议将游戏下载到你启动器所在的文件夹内。\n如果你已购买正版Minecraft，在确保java安装好后直接去官网下载启动器再到启动器中下载游戏即可，可能会因网络原因速度慢，这是正常现象。\n请支持正版，RMB165，可使用支付宝。\n第二部分： 笔记本双显卡用户请确保你正确的安装了显卡驱动（新买的笔记本不知道什么是显卡驱动就默认已经安装好了），NVIDA显卡用户在桌面右键选择NVIDIA控制面板（没有这个选项可能是你的显卡驱动没安装好），选择 3D设置-\u003e管理3D设置 ，选择添加，找到你安装的JAVA目录下的java.exe，将其设置为高性能处理器。然后保存设置并退出。（ps现在市面上新出的笔记本用集成显卡玩这个游戏也已经很流畅了） 在游戏中按F3，若右侧有NVIDIA字样就说明你已成功的使用独显运行游戏了，在左侧可以观察帧数。\nLinux用户如果可以启动HMCL但是无法启动游戏错误报告是有关OpenGL的话在确定显卡驱动配置正常后检查一下是否安装了xorg-xrandr。\n64位系统的用户不要安装32位的java，不仅影响性能而且对可使用的内存大小也有限制。\nLinux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 Linux下使Steam调用Bumblebee使用独显,当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。\n相关内容： 教程/成功地启动游戏-Minecraft Wiki 官方网站|Minecraft 树莓派之我的世界服务器 如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。\n",
+  "wordCount" : "1569",
+  "inLanguage": "zh",
+  "image": "https://blog.starry-s.moe/avatar.png","datePublished": "2018-07-29T17:26:35+08:00",
+  "dateModified": "2018-07-29T17:26:35+08:00",
+  "author":{
+    "@type": "Person",
+    "name": "STARRY-S"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://blog.starry-s.moe/posts/2018/hmcl-minecraft/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "STARRY-S' Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://blog.starry-s.moe/favicon-32x32.png"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://blog.starry-s.moe/" accesskey="h" title="Blog (Alt + H)">
+                <img src="https://blog.starry-s.moe/apple-touch-icon.png" alt="" aria-label="logo"
+                    height="24">Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://blog.starry-s.moe/gallery/" title="相册">
+                    <span>相册</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://blog.starry-s.moe/archives/" title="归档">
+                    <span>归档</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://blog.starry-s.moe/tags/" title="标签">
+                    <span>标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://blog.starry-s.moe/categories/" title="分类">
+                    <span>分类</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://blog.starry-s.moe/search/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://blog.starry-s.moe/projects/" title="项目">
+                    <span>项目</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://blog.starry-s.moe/about/" title="关于">
+                    <span>关于</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://blog.starry-s.moe/">主页</a>&nbsp;»&nbsp;<a href="https://blog.starry-s.moe/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      使用HMCL启动Minecraft
+    </h1>
+    <div class="post-meta"><span title='2018-07-29 17:26:35 +0800 +0800'>2018-07-29 17:26:35 +0800</span>&nbsp;·&nbsp;<span>4 分钟</span>&nbsp;·&nbsp;<span>1569 字</span>&nbsp;·&nbsp;<span>STARRY-S</span>&nbsp;|&nbsp;<span>
+    <a href="https://github.com/STARRY-S/blog/edit/main/content/posts/2018/hmcl-minecraft/index.md" rel="noopener noreferrer edit" target="_blank">Edit Text</a>
+</span>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">目录</span>
+        </summary>
+
+        <div class="inner"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#第一部分">第一部分：</a></li>
+    <li><a href="#第二部分">第二部分：</a></li>
+    <li><a href="#相关内容">相关内容：</a></li>
+  </ul>
+</nav>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( <del>没钱买鼠标？</del> )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。</p>
+<blockquote>
+<p>本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。</p>
+</blockquote>
+<blockquote>
+<p>本教程将分为二个部分，第一部分将指导你如何使用HMCL启动器安装并使用Minecraft（非网易代理版），第二部分处理一些常见的问题。
 本教程主要写给Windows用户，我想Linux用户不太需要我的教程了吧。。
-可能有人是刚接触电脑的新人，所以我尽可能的把每一步都写详细清楚，方便大家的理解。</p></blockquote><p>本教程仅提供所述内容的下载连接，游戏的版权归Mojang所有。</p><p>顺便说一下网易版并不支持MacOS哈哈哈哈。。。。</p><h2 id=第一部分>第一部分：<a hidden class=anchor aria-hidden=true href=#第一部分>#</a></h2><p><strong>如果你尚未在官网购买正版的Minecraft，你可以使用HMCL（<a href=https://github.com/huanghongxun/HMCL>Hello Minecraft Launcher</a> )启动器下载并运行MC。</strong></p><ol><li></li></ol><p>你需要确保你的电脑已安装java8。下载java：http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</p><ol start=2><li>接下来你需要下载HMCL启动器。</li></ol><p>我建议去<a href=https://ci.huangyuhui.net/job/HMCL/>HMCL的官方服务器</a> 下载所需的<code>exe</code>文件，最好不要从贴吧/论坛下载来路不明/非最新版本的HMCL启动器。</p><p>选择最新版本的后缀为<code>.exe</code>的文件下载即可。或者你可以下载后缀为<code>.jar</code>的文件（用于Linux，MacOS）</p><ol start=3><li>新建一个文件夹（放在你喜欢的位置例如桌面），将下载的<code>exe/jar</code>文件复制到这里。</li></ol><p>Windows用户直接双击exe文件运行即可，</p><p>Linux用户你下载的是jar文件所以如果你想运行你需要新建一个可执行文件：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-fallback data-lang=fallback><span class=line><span class=cl>$ cd 你的文件夹名称
-</span></span><span class=line><span class=cl>$ echo &#34;java -jar hmcl-对应的版本号.jar&#34; &gt; ./start.sh
-</span></span><span class=line><span class=cl>$ chmod 744 ./start.sh
-</span></span></code></pre></div><p>然后在终端执行<code>./start.sh</code>。</p><p>或者直接在终端执行<code>java -jar hmcl-*.jar</code>即可。</p><ol start=4><li>设置一个你喜欢的名字并一直使用它，选择离线模式</li></ol><p>在HMCL里点击右下角的加号下载游戏文件,建议将游戏下载到你启动器所在的文件夹内。</p><p><strong>如果你已购买正版Minecraft，在确保java安装好后直接去官网下载启动器再到启动器中下载游戏即可，可能会因网络原因速度慢，这是正常现象。</strong></p><p><strong>请支持正版，RMB165，可使用支付宝。</strong></p><h2 id=第二部分>第二部分：<a hidden class=anchor aria-hidden=true href=#第二部分>#</a></h2><ol><li>笔记本双显卡用户请确保你正确的安装了显卡驱动（新买的笔记本不知道什么是显卡驱动就默认已经安装好了），NVIDA显卡用户在桌面右键选择NVIDIA控制面板（没有这个选项可能是你的显卡驱动没安装好），选择 <strong>3D设置->管理3D设置</strong> ，选择添加，找到你安装的JAVA目录下的java.exe，将其设置为高性能处理器。然后保存设置并退出。（ps现在市面上新出的笔记本用集成显卡玩这个游戏也已经很流畅了）</li></ol><p>在游戏中按F3，若右侧有NVIDIA字样就说明你已成功的使用独显运行游戏了，在左侧可以观察帧数。</p><ol start=2><li><p>Linux用户如果可以启动HMCL但是无法启动游戏错误报告是有关OpenGL的话在确定显卡驱动配置正常后检查一下是否安装了<code>xorg-xrandr</code>。</p></li><li><p>64位系统的用户不要安装32位的java，不仅影响性能而且对可使用的内存大小也有限制。</p></li><li><p>Linux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 <a href=https://sh.alynx.one/posts/Steam-with-Bumblebee/>Linux下使Steam调用Bumblebee使用独显</a>,当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。</p></li></ol><h2 id=相关内容>相关内容：<a hidden class=anchor aria-hidden=true href=#相关内容>#</a></h2><ul><li><a href="https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&amp;variant=zh-cn">教程/成功地启动游戏-Minecraft Wiki</a></li><li><a href=https://minecraft.net/zh-hans/>官方网站|Minecraft</a></li><li><a href=https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/>树莓派之我的世界服务器</a></li></ul><p>如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。</p></div><footer class=post-footer><ul class=post-tags><li><a href=https://blog.starry-s.moe/tags/minecraft/>Minecraft</a></li><li><a href=https://blog.starry-s.moe/tags/hmcl/>HMCL</a></li></ul><nav class=paginav><a class=prev href=https://blog.starry-s.moe/posts/2018/life-in-sau/><span class=title>« 上一页</span><br><span>Lifeline</span>
-</a><a class=next href=https://blog.starry-s.moe/posts/2018/spring-2/><span class=title>下一页 »</span><br><span>Spring - 2</span></a></nav></footer><div id=disqus_thread></div><script>window.disqus_config=function(){},function(){if(["localhost","127.0.0.1"].indexOf(window.location.hostname)!=-1){document.getElementById("disqus_thread").innerHTML="Disqus comments not available by default when the website is previewed locally.";return}var t=document,e=t.createElement("script");e.async=!0,e.src="//starry-s-blog.disqus.com/embed.js",e.setAttribute("data-timestamp",+new Date),(t.head||t.body).appendChild(e)}()</script><noscript>Please enable JavaScript to view the <a href=https://disqus.com/?ref_noscript>comments powered by Disqus.</a></noscript><a href=https://disqus.com class=dsq-brlink>comments powered by <span class=logo-disqus>Disqus</span></a></article></main><footer class=footer><span>© 2016 - 2025 STARRY-S | <a href=https://creativecommons.org/licenses/by-nc-sa/4.0/>CC BY-NC-SA 4.0</a> | Hosted on <a href=https://pages.github.com>GitHub Pages</a><br></span>·
-<span>Powered by
-<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
-<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
-</a><script>const pathname=window.location.pathname,images=document.querySelectorAll("img");Array.from(images).forEach(e=>{if(!pathname.includes("/posts/"))return;if(e.src.indexOf("images")<0)return;e.addEventListener("load",()=>fitImage(e)),e.complete&&e.naturalWidth!==0&&fitImage(e)});function fitImage(e){e.style.marginLeft="auto",e.style.marginRight="auto",e.naturalWidth/e.naturalHeight<1.1&&(e.style.maxWidth="60%",e.style.height="auto")}</script><script src=/js/home-info.js></script><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="复制";function s(){t.innerHTML="已复制！",setTimeout(()=>{t.innerHTML="复制"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
+可能有人是刚接触电脑的新人，所以我尽可能的把每一步都写详细清楚，方便大家的理解。</p>
+</blockquote>
+<p>本教程仅提供所述内容的下载连接，游戏的版权归Mojang所有。</p>
+<p>顺便说一下网易版并不支持MacOS哈哈哈哈。。。。</p>
+<h2 id="第一部分">第一部分：<a hidden class="anchor" aria-hidden="true" href="#第一部分">#</a></h2>
+<p><strong>如果你尚未在官网购买正版的Minecraft，你可以使用HMCL（<a href="https://github.com/huanghongxun/HMCL">Hello Minecraft Launcher</a> )启动器下载并运行MC。</strong></p>
+<ol>
+<li></li>
+</ol>
+<p>你需要确保你的电脑已安装java8。下载java：http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</p>
+<ol start="2">
+<li>接下来你需要下载HMCL启动器。</li>
+</ol>
+<p>我建议去<a href="https://ci.huangyuhui.net/job/HMCL/">HMCL的官方服务器</a> 下载所需的<code>exe</code>文件，最好不要从贴吧/论坛下载来路不明/非最新版本的HMCL启动器。</p>
+<p>选择最新版本的后缀为<code>.exe</code>的文件下载即可。或者你可以下载后缀为<code>.jar</code>的文件（用于Linux，MacOS）</p>
+<ol start="3">
+<li>新建一个文件夹（放在你喜欢的位置例如桌面），将下载的<code>exe/jar</code>文件复制到这里。</li>
+</ol>
+<p>Windows用户直接双击exe文件运行即可，</p>
+<p>Linux用户你下载的是jar文件所以如果你想运行你需要新建一个可执行文件：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">$ cd 你的文件夹名称
+</span></span><span class="line"><span class="cl">$ echo &#34;java -jar hmcl-对应的版本号.jar&#34; &gt; ./start.sh
+</span></span><span class="line"><span class="cl">$ chmod 744 ./start.sh
+</span></span></code></pre></div><p>然后在终端执行<code>./start.sh</code>。</p>
+<p>或者直接在终端执行<code>java -jar hmcl-*.jar</code>即可。</p>
+<ol start="4">
+<li>设置一个你喜欢的名字并一直使用它，选择离线模式</li>
+</ol>
+<p>在HMCL里点击右下角的加号下载游戏文件,建议将游戏下载到你启动器所在的文件夹内。</p>
+<p><strong>如果你已购买正版Minecraft，在确保java安装好后直接去官网下载启动器再到启动器中下载游戏即可，可能会因网络原因速度慢，这是正常现象。</strong></p>
+<p><strong>请支持正版，RMB165，可使用支付宝。</strong></p>
+<h2 id="第二部分">第二部分：<a hidden class="anchor" aria-hidden="true" href="#第二部分">#</a></h2>
+<ol>
+<li>笔记本双显卡用户请确保你正确的安装了显卡驱动（新买的笔记本不知道什么是显卡驱动就默认已经安装好了），NVIDA显卡用户在桌面右键选择NVIDIA控制面板（没有这个选项可能是你的显卡驱动没安装好），选择 <strong>3D设置-&gt;管理3D设置</strong> ，选择添加，找到你安装的JAVA目录下的java.exe，将其设置为高性能处理器。然后保存设置并退出。（ps现在市面上新出的笔记本用集成显卡玩这个游戏也已经很流畅了）</li>
+</ol>
+<p>在游戏中按F3，若右侧有NVIDIA字样就说明你已成功的使用独显运行游戏了，在左侧可以观察帧数。</p>
+<ol start="2">
+<li>
+<p>Linux用户如果可以启动HMCL但是无法启动游戏错误报告是有关OpenGL的话在确定显卡驱动配置正常后检查一下是否安装了<code>xorg-xrandr</code>。</p>
+</li>
+<li>
+<p>64位系统的用户不要安装32位的java，不仅影响性能而且对可使用的内存大小也有限制。</p>
+</li>
+<li>
+<p>Linux用户如果想用独显玩Minecraft而日常使用时切换回省电的集显，请参考 <a href="https://sh.alynx.one/posts/Steam-with-Bumblebee/">Linux下使Steam调用Bumblebee使用独显</a>,当然不同的Linux Distribution方法会有不同，请linux用户自行摸索。</p>
+</li>
+</ol>
+<h2 id="相关内容">相关内容：<a hidden class="anchor" aria-hidden="true" href="#相关内容">#</a></h2>
+<ul>
+<li><a href="https://minecraft-zh.gamepedia.com/index.php?title=%E6%95%99%E7%A8%8B/%E6%88%90%E5%8A%9F%E5%9C%B0%E5%90%AF%E5%8A%A8%E6%B8%B8%E6%88%8F&amp;variant=zh-cn">教程/成功地启动游戏-Minecraft Wiki</a></li>
+<li><a href="https://minecraft.net/zh-hans/">官方网站|Minecraft</a></li>
+<li><a href="https://blog.starry-s.moe/posts/2016/raspberrypi-mc-server/">树莓派之我的世界服务器</a></li>
+</ul>
+<p>如果你感兴趣想一起联机我的世界的话欢迎联系我，大家一起来Van游戏。</p>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://blog.starry-s.moe/tags/minecraft/">Minecraft</a></li>
+      <li><a href="https://blog.starry-s.moe/tags/hmcl/">HMCL</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://blog.starry-s.moe/posts/2018/life-in-sau/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>Lifeline</span>
+  </a>
+  <a class="next" href="https://blog.starry-s.moe/posts/2018/spring-2/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>Spring - 2</span>
+  </a>
+</nav>
+
+  </footer><div id="disqus_thread"></div>
+<script>
+    window.disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "starry-s-blog" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>© 2016 - 2025 STARRY-S | <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> | Hosted on <a href="https://pages.github.com">GitHub Pages</a><br /></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a><script>
+  const pathname = window.location.pathname;
+  const images = document.querySelectorAll('img');
+
+  Array.from(images).forEach(image => {
+    if (!pathname.includes("/posts/")) {
+      return;
+    }
+    if (image.src.indexOf('images') < 0) {
+      return
+    }
+    image.addEventListener('load', () => fitImage(image));
+    if (image.complete && image.naturalWidth !== 0) {
+      fitImage(image);
+    }
+  });
+
+  function fitImage(image) {
+    image.style.marginLeft = 'auto';
+    image.style.marginRight = 'auto';
+    
+    if (image.naturalWidth / image.naturalHeight < 1.1) {
+      image.style.maxWidth = '60%';
+      image.style.height = 'auto';
+    }
+  }
+</script>
+
+<script src="/js/home-info.js"></script>
+
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = '复制';
+
+        function copyingDone() {
+            copybutton.innerHTML = '已复制！';
+            setTimeout(() => {
+                copybutton.innerHTML = '复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

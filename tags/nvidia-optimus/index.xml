@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -25,7 +25,8 @@
 <hr>
 <h2 id="先描述一下踩坑经过">先描述一下踩坑经过</h2>
 <blockquote>
-<p>本段略微有些废话, 可以跳过</p></blockquote>
+<p>本段略微有些废话, 可以跳过</p>
+</blockquote>
 <p>记得在刚买来这台笔记本（2018年夏）, Linux内核还没升到5.0的时候, 使用live CD装系统时会遇到<code>lspci</code>卡死, 关机的时候会卡死的问题, 查系统日记都是一堆ACPI的报错。当时网上查了一下大概是内核和驱动一些bug, 没找到解决办法, Google到论坛的帖子说是在关机/重启发生卡死时只能直接长按电源关机就（找不到搜的回答了）</p>
 <p>装完系统后安装显卡驱动时想通过Bumblebee + bbswitch切换双显卡, 于是装了Gnome然后照着wiki配置完Bumblebee和bbswitch后重启电脑直接死机。</p>
 <p>经过多次重装系统的折磨后, 发现只装Bumblebee不装bbswitch不<code>systemctl enable bumblebeed.service</code>时, 能正常开机, 然后之前遇到的两个问题也莫名其妙就好了, 即系统重启关机不会卡死, <code>lspci</code>也正常了（迷）</p>
@@ -34,7 +35,8 @@
 <p>今年年初买了一块拓展屏想搞双显示器, 本来显示器应该插上HDMI直接就能用的, 但是因为这电脑的HDMI走的独显输出, Bumblebee不能直接用, wiki上教的创建个intel的虚拟输出啥的方法有试过但是没成功, 于是又Google了一下后卸了Bumblebee改用<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus#Use_NVIDIA_graphics_only">NVIDIA Optimus 只使用独显</a>的方式, 这样双显示器倒是能用了, 但是如果笔记本只用电池没连着拓展屏的时候还跑着独显这也太费电了。</p>
 <p>所以最后找到了能切换显卡的<a href="https://github.com/Askannz/optimus-manager">Optimus Manager</a>。</p>
 <blockquote>
-<p>查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。</p></blockquote>
+<p>查了一下这款电脑的type-c接口支持DP1.2视频输出，和HDMI 2.0一样支持4K 60fps，走的是intel集成显卡，可以在独显不通电的时候输出画面到第三方显示器。所以买一根type-c转DP线就可以点亮第三方显示器（前提是你的显示器有DP接口），但是切换显卡还是得依靠Bunblebee或Optimus Manager这类的软件。</p>
+</blockquote>
 <h2 id="安装过程">安装过程</h2>
 <p>照着<a href="https://wiki.archlinux.org/index.php/NVIDIA_Optimus">Wiki</a>和Optimus Manager的<a href="https://github.com/Askannz/optimus-manager#optimus-manager">README</a>。首先安装好显卡驱动相关的软件, 如果有Bumblebee的话使用<code>systemctl disable bumblebeed</code>停用。</p>
 <p>首先清除（记得备份）<code>/etc/X11/xorg.conf.d/</code>下的配置文件, 并删掉（记得备份）<code>/etc/X11/xorg.conf</code>（如果有的话）, 因为Optimus Manager会自动生成配置文件存放到<code>/etc/X11/xorg.conf.d/</code>里面, 所以建议安装前把显示配置相关的文件都清除掉。</p>

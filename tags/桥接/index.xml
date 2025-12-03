@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -35,7 +35,8 @@
 </p>
 <blockquote>
 <p>这里备份之后不要立即把U盘拔下来，貌似光猫在备份完配置文件后没有立即把数据<code>sync</code>到U盘中，需要等一阵子再拔U盘。
-等多久我也不确定，反复试几次直到U盘上出现了<code>e8_Config_Backup</code>文件夹就可以了。</p></blockquote>
+等多久我也不确定，反复试几次直到U盘上出现了<code>e8_Config_Backup</code>文件夹就可以了。</p>
+</blockquote>
 <p>然后下载<a href="http://www.nirsoft.net/utils/router_password_recovery.html#DownloadLinks">RouterPassView</a>，
 用这个工具打开配置文件，就可以找到里面光猫上的所有配置了，包括宽带帐号和密码。</p>
 <p>之后在网络设置里面改桥接，就可以用软路由拨号上网辣。</p>

@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -23,11 +23,13 @@
       <description>&lt;p&gt;终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( &lt;del&gt;没钱买鼠标？&lt;/del&gt; )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p>终于到了暑假可以开一个Minecraft服务器和小伙伴联机的时候了！在发现我对吃鸡那类的游戏除了觉得好玩以外没有任何天赋( <del>没钱买鼠标？</del> )后打算继续玩我的世界，所以为了方便那些想玩Minecraft（非网易代理版）但是还不知道怎么操作的那些小伙伴们，这篇教程就这么诞生了。</p>
 <blockquote>
-<p>本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。</p></blockquote>
+<p>本篇由于创作时间过于久远，部分下载链接可能失效，因长期未更新，教程仅供参考。</p>
+</blockquote>
 <blockquote>
 <p>本教程将分为二个部分，第一部分将指导你如何使用HMCL启动器安装并使用Minecraft（非网易代理版），第二部分处理一些常见的问题。
 本教程主要写给Windows用户，我想Linux用户不太需要我的教程了吧。。
-可能有人是刚接触电脑的新人，所以我尽可能的把每一步都写详细清楚，方便大家的理解。</p></blockquote>
+可能有人是刚接触电脑的新人，所以我尽可能的把每一步都写详细清楚，方便大家的理解。</p>
+</blockquote>
 <p>本教程仅提供所述内容的下载连接，游戏的版权归Mojang所有。</p>
 <p>顺便说一下网易版并不支持MacOS哈哈哈哈。。。。</p>
 <h2 id="第一部分">第一部分：</h2>

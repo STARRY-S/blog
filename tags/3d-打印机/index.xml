@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -110,7 +110,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">stealthchop_threshold</span><span class="p">:</span><span class="w"> </span><span class="m">999999</span><span class="w">
 </span></span></span></code></pre></div><p>在设置 XYZ 轴和挤出机 (Extruder) 都使用 <strong>stealthChop Mode</strong> 后，能感到打印噪音的确小了一点点。至于打印质量的变化实测没有太多的改变。改善的效果因人而异，如果觉得噪音大的话可以尝试使用 <strong>stealthChop Mode</strong> 但改善的效果可能并不是特别明显。</p>
 <blockquote>
-<p><strong>记得备份</strong></p></blockquote>
+<p><strong>记得备份</strong></p>
+</blockquote>
 <hr>
 <p>除此之外经过一段时间的观察发现咱的这个打印机只有 Y 轴移动时平台会有特别大的嗡嗡声，于是实在忍受不了照着网上的拆解视频把它的 Y 轴平台拆了下来，给它的 Y 轴滚轮调整了一下螺丝松紧度确保每个滚轮都能顺畅的转动而不是被履带硬拖着摩擦，顺便给每个轴承都上了点油（咱用的自行车链条油 XD），经过着一番调教之后，Y 轴平台的声音控制在能接受的范围了。</p>
 <p>如果还是觉得 X/Y 轴的噪音有些难以接受，而且噪音是由于滚轴与轨道摩擦产生的，可以尝试在某宝搜一下海王星 4 MAX 改装线轨的套件，换成线轨能避免滚轴摩擦产生的异常噪音。至于改装后效果咱并没有试过，感兴趣的可以去试下。</p>

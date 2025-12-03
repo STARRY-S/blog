@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -64,7 +64,8 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> git clone https://github.com/goharbor/harbor-helm.git <span class="o">&amp;&amp;</span> <span class="nb">cd</span> harbor-helm
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> git checkout v1.12.1
 </span></span></code></pre></div><blockquote>
-<p>写这篇博客时 Chart 的最新版本是 <code>v1.12.1</code> (Harbor OSS v2.8.1)。</p></blockquote>
+<p>写这篇博客时 Chart 的最新版本是 <code>v1.12.1</code> (Harbor OSS v2.8.1)。</p>
+</blockquote>
 <h3 id="编辑-valuesyaml">编辑 <code>values.yaml</code></h3>
 <p>Harbor 的配置都定义在了 <code>values.yaml</code> 文件中，根据需要进行修改。</p>
 <p>这里列举些常用的可以修改的选项：</p>

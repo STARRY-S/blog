@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -24,7 +24,8 @@
       <content:encoded><![CDATA[<p>差一点就错过了今年春天的花……</p>
 <meting-js server="netease" type="song" id="32364750" theme="#233333"></meting-js>
 <blockquote>
-<p>感兴趣的话还可以看看咱的<a href="/gallery/">相册</a>页面。</p></blockquote>
+<p>感兴趣的话还可以看看咱的<a href="/gallery/">相册</a>页面。</p>
+</blockquote>
 <hr>
 <p>公寓楼下的花，不确定是什么品种，应该是桃花。</p>
 <p><img loading="lazy" src="../../../gallery/images/20240421-114524.jpg" alt="" />
@@ -214,7 +215,8 @@
 <p>实际上买完新镜头后我就拿它拍了几张花的照片后也没怎么出过门，本来打算5月初份去长白岛拍樱花的然而经过了五一小长假的调休，上周末的体侧，这周辽宁省又开始闹疫情，所以只好先拍点校内的风景啦。</p>
 <p>如果你想看长白岛的樱花，不妨看一下<a href="/posts/2019/spring-3/">Spring - 3</a>这篇文章。</p>
 <blockquote>
-<p>仅使用Raw Therapee和Adobe Lightroom对照片进行了裁剪并调整颜色，并由GIMP压缩</p></blockquote>
+<p>仅使用Raw Therapee和Adobe Lightroom对照片进行了裁剪并调整颜色，并由GIMP压缩</p>
+</blockquote>
 <p><img loading="lazy" src="images/IMG_6616.jpg" alt="" />
 <p style="margin-bottom: -0.8em;" class="image-title">iso100, 33mm, 1/1000s, f2.8</p>
 </p>
@@ -226,7 +228,8 @@
 </p>
 <hr>
 <blockquote>
-<p>拍摄自：2021-05-18</p></blockquote>
+<p>拍摄自：2021-05-18</p>
+</blockquote>
 <p>在大风天拍蒲公英确实是个不明智的选择。</p>
 <p><img loading="lazy" src="images/IMG_6723.jpg" alt="" />
 <p style="margin-bottom: -0.8em;" class="image-title">iso100, 50mm, 1/100s, f2.8</p>
@@ -303,7 +306,8 @@
 <hr>
 <h2 id="spring---2">Spring - 2</h2>
 <blockquote>
-<p>拍摄自2018-3-28</p></blockquote>]]></content:encoded>
+<p>拍摄自2018-3-28</p>
+</blockquote>]]></content:encoded>
     </item>
     <item>
       <title>Spring</title>

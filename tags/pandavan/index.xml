@@ -9,7 +9,7 @@
       <url>https://blog.starry-s.moe/avatar.png</url>
       <link>https://blog.starry-s.moe/avatar.png</link>
     </image>
-    <generator>Hugo -- 0.148.1</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh</language>
     <copyright>2016 - 2025 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -22,12 +22,14 @@
       <guid>https://blog.starry-s.moe/posts/2024/pandavan-uu-booster/</guid>
       <description>&lt;h2 id=&#34;起因&#34;&gt;起因&lt;/h2&gt;
 &lt;blockquote&gt;
-&lt;p&gt;省流：这段都是废话，想看安装教程的可直接跳过到下一节&lt;/p&gt;&lt;/blockquote&gt;
+&lt;p&gt;省流：这段都是废话，想看安装教程的可直接跳过到下一节&lt;/p&gt;
+&lt;/blockquote&gt;
 &lt;p&gt;前阵子搬了新家，办了新的宽带，和联通安宽带的师傅要了光猫桥接。原本是打算用 NanoPi R5S 拨号上网，但 RK3568 这个 ARM 芯片尽管性能蛮强的，但 PPoE 拨号没有硬件加速，跑不满千兆宽带，而且打游戏网络延时有时还忽高忽低，用起来很不舒服。&lt;/p&gt;
 &lt;p&gt;因为光猫桥接之后联通还非常贴心的主动给了 IPv4 公网 IP，所以不打算改回光猫拨号模式，于是翻出了很久之前用的小米路由器 R3G，刷了 Pandavan 毛子固件，这个小米路由器虽然芯片性能没有 NanoPi R5S 强，但它有 PPPoE 硬件加速，拨号上网后测速能直接能跑满千兆网口。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<h2 id="起因">起因</h2>
 <blockquote>
-<p>省流：这段都是废话，想看安装教程的可直接跳过到下一节</p></blockquote>
+<p>省流：这段都是废话，想看安装教程的可直接跳过到下一节</p>
+</blockquote>
 <p>前阵子搬了新家，办了新的宽带，和联通安宽带的师傅要了光猫桥接。原本是打算用 NanoPi R5S 拨号上网，但 RK3568 这个 ARM 芯片尽管性能蛮强的，但 PPoE 拨号没有硬件加速，跑不满千兆宽带，而且打游戏网络延时有时还忽高忽低，用起来很不舒服。</p>
 <p>因为光猫桥接之后联通还非常贴心的主动给了 IPv4 公网 IP，所以不打算改回光猫拨号模式，于是翻出了很久之前用的小米路由器 R3G，刷了 Pandavan 毛子固件，这个小米路由器虽然芯片性能没有 NanoPi R5S 强，但它有 PPPoE 硬件加速，拨号上网后测速能直接能跑满千兆网口。</p>
 <p>于是现在家里是用这个小米路由器 R3G 作为主路由 PPPoE 拨号 + 主网关使用，通过网线连接屋子里的另两个有线中继路由器作为 AP。因为咱已经有一台 X86 架构的 NAS，也没有软路由的需求，所以 NanoPi R5S 现在想不出拿它做点什么于是先闲置起来了。</p>
