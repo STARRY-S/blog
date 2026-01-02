@@ -205,10 +205,6 @@ privacy:
   vimeo:
     disabled: false
     simple: true
-  twitter:
-    disabled: false
-    enableDNT: true
-    simple: true
   instagram:
     disabled: false
     simple: true
@@ -219,8 +215,6 @@ privacy:
 services:
   instagram:
     disableInlineCSS: true
-  twitter:
-    disableInlineCSS: true
 
 outputs:
   home:
@@ -229,7 +223,7 @@ outputs:
   - JSON # is necessary
 
 copyright:
-  © 2016 - 2025 STARRY-S | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)<br />
+  © 2016 - 2026 STARRY-S | [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/) | Hosted on [GitHub Pages](https://pages.github.com)<br />
 hasCJKLanguage: true
 enableGitInfo: false
 timeout: 60000
