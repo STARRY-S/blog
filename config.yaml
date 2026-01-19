@@ -61,30 +61,32 @@ languages:
         weight: 70
     params:
       profileMode:
-        enabled: false # needs to be explicitly set
-        title: STARRY-S' Blog
+        enabled: true # needs to be explicitly set
+        title: "STARRY-S' Blog ❤️"
         subtitle: <span id="random-home-info"></span>
-        imageUrl: "/apple-touch-icon.png"
-        imageWidth: 160
-        imageHeight: 160
-        imageTitle:
+        imageUrl: "/web-app-manifest-512x512.png"
+        imageWidth: 200
+        imageHeight: 200
+        imageTitle: Starry
         buttons:
-          - name: 简体中文
-            url: /zh/
-          - name: Gallery
-            url: /en/gallery/
+          - name: Posts
+            url: /posts
+          - name: Photos
+            url: /gallery/
+          - name: Projects
+            url: /projects/
           - name: About
-            url: about
+            url: /about
 
 params:
   # set production to enable google analytics, opengraph,
   # twitter-cards and schema.
-  env:
+  env: production
   title: STARRY-S' Blog
   description: "Morning."
-  keywords: [Blog, STARRY-S, PaperMod]
+  keywords: [ Blog, STARRY-S, PaperMod ]
   author: STARRY-S
-  images: ["avatar.png"]
+  images: ["/web-app-manifest-512x512.png"]
   DateFormat: "2006-01-02 15:04:05 MST"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
@@ -108,23 +110,21 @@ params:
   assets:
     disableHLJS: true # to disable highlight.js
     # disableFingerprinting: true
-    favicon: "/favicon-32x32.png"
-    favicon16x16: "/favicon-16x16.png"
-    favicon32x32: "/favicon-32x32.png"
+    favicon: "/favicon.ico"
     apple_touch_icon: "/apple-touch-icon.png"
     safari_pinned_tab: "/apple-touch-icon.png"
 
   label:
-    text: "Blog"
-    icon: /apple-touch-icon.png
+    text: "Home"
+    icon: /web-app-manifest-192x192.png
     iconHeight: 24
 
   # profile-mode
   profileMode:
     enabled: false # needs to be explicitly set
-    title: STARRY-S' Blog
+    title: "STARRY-S' Blog ❤️"
     subtitle: "This is subtitle"
-    imageUrl: "/apple-touch-icon.png"
+    imageUrl: "/web-app-manifest-512x512.png"
     imageWidth: 120
     imageHeight: 120
     imageTitle: my image

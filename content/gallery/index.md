@@ -1,22 +1,18 @@
 ---
-title: Gallery
+title: Photos
 ShowBreadCrumbs: false
 showtoc: false
 ShowReadingTime: false
 ShowWordCount: false
 ---
 
-来亿点点照片~
-
-----
-
 {{<
     gallery
     match="images/*"
     sortOrder="desc"
-    rowHeight="180"
+    rowHeight="200"
     margins="5"
-    thumbnailResizeOptions="600x600 q90 Lanczos"
+    thumbnailResizeOptions="800x800 q70 Lanczos"
     showExif=true
     previewType="blur"
     embedPreview=true
