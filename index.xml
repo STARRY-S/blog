@@ -8600,10 +8600,12 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 &lt;p style=&#34;margin-bottom: -0.8em;&#34; class=&#34;image-title&#34;&gt;West Lake&lt;/p&gt;
 &lt;/p&gt;
 &lt;h2 id=&#34;about-me&#34;&gt;About Me&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-txt&#34; data-lang=&#34;txt&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- PGP 密钥：`E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2`
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- Email: [hxstarrys@gmail.com](mailto:hxstarrys@gmail.com)
-&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;- GitHub: &amp;lt;https://github.com/STARRY-S&amp;gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;PGP 密钥：&lt;code&gt;E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Email: &lt;a href=&#34;mailto:hxstarrys@gmail.com&#34;&gt;hxstarrys@gmail.com&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;GitHub: &lt;a href=&#34;https://github.com/STARRY-S&#34;&gt;https://github.com/STARRY-S&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
 &lt;p&gt;成分很杂：&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;I use Arch btw&lt;/li&gt;
@@ -8621,10 +8623,12 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <p style="margin-bottom: -0.8em;" class="image-title">West Lake</p>
 </p>
 <h2 id="about-me">About Me</h2>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-txt" data-lang="txt"><span class="line"><span class="cl">- PGP 密钥：`E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2`
-</span></span><span class="line"><span class="cl">- Email: [hxstarrys@gmail.com](mailto:hxstarrys@gmail.com)
-</span></span><span class="line"><span class="cl">- GitHub: &lt;https://github.com/STARRY-S&gt;
-</span></span></code></pre></div><hr>
+<ul>
+<li>PGP 密钥：<code>E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2</code></li>
+<li>Email: <a href="mailto:hxstarrys@gmail.com">hxstarrys@gmail.com</a></li>
+<li>GitHub: <a href="https://github.com/STARRY-S">https://github.com/STARRY-S</a></li>
+</ul>
+<hr>
 <p>成分很杂：</p>
 <ul>
 <li>I use Arch btw</li>
