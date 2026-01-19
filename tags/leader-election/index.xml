@@ -6,10 +6,10 @@
     <description>Recent content in Leader Election on STARRY-S&#39; Blog</description>
     <image>
       <title>STARRY-S&#39; Blog</title>
-      <url>https://blog.starry-s.moe/avatar.png</url>
-      <link>https://blog.starry-s.moe/avatar.png</link>
+      <url>https://blog.starry-s.moe/web-app-manifest-512x512.png</url>
+      <link>https://blog.starry-s.moe/web-app-manifest-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.154.5</generator>
     <language>zh</language>
     <copyright>2016 - 2026 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -39,12 +39,12 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">INFO[0000] Created network &#39;k3d-example&#39;
 </span></span></span><span class="line"><span class="cl"><span class="go">......
 </span></span></span><span class="line"><span class="cl"><span class="go">INFO[0012] Cluster &#39;example&#39; created successfully!
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> kubectl get nodes -o wide
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> kubectl get nodes -o wide
 </span></span><span class="line"><span class="cl"><span class="go">NAME                   STATUS   ROLES                  AGE   VERSION        INTERNAL-IP   EXTERNAL-IP   OS-IMAGE           KERNEL-VERSION   CONTAINER-RUNTIME
 </span></span></span><span class="line"><span class="cl"><span class="go">k3d-example-server-0   Ready    control-plane,master   98s   v1.28.8+k3s1   172.19.0.2    &lt;none&gt;        K3s v1.28.8+k3s1   6.9.3-arch1-1    containerd://1.7.11-k3s2
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> docker ps
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> docker ps
 </span></span><span class="line"><span class="cl"><span class="go">CONTAINER ID   IMAGE                            COMMAND                  CREATED          STATUS              PORTS                           NAMES
 </span></span></span><span class="line"><span class="cl"><span class="go">a4c1367c04a2   ghcr.io/k3d-io/k3d-proxy:5.6.3   &#34;/bin/sh -c nginx-pr…&#34;   2 minutes ago    Up About a minute   80/tcp, 0.0.0.0:6443-&gt;6443/tcp  k3d-example-serverlb
 </span></span></span><span class="line"><span class="cl"><span class="go">7c95a6ea069b   rancher/k3s:v1.28.8-k3s1         &#34;/bin/k3d-entrypoint…&#34;   2 minutes ago    Up 2 minutes                                        k3d-example-server-0
@@ -53,12 +53,12 @@
 </span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:20.118613   27504 leaderelection.go:250] attempting to acquire leader lease default/example...
 </span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:20.124630   27504 leaderelection.go:260] successfully acquired lease default/example
 </span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:20.124696   27504 main.go:87] Controller loop...
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> go run main.go -kubeconfig<span class="o">=</span>~/.kube/config -logtostderr<span class="o">=</span><span class="nb">true</span> -lease-lock-name<span class="o">=</span>example -lease-lock-namespace<span class="o">=</span>default -id<span class="o">=</span><span class="m">2</span>
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> go run main.go -kubeconfig<span class="o">=</span>~/.kube/config -logtostderr<span class="o">=</span><span class="nb">true</span> -lease-lock-name<span class="o">=</span>example -lease-lock-namespace<span class="o">=</span>default -id<span class="o">=</span><span class="m">2</span>
 </span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:32.692373   27815 leaderelection.go:250] attempting to acquire leader lease default/example...
 </span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:32.695277   27815 main.go:151] new leader elected: 1
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> go run main.go -kubeconfig<span class="o">=</span>~/.kube/config -logtostderr<span class="o">=</span><span class="nb">true</span> -lease-lock-name<span class="o">=</span>example -lease-lock-namespace<span class="o">=</span>default -id<span class="o">=</span><span class="m">3</span>
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> go run main.go -kubeconfig<span class="o">=</span>~/.kube/config -logtostderr<span class="o">=</span><span class="nb">true</span> -lease-lock-name<span class="o">=</span>example -lease-lock-namespace<span class="o">=</span>default -id<span class="o">=</span><span class="m">3</span>
 </span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:36.424251   28089 leaderelection.go:250] attempting to acquire leader lease default/example...
 </span></span></span><span class="line"><span class="cl"><span class="go">I0612 22:59:36.427674   28089 main.go:151] new leader elected: 1
 </span></span></span></code></pre></div><p>按顺序在 3 个终端中依次运行样例代码，可以看到 ID 为 1 的程序最先运行所以它成了 Leader，其余两个程序则在待命中。</p>

@@ -6,10 +6,10 @@
     <description>Recent content in 单片机 on STARRY-S&#39; Blog</description>
     <image>
       <title>STARRY-S&#39; Blog</title>
-      <url>https://blog.starry-s.moe/avatar.png</url>
-      <link>https://blog.starry-s.moe/avatar.png</link>
+      <url>https://blog.starry-s.moe/web-app-manifest-512x512.png</url>
+      <link>https://blog.starry-s.moe/web-app-manifest-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.154.5</generator>
     <language>zh</language>
     <copyright>2016 - 2026 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -228,8 +228,8 @@
 <li>分析下面子程序的功能, 假设8051单片机的震荡频率为6MHz。</li>
 </ol>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">DL:</span> <span class="nf">MOV</span> <span class="no">R7</span><span class="p">,</span> <span class="c1">#0AH
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">L0:</span> <span class="nf">MOV</span> <span class="no">R6</span><span class="p">,</span> <span class="c1">#250
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">L1:</span> <span class="nf">NOP</span>
+</span></span></span><span class="line"><span class="cl"><span class="nl">L0:</span> <span class="nf">MOV</span> <span class="no">R6</span><span class="p">,</span> <span class="c1">#250
+</span></span></span><span class="line"><span class="cl"><span class="nl">L1:</span> <span class="nf">NOP</span>
 </span></span><span class="line"><span class="cl">     <span class="nf">NOP</span>
 </span></span><span class="line"><span class="cl">     <span class="nf">DJNZ</span> <span class="no">R6</span><span class="p">,</span> <span class="no">L1</span>
 </span></span><span class="line"><span class="cl">     <span class="nf">DJNZ</span> <span class="no">R7</span><span class="p">,</span> <span class="no">L0</span>
@@ -248,10 +248,10 @@
 <li>
 <p>编写一个子程序, 将内部RAM 40H~4FH的内容复制到50H~5FH。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">COPY:</span> <span class="nf">MOV</span> <span class="no">R0</span><span class="p">,</span> <span class="c1">#40H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nf">MOV</span> <span class="no">R1</span><span class="p">,</span> <span class="c1">#50H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#10H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="c1">; 40H~4FH一共复制了16次
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">LOOP:</span>
+</span></span></span><span class="line"><span class="cl">      <span class="nf">MOV</span> <span class="no">R1</span><span class="p">,</span> <span class="c1">#50H
+</span></span></span><span class="line"><span class="cl">      <span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#10H
+</span></span></span><span class="line"><span class="cl">      <span class="c1">; 40H~4FH一共复制了16次
+</span></span></span><span class="line"><span class="cl"><span class="nl">LOOP:</span>
 </span></span><span class="line"><span class="cl">      <span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">R0</span>
 </span></span><span class="line"><span class="cl">      <span class="nf">MOV</span> <span class="err">@</span><span class="no">R1</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl">      <span class="nf">INC</span> <span class="no">R0</span>
@@ -264,18 +264,18 @@
 <p>将任何无符号8位二进制数转换为BCD码的子程序, 入口参数为内部RAM单元20H, 出口参数为内部RAM单元30H和31H, 30H存放百位数, 31H存放十位数和个位数。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">CV:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R0</span><span class="p">,</span> <span class="c1">#20H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">R0</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">R0</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">B</span><span class="p">,</span> <span class="c1">#100
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">DIV</span> <span class="no">AB</span><span class="c1">; A除以100, 得到的百位数存在A中
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="mi">30</span><span class="no">H</span><span class="p">,</span> <span class="no">A</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">DIV</span> <span class="no">AB</span><span class="c1">; A除以100, 得到的百位数存在A中
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="mi">30</span><span class="no">H</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="no">B</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">B</span><span class="p">,</span> <span class="c1">#10
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">DIV</span> <span class="no">AB</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">DIV</span> <span class="no">AB</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">SWAP</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">ADD</span> <span class="no">A</span><span class="p">,</span> <span class="no">B</span><span class="c1">; 也可以用ORL
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="mi">31</span><span class="no">H</span><span class="p">,</span> <span class="no">A</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="mi">31</span><span class="no">H</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RET</span>
 </span></span></code></pre></div><p><code>DIV AB</code>和<code>MUL AB</code>的A和B之间没有逗号。</p>
 </li>
@@ -287,14 +287,14 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">CV:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="mi">30</span><span class="no">H</span>
 </span></span><span class="line"><span class="cl"><span class="nf">ANL</span> <span class="no">A</span><span class="p">,</span> <span class="c1">#0FH
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#DATA; 或者直接用ADD A, #30H即可
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVC</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#DATA; 或者直接用ADD A, #30H即可
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVC</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="mi">41</span><span class="no">H</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="mi">30</span><span class="no">H</span>
 </span></span><span class="line"><span class="cl"><span class="nf">SWAP</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">ANL</span> <span class="no">A</span><span class="p">,</span> <span class="c1">#0FH
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVC</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVC</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="mi">40</span><span class="no">H</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">RET</span>
@@ -306,11 +306,11 @@
 <p>8个8位数相加, 求平均值, 入口地址为<code>30H</code>~<code>37H</code>, 结果存到<code>40H</code>。</p>
 <p>把8位数相加存在溢出, 所以把相加结果以16进制存到R2、R3中, 再除以8( 右移3次), 即可求得不四舍五入的平均值。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R0</span><span class="p">,</span> <span class="c1">#30H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">R1</span><span class="p">,</span> <span class="c1">#08H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#00H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">R3</span><span class="p">,</span> <span class="c1">#00H
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R1</span><span class="p">,</span> <span class="c1">#08H
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#00H
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R3</span><span class="p">,</span> <span class="c1">#00H
 </span></span></span><span class="line"><span class="cl"><span class="c1">; 初始化
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">LOOP:</span>
+</span></span></span><span class="line"><span class="cl"><span class="nl">LOOP:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">CLR</span> <span class="no">C</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">R0</span>
 </span></span><span class="line"><span class="cl"><span class="nf">ADD</span> <span class="no">A</span><span class="p">,</span> <span class="no">R3</span>
@@ -322,7 +322,7 @@
 </span></span><span class="line"><span class="cl"><span class="nf">DJNZ</span> <span class="no">R1</span><span class="p">,</span> <span class="no">LOOP</span>
 </span></span></code></pre></div><p>这样结果被保存到R2、R3中, 然后需要写一个循环右移3位的程序。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R4</span><span class="p">,</span> <span class="c1">#03H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">LOOP2:</span>
+</span></span></span><span class="line"><span class="cl"><span class="nl">LOOP2:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RRC</span> <span class="no">R2</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RRC</span> <span class="no">R3</span>
 </span></span><span class="line"><span class="cl"><span class="nf">DJNZ</span> <span class="no">R4</span><span class="p">,</span> <span class="no">LOOP2</span>
@@ -332,7 +332,7 @@
 </span></span></span></code></pre></div><p>这样R3中求得的是不带四舍五入的结果。</p>
 <p>如果需要带四舍五入的话第一种方法是判断最后一次右移时最低位是否为<span class="has-mathjax">\(1\)</span>，<span class="has-mathjax">\((1 / 2 = 0.5)\)</span>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R4</span><span class="p">,</span> <span class="c1">#03H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">LOOP2:</span>
+</span></span></span><span class="line"><span class="cl"><span class="nl">LOOP2:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RRC</span> <span class="no">R2</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RRC</span> <span class="no">R3</span>
 </span></span><span class="line"><span class="cl"><span class="nf">DJNZ</span> <span class="no">R4</span><span class="p">,</span> <span class="no">LOOP2</span>
@@ -345,13 +345,13 @@
 </span></span></span></code></pre></div><p>这样是带四舍五入的结果。</p>
 <p>第二种方法，8个8位数相加求平均值，要求四舍五入的话，只需要在这8个数求和后再加4（<code>0100B</code>），之后右移3次。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">ADD</span> <span class="no">A</span><span class="p">,</span> <span class="c1">#04H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">R3</span><span class="p">,</span> <span class="no">A</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R3</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">JNC</span> <span class="no">SKIP2</span>
 </span></span><span class="line"><span class="cl"><span class="nf">INC</span> <span class="no">R2</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nl">SKIP2:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R4</span><span class="p">,</span> <span class="c1">#03H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">LOOP2:</span>
+</span></span></span><span class="line"><span class="cl"><span class="nl">LOOP2:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RRC</span> <span class="no">R2</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RRC</span> <span class="no">R3</span>
 </span></span><span class="line"><span class="cl"><span class="nf">DJNZ</span> <span class="no">R4</span><span class="p">,</span> <span class="no">LOOP2</span>
@@ -607,32 +607,32 @@
 </span></span><span class="line"><span class="cl"><span class="nl">MAIN:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">SCON</span><span class="p">,</span> <span class="c1">#50H
 </span></span></span><span class="line"><span class="cl"><span class="c1">; 串口使用方式1，且允许接收
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">PCON</span><span class="p">,</span> <span class="c1">#00H
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">PCON</span><span class="p">,</span> <span class="c1">#00H
 </span></span></span><span class="line"><span class="cl"><span class="c1">; 波特率不加倍
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">TMOD</span><span class="p">,</span> <span class="c1">#20H
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">TMOD</span><span class="p">,</span> <span class="c1">#20H
 </span></span></span><span class="line"><span class="cl"><span class="c1">; 定时器1使用方式2
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">TL1</span><span class="p">,</span> <span class="c1">#0F3H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">TH1</span><span class="p">,</span> <span class="c1">#0F3H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">SETB</span> <span class="no">TR1</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">TH1</span><span class="p">,</span> <span class="c1">#0F3H
+</span></span></span><span class="line"><span class="cl"><span class="nf">SETB</span> <span class="no">TR1</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nl">LOOP:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R0</span><span class="p">,</span> <span class="c1">#30H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">R1</span><span class="p">,</span> <span class="c1">#08H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R1</span><span class="p">,</span> <span class="c1">#08H
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nl">REC:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">JNB</span> <span class="no">RI</span><span class="p">,</span> <span class="no">$</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="err">@</span><span class="no">R0</span><span class="p">,</span> <span class="no">SBUF</span>
 </span></span><span class="line"><span class="cl"><span class="nf">CLR</span> <span class="no">RI</span> <span class="c1">; 软件清零RI
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">INC</span> <span class="no">R0</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">INC</span> <span class="no">R0</span>
 </span></span><span class="line"><span class="cl"><span class="nf">DJNZ</span> <span class="no">R1</span><span class="p">,</span> <span class="no">REC</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">SBUF</span><span class="p">,</span> <span class="c1">#55H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">JNB</span> <span class="no">TI</span><span class="p">,</span> <span class="no">$</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">JNB</span> <span class="no">TI</span><span class="p">,</span> <span class="no">$</span>
 </span></span><span class="line"><span class="cl"><span class="nf">CLR</span> <span class="no">TI</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">SBUF</span><span class="p">,</span> <span class="c1">#0AAH
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">JNB</span> <span class="no">TI</span><span class="p">,</span> <span class="no">$</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">JNB</span> <span class="no">TI</span><span class="p">,</span> <span class="no">$</span>
 </span></span><span class="line"><span class="cl"><span class="nf">CLR</span> <span class="no">TI</span>
 </span></span><span class="line"><span class="cl"><span class="nf">AJMP</span> <span class="no">LOOP</span>
 </span></span><span class="line"><span class="cl">
@@ -680,48 +680,48 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">MAIN:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R0</span><span class="p">,</span> <span class="c1">#30H
 </span></span></span><span class="line"><span class="cl"><span class="c1">; R2用来计数
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#03H
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#03H
 </span></span></span><span class="line"><span class="cl"><span class="c1">; R3用来位选
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">R3</span><span class="p">,</span> <span class="c1">#01H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R3</span><span class="p">,</span> <span class="c1">#01H
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nl">LOOP:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">R0</span>
 </span></span><span class="line"><span class="cl"><span class="nf">SWAP</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">ANL</span> <span class="no">A</span><span class="p">,</span> <span class="c1">#0FH
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#TAB
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVC</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#TAB
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVC</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
 </span></span><span class="line"><span class="cl"><span class="c1">; 取高4位BCD码对应的段码
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#8004H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVX</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVX</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
 </span></span><span class="line"><span class="cl"><span class="c1">; 先送段码
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="no">R3</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#8002H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVX</span> <span class="err">@</span><span class="no">DPTR</span><span class="p">,</span> <span class="no">A</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVX</span> <span class="err">@</span><span class="no">DPTR</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RL</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R3</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="c1">; 再送位选
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">LCALL</span> <span class="no">DELAY</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">R0</span>
 </span></span><span class="line"><span class="cl"><span class="nf">ANL</span> <span class="no">A</span><span class="p">,</span> <span class="c1">#0FH
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#TAB
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVC</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#TAB
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVC</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
 </span></span><span class="line"><span class="cl"><span class="c1">; 取低4位BCD码对应的段码
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#8004H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVX</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVX</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">A</span><span class="err">+</span><span class="no">DPTR</span>
 </span></span><span class="line"><span class="cl"><span class="c1">; 送段码
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">A</span><span class="p">,</span> <span class="no">R3</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#8002H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVX</span> <span class="err">@</span><span class="no">DPTR</span><span class="p">,</span> <span class="no">A</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVX</span> <span class="err">@</span><span class="no">DPTR</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">RL</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R3</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="c1">; 送位选
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">LCALL</span> <span class="no">DELAY</span>
 </span></span><span class="line"><span class="cl"><span class="nf">INC</span> <span class="no">R0</span>
 </span></span><span class="line"><span class="cl">
@@ -729,7 +729,7 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nl">DELAY:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R7</span><span class="p">,</span> <span class="c1">#250
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">DL:</span>
+</span></span></span><span class="line"><span class="cl"><span class="nl">DL:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">NOP</span>
 </span></span><span class="line"><span class="cl"><span class="nf">NOP</span>
 </span></span><span class="line"><span class="cl"><span class="nf">DJNZ</span> <span class="no">R7</span><span class="p">,</span> <span class="no">DL</span>
@@ -747,12 +747,12 @@
 </p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">PRINT:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#1000H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#10H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#10H
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nl">LOOP:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">JB</span> <span class="no">P3.3</span><span class="p">,</span> <span class="no">$</span>
 </span></span><span class="line"><span class="cl"><span class="c1">; 确保打印机处于空闲状态
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVX</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">DPTR</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVX</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">DPTR</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">P1</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">CLR</span> <span class="no">P3.4</span>
 </span></span><span class="line"><span class="cl"><span class="nf">SETB</span> <span class="no">P3.4</span>
@@ -763,16 +763,16 @@
 <p>使用堆栈保护间接寻址寄存器的值。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">PRINT:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">R2</span><span class="p">,</span> <span class="c1">#10H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#1000H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">LOOP:</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#1000H
+</span></span></span><span class="line"><span class="cl"><span class="nl">LOOP:</span>
 </span></span><span class="line"><span class="cl"><span class="nf">JB</span> <span class="no">P3.3</span><span class="p">,</span> <span class="no">$</span>
 </span></span><span class="line"><span class="cl"><span class="c1">; 确保打印机处于空闲状态
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">MOVX</span> <span class="no">A</span><span class="p">,</span> <span class="err">@</span><span class="no">DPTR</span>
 </span></span><span class="line"><span class="cl"><span class="nf">PUSH</span> <span class="no">DPL</span>
 </span></span><span class="line"><span class="cl"><span class="nf">PUSH</span> <span class="no">DPH</span>
 </span></span><span class="line"><span class="cl"><span class="nf">MOV</span> <span class="no">DPTR</span><span class="p">,</span> <span class="c1">#0A000H
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">MOVX</span> <span class="err">@</span><span class="no">DPTR</span><span class="p">,</span> <span class="no">A</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">MOVX</span> <span class="err">@</span><span class="no">DPTR</span><span class="p">,</span> <span class="no">A</span>
 </span></span><span class="line"><span class="cl"><span class="nf">POP</span> <span class="no">DPH</span>
 </span></span><span class="line"><span class="cl"><span class="nf">POP</span> <span class="no">DPL</span>
 </span></span><span class="line"><span class="cl">

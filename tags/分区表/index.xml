@@ -6,10 +6,10 @@
     <description>Recent content in 分区表 on STARRY-S&#39; Blog</description>
     <image>
       <title>STARRY-S&#39; Blog</title>
-      <url>https://blog.starry-s.moe/avatar.png</url>
-      <link>https://blog.starry-s.moe/avatar.png</link>
+      <url>https://blog.starry-s.moe/web-app-manifest-512x512.png</url>
+      <link>https://blog.starry-s.moe/web-app-manifest-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.154.5</generator>
     <language>zh</language>
     <copyright>2016 - 2026 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -58,7 +58,7 @@
 </span></span></code></pre></div><p>将创建的 <code>disk1.qcow2</code> 镜像与 <code>/dev/nbd0</code> 连接。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo qemu-nbd -c /dev/nbd0 ./disk1.qcow2
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> lsblk /dev/nbd0
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> lsblk /dev/nbd0
 </span></span><span class="line"><span class="cl"><span class="go">NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINTS
 </span></span></span><span class="line"><span class="cl"><span class="go">nbd0  43:0    0  10G  0 disk
 </span></span></span></code></pre></div><p>使用 <code>fdisk</code> 初始化 GPT 分区表，并随便新建几个分区。</p>
@@ -67,36 +67,36 @@
 </blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Welcome to fdisk (util-linux 2.39.2).
 </span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
 </span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device does not contain a recognized partition table.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Device does not contain a recognized partition table.
 </span></span></span><span class="line"><span class="cl"><span class="go">Created a new DOS (MBR) disklabel with disk identifier 0xf5c43a4b.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): g
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): g
 </span></span></span><span class="line"><span class="cl"><span class="go">Created a new GPT disklabel (GUID: 2EB767AB-0958-461B-B56D-697B3305AC83).
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): n
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1-128, default 1):
 </span></span></span><span class="line"><span class="cl"><span class="go">First sector (2048-20971486, default 2048):
 </span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-20971486, default 20969471): +512M
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 1 of type &#39;Linux filesystem&#39; and of size 512 MiB.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): t
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new partition 1 of type &#39;Linux filesystem&#39; and of size 512 MiB.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): t
 </span></span></span><span class="line"><span class="cl"><span class="go">Selected partition 1
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition type or alias (type L to list all): 1
 </span></span></span><span class="line"><span class="cl"><span class="go">Changed type of partition &#39;Linux filesystem&#39; to &#39;EFI System&#39;.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): n
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
 </span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-20971486, default 1050624):
 </span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-20971486, default 20969471):
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 9.5 GiB.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 9.5 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): w
 </span></span></span><span class="line"><span class="cl"><span class="go">The partition table has been altered.
 </span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
 </span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
@@ -108,26 +108,26 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
 </span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
 </span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 2EB767AB-0958-461B-B56D-697B3305AC83
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Device        Start      End  Sectors  Size Type
 </span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
 </span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 20969471 19918848  9.5G Linux filesystem
 </span></span></span></code></pre></div><p>之后简单的格式化一下两个分区，挂载并往里面写一些文件进去。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo mkfs.vfat -F <span class="m">32</span> /dev/nbd0p1
 </span></span><span class="line"><span class="cl"><span class="go">mkfs.fat 4.2 (2021-01-31)
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo mkfs.btrfs /dev/nbd0p2
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mkfs.btrfs /dev/nbd0p2
 </span></span><span class="line"><span class="cl"><span class="go">btrfs-progs v6.5.2
 </span></span></span><span class="line"><span class="cl"><span class="go">See https://btrfs.readthedocs.io for more information.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Performing full device TRIM /dev/nbd0p2 (9.50GiB) ...
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Performing full device TRIM /dev/nbd0p2 (9.50GiB) ...
 </span></span></span><span class="line"><span class="cl"><span class="go">NOTE: several default settings have changed in version 5.15, please make sure
 </span></span></span><span class="line"><span class="cl"><span class="go">    this does not affect your deployments:
 </span></span></span><span class="line"><span class="cl"><span class="go">    - DUP for metadata (-m dup)
 </span></span></span><span class="line"><span class="cl"><span class="go">    - enabled no-holes (-O no-holes)
 </span></span></span><span class="line"><span class="cl"><span class="go">    - enabled free-space-tree (-R free-space-tree)
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Label:              (null)
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Label:              (null)
 </span></span></span><span class="line"><span class="cl"><span class="go">UUID:               a5fb30e5-eb5f-4a0b-8d2a-106e04e1488b
 </span></span></span><span class="line"><span class="cl"><span class="go">Node size:          16384
 </span></span></span><span class="line"><span class="cl"><span class="go">Sector size:        4096
@@ -145,8 +145,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">Devices:
 </span></span></span><span class="line"><span class="cl"><span class="go">   ID        SIZE  PATH
 </span></span></span><span class="line"><span class="cl"><span class="go">    1     9.50GiB  /dev/nbd0p2
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> mkdir -p mnt
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> mkdir -p mnt
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p2 mnt
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mkdir ./mnt/<span class="o">{</span>boot,home<span class="o">}</span>
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p1 mnt/boot
@@ -156,45 +156,45 @@
 <p>使用 <code>btrfs filesystem resize</code> 缩小 root 分区中的 BTRFS 文件系统大小至 7G，之后使用 <code>fdisk</code> 缩小 root 分区大小至 7G。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo btrfs filesystem resize 7G mnt
 </span></span><span class="line"><span class="cl"><span class="go">Resize device id 1 (/dev/nbd0p2) from 9.50GiB to 7.00GiB
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sync
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo sync
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo umount -R ./mnt
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Welcome to fdisk (util-linux 2.39.2).
 </span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
 </span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): d
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): d
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1,2, default 2): 2
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Partition 2 has been deleted.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Partition 2 has been deleted.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): n
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
 </span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-20971486, default 1050624):
 </span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-20971486, default 20969471): +7G
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 7 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 7 GiB.
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition #2 contains a btrfs signature.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">The partition table has been altered.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">The partition table has been altered.
 </span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
 </span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo fdisk -l /dev/nbd0
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk -l /dev/nbd0
 </span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 10 GiB, 10737418240 bytes, 20971520 sectors
 </span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
 </span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
 </span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
 </span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
 </span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 2EB767AB-0958-461B-B56D-697B3305AC83
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Device        Start      End  Sectors  Size Type
 </span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
 </span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 15730687 14680064    7G Linux filesystem
 </span></span></span></code></pre></div><p>调整完分区大小后，因为这里没有移除 BTRFS 签名，所以分区的文件没有被删除，执行 <code>lsblk -no NAME,UUID /dev/nbd0</code> 可以看到 <code>/dev/nbd0p2</code> 的 UUID 也没有变化，和上面执行 <code>mkfs.btrfs</code> 时输出的一致。</p>
@@ -207,7 +207,7 @@
 <p>断开 NBD 连接，缩小 qcow2 磁盘大小到 8G。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo qemu-nbd -d /dev/nbd0
 </span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0 disconnected
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> qemu-img resize ./disk1.qcow2 --shrink 8G
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> qemu-img resize ./disk1.qcow2 --shrink 8G
 </span></span><span class="line"><span class="cl"><span class="go">Image resized.
 </span></span></span></code></pre></div></li>
 <li>
@@ -221,8 +221,8 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
 </span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: dos
 </span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 0x00000000
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device      Boot Start      End  Sectors Size Id Type
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Device      Boot Start      End  Sectors Size Id Type
 </span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1          1 16777215 16777215   8G ee GPT
 </span></span></span></code></pre></div><p><code>fdisk</code> 输出中包含一条错误提示：<code>GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.</code>，大致意思是 GPT 分区表中记录的区块数量 (sectors) 和磁盘实际的区块数不一致。</p>
 </li>
@@ -232,46 +232,46 @@
 <p>这里重建分区时要注意，需要输入精确的区块位置，而不是类似 <code>+50M</code> 这样模糊的值。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo fdisk /dev/nbd0
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Welcome to fdisk (util-linux 2.39.2).
+</span></span></span><span class="line"><span class="cl"><span class="go">Welcome to fdisk (util-linux 2.39.2).
 </span></span></span><span class="line"><span class="cl"><span class="go">Changes will remain in memory only, until you decide to write them.
 </span></span></span><span class="line"><span class="cl"><span class="go">Be careful before using the write command.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): g
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new GPT disklabel (GUID: 3C587DB1-5978-45D2-AB05-9135D273D06D).
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">GPT PMBR size mismatch (20971519 != 16777215) will be corrected by write.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): g
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new GPT disklabel (GUID: 3C587DB1-5978-45D2-AB05-9135D273D06D).
 </span></span></span><span class="line"><span class="cl"><span class="go">The device contains &#39;PMBR&#39; signature and it will be removed by a write command. See fdisk(8) man page and --wipe option for more details.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): n
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1-128, default 1):
 </span></span></span><span class="line"><span class="cl"><span class="go">First sector (2048-16777182, default 2048):
 </span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-16777182, default 16775167): 1050623
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 1 of type &#39;Linux filesystem&#39; and of size 512 MiB.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new partition 1 of type &#39;Linux filesystem&#39; and of size 512 MiB.
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition #1 contains a vfat signature.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): n
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): n
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition number (2-128, default 2):
 </span></span></span><span class="line"><span class="cl"><span class="go">First sector (1050624-16777182, default 1050624):
 </span></span></span><span class="line"><span class="cl"><span class="go">Last sector, +/-sectors or +/-size{K,M,G,T,P} (1050624-16777182, default 16775167): 15730687
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 7 GiB.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Created a new partition 2 of type &#39;Linux filesystem&#39; and of size 7 GiB.
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition #2 contains a btrfs signature.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): t
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Do you want to remove the signature? [Y]es/[N]o: N
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): t
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition number (1,2, default 2): 1
 </span></span></span><span class="line"><span class="cl"><span class="go">Partition type or alias (type L to list all): 1
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Changed type of partition &#39;Linux filesystem&#39; to &#39;EFI System&#39;.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Command (m for help): w
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">The partition table has been altered.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Changed type of partition &#39;Linux filesystem&#39; to &#39;EFI System&#39;.
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Command (m for help): w
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">The partition table has been altered.
 </span></span></span><span class="line"><span class="cl"><span class="go">Calling ioctl() to re-read partition table.
 </span></span></span><span class="line"><span class="cl"><span class="go">Syncing disks.
 </span></span></span></code></pre></div><p>重建分区表后，不出意外的话，重新挂载分区是能访问分区中的文件的，分区的 UUID 也没有发生改动。</p>
@@ -279,20 +279,20 @@
 </span></span><span class="line"><span class="cl"><span class="go">nbd0
 </span></span></span><span class="line"><span class="cl"><span class="go">├─nbd0p1 C6B7-EF70
 </span></span></span><span class="line"><span class="cl"><span class="go">└─nbd0p2 a5fb30e5-eb5f-4a0b-8d2a-106e04e1488b
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo -l fdisk /dev/nbd0
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo -l fdisk /dev/nbd0
 </span></span><span class="line"><span class="cl"><span class="go">Disk /dev/nbd0: 8 GiB, 8589934592 bytes, 16777216 sectors
 </span></span></span><span class="line"><span class="cl"><span class="go">Units: sectors of 1 * 512 = 512 bytes
 </span></span></span><span class="line"><span class="cl"><span class="go">Sector size (logical/physical): 512 bytes / 512 bytes
 </span></span></span><span class="line"><span class="cl"><span class="go">I/O size (minimum/optimal): 512 bytes / 512 bytes
 </span></span></span><span class="line"><span class="cl"><span class="go">Disklabel type: gpt
 </span></span></span><span class="line"><span class="cl"><span class="go">Disk identifier: 3C587DB1-5978-45D2-AB05-9135D273D06D
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Device        Start      End  Sectors  Size Type
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Device        Start      End  Sectors  Size Type
 </span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1    2048  1050623  1048576  512M EFI System
 </span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 1050624 15730687 14680064    7G Linux filesystem
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo mount /dev/nbd0p2 mnt
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p2 mnt
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo mount /dev/nbd0p1 mnt/boot
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> ls -alh mnt
 </span></span><span class="line"><span class="cl"><span class="go">total 20K
@@ -309,19 +309,19 @@
 </span></span></span><span class="line"><span class="cl"><span class="go">first-lba: 2048
 </span></span></span><span class="line"><span class="cl"><span class="go">last-lba: 16777182
 </span></span></span><span class="line"><span class="cl"><span class="go">sector-size: 512
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">/dev/nbd0p1 : start=        2048, size=     1048576, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=496140B3-C491-470B-98D7-BB95F55266A7
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p1 : start=        2048, size=     1048576, type=C12A7328-F81F-11D2-BA4B-00A0C93EC93B, uuid=496140B3-C491-470B-98D7-BB95F55266A7
 </span></span></span><span class="line"><span class="cl"><span class="go">/dev/nbd0p2 : start=     1050624, size=    14680064, type=0FC63DAF-8483-4772-8E79-3D69D8477DE4, uuid=F918E93D-FB1D-4652-9657-CE24A29ADEA5
 </span></span></span></code></pre></div><p>在执行磁盘缩小操作之前，可以先使用 <code>sfdisk</code> 导出分区表，缩小磁盘后再恢复。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="go">Backup partition table
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sfdisk --dump /dev/nbd0 &gt; nbd0.txt
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo sfdisk --dump /dev/nbd0 &gt; nbd0.txt
 </span></span><span class="line"><span class="cl"><span class="go">Remove the `last-lba` line
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> grep -v last-lba nbd0.txt &gt; partition-backup.txt
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> grep -v last-lba nbd0.txt &gt; partition-backup.txt
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">After shrinking the disk size...
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">Restore the backup partition table
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo sfdisk /dev/nbd0 &lt; partition-backup.txt
+</span></span></span><span class="line"><span class="cl"><span class="go">After shrinking the disk size...
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">Restore the backup partition table
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo sfdisk /dev/nbd0 &lt; partition-backup.txt
 </span></span></code></pre></div>]]></content:encoded>
     </item>
   </channel>

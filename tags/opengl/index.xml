@@ -6,10 +6,10 @@
     <description>Recent content in OpenGL on STARRY-S&#39; Blog</description>
     <image>
       <title>STARRY-S&#39; Blog</title>
-      <url>https://blog.starry-s.moe/avatar.png</url>
-      <link>https://blog.starry-s.moe/avatar.png</link>
+      <url>https://blog.starry-s.moe/web-app-manifest-512x512.png</url>
+      <link>https://blog.starry-s.moe/web-app-manifest-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.154.5</generator>
     <language>zh</language>
     <copyright>2016 - 2026 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -35,24 +35,24 @@
 <p>为使用CMake生成Makefile，编写<code>CMakeLists.txt</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cmake" data-lang="cmake"><span class="line"><span class="cl"><span class="nb">cmake_minimum_required</span><span class="p">(</span><span class="s">VERSION</span> <span class="s">3.0</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">project</span><span class="p">(</span>
+</span></span></span><span class="line"><span class="cl"><span class="nb">project</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">    <span class="s2">&#34;Learn OpenGL&#34;</span>
 </span></span><span class="line"><span class="cl">    <span class="s">LANGUAGES</span> <span class="s">C</span>
 </span></span><span class="line"><span class="cl">    <span class="s">VERSION</span> <span class="s">0.1.0</span>
 </span></span><span class="line"><span class="cl"><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">C_FLAGS</span> <span class="s2">&#34;-Wall -lm -ldl -std=c11&#34;</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_FLAGS</span> <span class="o">${</span><span class="nv">C_FLAGS</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">set</span><span class="p">(</span><span class="s">OpenGL_GL_PREFERENCE</span> <span class="s">LEGACY</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">C_FLAGS</span> <span class="s2">&#34;-Wall -lm -ldl -std=c11&#34;</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">CMAKE_C_FLAGS</span> <span class="o">${</span><span class="nv">C_FLAGS</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">set</span><span class="p">(</span><span class="s">OpenGL_GL_PREFERENCE</span> <span class="s">LEGACY</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">glfw3</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">find_package</span><span class="p">(</span><span class="s">OpenGL</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">glfw3</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">find_package</span><span class="p">(</span><span class="s">OpenGL</span> <span class="s">REQUIRED</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">OPENGL_INCLUDE_DIR</span><span class="o">}</span> <span class="s">src</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">include_directories</span><span class="p">(</span><span class="o">${</span><span class="nv">OPENGL_INCLUDE_DIR</span><span class="o">}</span> <span class="s">src</span><span class="p">)</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">aux_source_directory</span><span class="p">(</span><span class="s2">&#34;src&#34;</span> <span class="s">GLSRC</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">add_executable</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">GLSRC</span><span class="o">}</span><span class="p">)</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">OPENGL_gl_LIBRARY</span><span class="o">}</span> <span class="s">glfw</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">aux_source_directory</span><span class="p">(</span><span class="s2">&#34;src&#34;</span> <span class="s">GLSRC</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">add_executable</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">GLSRC</span><span class="o">}</span><span class="p">)</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="nb">target_link_libraries</span><span class="p">(</span><span class="s">main</span> <span class="o">${</span><span class="nv">OPENGL_gl_LIBRARY</span><span class="o">}</span> <span class="s">glfw</span><span class="p">)</span><span class="err">
 </span></span></span></code></pre></div><p>完成上述步骤后，确保工程文件夹的结构如下：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">├── build/
 </span></span><span class="line"><span class="cl">├── CMakeLists.txt
@@ -62,7 +62,7 @@
 </span></span></code></pre></div><h2 id="创建窗口">创建窗口</h2>
 <p>编辑<code>main.c</code>，加入所需的头文件</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="c1">// glad.h要加在glfw3.h之前
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;glad/glad.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;GLFW/glfw3.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
@@ -77,9 +77,9 @@
 </span></span><span class="line"><span class="cl">        <span class="nf">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_OPENGL_PROFILE</span><span class="p">,</span> <span class="n">GLFW_OPENGL_CORE_PROFILE</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#ifdef __APPLE__
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="nf">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_OPENGL_FORWARD_COMPAT</span><span class="p">,</span> <span class="n">GL_TRUE</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">        <span class="nf">glfwWindowHint</span><span class="p">(</span><span class="n">GLFW_OPENGL_FORWARD_COMPAT</span><span class="p">,</span> <span class="n">GL_TRUE</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="cp">#endif
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="cm">/* 创建窗口 */</span>
 </span></span><span class="line"><span class="cl">        <span class="n">GLFWwindow</span> <span class="o">*</span><span class="n">window</span> <span class="o">=</span>
 </span></span><span class="line"><span class="cl">                    <span class="nf">glfwCreateWindow</span><span class="p">(</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">,</span> <span class="s">&#34;Hello World&#34;</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
@@ -185,22 +185,22 @@
 <p>所以我们先声明三角形的顶点和颜色值到一个一维数组里面（用一维数组是因为顶点坐标值在内存的分布都是连续的，这样方便给GPU传坐标）。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="kt">float</span> <span class="n">vertices</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="o">-</span><span class="mf">0.5f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// 左下角
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// red
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">0.5f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// 右下角
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// green
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">0.5f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// y轴正上方
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span>      <span class="c1">// blue
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">};</span>
+</span></span></span><span class="line"><span class="cl">     <span class="mf">1.0f</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// red
+</span></span></span><span class="line"><span class="cl">     <span class="mf">0.5f</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// 右下角
+</span></span></span><span class="line"><span class="cl">     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">1.0f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// green
+</span></span></span><span class="line"><span class="cl">     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">0.5f</span><span class="p">,</span> <span class="mf">0.0f</span><span class="p">,</span>     <span class="c1">// y轴正上方
+</span></span></span><span class="line"><span class="cl">     <span class="mf">0.0f</span><span class="p">,</span>  <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">1.0f</span>      <span class="c1">// blue
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></div><h3 id="顶点缓冲">顶点缓冲</h3>
 <p>首先我们需要创建一个顶点缓冲对象，用来存我们的顶点信息，这个对象叫“Vertex Buffer Object”（VBO），之后创建一个顶点数组对象“Vertex Array Object”（VAO），用来存我们创建的VBO。</p>
 <p>为便于理解，你可以把VBO当作为开辟了一块GPU上的显存(Buffer)，用来存顶点和颜色信息，然后VAO是一个包含多个VBO的数组(Array)。</p>
 <p>绘图时可以把VBO中存的大量顶点信息发送给GPU，因为用CPU给显卡发顶点坐标的速度慢而且没办法一次发送大量的顶点坐标，所以我们把顶点坐标存到显存中，绘图时直接访问显存即可。</p>
 <p>生成一个VBO和一个VAO的代码为：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C" data-lang="C"><span class="line"><span class="cl"><span class="c1">// VAO和VBO的ID都是非负整型
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">GLuint</span> <span class="n">VBO</span><span class="p">,</span> <span class="n">VAO</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl"><span class="n">GLuint</span> <span class="n">VBO</span><span class="p">,</span> <span class="n">VAO</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1">// 生成一个VAO和一个VBO
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">VAO</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="nf">glGenVertexArrays</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">VAO</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="nf">glGenBuffers</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">VBO</span><span class="p">);</span>
 </span></span></code></pre></div><p>我们刚刚创建好了一个缓存对象，我们现在需要告诉这个缓存的数据空间大小以及数据（顶点坐标）。</p>
 <p>首先我们绑定刚创建的VAO，然后绑定VBO</p>

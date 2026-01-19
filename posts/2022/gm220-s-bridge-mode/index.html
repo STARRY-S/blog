@@ -10,8 +10,8 @@
 <meta name="description" content="最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。">
 <meta name="author" content="STARRY-S">
 <link rel="canonical" href="https://blog.starry-s.moe/posts/2022/gm220-s-bridge-mode/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.a2fbb6acf340aaef051d3c978656747a6f87d3831456e9316bb4cfdb7519cd16.css" integrity="sha256-ovu2rPNAqu8FHTyXhlZ0em&#43;H04MUVukxa7TP23UZzRY=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://blog.starry-s.moe/favicon-32x32.png">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.5ea96d65090d903c4b3b57af33f9766457193cbe3c48470b654d56684cce3656.css" integrity="sha256-XqltZQkNkDxLO1evM/l2ZFcZPL48SEcLZU1WaEzONlY=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://blog.starry-s.moe/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://blog.starry-s.moe/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://blog.starry-s.moe/favicon-32x32.png">
 <link rel="apple-touch-icon" href="https://blog.starry-s.moe/apple-touch-icon.png">
@@ -70,11 +70,12 @@
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+</script><link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="theme-color" content="#232323">
 <meta property="og:url" content="https://blog.starry-s.moe/posts/2022/gm220-s-bridge-mode/">
@@ -89,9 +90,9 @@
     <meta property="article:tag" content="光猫">
     <meta property="article:tag" content="桥接">
     <meta property="article:tag" content="路由器">
-      <meta property="og:image" content="https://blog.starry-s.moe/avatar.png">
+      <meta property="og:image" content="https://blog.starry-s.moe/web-app-manifest-512x512.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://blog.starry-s.moe/avatar.png">
+<meta name="twitter:image" content="https://blog.starry-s.moe/web-app-manifest-512x512.png">
 <meta name="twitter:title" content="移动GM220-S光猫改桥接小记">
 <meta name="twitter:description" content="最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。">
 
@@ -129,7 +130,7 @@
   "articleBody": "最近搬了新的住处，用的是移动的宽带，因此尝试着把移动的光猫改成桥接，接到我的软路由上面。\n因为我不知道PPPoE拨号的帐号和密码，尽管这个光猫的超级密码网上一搜就能找到，但是我不知道PPPoE帐号的密码就算改了桥接也没办法拨号。 于是先借助网上能搜到的资料尝试把宽带帐号的密码给搞出来。\n一开始尝试着登录光猫的后台页面，在设置拨号上网的页面那里F12大法，把input元素的type=\"password\"改成type=\"text\"， 但是发现这里预填写的密码已经是加密过的******，因此这个方法行不通。\n然后看教程有说尝试打开光猫的telnet，把配置文件用ftp传出来，但是试了一下所有的尝试打开telnet的方式在这个光猫上都不好使，于是这个方法也行不通。\n之后在光猫登录管理员帐号之后，在“管理-\u003e设备管理-\u003eUSB备份配置\"这里找到了可以把配置文件备份到U盘的地方， 于是找了一张空内存卡格式化成FAT32，放读卡器里插在光猫上，把配置文件备份到U盘上。\n备份至USB\n这里备份之后不要立即把U盘拔下来，貌似光猫在备份完配置文件后没有立即把数据sync到U盘中，需要等一阵子再拔U盘。 等多久我也不确定，反复试几次直到U盘上出现了e8_Config_Backup文件夹就可以了。\n然后下载RouterPassView， 用这个工具打开配置文件，就可以找到里面光猫上的所有配置了，包括宽带帐号和密码。\n之后在网络设置里面改桥接，就可以用软路由拨号上网辣。\n使用了一下移动的宽带发现貌似他们把所有的ICMP的ECHO回显请求屏蔽掉了，所以尝试ping任何IP都是不通的。别的貌似没什么问题。\n",
   "wordCount" : "716",
   "inLanguage": "zh",
-  "image": "https://blog.starry-s.moe/avatar.png","datePublished": "2022-07-07T17:54:35+08:00",
+  "image": "https://blog.starry-s.moe/web-app-manifest-512x512.png","datePublished": "2022-07-07T17:54:35+08:00",
   "dateModified": "2022-07-07T17:54:35+08:00",
   "author":{
     "@type": "Person",
@@ -144,7 +145,7 @@
     "name": "STARRY-S' Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://blog.starry-s.moe/favicon-32x32.png"
+      "url": "https://blog.starry-s.moe/favicon.ico"
     }
   }
 }
@@ -154,9 +155,9 @@
     <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://blog.starry-s.moe/" accesskey="h" title="Blog (Alt + H)">
-                <img src="https://blog.starry-s.moe/apple-touch-icon.png" alt="" aria-label="logo"
-                    height="24">Blog</a>
+            <a href="https://blog.starry-s.moe/" accesskey="h" title="Home (Alt + H)">
+                <img src="https://blog.starry-s.moe/web-app-manifest-192x192.png" alt="" aria-label="logo"
+                    height="24">Home</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"

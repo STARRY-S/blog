@@ -6,10 +6,10 @@
     <description>Recent content in Arch Linux on STARRY-S&#39; Blog</description>
     <image>
       <title>STARRY-S&#39; Blog</title>
-      <url>https://blog.starry-s.moe/avatar.png</url>
-      <link>https://blog.starry-s.moe/avatar.png</link>
+      <url>https://blog.starry-s.moe/web-app-manifest-512x512.png</url>
+      <link>https://blog.starry-s.moe/web-app-manifest-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.154.5</generator>
     <language>zh</language>
     <copyright>2016 - 2026 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -122,11 +122,11 @@
 </span></span><span class="line"><span class="cl"><span class="go">[    0.796858] pci 0000:00:00.2: AMD-Vi: IOMMU performance counters supported
 </span></span></span><span class="line"><span class="cl"><span class="go">[    0.799440] AMD-Vi: Extended features (0x58f77ef22294a5a, 0x0): PPR NX GT IA PC GA_vAPIC
 </span></span></span><span class="line"><span class="cl"><span class="go">[    0.799447] AMD-Vi: Interrupt remapping enabled
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo dmesg <span class="p">|</span> grep IOMMU
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo dmesg <span class="p">|</span> grep IOMMU
 </span></span><span class="line"><span class="cl"><span class="go">[    0.741773] perf/amd_iommu: Detected AMD IOMMU #0 (2 banks, 4 counters/bank).
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> iommu.sh
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> iommu.sh
 </span></span><span class="line"><span class="cl"><span class="go">...
 </span></span></span><span class="line"><span class="cl"><span class="go">IOMMU Group 14:
 </span></span></span><span class="line"><span class="cl"><span class="go">	07:00.0 3D controller [0302]: NVIDIA Corporation GP104GL [Tesla P4] [10de:1abc] (rev a1)
@@ -148,7 +148,7 @@
 <p>因为显卡被直通给虚拟机，所以主机上不能运行 X Server，如果 libvirt 在启动虚拟机时卡住，可能是因为显卡驱动还在被主机加载，显卡设备依旧被主机使用而无法被直通给虚拟机。
 这是可以执行 <code>rmmod</code> 重新加载显卡驱动，让主机让出显卡给虚拟机使用。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># reload-nvidia.sh</span>
 </span></span><span class="line"><span class="cl">sudo rmmod nvidia_drm nvidia_uvm nvidia_modeset nvidia
 </span></span><span class="line"><span class="cl">sudo modprobe nvidia nvidia_uvm
@@ -200,11 +200,11 @@
 </span></span><span class="line"><span class="cl">                                    <span class="kt">unsigned</span> <span class="kt">long</span> <span class="o">*</span><span class="n">pfn</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="cp">#if defined(NV_FOLLOW_PFN_PRESENT)
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="k">return</span> <span class="nf">follow_pfn</span><span class="p">(</span><span class="n">vma</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">pfn</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nf">follow_pfn</span><span class="p">(</span><span class="n">vma</span><span class="p">,</span> <span class="n">address</span><span class="p">,</span> <span class="n">pfn</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="cp">#else
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="cp">#endif
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>    <span class="p">}</span>
+</span></span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span></code></pre></div></li>
 </ol>
 <p>之后再编译时还会遇到 <code>error: 'no_llseek' undeclared here (not in a function); did you mean 'noop_llseek'?</code> 报错，搜了一下发现在 Kernel 6.12 中 <code>no_llseek</code> <a href="https://github.com/google/gasket-driver/commit/4b2a1464f3b619daaf0f6c664c954a42c4b7ce00.patch">已被移除</a>，
@@ -214,9 +214,9 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> <span class="nb">cd</span> /sys/bus/pci/devices/0000:07:00.0/mdev_supported_types
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> ls
 </span></span><span class="line"><span class="cl"><span class="go">nvidia-157  nvidia-214  nvidia-243  nvidia-288  nvidia-289  nvidia-63  nvidia-64  nvidia-65  nvidia-66  nvidia-67  nvidia-68  nvidia-69  nvidia-70  nvidia-71
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> cat nvidia-64/name
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> cat nvidia-64/name
 </span></span><span class="line"><span class="cl"><span class="go">GRID P4-2Q
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> cat nvidia-64/description
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> cat nvidia-64/description
 </span></span><span class="line"><span class="cl"><span class="go">num_heads=4, frl_config=60, framebuffer=2048M, max_resolution=7680x4320, max_instance=4
 </span></span></span></code></pre></div><p><code>/sys/bus/pci/devices/0000:07:00.0/mdev_supported_types</code> 目录中存在许多不同种类的 vGPU 目录，Tesla P4 的 vGPU Type 的介绍可参照<a href="https://docs.nvidia.com/vgpu/14.0/grid-vgpu-user-guide/index.html#vgpu-types-tesla-p4">这里</a>。咱使用的是 Q 系列的 vGPU，<code>nvidia-64</code> 目录对应的是 <strong>2Q</strong> 系列的 vGPU，拥有 2G 显存，最多可创建 4 块 vGPU。</p>
 <p>生成几个 UUID 用于创建 vGPU 显卡。</p>
@@ -355,11 +355,11 @@
 <h2 id="装系统">装系统</h2>
 <p>Arch Wiki 的 Installation Guide 在使用 <code>pacstrap</code> 装系统时只写了最基础的软件包 <code>base</code>, <code>linux</code> 和 <code>linux-firmware</code>，可以在这一步补充亿些常用的软件。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">pacstrap -K /mnt base linux linux-firmware <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    base-devel gcc grub amd-ucode intel-ucode <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    zsh zsh-syntax-highlighting zsh-autosuggestions <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    vim neovim git openbsd-netcat <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    sudo man-db htop wget <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    fastfetch
+</span></span></span><span class="line"><span class="cl">    base-devel gcc grub amd-ucode intel-ucode <span class="se">\
+</span></span></span><span class="line"><span class="cl">    zsh zsh-syntax-highlighting zsh-autosuggestions <span class="se">\
+</span></span></span><span class="line"><span class="cl">    vim neovim git openbsd-netcat <span class="se">\
+</span></span></span><span class="line"><span class="cl">    sudo man-db htop wget <span class="se">\
+</span></span></span><span class="line"><span class="cl">    fastfetch
 </span></span></code></pre></div><p>进 chroot 后编辑 <code>/etc/pacman.conf</code>，添加以下配置，启用 Arch Linux CN。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># /etc/pacman.conf
 </span></span><span class="line"><span class="cl">[archlinuxcn]
@@ -431,30 +431,30 @@
 </span></span></code></pre></div><h2 id="常用命令行工具">常用命令行工具</h2>
 <p>如果只作为服务器 / 不包含图形的虚拟机使用的话，装这些咱常用软件，这部分因人而异，仅供参考。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S go <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    kubectl helm <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    docker docker-buildx <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    podman <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    privoxy <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    proxychains <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    wireguard-tools <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    axel aria2 <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    ffmpeg <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    jq go-yq <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    jdk8-openjdk <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    lm_sensors <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    net-tools traceroute <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    openssh <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    nodejs npm <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    python3 python-pip <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    btrfs-progs <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    <span class="nb">bind</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    ethtool <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    bc <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    age
+</span></span></span><span class="line"><span class="cl">    kubectl helm <span class="se">\
+</span></span></span><span class="line"><span class="cl">    docker docker-buildx <span class="se">\
+</span></span></span><span class="line"><span class="cl">    podman <span class="se">\
+</span></span></span><span class="line"><span class="cl">    privoxy <span class="se">\
+</span></span></span><span class="line"><span class="cl">    proxychains <span class="se">\
+</span></span></span><span class="line"><span class="cl">    wireguard-tools <span class="se">\
+</span></span></span><span class="line"><span class="cl">    axel aria2 <span class="se">\
+</span></span></span><span class="line"><span class="cl">    ffmpeg <span class="se">\
+</span></span></span><span class="line"><span class="cl">    jq go-yq <span class="se">\
+</span></span></span><span class="line"><span class="cl">    jdk8-openjdk <span class="se">\
+</span></span></span><span class="line"><span class="cl">    lm_sensors <span class="se">\
+</span></span></span><span class="line"><span class="cl">    net-tools traceroute <span class="se">\
+</span></span></span><span class="line"><span class="cl">    openssh <span class="se">\
+</span></span></span><span class="line"><span class="cl">    nodejs npm <span class="se">\
+</span></span></span><span class="line"><span class="cl">    python3 python-pip <span class="se">\
+</span></span></span><span class="line"><span class="cl">    btrfs-progs <span class="se">\
+</span></span></span><span class="line"><span class="cl">    <span class="nb">bind</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl">    ethtool <span class="se">\
+</span></span></span><span class="line"><span class="cl">    bc <span class="se">\
+</span></span></span><span class="line"><span class="cl">    age
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># golangci-lint</span>
 </span></span><span class="line"><span class="cl">paru -S golangci-lint-bin <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    krew-bin
+</span></span></span><span class="line"><span class="cl">    krew-bin
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># 装完 Docker 后把普通用户添加到 docker group 中</span>
 </span></span><span class="line"><span class="cl">sudo usermod -aG docker <span class="nv">$USER</span>
@@ -548,20 +548,20 @@
 </span></span></code></pre></div><h2 id="常用的-gui-软件">常用的 GUI 软件</h2>
 <p>装好图形界面并顺利跑起来之后，就可以装常用的桌面软件了，下面这些是部分可能用到的软件，这些因人而异，仅供参考。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">sudo pacman -S vlc <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    virt-manager <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    ttf-monaco <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-dejavu <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    ibus ibus-rime <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    firefox <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    emacs
+</span></span></span><span class="line"><span class="cl">    virt-manager <span class="se">\
+</span></span></span><span class="line"><span class="cl">    ttf-monaco <span class="se">\
+</span></span></span><span class="line"><span class="cl">    noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-dejavu <span class="se">\
+</span></span></span><span class="line"><span class="cl">    ibus ibus-rime <span class="se">\
+</span></span></span><span class="line"><span class="cl">    firefox <span class="se">\
+</span></span></span><span class="line"><span class="cl">    emacs
 </span></span></code></pre></div><p>在 AUR 中安装的软件：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">paru -S google-chrome <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>    visual-studio-code-bin
+</span></span></span><span class="line"><span class="cl">    visual-studio-code-bin
 </span></span></code></pre></div><h3 id="iommu-group">IOMMU Group</h3>
 <p>默认情况下 AMD CPU 不需要编辑内核参数就已经启用了 IOMMU Group，英特尔平台需要添加内核参数 <code>intel_iommu=on</code> 以启用 IOMMU Group。</p>
 <p>使用 <a href="https://wiki.archlinux.org/title/PCI_passthrough_via_OVMF#Ensuring_that_the_groups_are_valid">Arch Linux Wiki 提供的以下脚本</a>查看 PCI 设备的 IOMMU Group。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nb">shopt</span> -s nullglob
+</span></span></span><span class="line"><span class="cl"><span class="nb">shopt</span> -s nullglob
 </span></span><span class="line"><span class="cl"><span class="k">for</span> g in <span class="k">$(</span>find /sys/kernel/iommu_groups/* -maxdepth <span class="m">0</span> -type d <span class="p">|</span> sort -V<span class="k">)</span><span class="p">;</span> <span class="k">do</span>
 </span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;IOMMU Group </span><span class="si">${</span><span class="nv">g</span><span class="p">##*/</span><span class="si">}</span><span class="s2">:&#34;</span>
 </span></span><span class="line"><span class="cl">    <span class="k">for</span> d in <span class="nv">$g</span>/devices/*<span class="p">;</span> <span class="k">do</span>
@@ -672,7 +672,7 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">#</span> netctl <span class="nb">enable</span> bridge-br0
 </span></span><span class="line"><span class="cl"><span class="gp">#</span> netctl start bridge-br0
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">#</span> netctl <span class="nb">enable</span> noip-enp9s0
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> netctl <span class="nb">enable</span> noip-enp9s0
 </span></span><span class="line"><span class="cl"><span class="gp">#</span> netctl start noip-enp9s0
 </span></span></code></pre></div><p>顺利的话，执行 <code>ip addr</code> 可以看到新增加了一个 <code>br0</code> 网口 （不顺利的话就重启一下，再检查一下除了 <code>netctl</code> 之外是不是有别的配置网络的应用产生了干扰），然后原有的 5 个网口都绑定到了 <code>br0</code> 接口上了（接口的那一行出现了 <code>br0</code>）。</p>
 <p>然后 <code>enp9s0</code> 接口正常来讲是不应该从路由器上获取到 IP 地址的了，取而代之的是 <code>br0</code> 接口从路由器的 DHCP 服务器中获取了一个 IP 地址，然后 <code>br0</code> 接口的 MAC 地址和 <code>enp9s0</code> 接口的 MAC 地址都一致才对。</p>
@@ -981,16 +981,16 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </span></span></code></pre></div><p>创建个<code>pacman</code>的钩子，在以后更新<code>linux-aarch64</code>的时候自动的重新构建uboot和initramfs。</p>
 <p>在<code>mkdir -p /etc/pacman.d/hooks</code>目录下创建<code>/etc/pacman.d/hooks/initramfs.hook</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Trigger]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Operation</span> <span class="o">=</span> Install<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Operation</span> <span class="o">=</span> Upgrade<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Type</span> <span class="o">=</span> Package<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Target</span> <span class="o">=</span> linux-aarch64<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="na">Operation</span> <span class="o">=</span> Install<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">Operation</span> <span class="o">=</span> Upgrade<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">Type</span> <span class="o">=</span> Package<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">Target</span> <span class="o">=</span> linux-aarch64<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">
 </span></span></span><span class="line"><span class="cl"><span class="k">[Action]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Description</span> <span class="o">=</span> Generate uInitrd<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Exec</span> <span class="o">=</span> /usr/bin/mkimage -A arm64 -T ramdisk -n uInitrd -d /boot/initramfs-linux.img /boot/uInitrd-initramfs-linux.img<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">When</span> <span class="o">=</span> PostTransaction<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Depends</span> <span class="o">=</span> uboot-tools<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">Description</span> <span class="o">=</span> Generate uInitrd<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">Exec</span> <span class="o">=</span> /usr/bin/mkimage -A arm64 -T ramdisk -n uInitrd -d /boot/initramfs-linux.img /boot/uInitrd-initramfs-linux.img<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">When</span> <span class="o">=</span> PostTransaction<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">Depends</span> <span class="o">=</span> uboot-tools<span class="err">
 </span></span></span></code></pre></div></li>
 <li>
 <p>重启，<code>uname -a</code>输出的应该是新版本的内核了。</p>
@@ -1017,36 +1017,36 @@ IPv6的局域网网段为<code>fd00::/8</code>，通俗一点讲就是<code>fd**
 </span></span><span class="line"><span class="cl">12:34:56:78:90:ab
 </span></span></code></pre></div><p>创建<code>10-extern0.link</code>，重命名<code>eth0</code>到<code>extern0</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">MACAddress</span><span class="o">=</span>12:34:56:78:90:ab<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="na">MACAddress</span><span class="o">=</span>12:34:56:78:90:ab<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">
 </span></span></span><span class="line"><span class="cl"><span class="k">[Link]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Description</span><span class="o">=</span>WAN<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>extern0<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">Description</span><span class="o">=</span>WAN<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">Name</span><span class="o">=</span>extern0<span class="err">
 </span></span></span></code></pre></div><p>另一个网口(LAN)在开机时<code>systemd-networkd</code>会自动给他重命名为<code>enp1s0</code>。</p>
 <h3 id="wan口配置dhcp客户端">WAN口配置DHCP客户端</h3>
 <p>这里我是把R4S的WAN口接到另一台路由器的LAN上，所以配置的是DHCP客户端。如果你打算直接把路由器接光猫，而且你的猫设置了桥接，那么你可能需要配置PPPOE。</p>
 <p>创建<code>20-extern0.network</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>extern0<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="na">Name</span><span class="o">=</span>extern0<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">
 </span></span></span><span class="line"><span class="cl"><span class="k">[Network]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">DHCP</span><span class="o">=</span>yes<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">DHCP</span><span class="o">=</span>yes<span class="err">
 </span></span></span></code></pre></div><h3 id="lan口配置静态ip和dhcp服务器">LAN口配置静态IP和DHCP服务器</h3>
 <p>给LAN口设置成另一个网络的静态IP地址，并配置DHCP服务器，给连接到LAN口的机器分配同一个网络下的其他IP地址。</p>
 <p>创建<code>20-enp1s0.network</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-pacmanconf" data-lang="pacmanconf"><span class="line"><span class="cl"><span class="k">[Match]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Name</span><span class="o">=</span>enp1s0<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="na">Name</span><span class="o">=</span>enp1s0<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">
 </span></span></span><span class="line"><span class="cl"><span class="k">[Network]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">Address</span><span class="o">=</span>10.0.0.1/24<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">DHCPServer</span><span class="o">=</span>true<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">IPMasquerade</span><span class="o">=</span>both<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">
+</span></span></span><span class="line"><span class="cl"><span class="na">Address</span><span class="o">=</span>10.0.0.1/24<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">DHCPServer</span><span class="o">=</span>true<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">IPMasquerade</span><span class="o">=</span>both<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="k">
 </span></span></span><span class="line"><span class="cl"><span class="k">[DHCPServer]</span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">PoolOffset</span><span class="o">=</span>100<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">PoolSize</span><span class="o">=</span>100<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="na">EmitDNS</span><span class="o">=</span>yes<span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="c1"># DNS=8.8.8.8</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">PoolOffset</span><span class="o">=</span>100<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">PoolSize</span><span class="o">=</span>100<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="na">EmitDNS</span><span class="o">=</span>yes<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="c1"># DNS=8.8.8.8</span><span class="err">
 </span></span></span></code></pre></div><p>我这个配置是给LAN口设置了静态IP地址<code>10.0.0.1</code>，掩码<code>255.255.255.0</code>，启用了DHCP服务器，
 设置了IPv4数据“伪装”(packets forwarded from the network interface will be appear as coming from the local host)。</p>
 <p>有关配置文件的参数可以使用<code>man systemd.network</code>查询。</p>

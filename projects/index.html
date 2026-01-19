@@ -5,20 +5,23 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>项目 | STARRY-S&#39; Blog</title>
+<title>Projects | STARRY-S&#39; Blog</title>
 <meta name="keywords" content="">
-<meta name="description" content="一些咱维护的项目，感兴趣的可以去瞅瞅。
+<meta name="description" content="这里列出了一些咱的小项目，感兴趣的可以去瞅瞅。
 
-github.com/STARRY-S/zip: 用于向已有的 ZIP 压缩包文件增添新的文件 / 替换已有文件的 ZIP 库
-github.com/STARRY-S/esp32-pwm-controller：基于 ESP32 的兽装风扇/LED 远程控制器
-github.com/STARRY-S/telebot：自用的 Telebot，可查询 NAS 状态信息
-github.com/STARRY-S/Aperture：用纯 C 搓的一个游戏引擎，写的很乱
-Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命令行工具
+go-zip: 在 Golang 标准 zip 库的基础上支持编辑已有压缩包功能
+wg-healthcheck：确保 WireGuard Client 通信正常的脚本
+archlinux-suc：使用 Rancher SUC，自动升级 Arch Linux RKE2/K3s 集群节点系统
+esp32-pwm-controller：ESP32 的兽装风扇/LED 远程控制器
+overlayer：用 Go 搓的反向代理，配合 CDN &#43; 存储桶减少容器镜像仓库流量费用
+telebot：自用 Telebot，可查询 NAS 状态信息
+aperture：大学时期用纯 C &#43; OpenGL 搓的一个游戏引擎，写的很乱
+hangar：容器镜像多线程批量拷贝 &amp; CVE 扫描 &amp; Sigstore 签名等功能的命令行工具
 ">
 <meta name="author" content="STARRY-S">
 <link rel="canonical" href="https://blog.starry-s.moe/projects/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.a2fbb6acf340aaef051d3c978656747a6f87d3831456e9316bb4cfdb7519cd16.css" integrity="sha256-ovu2rPNAqu8FHTyXhlZ0em&#43;H04MUVukxa7TP23UZzRY=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://blog.starry-s.moe/favicon-32x32.png">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.5ea96d65090d903c4b3b57af33f9766457193cbe3c48470b654d56684cce3656.css" integrity="sha256-XqltZQkNkDxLO1evM/l2ZFcZPL48SEcLZU1WaEzONlY=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://blog.starry-s.moe/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://blog.starry-s.moe/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://blog.starry-s.moe/favicon-32x32.png">
 <link rel="apple-touch-icon" href="https://blog.starry-s.moe/apple-touch-icon.png">
@@ -77,31 +80,35 @@ Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命�
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+</script><link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="theme-color" content="#232323">
 <meta property="og:url" content="https://blog.starry-s.moe/projects/">
   <meta property="og:site_name" content="STARRY-S&#39; Blog">
-  <meta property="og:title" content="项目">
-  <meta property="og:description" content="一些咱维护的项目，感兴趣的可以去瞅瞅。
-github.com/STARRY-S/zip: 用于向已有的 ZIP 压缩包文件增添新的文件 / 替换已有文件的 ZIP 库 github.com/STARRY-S/esp32-pwm-controller：基于 ESP32 的兽装风扇/LED 远程控制器 github.com/STARRY-S/telebot：自用的 Telebot，可查询 NAS 状态信息 github.com/STARRY-S/Aperture：用纯 C 搓的一个游戏引擎，写的很乱 Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命令行工具 ">
+  <meta property="og:title" content="Projects">
+  <meta property="og:description" content="这里列出了一些咱的小项目，感兴趣的可以去瞅瞅。
+go-zip: 在 Golang 标准 zip 库的基础上支持编辑已有压缩包功能 wg-healthcheck：确保 WireGuard Client 通信正常的脚本 archlinux-suc：使用 Rancher SUC，自动升级 Arch Linux RKE2/K3s 集群节点系统 esp32-pwm-controller：ESP32 的兽装风扇/LED 远程控制器 overlayer：用 Go 搓的反向代理，配合 CDN &#43; 存储桶减少容器镜像仓库流量费用 telebot：自用 Telebot，可查询 NAS 状态信息 aperture：大学时期用纯 C &#43; OpenGL 搓的一个游戏引擎，写的很乱 hangar：容器镜像多线程批量拷贝 &amp; CVE 扫描 &amp; Sigstore 签名等功能的命令行工具 ">
   <meta property="og:locale" content="zh">
   <meta property="og:type" content="article">
-      <meta property="og:image" content="https://blog.starry-s.moe/avatar.png">
+      <meta property="og:image" content="https://blog.starry-s.moe/web-app-manifest-512x512.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://blog.starry-s.moe/avatar.png">
-<meta name="twitter:title" content="项目">
-<meta name="twitter:description" content="一些咱维护的项目，感兴趣的可以去瞅瞅。
+<meta name="twitter:image" content="https://blog.starry-s.moe/web-app-manifest-512x512.png">
+<meta name="twitter:title" content="Projects">
+<meta name="twitter:description" content="这里列出了一些咱的小项目，感兴趣的可以去瞅瞅。
 
-github.com/STARRY-S/zip: 用于向已有的 ZIP 压缩包文件增添新的文件 / 替换已有文件的 ZIP 库
-github.com/STARRY-S/esp32-pwm-controller：基于 ESP32 的兽装风扇/LED 远程控制器
-github.com/STARRY-S/telebot：自用的 Telebot，可查询 NAS 状态信息
-github.com/STARRY-S/Aperture：用纯 C 搓的一个游戏引擎，写的很乱
-Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命令行工具
+go-zip: 在 Golang 标准 zip 库的基础上支持编辑已有压缩包功能
+wg-healthcheck：确保 WireGuard Client 通信正常的脚本
+archlinux-suc：使用 Rancher SUC，自动升级 Arch Linux RKE2/K3s 集群节点系统
+esp32-pwm-controller：ESP32 的兽装风扇/LED 远程控制器
+overlayer：用 Go 搓的反向代理，配合 CDN &#43; 存储桶减少容器镜像仓库流量费用
+telebot：自用 Telebot，可查询 NAS 状态信息
+aperture：大学时期用纯 C &#43; OpenGL 搓的一个游戏引擎，写的很乱
+hangar：容器镜像多线程批量拷贝 &amp; CVE 扫描 &amp; Sigstore 签名等功能的命令行工具
 ">
 
 
@@ -113,7 +120,7 @@ Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命�
     {
       "@type": "ListItem",
       "position":  1 ,
-      "name": "项目",
+      "name": "Projects",
       "item": "https://blog.starry-s.moe/projects/"
     }
   ]
@@ -123,16 +130,16 @@ Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命�
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "项目",
-  "name": "项目",
-  "description": "一些咱维护的项目，感兴趣的可以去瞅瞅。\ngithub.com/STARRY-S/zip: 用于向已有的 ZIP 压缩包文件增添新的文件 / 替换已有文件的 ZIP 库 github.com/STARRY-S/esp32-pwm-controller：基于 ESP32 的兽装风扇/LED 远程控制器 github.com/STARRY-S/telebot：自用的 Telebot，可查询 NAS 状态信息 github.com/STARRY-S/Aperture：用纯 C 搓的一个游戏引擎，写的很乱 Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命令行工具 ",
+  "headline": "Projects",
+  "name": "Projects",
+  "description": "这里列出了一些咱的小项目，感兴趣的可以去瞅瞅。\ngo-zip: 在 Golang 标准 zip 库的基础上支持编辑已有压缩包功能 wg-healthcheck：确保 WireGuard Client 通信正常的脚本 archlinux-suc：使用 Rancher SUC，自动升级 Arch Linux RKE2/K3s 集群节点系统 esp32-pwm-controller：ESP32 的兽装风扇/LED 远程控制器 overlayer：用 Go 搓的反向代理，配合 CDN + 存储桶减少容器镜像仓库流量费用 telebot：自用 Telebot，可查询 NAS 状态信息 aperture：大学时期用纯 C + OpenGL 搓的一个游戏引擎，写的很乱 hangar：容器镜像多线程批量拷贝 \u0026amp; CVE 扫描 \u0026amp; Sigstore 签名等功能的命令行工具 ",
   "keywords": [
     
   ],
-  "articleBody": "一些咱维护的项目，感兴趣的可以去瞅瞅。\ngithub.com/STARRY-S/zip: 用于向已有的 ZIP 压缩包文件增添新的文件 / 替换已有文件的 ZIP 库 github.com/STARRY-S/esp32-pwm-controller：基于 ESP32 的兽装风扇/LED 远程控制器 github.com/STARRY-S/telebot：自用的 Telebot，可查询 NAS 状态信息 github.com/STARRY-S/Aperture：用纯 C 搓的一个游戏引擎，写的很乱 Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命令行工具 ",
-  "wordCount" : "234",
+  "articleBody": "这里列出了一些咱的小项目，感兴趣的可以去瞅瞅。\ngo-zip: 在 Golang 标准 zip 库的基础上支持编辑已有压缩包功能 wg-healthcheck：确保 WireGuard Client 通信正常的脚本 archlinux-suc：使用 Rancher SUC，自动升级 Arch Linux RKE2/K3s 集群节点系统 esp32-pwm-controller：ESP32 的兽装风扇/LED 远程控制器 overlayer：用 Go 搓的反向代理，配合 CDN + 存储桶减少容器镜像仓库流量费用 telebot：自用 Telebot，可查询 NAS 状态信息 aperture：大学时期用纯 C + OpenGL 搓的一个游戏引擎，写的很乱 hangar：容器镜像多线程批量拷贝 \u0026 CVE 扫描 \u0026 Sigstore 签名等功能的命令行工具 ",
+  "wordCount" : "275",
   "inLanguage": "zh",
-  "image": "https://blog.starry-s.moe/avatar.png","datePublished": "0001-01-01T00:00:00Z",
+  "image": "https://blog.starry-s.moe/web-app-manifest-512x512.png","datePublished": "0001-01-01T00:00:00Z",
   "dateModified": "0001-01-01T00:00:00Z",
   "author":{
     "@type": "Person",
@@ -147,7 +154,7 @@ Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命�
     "name": "STARRY-S' Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://blog.starry-s.moe/favicon-32x32.png"
+      "url": "https://blog.starry-s.moe/favicon.ico"
     }
   }
 }
@@ -157,9 +164,9 @@ Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命�
     <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://blog.starry-s.moe/" accesskey="h" title="Blog (Alt + H)">
-                <img src="https://blog.starry-s.moe/apple-touch-icon.png" alt="" aria-label="logo"
-                    height="24">Blog</a>
+            <a href="https://blog.starry-s.moe/" accesskey="h" title="Home (Alt + H)">
+                <img src="https://blog.starry-s.moe/web-app-manifest-192x192.png" alt="" aria-label="logo"
+                    height="24">Home</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -228,7 +235,7 @@ Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命�
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      项目
+      Projects
     </h1>
     <div class="post-meta"><span>STARRY-S</span>&nbsp;|&nbsp;<span>
     <a href="https://github.com/STARRY-S/blog/edit/main/content/projects/index.md" rel="noopener noreferrer edit" target="_blank">Edit Text</a>
@@ -236,13 +243,16 @@ Hangar：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命�
 
 </div>
   </header> 
-  <div class="post-content"><p>一些咱维护的项目，感兴趣的可以去瞅瞅。</p>
+  <div class="post-content"><p>这里列出了一些咱的小项目，感兴趣的可以去瞅瞅。</p>
 <ul>
-<li><a href="https://github.com/STARRY-S/zip">github.com/STARRY-S/zip</a>: 用于向已有的 ZIP 压缩包文件增添新的文件 / 替换已有文件的 ZIP 库</li>
-<li><a href="https://github.com/STARRY-S/esp32-pwm-controller">github.com/STARRY-S/esp32-pwm-controller</a>：基于 ESP32 的兽装风扇/LED 远程控制器</li>
-<li><a href="https://github.com/STARRY-S/telebot">github.com/STARRY-S/telebot</a>：自用的 Telebot，可查询 NAS 状态信息</li>
-<li><a href="https://github.com/STARRY-S/Aperture">github.com/STARRY-S/Aperture</a>：用纯 C 搓的一个游戏引擎，写的很乱</li>
-<li><a href="https://github.com/cnrancher/hangar">Hangar</a>：容器镜像多线程批量拷贝、CVE 扫描、签名等功能的命令行工具</li>
+<li><a href="https://github.com/STARRY-S/zip">go-zip</a>: 在 Golang 标准 zip 库的基础上支持编辑已有压缩包功能</li>
+<li><a href="https://github.com/STARRY-S/wg-healthcheck">wg-healthcheck</a>：确保 WireGuard Client 通信正常的脚本</li>
+<li><a href="https://github.com/STARRY-S/archlinux-suc">archlinux-suc</a>：使用 Rancher <a href="https://github.com/rancher/system-upgrade-controller">SUC</a>，自动升级 Arch Linux RKE2/K3s 集群节点系统</li>
+<li><a href="https://github.com/STARRY-S/esp32-pwm-controller">esp32-pwm-controller</a>：ESP32 的兽装风扇/LED 远程控制器</li>
+<li><a href="https://github.com/STARRY-S/overlayer">overlayer</a>：用 Go 搓的反向代理，配合 CDN + 存储桶减少容器镜像仓库流量费用</li>
+<li><a href="https://github.com/STARRY-S/telebot">telebot</a>：自用 Telebot，可查询 NAS 状态信息</li>
+<li><a href="https://github.com/STARRY-S/Aperture">aperture</a>：大学时期用纯 C + OpenGL 搓的一个游戏引擎，写的很乱</li>
+<li><a href="https://github.com/cnrancher/hangar">hangar</a>：容器镜像多线程批量拷贝 &amp; CVE 扫描 &amp; Sigstore 签名等功能的命令行工具</li>
 </ul>
 
 

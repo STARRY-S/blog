@@ -8,10 +8,10 @@
     <loc>https://blog.starry-s.moe/categories/</loc>
     <lastmod>2026-01-02T23:07:35+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/</loc>
+    <loc>https://blog.starry-s.moe/posts/</loc>
     <lastmod>2026-01-02T23:07:35+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/posts/</loc>
+    <loc>https://blog.starry-s.moe/</loc>
     <lastmod>2026-01-02T23:07:35+08:00</lastmod>
   </url><url>
     <loc>https://blog.starry-s.moe/tags/</loc>
@@ -506,18 +506,14 @@
     <loc>https://blog.starry-s.moe/about/</loc>
     <lastmod>2024-09-02T00:56:52+08:00</lastmod>
   </url><url>
-    <loc>https://blog.starry-s.moe/archives.en/</loc>
-  </url><url>
     <loc>https://blog.starry-s.moe/archives/</loc>
   </url><url>
     <loc>https://blog.starry-s.moe/gallery/</loc>
   </url><url>
-    <loc>https://blog.starry-s.moe/search.en/</loc>
+    <loc>https://blog.starry-s.moe/projects/</loc>
   </url><url>
     <loc>https://blog.starry-s.moe/search/</loc>
   </url><url>
     <loc>https://blog.starry-s.moe/series/</loc>
-  </url><url>
-    <loc>https://blog.starry-s.moe/projects/</loc>
   </url>
 </urlset>

@@ -6,10 +6,10 @@
     <description>Recent content in Multus on STARRY-S&#39; Blog</description>
     <image>
       <title>STARRY-S&#39; Blog</title>
-      <url>https://blog.starry-s.moe/avatar.png</url>
-      <link>https://blog.starry-s.moe/avatar.png</link>
+      <url>https://blog.starry-s.moe/web-app-manifest-512x512.png</url>
+      <link>https://blog.starry-s.moe/web-app-manifest-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.154.5</generator>
     <language>zh</language>
     <copyright>2016 - 2026 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -46,13 +46,13 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;https://ghcr.nju.edu.cn&#34;</span><span class="w">
 </span></span></span></code></pre></div><p>之后使用国内源一键安装 K3s：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">curl -sfL https://rancher-mirror.oss-cn-beijing.aliyuncs.com/k3s/k3s-install.sh <span class="p">|</span> <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>	<span class="nv">INSTALL_K3S_VERSION</span><span class="o">=</span>v1.27.8+k3s2 <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>	<span class="nv">INSTALL_K3S_MIRROR</span><span class="o">=</span>cn <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>	sh -s - server <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--cluster-init <span class="se">\
-</span></span></span><span class="line"><span class="cl"><span class="se"></span>	--system-default-registry <span class="s2">&#34;docker.nju.edu.cn&#34;</span>
+</span></span></span><span class="line"><span class="cl">	<span class="nv">INSTALL_K3S_VERSION</span><span class="o">=</span>v1.27.8+k3s2 <span class="se">\
+</span></span></span><span class="line"><span class="cl">	<span class="nv">INSTALL_K3S_MIRROR</span><span class="o">=</span>cn <span class="se">\
+</span></span></span><span class="line"><span class="cl">	sh -s - server <span class="se">\
+</span></span></span><span class="line"><span class="cl">	--cluster-init <span class="se">\
+</span></span></span><span class="line"><span class="cl">	--system-default-registry <span class="s2">&#34;docker.nju.edu.cn&#34;</span>
 </span></span></code></pre></div><h2 id="安装-multus-cni">安装 Multus CNI</h2>
 <p>接下来安装 Multus CNI 插件，下载 <code>multus-daemonset.yml</code> 配置，需要编辑 <code>kube-multus-ds</code> DaemonSet hostPath 的路径到 K3s 对应的路径上去。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">wget <span class="s1">&#39;https://raw.githubusercontent.com/k8snetworkplumbingwg/multus-cni/master/deployments/multus-daemonset.yml&#39;</span>
@@ -65,7 +65,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">cnibin</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/var/lib/rancher/k3s/data/current/bin</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nn">...</span><span class="w">
 </span></span></span></code></pre></div><p>还要编辑 <code>kube-multus-ds</code> DaemonSet 的 Container 配置，增添一条 command arg：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nn">...</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">containers</span><span class="p">:</span><span class="w">
@@ -78,7 +78,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;--cni-conf-dir=/host/etc/cni/net.d&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c"># ADD THIS LINE:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span>- <span class="s2">&#34;--multus-kubeconfig-file-host=/var/lib/rancher/k3s/agent/etc/cni/net.d/multus.d/multus.kubeconfig&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nn">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nn">...</span><span class="w">
 </span></span></span></code></pre></div><p>之后 <code>kubectl apply</code> 上面的 Multus Daemonset 配置，等待 <code>kube-multus-ds</code> DaemonSet 跑起来后，可以看到 <code>/var/lib/rancher/k3s/data/current/bin</code> 目录下有新增 <code>multus</code> 可执行文件。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ls /var/lib/rancher/k3s/data/current/bin <span class="p">|</span> grep multus
 </span></span><span class="line"><span class="cl"><span class="go">multus
@@ -88,10 +88,10 @@
 <p>咱把 K3s Server 安装在了 QEMU 虚拟机中，虚拟机使用的是 libvirt 创建的默认网卡，CIDR 编址为 <code>192.168.122.0/24</code>，网关 <code>192.168.122.1</code>。
 为了能在其他虚拟机 / 物理机上也能访问到虚拟机中使用了 macvlan 的 pod，multus macvlan 配置文件也使用 libvirt 网卡的 CIDR。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;k8s.cni.cncf.io/v1&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">NetworkAttachmentDefinition</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">NetworkAttachmentDefinition</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">macvlan-conf</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;{
 </span></span></span><span class="line"><span class="cl"><span class="s1">      &#34;cniVersion&#34;: &#34;0.3.1&#34;,
 </span></span></span><span class="line"><span class="cl"><span class="s1">      &#34;type&#34;: &#34;macvlan&#34;,
@@ -120,12 +120,12 @@
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo cp ./macvlan /var/lib/rancher/k3s/data/current/bin/
 </span></span></code></pre></div><p>之后创建 Pod，使用 Annotation 指定网络的配置文件，并让 Pod 被 Multus CNI 识别。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx-macvlan</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">annotations</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">k8s.v1.cni.cncf.io/networks</span><span class="p">:</span><span class="w"> </span><span class="l">macvlan-conf</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">nginx</span><span class="w">

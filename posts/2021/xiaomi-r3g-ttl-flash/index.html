@@ -13,8 +13,8 @@
 (在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意&hellip;)">
 <meta name="author" content="STARRY-S">
 <link rel="canonical" href="https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.a2fbb6acf340aaef051d3c978656747a6f87d3831456e9316bb4cfdb7519cd16.css" integrity="sha256-ovu2rPNAqu8FHTyXhlZ0em&#43;H04MUVukxa7TP23UZzRY=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://blog.starry-s.moe/favicon-32x32.png">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.5ea96d65090d903c4b3b57af33f9766457193cbe3c48470b654d56684cce3656.css" integrity="sha256-XqltZQkNkDxLO1evM/l2ZFcZPL48SEcLZU1WaEzONlY=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://blog.starry-s.moe/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://blog.starry-s.moe/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://blog.starry-s.moe/favicon-32x32.png">
 <link rel="apple-touch-icon" href="https://blog.starry-s.moe/apple-touch-icon.png">
@@ -79,11 +79,12 @@
 
 <script>
   var meting_api='https://api.injahow.cn/meting/?server=:server&type=:type&id=:id&auth=:auth&r=:r';
-</script><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+</script><link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<link rel="manifest" href="/site.webmanifest" />
+
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="theme-color" content="#232323">
 <meta property="og:url" content="https://blog.starry-s.moe/posts/2021/xiaomi-r3g-ttl-flash/">
@@ -101,9 +102,9 @@
     <meta property="article:tag" content="教程">
     <meta property="article:tag" content="路由器">
     <meta property="article:tag" content="OpenWrt">
-      <meta property="og:image" content="https://blog.starry-s.moe/avatar.png">
+      <meta property="og:image" content="https://blog.starry-s.moe/web-app-manifest-512x512.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://blog.starry-s.moe/avatar.png">
+<meta name="twitter:image" content="https://blog.starry-s.moe/web-app-manifest-512x512.png">
 <meta name="twitter:title" content="小米路由器3G之使用TTL串口刷机救砖">
 <meta name="twitter:description" content="本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。
 然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。
@@ -144,7 +145,7 @@
   "articleBody": "本来路由器闲置了一年了都没咋用了，前两天想把OpenWrt系统刷回原厂系统。\n然鹅刷原厂固件时忘记改环境变量了，因为第三方Boot Loader也被我顺带刷回了原厂的所以现在开机无限重启。\n之前买单片机套件时赠了一条usb转ttl线的，但是被我放学校了。只好再从万能的某宝再买一条线，尝试着救砖了。\n(在某宝发现了一家店啥元件都有，还特别便宜。于是我还顺带买了很多杜邦线、电阻、LED灯、面包板等小玩意…)\n砖了 拆机 Are You OK?\n北方冬季气候干燥，拆机时记得放静电，找根铁丝把自己连地线上 (找个金属外壳是接地的电器和自己连上也行)。\n拆开路由器外壳，卸下主板，顺手拆掉了散热片（屏蔽罩）。\n串口在图片上主板的左侧，旁边有标记，从上到下依次是TX、GND、RX、1。需要注意的是主板上的TX要接到usb串口的RX，主板上的RX要接到usb串口的TX，GND连GND，VCC不用连。为了防止接错线，小米还十分贴心的标注了每个接口对应的连接线的颜色。\nI'm very OK!\n找出家里吃灰好几年差点被我扔掉的电烙铁，刮刀头刮了半天电烙铁才上锡，把新买的杜邦线母线焊到主板上，和ttl串口线相连。\n(电烙铁太破了根本焊不上锡，焊得很丑，emmm)\n实际上可以买个4PIN单排针焊上去，把串口接到排针上就可以，我直接把电线焊到上面以后用起来会很麻烦。\n刷机 以下部分基于Arch Linux，其他系统的操作方式可能不一样（例如Windows可能需要超级终端访问串口，再想办法开一个tftp服务器） 刷机的原理: 通过ttl串口线连接路由器的主板，让路由器访问电脑上的tftp服务器，刷第三方Boot Loader。\n首先电脑上装一个tftp服务器。 $ sudo pacman -S tftp-hpa $ sudo systemctl start tftpd.service tftp的默认目录为/srv/tftp。\n这里使用HackPascal制作的Breed（第三方Boot Loader），下载链接，把下载好的Breed重命名为breed.bin，复制到tftp的默认目录。\n$ cd /srv/tftp $ sudo cp ~/Downloads/breed-mt7620-xiaomi-r3g.bin breed.bin 路由器插网线连电脑，设置静态ip地址192.168.1.3/24，将串口和电脑连接，先不给路由器通电，通常情况下usb串口的设备名称为/dev/ttyUSB0，如果不确定的话可以dmesg查一下。\n使用screen连接串口，波特率为115200。\n$ sudo pacman -S screen $ sudo screen /dev/ttyUSB0 115200 路由器通电，终端上会显示路由器启动的信息，等几秒后在选择启动项的时候按9，通过TFTP加载Boot Loader。\n如果串口在连接到电脑的情况下主板通电时没有响应，那就断开usb串口先给主板通电后再连接串口。 (我语文不好别骂我) 如果路由器没有变砖可以正常启动（蓝灯长亮），在正常开机过程中不能选择启动项。此时可以尝试在路由器开机后长按reset按钮7s以上直到主板重启，便可以选择启动项。\nPlease choose the operation: 1: Load system code to SDRAM via TFTP. 2: Load system code then write to Flash via TFTP. 3: Boot system code via Flash (default). 4: Entr boot command line interface. 7: Load Boot Loader code then write to Flash via Serial. 9: Load Boot Loader code then write to Flash via TFTP. You choosed 9 9: System Load Boot Loader then write to Flash via TFTP. Warning!! Erase Boot Loader in Flash then burn new one. Are you sure?(Y/N)y 之后设置路由器主机地址（192.168.1.1）和TFTP服务器地址(192.168.1.3)以及文件名称(breed.bin)。\nPlease Input new ones /or Ctrl-C to discard Input device IP (192.168.31.1) ==:192.168.1.1 Input server IP (192.168.31.3) ==:192.168.1.3 Input Uboot filename (uboot.bin) ==:breed.bin 按回车后开始刷机，过几秒钟后路由器会自动重启，第三方Boot Loader刷写完成。\n路由器断电，长按reset键的同时通电开机，灯闪烁后打开浏览器输入网址http://192.168.1.1便可访问breed后台。\nDone 第三方Breed刷完后，先用Breed刷小米官方的开发版固件，开启ssh，之后按照小米路由器3G折腾之刷OpenWrt记录这篇文章刷OpenWrt。\nBusyBox v1.19.4 (2018-10-29 07:52:03 UTC) built-in shell (ash) Enter 'help' for a list of built-in commands. ----------------------------------------------------- Welcome to XiaoQiang! ----------------------------------------------------- $$$$$$\\ $$$$$$$\\ $$$$$$$$\\ $$\\ $$\\ $$$$$$\\ $$\\ $$\\ $$ __$$\\ $$ __$$\\ $$ _____| $$ | $$ | $$ __$$\\ $$ | $$ | $$ / $$ |$$ | $$ |$$ | $$ | $$ | $$ / $$ |$$ |$$ / $$$$$$$$ |$$$$$$$ |$$$$$\\ $$ | $$ | $$ | $$ |$$$$$ / $$ __$$ |$$ __$$\u003c $$ __| $$ | $$ | $$ | $$ |$$ $$\u003c $$ | $$ |$$ | $$ |$$ | $$ | $$ | $$ | $$ |$$ |\\$$\\ $$ | $$ |$$ | $$ |$$$$$$$$\\ $$$$$$$$$ | $$$$$$ |$$ | \\$$\\ \\__| \\__|\\__| \\__|\\________| \\_________/ \\______/ \\__| \\__| root@XiaoQiang:~# ",
   "wordCount" : "1619",
   "inLanguage": "zh",
-  "image": "https://blog.starry-s.moe/avatar.png","datePublished": "2021-01-22T22:10:01+08:00",
+  "image": "https://blog.starry-s.moe/web-app-manifest-512x512.png","datePublished": "2021-01-22T22:10:01+08:00",
   "dateModified": "2021-01-22T22:10:01+08:00",
   "author":{
     "@type": "Person",
@@ -159,7 +160,7 @@
     "name": "STARRY-S' Blog",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://blog.starry-s.moe/favicon-32x32.png"
+      "url": "https://blog.starry-s.moe/favicon.ico"
     }
   }
 }
@@ -169,9 +170,9 @@
     <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://blog.starry-s.moe/" accesskey="h" title="Blog (Alt + H)">
-                <img src="https://blog.starry-s.moe/apple-touch-icon.png" alt="" aria-label="logo"
-                    height="24">Blog</a>
+            <a href="https://blog.starry-s.moe/" accesskey="h" title="Home (Alt + H)">
+                <img src="https://blog.starry-s.moe/web-app-manifest-192x192.png" alt="" aria-label="logo"
+                    height="24">Home</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"

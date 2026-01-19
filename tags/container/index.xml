@@ -6,10 +6,10 @@
     <description>Recent content in Container on STARRY-S&#39; Blog</description>
     <image>
       <title>STARRY-S&#39; Blog</title>
-      <url>https://blog.starry-s.moe/avatar.png</url>
-      <link>https://blog.starry-s.moe/avatar.png</link>
+      <url>https://blog.starry-s.moe/web-app-manifest-512x512.png</url>
+      <link>https://blog.starry-s.moe/web-app-manifest-512x512.png</link>
     </image>
-    <generator>Hugo -- 0.152.2</generator>
+    <generator>Hugo -- 0.154.5</generator>
     <language>zh</language>
     <copyright>2016 - 2026 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
@@ -48,21 +48,21 @@
 <p>CNI 配置文件为 JSON 格式，以下是一个样例配置文件：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="c1">// CNI Spec Version
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nt">&#34;cniVersion&#34;</span><span class="p">:</span> <span class="s2">&#34;1.0.0&#34;</span><span class="p">,</span>
+</span></span></span><span class="line"><span class="cl">  <span class="nt">&#34;cniVersion&#34;</span><span class="p">:</span> <span class="s2">&#34;1.0.0&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="c1">// Network name.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;dbnet&#34;</span><span class="p">,</span>
+</span></span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;dbnet&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">  <span class="nt">&#34;plugins&#34;</span><span class="p">:</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="c1">// CNI Plugin Binary name
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;bridge&#34;</span><span class="p">,</span>
+</span></span></span><span class="line"><span class="cl">      <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;bridge&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">      <span class="c1">// CNI Plugin specific parameters...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nt">&#34;bridge&#34;</span><span class="p">:</span> <span class="s2">&#34;cni0&#34;</span><span class="p">,</span>
+</span></span></span><span class="line"><span class="cl">      <span class="nt">&#34;bridge&#34;</span><span class="p">:</span> <span class="s2">&#34;cni0&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">      <span class="c1">// Dictionary with IPAM (IP Address Management) specific values.
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>      <span class="nt">&#34;ipam&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl">      <span class="nt">&#34;ipam&#34;</span><span class="p">:</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// IPAM Plugin Binary name
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;host-local&#34;</span><span class="p">,</span>
+</span></span></span><span class="line"><span class="cl">        <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;host-local&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// IPAM specific params...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nt">&#34;subnet&#34;</span><span class="p">:</span> <span class="s2">&#34;10.1.0.0/16&#34;</span><span class="p">,</span>
+</span></span></span><span class="line"><span class="cl">        <span class="nt">&#34;subnet&#34;</span><span class="p">:</span> <span class="s2">&#34;10.1.0.0/16&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">        <span class="nt">&#34;gateway&#34;</span><span class="p">:</span> <span class="s2">&#34;10.1.0.1&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">        <span class="nt">&#34;routes&#34;</span><span class="p">:</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">            <span class="p">{</span> <span class="nt">&#34;dst&#34;</span><span class="p">:</span> <span class="s2">&#34;0.0.0.0/0&#34;</span> <span class="p">}</span>
@@ -89,7 +89,7 @@
 <p>打开<a href="https://github.com/containernetworking/plugins/blob/main/plugins/main/ptp/ptp.go">样例 p2p CNI 插件代码</a>，先看他的 <code>main</code> 函数只有简洁的一行 <code>skel.PluginMain</code>，这个方法会处理环境变量传入的 CNI 参数，加载 Config，执行相应的 COMMAND。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nx">skel</span><span class="p">.</span><span class="nf">PluginMain</span><span class="p">(</span><span class="nx">cmdAdd</span><span class="p">,</span><span class="w"> </span><span class="nx">cmdCheck</span><span class="p">,</span><span class="w"> </span><span class="nx">cmdDel</span><span class="p">,</span><span class="w"> </span><span class="nx">version</span><span class="p">.</span><span class="nx">All</span><span class="p">,</span><span class="w"> </span><span class="nx">bv</span><span class="p">.</span><span class="nf">BuildString</span><span class="p">(</span><span class="s">&#34;ptp&#34;</span><span class="p">))</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><h4 id="add-命令">ADD 命令</h4>
 <p>ADD 命令用于为容器创建网卡（或修改已有的网卡），找一下 p2p CNI 插件的 <code>cmdAdd</code> 函数，大致简化一下里面的代码流程为：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">cmdAdd</span><span class="p">(</span><span class="nx">args</span><span class="w"> </span><span class="o">*</span><span class="nx">skel</span><span class="p">.</span><span class="nx">CmdArgs</span><span class="p">)</span><span class="w"> </span><span class="kt">error</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -135,7 +135,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// Some other IP forward (masquerade) operations...</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">types</span><span class="p">.</span><span class="nf">PrintResult</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span><span class="w"> </span><span class="nx">conf</span><span class="p">.</span><span class="nx">CNIVersion</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><p>简单概括样例 P2P Plugin 的 ADD 命令流程大致为：</p>
 <ol>
 <li>加载 CNI Config 配置文件</li>
@@ -180,7 +180,7 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="nx">err</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><p>简单概括 DEL 命令流程大致为：</p>
 <ol>
 <li>加载 CNI Config 配置文件</li>
@@ -261,7 +261,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><p>样例 P2P 插件的 DEL 命令流程大致为：</p>
 <ol>
 <li>加载 CNI Config 配置文件</li>
@@ -283,10 +283,10 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo cp ptp /var/lib/rancher/k3s/data/current/bin/
 </span></span></code></pre></div><p>创建一个 <code>NetworkAttachmentDefinition</code> Custom Resource，将 p2p 的 CNI Config 存储在这里，配置 Pod 使用 ptp CNI 插件。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;k8s.cni.cncf.io/v1&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">NetworkAttachmentDefinition</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">NetworkAttachmentDefinition</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ptp-conf</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">config</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;{
 </span></span></span><span class="line"><span class="cl"><span class="s1">  &#34;cniVersion&#34;: &#34;1.0.0&#34;,
 </span></span></span><span class="line"><span class="cl"><span class="s1">  &#34;type&#34;: &#34;ptp&#34;,
@@ -304,11 +304,11 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span></code></pre></div><h3 id="创建样例-workload">创建样例 Workload</h3>
 <p>接下来可以创建样例工作负载，设置 <code>k8s.v1.cni.cncf.io/networks</code> Annotation 定义 Pod 的第二网卡由上述的 P2P 插件创建。为便于折腾这里的样例负载为 DaemonSet，并赋予容器 Privileged 权限。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">apps/v1</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">DaemonSet</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">DaemonSet</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">metadata</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">example-ds</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="nt">spec</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">selector</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">example-alpine-ds</span><span class="w">
@@ -330,7 +330,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> vim example-ds.yaml
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> k apply -f example-ds.yaml
 </span></span><span class="line"><span class="cl"><span class="go">daemonset.apps/example-ds created
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> k get pods -o wide
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> k get pods -o wide
 </span></span><span class="line"><span class="cl"><span class="go">NAME               READY   STATUS    RESTARTS   AGE   IP           NODE    NOMINATED NODE   READINESS GATES
 </span></span></span><span class="line"><span class="cl"><span class="go">example-ds-4865k   1/1     Running   0          3s    10.42.1.7    k3s-2   &lt;none&gt;           &lt;none&gt;
 </span></span></span><span class="line"><span class="cl"><span class="go">example-ds-9g5kp   1/1     Running   0          3s    10.42.0.12   k3s-1   &lt;none&gt;           &lt;none&gt;
@@ -355,7 +355,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::680b:7dff:fe4b:6fc5/64 scope link
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">#</span> ip r
+</span></span></span><span class="line"><span class="cl"><span class="gp">#</span> ip r
 </span></span><span class="line"><span class="cl"><span class="go">default via 10.42.0.1 dev eth0
 </span></span></span><span class="line"><span class="cl"><span class="go">10.42.0.0/24 dev eth0 scope link  src 10.42.0.12
 </span></span></span><span class="line"><span class="cl"><span class="go">10.42.0.0/16 via 10.42.0.1 dev eth0
@@ -441,7 +441,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></div><p>设置 CNI 环境变量，传递 CHECK 命令需要的参数。如果实在不清楚 NETNS 和 CONTAINERID 的话，可以魔改 ADD 和 DEL 命令的代码，把参数打印到某个日志文件中。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CNI_PATH</span><span class="o">=</span><span class="s2">&#34;/var/lib/rancher/k3s/data/current/bin&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$CNI_PATH</span>:<span class="nv">$PATH</span>
 </span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">CNI_CONTAINERID</span><span class="o">=</span><span class="s2">&#34;f19d5f601d6227bdf0cb28b43862632e98ecd23cd44d08e8ba1b2d8f27c9639c&#34;</span>
@@ -497,22 +497,22 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns ls
 </span></span><span class="line"><span class="cl"><span class="go">ns0
 </span></span></span><span class="line"><span class="cl"><span class="go">ns1
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> ls /var/run/netns/
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> ls /var/run/netns/
 </span></span><span class="line"><span class="cl"><span class="go">ns0 ns1
 </span></span></span></code></pre></div><p>每个 Network Namespace 拥有不同的网卡、路由表、ARP 表等信息，可以使用 <code>ip -n [NAMESPACE]</code> 对某个 netns 进行操作，或通过 <code>ip netns exec</code> 在不同的 netns 下执行命令。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 link
 </span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ip link
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ip link
 </span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 route
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 route
 </span></span><span class="line"><span class="cl"><span class="go">Kernel IP routing table
 </span></span></span><span class="line"><span class="cl"><span class="go">Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 arp
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 arp
 </span></span></code></pre></div><h3 id="veth-pair-连接-network-namespace">veth pair 连接 Network Namespace</h3>
 <p>新建的 netns 只有一个 DOWN 状态的回环接口，没有 ARP 和路由表信息，如果想在不同的 netns 之间通信，需要建立 veth pair（Virtual Cabel），把 netns 连接起来。</p>
 <p>可以使用 <code>ip link add type veth</code> 创建一对 veth pair，注意 veth pair 是成对出现的，可以在创建 veth pair 时指定这对 veth pair 名称。</p>
@@ -540,7 +540,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 </span></span></span><span class="line"><span class="cl"><span class="go">5: veth0@if4: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:5b:51:12:d0:b6 brd ff:ff:ff:ff:ff:ff link-netns ns1
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns1 link
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 link
 </span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN mode DEFAULT group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 </span></span></span><span class="line"><span class="cl"><span class="go">4: veth1@if5: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN mode DEFAULT group default qlen 1000
@@ -559,7 +559,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::5c5b:51ff:fe12:d0b6/64 scope link proto kernel_ll 
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns1 addr
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 addr
 </span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK&gt; mtu 65536 qdisc noop state DOWN group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 </span></span></span><span class="line"><span class="cl"><span class="go">4: veth1@if5: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
@@ -571,20 +571,20 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span></code></pre></div><p><code>ip addr add</code> 命令在添加 IP 地址时会自动创建路由表信息。现在两个 netns 之间可通过 veth pair 互相通信。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 route
 </span></span><span class="line"><span class="cl"><span class="go">10.0.0.0/24 dev veth0 proto kernel scope link src 10.0.0.100 
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns1 route
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 route
 </span></span><span class="line"><span class="cl"><span class="go">10.0.0.0/24 dev veth1 proto kernel scope link src 10.0.0.101 
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 10.0.0.101
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 10.0.0.101
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.0.0.101 (10.0.0.101) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.0.0.101: icmp_seq=1 ttl=64 time=0.051 ms
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">--- 10.0.0.101 ping statistics ---
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">--- 10.0.0.101 ping statistics ---
 </span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 1 received, 0% packet loss, time 0ms
 </span></span></span><span class="line"><span class="cl"><span class="go">rtt min/avg/max/mdev = 0.051/0.051/0.051/0.000 ms
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns1 ping -c <span class="m">1</span> 10.0.0.100
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns1 ping -c <span class="m">1</span> 10.0.0.100
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.0.0.100 (10.0.0.100) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.0.0.100: icmp_seq=1 ttl=64 time=0.040 ms
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">--- 10.0.0.100 ping statistics ---
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">--- 10.0.0.100 ping statistics ---
 </span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 1 received, 0% packet loss, time 0ms
 </span></span></span><span class="line"><span class="cl"><span class="go">rtt min/avg/max/mdev = 0.040/0.040/0.040/0.000 ms
 </span></span></span></code></pre></div><p>到这里，<code>ns0</code> 和 <code>ns1</code> 两个 Network Namespace 之间的拓扑图如下。</p>
@@ -664,21 +664,21 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/ether f2:e6:df:92:de:71 brd ff:ff:ff:ff:ff:ff link-netns ns2
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::f0e6:dfff:fe92:de71/64 scope link proto kernel_ll 
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns0 a
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns0 a
 </span></span><span class="line"><span class="cl"><span class="go">5: eth0@if6: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:5b:51:12:d0:b6 brd ff:ff:ff:ff:ff:ff link-netnsid 0
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.1.1.10/24 scope global eth0
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::5c5b:51ff:fe12:d0b6/64 scope link proto kernel_ll 
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns1 a
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns1 a
 </span></span><span class="line"><span class="cl"><span class="go">7: eth0@if8: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 5e:7a:4e:96:b1:df brd ff:ff:ff:ff:ff:ff link-netnsid 0
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.1.1.11/24 scope global eth0
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet6 fe80::5c7a:4eff:fe96:b1df/64 scope link proto kernel_ll 
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip -n ns2 a
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns2 a
 </span></span><span class="line"><span class="cl"><span class="go">9: eth0@if10: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 62:13:73:b6:5d:f9 brd ff:ff:ff:ff:ff:ff link-netnsid 0
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet 10.1.1.12/24 scope global eth0
@@ -689,27 +689,27 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> ping -c <span class="m">1</span> 10.1.1.10
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.10 (10.1.1.10) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.10: icmp_seq=1 ttl=64 time=0.130 ms
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> ping -c <span class="m">1</span> 10.1.1.11
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> ping -c <span class="m">1</span> 10.1.1.11
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.11 (10.1.1.11) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.11: icmp_seq=1 ttl=64 time=0.117 ms
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> ping -c <span class="m">1</span> 10.1.1.12
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> ping -c <span class="m">1</span> 10.1.1.12
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.12 (10.1.1.12) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.12: icmp_seq=1 ttl=64 time=0.119 ms
 </span></span></span></code></pre></div><p>三个 netns 也可以访问主机的 IP 地址 <code>10.1.1.1</code>。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 10.1.1.1
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.1 (10.1.1.1) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.1: icmp_seq=1 ttl=64 time=0.076 ms
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns1 ping -c <span class="m">1</span> 10.1.1.1
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns1 ping -c <span class="m">1</span> 10.1.1.1
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.1 (10.1.1.1) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.1: icmp_seq=1 ttl=64 time=0.071 ms
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns2 ping -c <span class="m">1</span> 10.1.1.1
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns2 ping -c <span class="m">1</span> 10.1.1.1
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.1 (10.1.1.1) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.1.1: icmp_seq=1 ttl=64 time=0.072 ms
 </span></span></span></code></pre></div><p>默认情况下 Linux 会把 bridge 的二层转发（交换机）功能禁用掉，因此不同的 netns 之间仍无法互相访问。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> -W <span class="m">5</span> 10.1.1.11
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.1.11 (10.1.1.11) 56(84) bytes of data.
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">--- 10.1.1.11 ping statistics ---
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">--- 10.1.1.11 ping statistics ---
 </span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 0 received, 100% packet loss, time 0ms
 </span></span></span></code></pre></div><p>使用 IP 桌子，激活桥接接口的转发功能。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo iptables -A FORWARD -i br0 -j ACCEPT
@@ -746,8 +746,8 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns0 ping -c <span class="m">1</span> 8.8.8.8
 </span></span><span class="line"><span class="cl"><span class="go">PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 8.8.8.8: icmp_seq=1 ttl=112 time=66.0 ms
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="go">--- 8.8.8.8 ping statistics ---
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="go">--- 8.8.8.8 ping statistics ---
 </span></span></span><span class="line"><span class="cl"><span class="go">1 packets transmitted, 1 received, 0% packet loss, time 0ms
 </span></span></span><span class="line"><span class="cl"><span class="go">rtt min/avg/max/mdev = 65.964/65.964/65.964/0.000 ms
 </span></span></span></code></pre></div><h2 id="容器网络">容器网络</h2>
@@ -762,7 +762,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ln -s /proc/993/ns/net /var/run/netns/ns-993
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> ip netns
 </span></span><span class="line"><span class="cl"><span class="go">ns-993
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns-993 ip addr
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip netns <span class="nb">exec</span> ns-993 ip addr
 </span></span><span class="line"><span class="cl"><span class="go">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
 </span></span></span><span class="line"><span class="cl"><span class="go">    inet 127.0.0.1/8 scope host lo
@@ -786,18 +786,18 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="go">       valid_lft forever preferred_lft forever
 </span></span></span><span class="line"><span class="cl"><span class="go">9: eth1@if8: &lt;BROADCAST,MULTICAST&gt; mtu 1500 qdisc noop state DOWN group default qlen 1000
 </span></span></span><span class="line"><span class="cl"><span class="go">    link/ether 36:57:fa:63:3b:f0 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> sudo ip addr add 10.1.0.1/24 dev veth-ns-993
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip addr add 10.1.0.1/24 dev veth-ns-993
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns-993 addr add 10.1.0.2/24 dev eth1
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip link <span class="nb">set</span> dev veth-ns-993 up
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> sudo ip -n ns-993 link <span class="nb">set</span> dev eth1 up
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> ping 10.1.0.2
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> ping 10.1.0.2
 </span></span><span class="line"><span class="cl"><span class="go">PING 10.1.0.2 (10.1.0.2) 56(84) bytes of data.
 </span></span></span><span class="line"><span class="cl"><span class="go">64 bytes from 10.1.0.2: icmp_seq=1 ttl=64 time=0.040 ms
 </span></span></span><span class="line"><span class="cl"><span class="go">...
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> curl 10.1.0.2
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> curl 10.1.0.2
 </span></span><span class="line"><span class="cl"><span class="go">&lt;!DOCTYPE html&gt;
 </span></span></span><span class="line"><span class="cl"><span class="go">&lt;html&gt;
 </span></span></span><span class="line"><span class="cl"><span class="go">&lt;head&gt;
@@ -821,19 +821,19 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> docker run -d --name nginx --net<span class="o">=</span>container:pause --ipc<span class="o">=</span>container:pause --pid<span class="o">=</span>container:pause nginx
 </span></span><span class="line"><span class="cl"><span class="gp">$</span> docker run -d --name registry --net<span class="o">=</span>container:pause --ipc<span class="o">=</span>container:pause --pid<span class="o">=</span>container:pause registry
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> docker ps
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> docker ps
 </span></span><span class="line"><span class="cl"><span class="go">CONTAINER ID   IMAGE                        COMMAND                  CREATED         STATUS         PORTS                                                                              NAMES
 </span></span></span><span class="line"><span class="cl"><span class="go">eaace8974956   registry                     &#34;/entrypoint.sh /etc…&#34;   2 minutes ago   Up 2 minutes                                                                                      registry
 </span></span></span><span class="line"><span class="cl"><span class="go">247ed1ca07e3   nginx                        &#34;/docker-entrypoint.…&#34;   2 minutes ago   Up 2 minutes                                                                                      nginx
 </span></span></span><span class="line"><span class="cl"><span class="go">6cdf835a09f0   rancher/mirrored-pause:3.6   &#34;/pause&#34;                 2 minutes ago   Up 2 minutes   0.0.0.0:5000-&gt;5000/tcp, :::5000-&gt;5000/tcp, 0.0.0.0:8080-&gt;80/tcp, :::8080-&gt;80/tcp   pause
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> curl 127.0.0.1:8080
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> curl 127.0.0.1:8080
 </span></span><span class="line"><span class="cl"><span class="go">&lt;!DOCTYPE html&gt;
 </span></span></span><span class="line"><span class="cl"><span class="go">&lt;html&gt;
 </span></span></span><span class="line"><span class="cl"><span class="go">&lt;head&gt;
 </span></span></span><span class="line"><span class="cl"><span class="go">&lt;title&gt;Welcome to nginx!&lt;/title&gt;
 </span></span></span><span class="line"><span class="cl"><span class="go">...
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="gp">$</span> docker login 127.0.0.1:5000
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> docker login 127.0.0.1:5000
 </span></span><span class="line"><span class="cl"><span class="go">Username: admin
 </span></span></span><span class="line"><span class="cl"><span class="go">Password: 
 </span></span></span><span class="line"><span class="cl"><span class="go">Login Succeeded
@@ -878,9 +878,9 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <p><code>skopeo inspect</code> 查看容器镜像的信息，例如镜像的 Manifest、Config。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo inspect docker://docker.io/library/nginx:latest
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> skopeo inspect docker://docker.io/library/nginx:latest --raw
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> skopeo inspect docker://docker.io/library/nginx:latest --raw
 </span></span><span class="line"><span class="cl"><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> skopeo inspect docker://docker.io/library/nginx:latest --raw --config
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> skopeo inspect docker://docker.io/library/nginx:latest --raw --config
 </span></span></code></pre></div><p><code>skopeo inspect</code> 不加任何参数时，查询的是容器镜像相关的信息，输出的内容包括镜像 Digest、该镜像其他的所有 Tag 等一系列信息。</p>
 <p>在添加 <code>--raw</code> 参数时，输出的是该镜像的 Manifest 原始信息，因为是 RAW，所以输出的 Json 可能格式不是很友好，通常与 <code>jq</code> 一起使用。</p>
 <p>添加 <code>--raw</code> 和 <code>--config</code> 参数后，输出的是该镜像的 Config 的原始信息，Config 中包括容器运行时的一些配置项等信息。</p>
@@ -889,7 +889,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <hr>
 <p>可以通过 <a href="https://github.com/containers/skopeo">skopeo</a> 工具，从 Docker Hub 上挑一个容器镜像 (例如 <code>nginx:latest</code>)，查看这个镜像的 Manifest。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://nginx:latest --raw | jq
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="nt">&#34;manifests&#34;</span><span class="p">:</span> <span class="p">[</span>
 </span></span><span class="line"><span class="cl">    <span class="p">{</span>
 </span></span><span class="line"><span class="cl">      <span class="nt">&#34;digest&#34;</span><span class="p">:</span> <span class="s2">&#34;sha256:3f01b0094e21f7d55b9eb7179d01c49fdf9c3e1e3419d315b81a9e0bae1b6a90&#34;</span><span class="p">,</span>
@@ -923,7 +923,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <p><code>schemaVersion: 1</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.v1+json&quot;</code></p>
 <p>旧版本的 Docker 使用这种 Manifest 格式，现已被弃用，有些旧的容器镜像依旧是这种格式的 Manifest。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://mysql:5.5.40 --raw | jq
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;library/mysql&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;tag&#34;</span><span class="p">:</span> <span class="s2">&#34;5.5.40&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;architecture&#34;</span><span class="p">:</span> <span class="s2">&#34;amd64&#34;</span><span class="p">,</span>
@@ -950,7 +950,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <p><code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.v2+json&quot;</code></p>
 <p>这个是现在常见的 Docker 镜像的 Manifest 格式。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://hxstarrys/nginx:1.22-amd64 --raw | jq
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&#34;config&#34;</span><span class="p">:</span> <span class="p">{</span>
@@ -978,7 +978,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <p><code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.list.v2+json&quot;</code></p>
 <p>这个格式的 Manifest List 包含一个 <code>manifests</code> 列表：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://docker.io/library/nginx:1.22 --raw | jq
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.list.v2+json&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl"><span class="nt">&#34;manifests&#34;</span><span class="p">:</span> <span class="p">[</span>
@@ -1007,7 +1007,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <p>可以用 <code>skopeo inspect</code> 查看一下这个 digest 的镜像的 Manifest 内容，其格式为
 <code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.docker.distribution.manifest.v2+json&quot;</code></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://nginx@sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b --raw | jq
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.docker.distribution.manifest.v2+json&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;config&#34;</span><span class="p">:</span> <span class="p">{</span>
@@ -1059,8 +1059,8 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="go">        &#34;digest&#34;: &#34;sha256:0f8498f13f3adef3f3c8b52cdf069ecc880b081159be6349163d144e8aa5fb29&#34;
 </span></span></span><span class="line"><span class="cl"><span class="go">    },
 </span></span></span><span class="line"><span class="cl"><span class="go">    ......
-</span></span></span><span class="line"><span class="cl"><span class="go"></span><span class="err">
-</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="gp">$</span> skopeo inspect --raw docker://nginx@sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b <span class="p">|</span> sha256sum
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="gp">$</span> skopeo inspect --raw docker://nginx@sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b <span class="p">|</span> sha256sum
 </span></span><span class="line"><span class="cl"><span class="go">9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b  -
 </span></span></span></code></pre></div><p>同理，Config 的 Digest 为镜像的 Config 内容的 sha256sum 校验和：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-console" data-lang="console"><span class="line"><span class="cl"><span class="gp">$</span> skopeo inspect --raw --config docker://nginx@sha256:9081064712674ffcff7b7bdf874c75bcb8e5fb933b65527026090dacda36ea8b <span class="p">|</span> sha256sum
@@ -1072,7 +1072,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <ol>
 <li><code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.oci.image.manifest.v1+json&quot;</code>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://quay.io/skopeo/stable@sha256:9da6763a4d35592a6279e851738472d9cdaa8ff5a5da3c50b560f065d22c2bff --raw | jq
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.manifest.v1+json&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;config&#34;</span><span class="p">:</span> <span class="p">{</span>
@@ -1115,7 +1115,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></code></pre></div></li>
 <li><code>schemaVersion: 2</code>, <code>mediaType: &quot;application/vnd.oci.image.index.v1+json&quot;</code>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="c1">// skopeo inspect docker://quay.io/skopeo/stable:latest --raw | jq
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;schemaVersion&#34;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;mediaType&#34;</span><span class="p">:</span> <span class="s2">&#34;application/vnd.oci.image.index.v1+json&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="nt">&#34;manifests&#34;</span><span class="p">:</span> <span class="p">[</span>
@@ -1155,7 +1155,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 <p>下面是咱写的一个栗子，使用上述的 Library 模拟一下 <code>skopeo inspect</code> 查看容器镜像 Manifest 的功能，其实查看容器镜像 Manifest 的代码实现还是蛮简单的：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">example</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;context&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;encoding/json&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;fmt&#34;</span><span class="w">
@@ -1163,9 +1163,9 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/containers/image/v5/transports/alltransports&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/containers/image/v5/types&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">func</span><span class="w"> </span><span class="nf">Test_Inspect</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">Test_Inspect</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// reference name format: docker://&lt;image&gt;:&lt;tag&gt;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">refName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;docker://docker.io/library/nginx:latest&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ref</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">alltransports</span><span class="p">.</span><span class="nf">ParseImageName</span><span class="p">(</span><span class="nx">refName</span><span class="p">)</span><span class="w">
@@ -1211,7 +1211,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;===================================\n&#34;</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Printf</span><span class="p">(</span><span class="s">&#34;Manifest data: \n%v\n&#34;</span><span class="p">,</span><span class="w"> </span><span class="nb">string</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><hr>
 <p>接下来，是构建 Manifest List 索引的一个简单栗子，假设你分别向 Registry Server 上传了 <code>&lt;namespace&gt;/example:v1.0.0-amd64</code> 和 <code>&lt;namespace&gt;/example:v1.0.0-arm64</code> 两个不同架构的容器镜像，你希望用户在 AMD64 架构的主机上拉取 <code>&lt;namespace&gt;/example:v1.0.0</code> 的 TAG 时，自动拉取 <code>&lt;namespace&gt;/example:v1.0.0-amd64</code> 这个镜像，而在 ARM64 架构的主机上拉取时，自动拉取 <code>&lt;namespace&gt;/example:v1.0.0-arm64</code> 这个镜像。</p>
 <blockquote>
@@ -1220,7 +1220,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="kn">package</span><span class="w"> </span><span class="nx">example</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kn">import</span><span class="w"> </span><span class="p">(</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;context&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;crypto/sha256&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;encoding/json&#34;</span><span class="w">
@@ -1231,14 +1231,14 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/containers/image/v5/transports/alltransports&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/containers/image/v5/types&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="s">&#34;github.com/opencontainers/go-digest&#34;</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">func</span><span class="w"> </span><span class="nf">sha256sum</span><span class="p">(</span><span class="nx">data</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">sha256sum</span><span class="p">(</span><span class="nx">data</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">sum</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">sha256</span><span class="p">.</span><span class="nf">Sum256</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Sprintf</span><span class="p">(</span><span class="s">&#34;%x&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">sum</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">func</span><span class="w"> </span><span class="nf">getManifest</span><span class="p">(</span><span class="nx">refName</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">ctx</span><span class="w"> </span><span class="o">*</span><span class="nx">types</span><span class="p">.</span><span class="nx">SystemContext</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">getManifest</span><span class="p">(</span><span class="nx">refName</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="nx">ctx</span><span class="w"> </span><span class="o">*</span><span class="nx">types</span><span class="p">.</span><span class="nx">SystemContext</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="kt">string</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// reference name format: docker://&lt;image&gt;:&lt;tag&gt;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ref</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">alltransports</span><span class="p">.</span><span class="nf">ParseImageName</span><span class="p">(</span><span class="nx">refName</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">if</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="p">{</span><span class="w">
@@ -1250,9 +1250,9 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w"> </span><span class="kc">nil</span><span class="p">,</span><span class="w"> </span><span class="s">&#34;&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">fmt</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;NewImageSource: %v&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">return</span><span class="w"> </span><span class="nx">source</span><span class="p">.</span><span class="nf">GetManifest</span><span class="p">(</span><span class="nx">context</span><span class="p">.</span><span class="nf">TODO</span><span class="p">(),</span><span class="w"> </span><span class="kc">nil</span><span class="p">)</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kd">func</span><span class="w"> </span><span class="nf">Test_BuildManifest</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">func</span><span class="w"> </span><span class="nf">Test_BuildManifest</span><span class="p">(</span><span class="nx">t</span><span class="w"> </span><span class="o">*</span><span class="nx">testing</span><span class="p">.</span><span class="nx">T</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// reference name format: docker://&lt;image&gt;:&lt;tag&gt;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">refName</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="s">&#34;docker://&lt;REGISTRY_URL:PORT&gt;/&lt;NAMESPACE&gt;/example:v1.0.0&#34;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="nx">ref</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">alltransports</span><span class="p">.</span><span class="nf">ParseImageName</span><span class="p">(</span><span class="nx">refName</span><span class="p">)</span><span class="w">
@@ -1331,7 +1331,7 @@ CHECK 命令将 <code>prevResult</code> 记录的状态信息和设定的期望�
 </span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="nx">t</span><span class="p">.</span><span class="nf">Errorf</span><span class="p">(</span><span class="s">&#34;PutManifest: %v&#34;</span><span class="p">,</span><span class="w"> </span><span class="nx">err</span><span class="p">)</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">		</span><span class="k">return</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div><p>构建 Manifest 的栗子中，用到了一部分 Manifest 的代码，用来获取 amd64 架构的镜像和 arm64 架构镜像的 Manifest 文本长度，并计算 Digest。</p>]]></content:encoded>
     </item>
   </channel>
