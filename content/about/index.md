@@ -10,11 +10,9 @@ showtoc: false
 
 ## About Me
 
-```txt
 - PGP 密钥：`E8F9 2E5A C1AE 0B0F 4421  4012 9190 2000 F0C2 9BC2`
 - Email: [hxstarrys@gmail.com](mailto:hxstarrys@gmail.com)
 - GitHub: <https://github.com/STARRY-S>
-```
 
 ---
 
