@@ -1,7 +1,7 @@
 ---
 title: About
 date: 2016-08-22T13:25:30+08:00
-lastmod: 2024-09-02T00:56:52+08:00
+lastmod: 2026-01-21T21:11:37+08:00
 ShowBreadCrumbs: false
 showtoc: false
 ---
@@ -17,7 +17,7 @@ showtoc: false
 ---
 
 成分很杂：
-- I use Arch btw
+- I use Arch, btw.
 - 不写代码会死星人
 - 工作与容器、Kubernetes 相关
 - 业余摄影，相机 A7C2 + 适马定焦，可约人像/漫展/兽装摄影
@@ -27,8 +27,8 @@ showtoc: false
 
 ## 关于本站
 
-博客建于 2016 年 8 月，基于 [Hugo](https://hugo.io) + [PaperMod](https://github.com/adityatelange/hugo-PaperMod/)
-生成静态页托管在 [GitHub Pages](https://pages.github.com/)。
+博客建于 2016 年 8 月，使用 [Hugo](https://hugo.io) + [PaperMod](https://github.com/adityatelange/hugo-PaperMod/)
+主题生成静态页托管在 [GitHub Pages](https://pages.github.com/)。
 
 时间久远曾换过几个域名，现在使用 `starry-s.moe`。
 
