@@ -13,7 +13,7 @@
     <language>zh</language>
     <copyright>2016 - 2026 STARRY-S | CC BY-NC-SA 4.0 | Hosted on GitHub Pages
 </copyright>
-    <lastBuildDate>Fri, 02 Jan 2026 23:07:35 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 21 Jan 2026 21:11:37 +0800</lastBuildDate>
     <atom:link href="https://blog.starry-s.moe/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>2025 End of the Year Mix</title>
@@ -8608,7 +8608,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 &lt;hr&gt;
 &lt;p&gt;成分很杂：&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;I use Arch btw&lt;/li&gt;
+&lt;li&gt;I use Arch, btw.&lt;/li&gt;
 &lt;li&gt;不写代码会死星人&lt;/li&gt;
 &lt;li&gt;工作与容器、Kubernetes 相关&lt;/li&gt;
 &lt;li&gt;业余摄影，相机 A7C2 + 适马定焦，可约人像/漫展/兽装摄影&lt;/li&gt;
@@ -8617,8 +8617,8 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 &lt;li&gt;月厨&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id=&#34;关于本站&#34;&gt;关于本站&lt;/h2&gt;
-&lt;p&gt;博客建于 2016 年 8 月，基于 &lt;a href=&#34;https://hugo.io&#34;&gt;Hugo&lt;/a&gt; + &lt;a href=&#34;https://github.com/adityatelange/hugo-PaperMod/&#34;&gt;PaperMod&lt;/a&gt;
-生成静态页托管在 &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt;。&lt;/p&gt;</description>
+&lt;p&gt;博客建于 2016 年 8 月，使用 &lt;a href=&#34;https://hugo.io&#34;&gt;Hugo&lt;/a&gt; + &lt;a href=&#34;https://github.com/adityatelange/hugo-PaperMod/&#34;&gt;PaperMod&lt;/a&gt;
+主题生成静态页托管在 &lt;a href=&#34;https://pages.github.com/&#34;&gt;GitHub Pages&lt;/a&gt;。&lt;/p&gt;</description>
       <content:encoded><![CDATA[<p><img loading="lazy" src="images/westlake.jpg" alt="&ldquo;West Lake&rdquo;" />
 <p style="margin-bottom: -0.8em;" class="image-title">West Lake</p>
 </p>
@@ -8631,7 +8631,7 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <hr>
 <p>成分很杂：</p>
 <ul>
-<li>I use Arch btw</li>
+<li>I use Arch, btw.</li>
 <li>不写代码会死星人</li>
 <li>工作与容器、Kubernetes 相关</li>
 <li>业余摄影，相机 A7C2 + 适马定焦，可约人像/漫展/兽装摄影</li>
@@ -8640,11 +8640,50 @@ qt5设置环境变量<code>QT_SCREEN_SCALE_FACTORS=2</code>。</p>
 <li>月厨</li>
 </ul>
 <h2 id="关于本站">关于本站</h2>
-<p>博客建于 2016 年 8 月，基于 <a href="https://hugo.io">Hugo</a> + <a href="https://github.com/adityatelange/hugo-PaperMod/">PaperMod</a>
-生成静态页托管在 <a href="https://pages.github.com/">GitHub Pages</a>。</p>
+<p>博客建于 2016 年 8 月，使用 <a href="https://hugo.io">Hugo</a> + <a href="https://github.com/adityatelange/hugo-PaperMod/">PaperMod</a>
+主题生成静态页托管在 <a href="https://pages.github.com/">GitHub Pages</a>。</p>
 <p>时间久远曾换过几个域名，现在使用 <code>starry-s.moe</code>。</p>
 <p>内容很杂，随缘更新。</p>
 <meting-js server="netease" type="playlist" id="8433061690" theme="#2E9AFE"></meting-js>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>Links</title>
+      <link>https://blog.starry-s.moe/links/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://blog.starry-s.moe/links/</guid>
+      <description>&lt;table&gt;
+  &lt;thead&gt;
+      &lt;tr&gt;
+          &lt;th&gt;Avatar&lt;/th&gt;
+          &lt;th&gt;Link&lt;/th&gt;
+          &lt;th&gt;Description&lt;/th&gt;
+      &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+      &lt;tr&gt;
+          &lt;td&gt;&lt;img src=&#34;http://furzhengze.top/upload/1729840291079.png&#34; width=50 height=50  style=&#34;border-radius:50%;&#34; /&gt;&lt;/td&gt;
+          &lt;td&gt;&lt;a href=&#34;http://furzhengze.top/&#34;&gt;筝泽的小破站&lt;/a&gt;&lt;/td&gt;
+          &lt;td&gt;嗷？&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;</description>
+      <content:encoded><![CDATA[<table>
+  <thead>
+      <tr>
+          <th>Avatar</th>
+          <th>Link</th>
+          <th>Description</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><img src="http://furzhengze.top/upload/1729840291079.png" width=50 height=50  style="border-radius:50%;" /></td>
+          <td><a href="http://furzhengze.top/">筝泽的小破站</a></td>
+          <td>嗷？</td>
+      </tr>
+  </tbody>
+</table>
 ]]></content:encoded>
     </item>
     <item>
